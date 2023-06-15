@@ -1,4 +1,4 @@
-export interface IUser{
+export interface IConductor{
 	nombre: string,
 	apellido: string,
 	edad: number,

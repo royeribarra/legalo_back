@@ -1,38 +1,38 @@
 import { Body, Controller, Get, Param, Post, Put} from '@nestjs/common';
-import { DistritoDTO, DistritoUpdateDTO } from '../dto/distrito.dto';
+import { ConductorDTO, ConductorUpdateDTO } from '../dto/conductor.dto';
 import { Delete } from '@nestjs/common/decorators';
-import { DistritosService } from '../services/distritos.service';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ConductoresService } from '../services/conductores.service';
+import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Projects')
-@Controller('distritos')
-export class DistritosController {
-  constructor(private readonly herramientasService: DistritosService) {}
+@ApiTags('conductores')
+@Controller('conductores')
+export class ConductoresController {
+  constructor(private readonly conductoresService: ConductoresService) {}
 
   @Post('register')
-  public async registerHerramienta(@Body() body:DistritoDTO){
-    return await this.herramientasService.createHerramienta(body);
+  public async registerConductor(@Body() body:ConductorDTO){
+    return await this.conductoresService.createConductor(body);
   }
 
   @Get('all')
-  public async findAllHerramientas()
+  public async findAllConductores()
   {
-    return await this.herramientasService.findHerramientas();
+    return await this.conductoresService.findConductores();
   }
 
   @Get(':id')
-  public async findHerramientaById(@Param('id') id: string){
-    return await this.herramientasService.findHerramientaById(id);
+  public async findConductorById(@Param('id') id: string){
+    return await this.conductoresService.findConductorById(id);
   }
 
   @Put('edit/:id')
-  public async updateHerramienta(@Body() body: DistritoUpdateDTO, @Param('id') id:string){
-    return await this.herramientasService.updateHerramienta(body, id);
+  public async updateConductor(@Body() body: ConductorUpdateDTO, @Param('id') id:string){
+    return await this.conductoresService.updateConductor(body, id);
   }
 
   @Delete(':id')
-  public async deleteHerramienta(@Param('id') id:string){
-    return await this.herramientasService.deleteHerramienta(id);
+  public async deleteConductor(@Param('id') id:string){
+    return await this.conductoresService.deleteConductor(id);
   }
 
 }
