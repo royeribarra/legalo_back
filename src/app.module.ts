@@ -6,6 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSourceConfig } from './config/data.source';
 import { ConfigModule } from '@nestjs/config';
 import { UsuariosModule } from './modules/mantenimiento/usuarios/usuarios.module';
+import { RolesModule } from './modules/mantenimiento/roles/roles.module';
+import { ClientesModule } from './modules/solicitudes/clientes/clientes.modulo';
+import { SucursalesClienteModule } from './modules/solicitudes/sucursalesCliente/sucursalesCliente.module';
 
 @Module({
   imports: [
@@ -15,7 +18,10 @@ import { UsuariosModule } from './modules/mantenimiento/usuarios/usuarios.module
     }),
     TypeOrmModule.forRoot({...DataSourceConfig}), 
     ConductoresModule,
-    UsuariosModule
+    UsuariosModule,
+    RolesModule,
+    ClientesModule,
+    SucursalesClienteModule
   ],
   controllers: [AppController],
   providers: [AppService],

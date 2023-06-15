@@ -1,6 +1,7 @@
 import { BaseEntity } from '../../../../config/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { IUsuario } from 'src/interfaces/mantenimiento/user.interface';
+import { RolesEntity } from '../../roles/entities/roles.entity';
 
 @Entity({name:'conductores'})
 export class UsuariosEntity extends BaseEntity implements IUsuario{
@@ -37,4 +38,7 @@ export class UsuariosEntity extends BaseEntity implements IUsuario{
 
   @Column()
   provincia: string;
+
+  @ManyToOne(() => RolesEntity, rol => rol.usuarios)
+  rol: RolesEntity;
 }
