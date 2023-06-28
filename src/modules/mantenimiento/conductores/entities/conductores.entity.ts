@@ -45,7 +45,7 @@ export class ConductoresEntity extends BaseEntity implements IConductor{
   isActive: boolean;
 
   @Column()
-  historialAccidentes: [];
+  historialAccidentes: string;
 
   @Column()
   vehiculoAsignado: number;

@@ -12,7 +12,7 @@ export interface IConductor{
   fechaVencimientoLicencia: string,
   fechaContratacion: string,
   isActive: boolean,
-  historialAccidentes: [],
+  historialAccidentes: string,
   vehiculoAsignado: number,
   disponibilidad: number
 }

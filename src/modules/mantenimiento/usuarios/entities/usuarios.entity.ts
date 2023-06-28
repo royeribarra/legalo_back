@@ -2,8 +2,9 @@ import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { IUsuario } from 'src/interfaces/mantenimiento/user.interface';
 import { RolesEntity } from '../../roles/entities/roles.entity';
+import { Exclude } from '@nestjs/class-transformer';
 
-@Entity({name:'conductores'})
+@Entity({name:'usuarios'})
 export class UsuariosEntity extends BaseEntity implements IUsuario{
 
   @Column()
@@ -12,31 +13,32 @@ export class UsuariosEntity extends BaseEntity implements IUsuario{
   @Column()
   apellido: string;
 
-  @Column()
+  @Column({ nullable: true })
   edad: number;
 
-  @Column()
+  @Column({ unique: true })
   correo: string;
 
-  @Column()
+  @Column({ unique: true })
   usuario: string;
 
+  @Exclude()
   @Column()
   contrasena: string;
 
   @Column()
   direccion: string;
 
-  @Column()
+  @Column({ unique: true })
   dni: string;
 
   @Column()
   telefono: string;
 
-  @Column()
+  @Column({ nullable: true })
   distrito: string;
 
-  @Column()
+  @Column({ nullable: true })
   provincia: string;
 
   @ManyToOne(() => RolesEntity, rol => rol.usuarios)

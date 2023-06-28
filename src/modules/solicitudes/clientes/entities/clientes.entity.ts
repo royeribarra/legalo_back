@@ -15,5 +15,5 @@ export class ClientesEntity extends BaseEntity implements ICliente{
   direccion: string;
 
   @Column()
-  certificaciones: [];
+  certificaciones: string;
 }

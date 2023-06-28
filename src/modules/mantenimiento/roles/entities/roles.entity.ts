@@ -1,7 +1,8 @@
 import { BaseEntity } from '../../../../config/base.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, JoinTable, OneToMany } from 'typeorm';
 import { IRol } from 'src/interfaces/mantenimiento/rol.interface';
 import { UsuariosEntity } from '../../usuarios/entities/usuarios.entity';
+import { RolesModulosWebEntity } from './rolModulosWeb.entity';
 
 @Entity({name:'roles'})
 export class RolesEntity extends BaseEntity implements IRol{
@@ -12,12 +13,10 @@ export class RolesEntity extends BaseEntity implements IRol{
   @Column()
   descripcion: string;
 
-  @Column()
-  permisos: [];
-
-  @Column()
-  modulosAcceso: [];
-
   @OneToMany(() => UsuariosEntity, usuario => usuario.rol)
   usuarios: UsuariosEntity[];
+
+  @OneToMany(() => RolesModulosWebEntity, modulo => modulo.rol)
+  @JoinTable()
+  modulos: RolesModulosWebEntity[];
 }

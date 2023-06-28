@@ -1,38 +1,38 @@
 import { Body, Controller, Get, Param, Post, Put} from '@nestjs/common';
-import { DistritoDTO, DistritoUpdateDTO } from '../dto/distrito.dto';
+import { SolicitudDTO, SolicitudUpdateDTO } from '../dto/solicitud.dto';
 import { Delete } from '@nestjs/common/decorators';
-import { DistritosService } from '../services/distritos.service';
+import { SolicitudesService } from '../services/solicitudes.service';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Projects')
-@Controller('distritos')
-export class DistritosController {
-  constructor(private readonly herramientasService: DistritosService) {}
+@ApiTags('solicitudes')
+@Controller('solicitudes')
+export class SolicitudesController {
+  constructor(private readonly solicitudesService: SolicitudesService) {}
 
   @Post('register')
-  public async registerHerramienta(@Body() body:DistritoDTO){
-    return await this.herramientasService.createHerramienta(body);
+  public async registerHerramienta(@Body() body:SolicitudDTO){
+    return await this.solicitudesService.createSolicitud(body);
   }
 
   @Get('all')
   public async findAllHerramientas()
   {
-    return await this.herramientasService.findHerramientas();
+    return await this.solicitudesService.findSolicitudes();
   }
 
   @Get(':id')
   public async findHerramientaById(@Param('id') id: string){
-    return await this.herramientasService.findHerramientaById(id);
+    return await this.solicitudesService.findSolicitudById(id);
   }
 
   @Put('edit/:id')
-  public async updateHerramienta(@Body() body: DistritoUpdateDTO, @Param('id') id:string){
-    return await this.herramientasService.updateHerramienta(body, id);
+  public async updateHerramienta(@Body() body: SolicitudUpdateDTO, @Param('id') id:string){
+    return await this.solicitudesService.updateSolicitud(body, id);
   }
 
   @Delete(':id')
   public async deleteHerramienta(@Param('id') id:string){
-    return await this.herramientasService.deleteHerramienta(id);
+    return await this.solicitudesService.deleteSolicitud(id);
   }
 
 }

@@ -9,6 +9,8 @@ import { UsuariosModule } from './modules/mantenimiento/usuarios/usuarios.module
 import { RolesModule } from './modules/mantenimiento/roles/roles.module';
 import { ClientesModule } from './modules/solicitudes/clientes/clientes.modulo';
 import { SucursalesClienteModule } from './modules/solicitudes/sucursalesCliente/sucursalesCliente.module';
+import { SolicitudesModule } from './modules/solicitudes/solicitudes/solicitudes.module';
+import { TiposResiduoModule } from './modules/mantenimiento/tiposResiduo/tiposResiduo.module';
 
 @Module({
   imports: [
@@ -21,7 +23,9 @@ import { SucursalesClienteModule } from './modules/solicitudes/sucursalesCliente
     UsuariosModule,
     RolesModule,
     ClientesModule,
-    SucursalesClienteModule
+    SucursalesClienteModule,
+    SolicitudesModule,
+    TiposResiduoModule
   ],
   controllers: [AppController],
   providers: [AppService],

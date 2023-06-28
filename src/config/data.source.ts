@@ -2,12 +2,14 @@ import { ConfigModule } from "@nestjs/config";
 import { DataSource, DataSourceOptions  } from "typeorm";
 import { ConfigService } from '@nestjs/config/dist';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { SeederOptions } from 'typeorm-extension';
+import MainSeeder from "../database/seeds/Main.seeder";
 
 ConfigModule.forRoot({envFilePath: `.${process.env.NODE_ENV}.env`});
 
 const configService = new ConfigService();
 
-export const DataSourceConfig: DataSourceOptions = {
+export const DataSourceConfig: DataSourceOptions & SeederOptions= {
   type: 'mysql',
   host: configService.get('DB_HOST'),
   port: configService.get('DB_PORT'),
@@ -20,6 +22,7 @@ export const DataSourceConfig: DataSourceOptions = {
   migrationsRun: true,
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),
+  seeds: [MainSeeder],
 }
 
 export const AppDS= new DataSource(DataSourceConfig);

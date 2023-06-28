@@ -8,4 +8,8 @@ export interface IVehiculo{
   estadoMantenimiento: number,
   disponibilidad: boolean,
   responsable: string,
+  vencimientoMTC: string,
+  vencimientoSOAT: string,
+  vencimientoRD: string,
+  vencimientoPoliza: string
 }

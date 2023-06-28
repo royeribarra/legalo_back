@@ -7,13 +7,44 @@ export class UsuarioDTO{
 
   @IsNotEmpty()
   @IsString()
-  codigo: string;
+  apellido: string;
 
   @IsNotEmpty()
   @IsNumber()
-  tarifa: number;
-}
+  edad: number;
 
+  @IsNotEmpty()
+  @IsString()
+  correo: string;
+
+  @IsNotEmpty()
+  @IsString()
+  usuario: string;
+
+  @IsNotEmpty()
+  @IsString()
+  contrasena: string;
+
+  @IsNotEmpty()
+  @IsString()
+  direccion: string;
+
+  @IsNotEmpty()
+  @IsString()
+  distrito: string;
+
+  @IsNotEmpty()
+  @IsString()
+  provincia: string;
+
+  @IsNotEmpty()
+  @IsString()
+  dni: string;
+
+  @IsNotEmpty()
+  @IsString()
+  telefono: string;
+}
 export class UsuarioUpdateDTO{
   @IsOptional()
   @IsString()

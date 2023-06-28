@@ -2,7 +2,7 @@ export interface ISolicitudRecoleccion{
   codigo: number,
   fechaSolicitud: string,
   empresaSolicitante: number,
-  sucursalEmpresaSolicitante: [],
+  sucursalEmpresaSolicitante: number,
   tipoResiduo: number,
   cantidad: number,
   fechaRecoleccion: string,
