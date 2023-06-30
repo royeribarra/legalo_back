@@ -9,5 +9,5 @@ export interface IUsuario{
   distrito?: string,
   provincia?: string,
   dni: string,
-  telefono: string
+  telefono: string,
 }

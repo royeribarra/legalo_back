@@ -21,7 +21,7 @@ export class UsuariosController {
   }
 
   @Get(':id')
-  public async findUsuarioById(@Param('id') id: string){
+  public async findUsuarioById(@Param('id') id: number){
     return await this.usuariosService.findUsuarioById(id);
   }
 

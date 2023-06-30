@@ -11,6 +11,7 @@ import { ClientesModule } from './modules/solicitudes/clientes/clientes.modulo';
 import { SucursalesClienteModule } from './modules/solicitudes/sucursalesCliente/sucursalesCliente.module';
 import { SolicitudesModule } from './modules/solicitudes/solicitudes/solicitudes.module';
 import { TiposResiduoModule } from './modules/mantenimiento/tiposResiduo/tiposResiduo.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { TiposResiduoModule } from './modules/mantenimiento/tiposResiduo/tiposRe
     ClientesModule,
     SucursalesClienteModule,
     SolicitudesModule,
-    TiposResiduoModule
+    TiposResiduoModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

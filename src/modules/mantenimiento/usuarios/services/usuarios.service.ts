@@ -40,11 +40,12 @@ export class UsuariosService{
     }
   }
 
-  public async findUsuarioById(id: string): Promise<UsuariosEntity>
+  public async findUsuarioById(id: number): Promise<UsuariosEntity>
   {
     try {
       const usuarios : UsuariosEntity =  await this.usuariosRespository
         .createQueryBuilder('usuarios')
+        .leftJoinAndSelect('usuarios.rol', 'rol')
         .where({id})
         .getOne();
 
@@ -91,6 +92,20 @@ export class UsuariosService{
         });
       }
       return usuarios;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findBy({key, value} : { key: keyof UsuarioDTO; value: any })
+  {
+    try {
+      const usuario: UsuariosEntity = await this.usuariosRespository.createQueryBuilder(
+        'usuario'
+      ).addSelect('usuario.contrasena')
+      .where({[key]: value})
+      .getOne();
+      return usuario;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

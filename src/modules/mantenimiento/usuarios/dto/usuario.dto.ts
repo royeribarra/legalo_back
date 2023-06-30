@@ -9,7 +9,7 @@ export class UsuarioDTO{
   @IsString()
   apellido: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   edad: number;
 
@@ -29,11 +29,11 @@ export class UsuarioDTO{
   @IsString()
   direccion: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   distrito: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   provincia: string;
 
@@ -44,6 +44,10 @@ export class UsuarioDTO{
   @IsNotEmpty()
   @IsString()
   telefono: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  rol_id: number;
 }
 export class UsuarioUpdateDTO{
   @IsOptional()
@@ -52,13 +56,45 @@ export class UsuarioUpdateDTO{
 
   @IsOptional()
   @IsString()
-  codigo: string;
+  apellido: string;
 
   @IsOptional()
   @IsNumber()
-  tarifa: number;
+  edad: number;
 
   @IsOptional()
-  @IsBoolean()
-  isActive: boolean;
+  @IsString()
+  correo: string;
+
+  @IsOptional()
+  @IsString()
+  usuario: string;
+
+  @IsOptional()
+  @IsString()
+  contrasena: string;
+
+  @IsOptional()
+  @IsString()
+  direccion: string;
+
+  @IsOptional()
+  @IsString()
+  distrito: string;
+
+  @IsOptional()
+  @IsString()
+  provincia: string;
+
+  @IsOptional()
+  @IsString()
+  dni: string;
+
+  @IsOptional()
+  @IsString()
+  telefono: string;
+
+  @IsOptional()
+  @IsNumber()
+  rol_id: number;
 }

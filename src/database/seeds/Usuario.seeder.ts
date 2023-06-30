@@ -2,7 +2,7 @@ import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { UsuariosEntity } from '../../modules/mantenimiento/usuarios/entities/usuarios.entity';
 import * as bcrypt from 'bcrypt';
-import { IUsuario } from 'src/interfaces/mantenimiento/user.interface';
+import { UsuarioDTO } from 'src/modules/mantenimiento/usuarios/dto/usuario.dto';
 
 export default class UsuarioSeeder implements Seeder {
   public async run(
@@ -11,7 +11,7 @@ export default class UsuarioSeeder implements Seeder {
   ): Promise<any> {
     try {
       const userrepository =  dataSource.getRepository(UsuariosEntity);
-      const data : IUsuario[] = [
+      const data : UsuarioDTO[] = [
         {
           nombre: 'Jorge',
           apellido: 'Copetrol',
@@ -20,7 +20,11 @@ export default class UsuarioSeeder implements Seeder {
           contrasena: await bcrypt.hash('adminCopetrol', +process.env.HASH_SALT),
           direccion: 'Jiron administrador',
           dni: '20020010',
-          telefono: '990393939'
+          telefono: '990393939',
+          edad: null,
+          distrito: null,
+          provincia: null,
+          rol_id: 1
         },
         {
           nombre: 'Susana',
@@ -30,7 +34,11 @@ export default class UsuarioSeeder implements Seeder {
           contrasena: await bcrypt.hash('comercialCopetrol', +process.env.HASH_SALT),
           direccion: 'Jiron comercial',
           dni: '20020020',
-          telefono: '990393940'
+          telefono: '990393940',
+          edad: null,
+          distrito: null,
+          provincia: null,
+          rol_id: 2
         },
         {
           nombre: 'Alex',
@@ -40,7 +48,11 @@ export default class UsuarioSeeder implements Seeder {
           contrasena: await bcrypt.hash('transporteCopetrol', +process.env.HASH_SALT),
           direccion: 'Jiron transporte',
           dni: '20020030',
-          telefono: '990393941'
+          telefono: '990393941',
+          edad: null,
+          distrito: null,
+          provincia: null,
+          rol_id: 3
         },
         {
           nombre: 'Lucciana',
@@ -50,7 +62,11 @@ export default class UsuarioSeeder implements Seeder {
           contrasena: await bcrypt.hash('calidadCopetrol', +process.env.HASH_SALT),
           direccion: 'Jiron calidad',
           dni: '20020040',
-          telefono: '990393943'
+          telefono: '990393943',
+          edad: null,
+          distrito: null,
+          provincia: null,
+          rol_id: 4
         },
         {
           nombre: 'Miguel',
@@ -60,7 +76,11 @@ export default class UsuarioSeeder implements Seeder {
           contrasena: await bcrypt.hash('cinternoCopetrol', +process.env.HASH_SALT),
           direccion: 'Jiron control interno',
           dni: '20020080',
-          telefono: '990393950'
+          telefono: '990393950',
+          edad: null,
+          distrito: null,
+          provincia: null,
+          rol_id: 5
         },
       ];
 

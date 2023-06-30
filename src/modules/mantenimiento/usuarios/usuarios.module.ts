@@ -13,6 +13,9 @@ import { UsuariosController } from './controllers/usuarios.controller';
   ],
   controllers: [
     UsuariosController
+  ],
+  exports: [
+    UsuariosService, TypeOrmModule
   ]
 })
 

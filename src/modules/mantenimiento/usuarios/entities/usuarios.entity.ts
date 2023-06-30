@@ -23,7 +23,7 @@ export class UsuariosEntity extends BaseEntity implements IUsuario{
   usuario: string;
 
   @Exclude()
-  @Column()
+  @Column({ select: false })
   contrasena: string;
 
   @Column()
