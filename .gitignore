@@ -35,7 +35,6 @@ lerna-debug.log*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-<<<<<<< HEAD
 !.vscode/extensions.json
 *.code-workspace
 
@@ -51,6 +50,3 @@ lerna-debug.log*
 
 # JetBrains Rider
 *.sln.iml
-=======
-!.vscode/extensions.json
->>>>>>> 4026e309bcbbfc0693be8944be5df2d84e25c0f6

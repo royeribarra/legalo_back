@@ -19,16 +19,13 @@ export class TiposResiduoEntity extends BaseEntity implements ITipoResiduo{
   @Column()
   nivelPeligro: number;
 
-  @Column()
+  @Column({nullable: true})
   metodoAlmacenamiento: number;
 
-  @Column()
-  tratamiento: string;
-
-  @Column()
+  @Column({nullable: true})
   disposicionFinal: string;
 
-  @Column()
+  @Column({nullable: true})
   responsable: string;
 
   @OneToMany(() => ResiduosEntity, residuo => residuo.tipoResiduo)

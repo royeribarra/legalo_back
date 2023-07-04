@@ -1,6 +1,7 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { TiposResiduoEntity } from 'src/modules/mantenimiento/tiposResiduo/entities/tiposResiduo.entity';
+import { MetodosTratamientoResiduoEntity } from '../../modules/mantenimiento/tiposResiduo/entities/metodosTratamientoResiduo.entity';
+import { MetodoTratamientoTipoResiduoDTO } from '../../modules/mantenimiento/tiposResiduo/dto/medidaTratamientoTipoResiduo.dto';
 
 export default class MetodoTratamientoTipoResiduoSeeder implements Seeder {
   public async run(
@@ -8,58 +9,48 @@ export default class MetodoTratamientoTipoResiduoSeeder implements Seeder {
     factoryManager: SeederFactoryManager
   ): Promise<any> {
     try {
-      const tipoResiduoRepository =  dataSource.getRepository(TiposResiduoEntity);
-      const data = [
+      const tratamientoRepository =  dataSource.getRepository(MetodosTratamientoResiduoEntity);
+      const data : MetodoTratamientoTipoResiduoDTO[] = [
         {
-          codigo: 're01',
-          nombre: 'Aceite de motor usado',
-          descripcion: 'El aceite de motor utilizado en vehículos y maquinaria, que se descarta cuando se realiza un cambio de aceite.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          nombre: 'Reciclaje',
+          descripcion: 'El reciclaje es un método efectivo para el tratamiento de muchos tipos de residuos peligrosos, aceites usados y combustibles contaminados. A través del reciclaje, estos materiales se procesan y se les da una nueva utilidad, reduciendo la necesidad de extraer y fabricar nuevos productos. Por ejemplo, los aceites usados pueden ser refinados y reutilizados como combustible o lubricante.',
+          valor: 1
         },
         {
-          codigo: 're02',
-          nombre: 'Aceite de cocina usado',
-          descripcion: 'El aceite utilizado para cocinar, que se desecha después de su uso en restaurantes, hogares u otras instalaciones.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          nombre: 'Tratamiento físico',
+          descripcion: 'El tratamiento físico implica el uso de técnicas mecánicas o físicas para tratar los residuos. Esto puede incluir la separación de componentes, como la filtración o la centrifugación, para eliminar contaminantes o sustancias no deseadas. También puede implicar la reducción de volumen mediante compactación o trituración.',
+          valor: 1
         },
         {
-          codigo: 're03',
-          nombre: 'Combustibles vencidos',
-          descripcion: 'Los combustibles que han superado su vida útil o que ya no cumplen con las especificaciones requeridas, como gasolina, diésel, queroseno u otros combustibles.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          nombre: 'Tratamiento químico',
+          descripcion: ' El tratamiento químico se utiliza para transformar los residuos peligrosos, aceites usados y combustibles contaminados en formas menos peligrosas o más fáciles de manejar. Esto puede implicar reacciones químicas para descomponer o neutralizar los componentes peligrosos, convirtiéndolos en productos más estables y menos dañinos.',
+          valor: 1
         },
         {
-          codigo: 're04',
-          nombre: 'Lubricantes usados',
-          descripcion: 'Los lubricantes utilizados en maquinaria y equipos, como aceites lubricantes para motores, engranajes o sistemas hidráulicos.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          nombre: 'Incineración',
+          descripcion: 'La incineración es un proceso de tratamiento que implica la combustión controlada de los residuos a altas temperaturas. Este método es especialmente adecuado para residuos peligrosos y combustibles contaminados, ya que puede destruir los contaminantes y reducir el volumen de los residuos. Sin embargo, es importante contar con sistemas de control de emisiones para evitar la liberación de gases y partículas contaminantes al medio ambiente.',
+          valor: 1
         },
         {
-          codigo: 're05',
-          nombre: 'Aceite de transformadores y capacitores',
-          descripcion: 'Los aceites utilizados en transformadores eléctricos y capacitores, que pueden contener contaminantes peligrosos como PCB (bifenilos policlorados).',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          nombre: 'Disposición segura',
+          descripcion: 'Cuando otros métodos de tratamiento no son viables, se puede recurrir a la disposición segura de los residuos peligrosos, aceites usados y combustibles contaminados. Esto puede incluir su confinamiento en instalaciones adecuadas, como rellenos sanitarios o depósitos especiales, donde se minimiza el riesgo de liberación de contaminantes al suelo o al agua subterránea.',
+          valor: 1
         },
       ];
 
       const dataToInsert = [];
 
       for (const element of data) {
-        const residuoExists = await tipoResiduoRepository.findOneBy({ nombre: element.nombre, codigo: element.codigo });
-        if (!residuoExists) {
+        const tratamientoExists = await tratamientoRepository.findOneBy({ nombre: element.nombre });
+        if (!tratamientoExists) {
           dataToInsert.push(element);
         }
       }
       
-      await tipoResiduoRepository.insert(dataToInsert);
-      console.log("Tipos de residuos insertados correctamente");
+      await tratamientoRepository.insert(dataToInsert);
+      console.log("Metodos de tratamiento de tipos de residuos insertados correctamente");
     } catch (error) {
-      console.error('Error en el TipoResiduoSeeder:', error);
+      console.error('Error en el MetodoTratamientoTipoResiduoSeeder:', error);
     }
     
   }

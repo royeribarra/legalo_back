@@ -1,6 +1,7 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { TiposResiduoEntity } from 'src/modules/mantenimiento/tiposResiduo/entities/tiposResiduo.entity';
+import { MedidasSeguridadResiduoEntity } from '../../modules/mantenimiento/tiposResiduo/entities/medidasSeguridadResiduo.entity';
+import { MedidaSeguridadTipoResiduoDTO } from '../../modules/mantenimiento/tiposResiduo/dto/medidadSeguridadTipoResiduo.dto';
 
 export default class MedidaSeguridadTipoResiduoSeeder implements Seeder {
   public async run(
@@ -8,58 +9,48 @@ export default class MedidaSeguridadTipoResiduoSeeder implements Seeder {
     factoryManager: SeederFactoryManager
   ): Promise<any> {
     try {
-      const tipoResiduoRepository =  dataSource.getRepository(TiposResiduoEntity);
-      const data = [
+      const seguridadRepository =  dataSource.getRepository(MedidasSeguridadResiduoEntity);
+      const data : MedidaSeguridadTipoResiduoDTO[] = [
         {
-          codigo: 're01',
-          nombre: 'Aceite de motor usado',
-          descripcion: 'El aceite de motor utilizado en vehículos y maquinaria, que se descarta cuando se realiza un cambio de aceite.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          nombre: 'Clasificación y etiquetado',
+          descripcion: 'Los residuos peligrosos, aceites usados y combustibles contaminados deben ser correctamente clasificados y etiquetados de acuerdo con las regulaciones vigentes. Esto permite identificar su naturaleza y peligrosidad, facilitando su manejo adecuado.',
+          valor: 1
         },
         {
-          codigo: 're02',
-          nombre: 'Aceite de cocina usado',
-          descripcion: 'El aceite utilizado para cocinar, que se desecha después de su uso en restaurantes, hogares u otras instalaciones.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          nombre: 'Almacenamiento seguro',
+          descripcion: 'Se deben establecer áreas designadas y seguras para el almacenamiento temporal de estos materiales. Los recipientes y contenedores utilizados deben ser adecuados para el tipo de residuo y estar correctamente etiquetados. Además, se deben seguir protocolos específicos para prevenir fugas, derrames o cualquier otra forma de contaminación.',
+          valor: 1
         },
         {
-          codigo: 're03',
-          nombre: 'Combustibles vencidos',
-          descripcion: 'Los combustibles que han superado su vida útil o que ya no cumplen con las especificaciones requeridas, como gasolina, diésel, queroseno u otros combustibles.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          nombre: 'Manipulación adecuada',
+          descripcion: 'Se deben seguir prácticas seguras durante la manipulación de residuos peligrosos, aceites usados y combustibles contaminados. Esto implica el uso de equipos de protección personal (EPP), como guantes, gafas y ropa de seguridad, así como la adopción de técnicas adecuadas para minimizar la exposición y el riesgo de lesiones.',
+          valor: 1
         },
         {
-          codigo: 're04',
-          nombre: 'Lubricantes usados',
-          descripcion: 'Los lubricantes utilizados en maquinaria y equipos, como aceites lubricantes para motores, engranajes o sistemas hidráulicos.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          nombre: 'Transporte seguro',
+          descripcion: 'El transporte de estos materiales debe cumplir con regulaciones específicas. Se deben utilizar vehículos adecuados, con contenedores seguros y debidamente etiquetados. Además, se deben seguir los protocolos de embalaje y carga para prevenir derrames y garantizar la seguridad del personal y el medio ambiente.',
+          valor: 1
         },
         {
-          codigo: 're05',
-          nombre: 'Aceite de transformadores y capacitores',
-          descripcion: 'Los aceites utilizados en transformadores eléctricos y capacitores, que pueden contener contaminantes peligrosos como PCB (bifenilos policlorados).',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          nombre: 'Tratamiento y disposición final adecuada',
+          descripcion: 'Los residuos peligrosos, aceites usados y combustibles contaminados deben ser tratados y dispuestos de acuerdo con las regulaciones y normativas vigentes. Esto puede incluir procesos de reciclaje, reutilización, tratamiento químico, incineración controlada u otras formas de eliminación segura y responsable.',
+          valor: 1
         },
       ];
 
       const dataToInsert = [];
 
       for (const element of data) {
-        const residuoExists = await tipoResiduoRepository.findOneBy({ nombre: element.nombre, codigo: element.codigo });
-        if (!residuoExists) {
+        const seguridadExists = await seguridadRepository.findOneBy({ nombre: element.nombre });
+        if (!seguridadExists) {
           dataToInsert.push(element);
         }
       }
       
-      await tipoResiduoRepository.insert(dataToInsert);
-      console.log("Tipos de residuos insertados correctamente");
+      await seguridadRepository.insert(dataToInsert);
+      console.log("Medidades de seguridad de tipos de residuos insertados correctamente");
     } catch (error) {
-      console.error('Error en el TipoResiduoSeeder:', error);
+      console.error('Error en el MedidaSeguridadTipoResiduoSeeder:', error);
     }
     
   }

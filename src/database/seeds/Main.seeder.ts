@@ -4,6 +4,11 @@ import RolSeeder from './Rol.seeder';
 import UsuarioSeeder from './Usuario.seeder';
 import ClienteSeeder from './Cliente.seeder';
 import SucursalClienteSeeder from './SucursalCliente.seeder';
+import TipoResiduoSeeder from './TipoResiduo.seeder';
+import MedidaSeguridadTipoResiduoSeeder from './MedidaSeguridadTipoResiduo.seeder';
+import MetodoTratamientoTipoResiduoSeeder from './MetodoTratamientoTipoResiduo.seeder';
+import NormativaTipoResiduoSeeder from './NormativaTipoResiduo.seeder';
+import PropiedadTipoResiduoSeeder from './PropiedadTipoResiduo.seeder';
 
 export default class MainSeeder implements Seeder {
   public async run(
@@ -14,5 +19,10 @@ export default class MainSeeder implements Seeder {
     await runSeeder(dataSource, UsuarioSeeder);
     await runSeeder(dataSource, ClienteSeeder);
     await runSeeder(dataSource, SucursalClienteSeeder);
+    await runSeeder(dataSource, TipoResiduoSeeder);
+    await runSeeder(dataSource, MedidaSeguridadTipoResiduoSeeder);
+    await runSeeder(dataSource, MetodoTratamientoTipoResiduoSeeder);
+    await runSeeder(dataSource, NormativaTipoResiduoSeeder);
+    await runSeeder(dataSource, PropiedadTipoResiduoSeeder);
   }
 }
