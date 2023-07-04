@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
+import { IsNumber, IsOptional, IsNotEmpty, IsString } from 'class-validator';
 
 export class SucursalClienteDTO{
   @IsNotEmpty()
@@ -7,11 +7,39 @@ export class SucursalClienteDTO{
 
   @IsNotEmpty()
   @IsString()
-  codigo: string;
+  direccion: string;
+
+  @IsNotEmpty()
+  @IsString()
+  distrito: string;
+
+  @IsNotEmpty()
+  @IsString()
+  provincia: string;
+
+  @IsNotEmpty()
+  @IsString()
+  contacto: string;
+
+  @IsNotEmpty()
+  @IsString()
+  numeroContacto: string;
+
+  @IsNotEmpty()
+  @IsString()
+  codigoSucursal: string;
+
+  @IsNotEmpty()
+  @IsString()
+  latitud: string;
+
+  @IsNotEmpty()
+  @IsString()
+  longitud: string;
 
   @IsNotEmpty()
   @IsNumber()
-  tarifa: number;
+  clienteId: number;
 }
 
 export class SucursalClienteUpdateDTO{
@@ -21,13 +49,13 @@ export class SucursalClienteUpdateDTO{
 
   @IsOptional()
   @IsString()
-  codigo: string;
+  direccion: string;
 
   @IsOptional()
-  @IsNumber()
-  tarifa: number;
+  @IsString()
+  contacto: string;
 
   @IsOptional()
-  @IsBoolean()
-  isActive: boolean;
+  @IsString()
+  codigoSucursal: string;
 }

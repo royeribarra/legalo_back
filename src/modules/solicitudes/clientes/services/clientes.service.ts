@@ -11,6 +11,19 @@ export class ClientesService{
     @InjectRepository(ClientesEntity) private readonly clientesRespository: Repository<ClientesEntity>
   ){}
 
+  public async existeClienteByCodigo(codigo: string): Promise<Boolean>
+  {
+    try {
+      const clienteExistente = await this.clientesRespository
+        .createQueryBuilder('clientes')
+        .where('clientes.codigo = :codigo', { codigo })
+        .getOne();
+      return !!clienteExistente;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async createCliente(body: ClienteDTO): Promise<ClientesEntity>
   {
     try {

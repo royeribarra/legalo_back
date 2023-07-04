@@ -1,5 +1,11 @@
 export interface ISucursalCliente{
   nombre: string,
   direccion: string,
-  contacto: string
+  distrito: string,
+  provincia: string,
+  contacto: string,
+  numeroContacto: string,
+  codigoSucursal: string,
+  latitud: string,
+  longitud: string
 }

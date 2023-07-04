@@ -7,11 +7,19 @@ export class ClienteDTO{
 
   @IsNotEmpty()
   @IsString()
-  codigo: string;
+  contactoPrincipal: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  tarifa: number;
+  @IsString()
+  direccion: string;
+
+  @IsNotEmpty()
+  @IsString()
+  numeroContacto: string;
+
+  @IsNotEmpty()
+  @IsString()
+  codigo: string;
 }
 
 export class ClienteUpdateDTO{

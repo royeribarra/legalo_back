@@ -8,13 +8,26 @@ import { SucursalesClienteEntity } from '../entities/sucursalesCliente.entity';
 @Injectable()
 export class SucursalesClienteService{
   constructor(
-    @InjectRepository(SucursalesClienteEntity) private readonly usuariosRespository: Repository<SucursalesClienteEntity>
+    @InjectRepository(SucursalesClienteEntity) private readonly sucursalRepository: Repository<SucursalesClienteEntity>
   ){}
+
+  public async existeSucursalByCodigo(codigoSucursal: string): Promise<SucursalesClienteEntity>
+  {
+    try {
+      const sucursalExistente = await this.sucursalRepository
+        .createQueryBuilder('sucursales')
+        .where('sucursales.codigoSucursal = :codigoSucursal', { codigoSucursal })
+        .getOne();
+      return sucursalExistente;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
 
   public async createSucursal(body: SucursalClienteDTO): Promise<SucursalesClienteEntity>
   {
     try {
-      const usuarios : SucursalesClienteEntity = await this.usuariosRespository.save(body);
+      const usuarios : SucursalesClienteEntity = await this.sucursalRepository.save(body);
       return usuarios;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -24,7 +37,7 @@ export class SucursalesClienteService{
   public async findSucursales(): Promise<SucursalesClienteEntity[]>
   {
     try {
-      const usuarios : SucursalesClienteEntity[] = await this.usuariosRespository.find();
+      const usuarios : SucursalesClienteEntity[] = await this.sucursalRepository.find();
       if(usuarios.length === 0)
       {
         throw new ErrorManager({
@@ -41,7 +54,7 @@ export class SucursalesClienteService{
   public async findSucursalById(id: string): Promise<SucursalesClienteEntity>
   {
     try {
-      const usuarios : SucursalesClienteEntity =  await this.usuariosRespository
+      const usuarios : SucursalesClienteEntity =  await this.sucursalRepository
         .createQueryBuilder('usuarios')
         .where({id})
         .getOne();
@@ -63,7 +76,7 @@ export class SucursalesClienteService{
   public async updateSucursal(body: SucursalClienteUpdateDTO, id: string): Promise<UpdateResult> | undefined
   {
     try {
-      const usuarios: UpdateResult = await this.usuariosRespository.update(id, body);
+      const usuarios: UpdateResult = await this.sucursalRepository.update(id, body);
       if(usuarios.affected === 0)
       {
         throw new ErrorManager({
@@ -80,7 +93,7 @@ export class SucursalesClienteService{
   public async deleteSucursal(id: string): Promise<DeleteResult> | undefined
   {
     try {
-      const usuarios: DeleteResult = await this.usuariosRespository.delete(id);
+      const usuarios: DeleteResult = await this.sucursalRepository.delete(id);
       if(usuarios.affected === 0)
       {
         throw new ErrorManager({
