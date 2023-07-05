@@ -8,8 +8,8 @@ import { TiposResiduoPropiedadesEntity } from './tipoResiduoPropiedad.entity';
 import { ResiduosEntity } from '../../residuos/entities/residuos.entity';
 
 @Entity({name:'tiposResiduo'})
-export class TiposResiduoEntity extends BaseEntity implements ITipoResiduo{
-
+export class TiposResiduoEntity extends BaseEntity implements ITipoResiduo
+{
   @Column()
   codigo: string;
 

@@ -10,28 +10,29 @@ export class SolicitudesController {
   constructor(private readonly solicitudesService: SolicitudesService) {}
 
   @Post('register')
-  public async registerHerramienta(@Body() body:SolicitudDTO){
+  public async registerSolicitud(@Body() body: SolicitudDTO){
+    return body;
     return await this.solicitudesService.createSolicitud(body);
   }
 
   @Get('all')
-  public async findAllHerramientas()
+  public async findAllSolicitud()
   {
     return await this.solicitudesService.findSolicitudes();
   }
 
   @Get(':id')
-  public async findHerramientaById(@Param('id') id: string){
+  public async findSolicitudById(@Param('id') id: string){
     return await this.solicitudesService.findSolicitudById(id);
   }
 
   @Put('edit/:id')
-  public async updateHerramienta(@Body() body: SolicitudUpdateDTO, @Param('id') id:string){
+  public async updateSolicitud(@Body() body: SolicitudUpdateDTO, @Param('id') id:string){
     return await this.solicitudesService.updateSolicitud(body, id);
   }
 
   @Delete(':id')
-  public async deleteHerramienta(@Param('id') id:string){
+  public async deleteSolicitud(@Param('id') id:string){
     return await this.solicitudesService.deleteSolicitud(id);
   }
 

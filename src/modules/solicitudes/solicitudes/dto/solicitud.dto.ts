@@ -3,15 +3,47 @@ import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-val
 export class SolicitudDTO{
   @IsNotEmpty()
   @IsString()
-  nombre: string;
+  fechaRecoleccion: string;
 
   @IsNotEmpty()
   @IsString()
-  codigo: string;
+  fechaSolicitud: string;
 
   @IsNotEmpty()
   @IsNumber()
-  tarifa: number;
+  empresaSolicitante: number;
+
+  @IsNotEmpty()
+  @IsString()
+  sucursalEmpresaSolicitante: string;
+
+  @IsNotEmpty()
+  @IsString()
+  tipoResiduo: string;
+
+  @IsNotEmpty()
+  @IsString()
+  cantidad: string;
+
+  @IsNotEmpty()
+  @IsString()
+  cilindros: string;
+
+  @IsNotEmpty()
+  @IsString()
+  direccionRecoleccion: string;
+
+  @IsNotEmpty()
+  @IsString()
+  contactoEmpresa: string;
+
+  @IsNotEmpty()
+  @IsString()
+  estadoSolicitud: string;
+
+  @IsNotEmpty()
+  @IsString()
+  observacion: string;
 }
 
 export class SolicitudUpdateDTO{

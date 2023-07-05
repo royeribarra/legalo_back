@@ -4,7 +4,8 @@ import { MedidasSeguridadResiduoEntity } from './medidasSeguridadResiduo.entity'
 import { TiposResiduoEntity } from './tiposResiduo.entity';
 
 @Entity({ name: 'tiposResiduo_medidasSeguridad' })
-export class TiposResiduoMedidasSeguridadEntity extends BaseEntity {
+export class TiposResiduoMedidasSeguridadEntity extends BaseEntity
+{
 
   @ManyToOne(()=> MedidasSeguridadResiduoEntity, (medida)=> medida.tiposResiduo)
   medidaSeguridad: MedidasSeguridadResiduoEntity;

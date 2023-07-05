@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { ClienteDTO, ClienteUpdateDTO } from '../dto/cliente.dto';
+import { TrackerDTO, TrackerUpdateDTO } from '../dto/tracker.dto';
 import { ErrorManager } from '../../../../utils/error.manager';
-import { ClientesEntity } from '../entities/clientes.entity';
-import * as jwt from 'jsonwebtoken';
+import { TrackerEntity } from '../entities/tracker.entity';
 
 @Injectable()
-export class ClientesService{
+export class TrackerService{
   constructor(
-    @InjectRepository(ClientesEntity) private readonly clientesRespository: Repository<ClientesEntity>
+    @InjectRepository(TrackerEntity) private readonly clientesRespository: Repository<TrackerEntity>
   ){}
 
   public async existeClienteByCodigo(codigo: string): Promise<Boolean>
@@ -25,20 +24,20 @@ export class ClientesService{
     }
   }
 
-  public async createCliente(body: ClienteDTO): Promise<ClientesEntity>
+  public async createCliente(body: TrackerDTO): Promise<TrackerEntity>
   {
     try {
-      const clientes : ClientesEntity = await this.clientesRespository.save(body);
+      const clientes : TrackerEntity = await this.clientesRespository.save(body);
       return clientes;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
 
-  public async findClientes(): Promise<ClientesEntity[]>
+  public async findClientes(): Promise<TrackerEntity[]>
   {
     try {
-      const clientes : ClientesEntity[] = await this.clientesRespository.find();
+      const clientes : TrackerEntity[] = await this.clientesRespository.find();
       if(clientes.length === 0)
       {
         throw new ErrorManager({
@@ -52,10 +51,10 @@ export class ClientesService{
     }
   }
 
-  public async findClienteById(id: string): Promise<ClientesEntity>
+  public async findClienteById(id: string): Promise<TrackerEntity>
   {
     try {
-      const clientes : ClientesEntity =  await this.clientesRespository
+      const clientes : TrackerEntity =  await this.clientesRespository
         .createQueryBuilder('clientes')
         .where({id})
         .getOne();
@@ -74,7 +73,7 @@ export class ClientesService{
     }
   }
 
-  public async updateCliente(body: ClienteUpdateDTO, id: string): Promise<UpdateResult> | undefined
+  public async updateCliente(body: TrackerUpdateDTO, id: string): Promise<UpdateResult> | undefined
   {
     try {
       const clientes: UpdateResult = await this.clientesRespository.update(id, body);
@@ -105,34 +104,6 @@ export class ClientesService{
       return clientes;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
-    }
-  }
-
-  public signJWT({
-    payload,
-    secret,
-    expires
-  }: {
-    payload: jwt.JwtPayload; 
-    secret: string; 
-    expires: number | string;
-  }){
-    return jwt.sign(payload, secret, {expiresIn: expires});
-  }
-
-  public async generateJWT(tipo: number, cliente) : Promise<any>
-  {
-    const payload = {
-      
-    };
-    return {
-      accessToken: this.signJWT({
-        payload,
-        secret: process.env.JWT_SECRET,
-        expires: '1h'
-      }),
-      cliente,
-      rol: tipo
     }
   }
 }

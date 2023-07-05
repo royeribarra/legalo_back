@@ -20,16 +20,18 @@ export class ClientesController {
     const existeCliente = await this.clientesService.existeClienteByCodigo(body.codigo);
     const existeSucursalCliente = await this.sucursalService.existeSucursalByCodigo(body.codigo);
     if (existeCliente) {
+      const jwt = await this.clientesService.generateJWT(1, existeCliente);
       return response.json({
         message: 'Cliente existente.',
-        cliente: 1,
-        state: true
+        state: true,
+        info: jwt
       });
     } else if(existeSucursalCliente){
+      const jwt = await this.clientesService.generateJWT(2, existeSucursalCliente);
       return response.json({
         message: 'Sucursal de cliente existente.',
-        cliente: 2,
-        state: true
+        state: true,
+        info: jwt
       });
     } 
 

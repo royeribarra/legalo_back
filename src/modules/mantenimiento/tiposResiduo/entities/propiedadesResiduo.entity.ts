@@ -4,12 +4,12 @@ import { IPropiedadResiduo } from '../../../../interfaces/mantenimiento/residuos
 import { TiposResiduoPropiedadesEntity } from './tipoResiduoPropiedad.entity';
 
 @Entity({name:'propiedadesResiduo'})
-export class PropiedadesResiduoEntity extends BaseEntity implements IPropiedadResiduo{
-
+export class PropiedadesResiduoEntity extends BaseEntity implements IPropiedadResiduo
+{
   @Column()
   nombre: string;
 
-  @Column()
+  @Column({ type: 'text' })
   descripcion: string;
 
   @Column()

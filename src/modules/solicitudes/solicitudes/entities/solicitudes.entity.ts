@@ -1,10 +1,11 @@
 import { BaseEntity } from '../../../../config/base.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { ISolicitudRecoleccion } from 'src/interfaces/solicitudes/solicitudRecoleccion.interface';
+import { TrackerEntity } from '../../tracker/entities/tracker.entity';
 
 @Entity({name:'solicitudes'})
-export class SolicitudesEntity extends BaseEntity implements ISolicitudRecoleccion{
-
+export class SolicitudesEntity extends BaseEntity implements ISolicitudRecoleccion
+{
   @Column()
   codigo: number;
 
@@ -26,6 +27,9 @@ export class SolicitudesEntity extends BaseEntity implements ISolicitudRecolecci
   @Column()
   cantidad: number;
 
+  @Column({nullable: true})
+  cilindros: number;
+
   @Column()
   direccionRecoleccion: string;
 
@@ -34,4 +38,11 @@ export class SolicitudesEntity extends BaseEntity implements ISolicitudRecolecci
 
   @Column()
   estadoSolicitud: number;
+
+  @Column({nullable: true})
+  observacion: string;
+
+  @OneToOne(() => TrackerEntity)
+  @JoinColumn()
+  tracker: TrackerEntity;
 }

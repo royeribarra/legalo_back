@@ -26,6 +26,7 @@ export class AuthController {
     const jwt = await this.authService.generateJWT(userValidate);
     return response.json({
       status: 200,
+      state: true,
       message: 'Inicio de sesión exitoso.',
       jwt: jwt
     });

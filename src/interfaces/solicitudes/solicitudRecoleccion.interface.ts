@@ -8,5 +8,7 @@ export interface ISolicitudRecoleccion{
   fechaRecoleccion: string,
   direccionRecoleccion: string,
   contactoEmpresa: string,
-  estadoSolicitud: number
+  estadoSolicitud: number,
+  cilindros: number,
+  observacion: string
 }
