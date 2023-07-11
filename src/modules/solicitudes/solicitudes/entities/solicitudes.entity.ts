@@ -6,8 +6,8 @@ import { TrackerEntity } from '../../tracker/entities/tracker.entity';
 @Entity({name:'solicitudes'})
 export class SolicitudesEntity extends BaseEntity implements ISolicitudRecoleccion
 {
-  @Column()
-  codigo: number;
+  @Column({nullable: true})
+  codigo: string;
 
   @Column()
   fechaRecoleccion: string;
@@ -23,6 +23,9 @@ export class SolicitudesEntity extends BaseEntity implements ISolicitudRecolecci
 
   @Column()
   tipoResiduo: number;
+
+  @Column()
+  unidadMedida: number;
 
   @Column()
   cantidad: number;

@@ -12,6 +12,7 @@ import { SucursalesClienteModule } from './modules/solicitudes/sucursalesCliente
 import { SolicitudesModule } from './modules/solicitudes/solicitudes/solicitudes.module';
 import { TiposResiduoModule } from './modules/mantenimiento/tiposResiduo/tiposResiduo.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ResiduosModule } from './modules/mantenimiento/residuos/residuos.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from './modules/auth/auth.module';
     ClientesModule,
     SucursalesClienteModule,
     SolicitudesModule,
+    ResiduosModule,
     TiposResiduoModule,
     AuthModule
   ],

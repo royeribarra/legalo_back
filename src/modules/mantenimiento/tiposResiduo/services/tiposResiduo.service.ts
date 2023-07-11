@@ -8,13 +8,13 @@ import { TiposResiduoEntity } from '../entities/tiposResiduo.entity';
 @Injectable()
 export class TiposResiduoService{
   constructor(
-    @InjectRepository(TiposResiduoEntity) private readonly usuariosRespository: Repository<TiposResiduoEntity>
+    @InjectRepository(TiposResiduoEntity) private readonly residuosRespository: Repository<TiposResiduoEntity>
   ){}
 
   public async createResiduo(body: TipoResiduoDTO): Promise<TiposResiduoEntity>
   {
     try {
-      const usuarios : TiposResiduoEntity = await this.usuariosRespository.save(body);
+      const usuarios : TiposResiduoEntity = await this.residuosRespository.save(body);
       return usuarios;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -24,15 +24,21 @@ export class TiposResiduoService{
   public async findResiduos(): Promise<TiposResiduoEntity[]>
   {
     try {
-      const usuarios : TiposResiduoEntity[] = await this.usuariosRespository.find();
-      if(usuarios.length === 0)
-      {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se encontró ningun usuario.'
-        });
-      }
-      return usuarios;
+      // const residuos : TiposResiduoEntity[] = await this.residuosRespository.find({
+      //   relations: ['medidasSeguridad', 'metodosTratamiento', 'normativas', 'propiedades', 'unidadesMedida']
+      // });
+
+      const residuos : TiposResiduoEntity[] = await this.residuosRespository
+        .createQueryBuilder('tiposResiduo')
+        // .leftJoinAndSelect('tiposResiduo.medidasSeguridad', 'medidasSeguridad')
+        // .leftJoinAndSelect('tiposResiduo.metodosTratamiento', 'metodosTratamiento')
+        // .leftJoinAndSelect('tiposResiduo.normativas', 'normativas')
+        // .leftJoinAndSelect('tiposResiduo.propiedades', 'propiedades')
+
+        .leftJoinAndSelect('tiposResiduo.unidadesMedida', 'unidadesMedida')
+        .leftJoinAndSelect('unidadesMedida.unidadMedida', 'unidadMedida')
+        .getMany();
+      return residuos;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -41,7 +47,7 @@ export class TiposResiduoService{
   public async findResiduoById(id: string): Promise<TiposResiduoEntity>
   {
     try {
-      const usuarios : TiposResiduoEntity =  await this.usuariosRespository
+      const usuarios : TiposResiduoEntity =  await this.residuosRespository
         .createQueryBuilder('usuarios')
         .where({id})
         .getOne();
@@ -63,7 +69,7 @@ export class TiposResiduoService{
   public async updateResiduo(body: TipoResiduoUpdateDTO, id: string): Promise<UpdateResult> | undefined
   {
     try {
-      const usuarios: UpdateResult = await this.usuariosRespository.update(id, body);
+      const usuarios: UpdateResult = await this.residuosRespository.update(id, body);
       if(usuarios.affected === 0)
       {
         throw new ErrorManager({
@@ -80,7 +86,7 @@ export class TiposResiduoService{
   public async deleteResiduo(id: string): Promise<DeleteResult> | undefined
   {
     try {
-      const usuarios: DeleteResult = await this.usuariosRespository.delete(id);
+      const usuarios: DeleteResult = await this.residuosRespository.delete(id);
       if(usuarios.affected === 0)
       {
         throw new ErrorManager({

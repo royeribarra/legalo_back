@@ -9,6 +9,8 @@ import MedidaSeguridadTipoResiduoSeeder from './MedidaSeguridadTipoResiduo.seede
 import MetodoTratamientoTipoResiduoSeeder from './MetodoTratamientoTipoResiduo.seeder';
 import NormativaTipoResiduoSeeder from './NormativaTipoResiduo.seeder';
 import PropiedadTipoResiduoSeeder from './PropiedadTipoResiduo.seeder';
+import UnidadMedidaTipoResiduoSeeder from './UnidadMedidaTipoResiduo.seeder';
+import TipoResiduoRelationUnidadMedidaSeeder from './TipoResiduoRelationUnidadMedida.seeder';
 
 export default class MainSeeder implements Seeder {
   public async run(
@@ -20,9 +22,11 @@ export default class MainSeeder implements Seeder {
     await runSeeder(dataSource, ClienteSeeder);
     await runSeeder(dataSource, SucursalClienteSeeder);
     await runSeeder(dataSource, TipoResiduoSeeder);
+    await runSeeder(dataSource, UnidadMedidaTipoResiduoSeeder);
     await runSeeder(dataSource, MedidaSeguridadTipoResiduoSeeder);
     await runSeeder(dataSource, MetodoTratamientoTipoResiduoSeeder);
     await runSeeder(dataSource, NormativaTipoResiduoSeeder);
     await runSeeder(dataSource, PropiedadTipoResiduoSeeder);
+    await runSeeder(dataSource, TipoResiduoRelationUnidadMedidaSeeder);
   }
 }

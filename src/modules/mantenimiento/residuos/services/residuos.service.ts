@@ -25,15 +25,11 @@ export class ResiduosService{
   public async findResiduos(): Promise<ResiduosEntity[]>
   {
     try {
-      const usuarios : ResiduosEntity[] = await this.usuariosRespository.find();
-      if(usuarios.length === 0)
-      {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se encontró ningun usuario.'
-        });
-      }
-      return usuarios;
+      const residuos : ResiduosEntity[] = await this.usuariosRespository.find({
+        relations: ['tipoResiduo'],
+      });
+      
+      return residuos;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

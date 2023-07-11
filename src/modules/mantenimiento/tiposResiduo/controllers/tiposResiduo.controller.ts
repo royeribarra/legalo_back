@@ -10,28 +10,28 @@ export class TiposResiduoController {
   constructor(private readonly herramientasService: TiposResiduoService) {}
 
   @Post('register')
-  public async registerHerramienta(@Body() body:TipoResiduoDTO){
+  public async registerTipoResiduo(@Body() body:TipoResiduoDTO){
     return await this.herramientasService.createResiduo(body);
   }
 
   @Get('all')
-  public async findAllHerramientas()
+  public async findAllTiposResiduo()
   {
     return await this.herramientasService.findResiduos();
   }
 
   @Get(':id')
-  public async findHerramientaById(@Param('id') id: string){
+  public async findTipoResiduoById(@Param('id') id: string){
     return await this.herramientasService.findResiduoById(id);
   }
 
   @Put('edit/:id')
-  public async updateHerramienta(@Body() body: TipoResiduoUpdateDTO, @Param('id') id:string){
+  public async updateTipoResiduo(@Body() body: TipoResiduoUpdateDTO, @Param('id') id:string){
     return await this.herramientasService.updateResiduo(body, id);
   }
 
   @Delete(':id')
-  public async deleteHerramienta(@Param('id') id:string){
+  public async deleteTipoResiduo(@Param('id') id:string){
     return await this.herramientasService.deleteResiduo(id);
   }
 

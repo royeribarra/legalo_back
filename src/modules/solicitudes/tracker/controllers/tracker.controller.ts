@@ -14,7 +14,8 @@ export class TrackerController {
 
   @Post('register')
   public async registerCliente(@Body() body:TrackerDTO){
-    return await this.trackerService.createCliente(body);
+    const newDate = new Date()
+    return await this.trackerService.createTracker(newDate.toLocaleDateString());
   }
 
   @Get('all')

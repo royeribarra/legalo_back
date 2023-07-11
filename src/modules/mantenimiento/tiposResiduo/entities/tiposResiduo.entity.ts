@@ -1,11 +1,12 @@
 import { BaseEntity } from '../../../../config/base.entity';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToOne, OneToMany } from 'typeorm';
 import { ITipoResiduo } from '../../../../interfaces/mantenimiento/residuos/tipoResiduo.interface';
 import { TiposResiduoMedidasSeguridadEntity } from './tipoResiduoMedidaSeguridad.entity';
 import { TiposResiduoMetodosTratamientoEntity } from './tipoResiduoMetodoTratamiento.entity';
 import { TiposResiduoNormativasEntity } from './tipoResiduoNormativa.entity';
 import { TiposResiduoPropiedadesEntity } from './tipoResiduoPropiedad.entity';
 import { ResiduosEntity } from '../../residuos/entities/residuos.entity';
+import { TiposResiduoUnidadMedidaEntity } from './tiposResiduoUnidadMedida.entity';
 
 @Entity({name:'tiposResiduo'})
 export class TiposResiduoEntity extends BaseEntity implements ITipoResiduo
@@ -29,17 +30,26 @@ export class TiposResiduoEntity extends BaseEntity implements ITipoResiduo
   responsable: string;
 
   @OneToMany(() => ResiduosEntity, residuo => residuo.tipoResiduo)
+  @JoinTable()
   residuos: ResiduosEntity[];
 
-  @ManyToOne(() => TiposResiduoMedidasSeguridadEntity, medida => medida.tipoResiduo)
+  @OneToMany(() => TiposResiduoMedidasSeguridadEntity, medida => medida.tipoResiduo)
+  @JoinTable()
   medidasSeguridad: TiposResiduoMedidasSeguridadEntity;
 
-  @ManyToOne(() => TiposResiduoMetodosTratamientoEntity, metodo => metodo.tipoResiduo)
+  @OneToMany(() => TiposResiduoMetodosTratamientoEntity, metodo => metodo.tipoResiduo)
+  @JoinTable()
   metodosTratamiento: TiposResiduoMetodosTratamientoEntity;
 
-  @ManyToOne(() => TiposResiduoNormativasEntity, normativa => normativa.tipoResiduo)
+  @OneToMany(() => TiposResiduoNormativasEntity, normativa => normativa.tipoResiduo)
+  @JoinTable()
   normativas: TiposResiduoNormativasEntity;
 
-  @ManyToOne(() => TiposResiduoPropiedadesEntity, propiedad => propiedad.tipoResiduo)
+  @OneToMany(() => TiposResiduoPropiedadesEntity, propiedad => propiedad.tipoResiduo)
+  @JoinTable()
   propiedades: TiposResiduoPropiedadesEntity;
+
+  @OneToMany(() => TiposResiduoUnidadMedidaEntity, unidad => unidad.tipoResiduo)
+  @JoinTable()
+  unidadesMedida: TiposResiduoUnidadMedidaEntity;
 }

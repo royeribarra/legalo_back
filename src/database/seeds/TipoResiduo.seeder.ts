@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import { TiposResiduoEntity } from '../../../src/modules/mantenimiento/tiposResiduo/entities/tiposResiduo.entity';
 
 export default class TipoResiduoSeeder implements Seeder {
+  
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager

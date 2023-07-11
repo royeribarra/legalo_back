@@ -1,4 +1,5 @@
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
+import { TrackerEntity } from '../../tracker/entities/tracker.entity';
 
 export class SolicitudDTO{
   @IsNotEmpty()
@@ -14,36 +15,41 @@ export class SolicitudDTO{
   empresaSolicitante: number;
 
   @IsNotEmpty()
-  @IsString()
-  sucursalEmpresaSolicitante: string;
+  @IsNumber()
+  sucursalEmpresaSolicitante: number;
 
   @IsNotEmpty()
-  @IsString()
-  tipoResiduo: string;
+  @IsNumber()
+  tipoResiduo: number;
 
   @IsNotEmpty()
-  @IsString()
-  cantidad: string;
+  @IsNumber()
+  unidadMedida: number;
 
   @IsNotEmpty()
-  @IsString()
-  cilindros: string;
+  @IsNumber()
+  cantidad: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  cilindros: number;
 
   @IsNotEmpty()
   @IsString()
   direccionRecoleccion: string;
 
-  @IsNotEmpty()
   @IsString()
   contactoEmpresa: string;
 
   @IsNotEmpty()
-  @IsString()
-  estadoSolicitud: string;
+  @IsNumber()
+  estadoSolicitud: number;
 
-  @IsNotEmpty()
   @IsString()
   observacion: string;
+
+  @IsOptional()
+  tracker: TrackerEntity;
 }
 
 export class SolicitudUpdateDTO{

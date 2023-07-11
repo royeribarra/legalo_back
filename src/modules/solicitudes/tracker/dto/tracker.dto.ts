@@ -9,7 +9,6 @@ export class TrackerDTO{
   @IsString()
   fechaInicio: string;
 
-  @IsNotEmpty()
   @IsString()
   fechaCompletado: string;
 
@@ -21,7 +20,7 @@ export class TrackerDTO{
   @IsString()
   estado: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   archivo: string;
 }

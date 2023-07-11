@@ -1,5 +1,5 @@
 export interface ISolicitudRecoleccion{
-  codigo: number,
+  codigo: string,
   fechaSolicitud: string,
   empresaSolicitante: number,
   sucursalEmpresaSolicitante: number,
