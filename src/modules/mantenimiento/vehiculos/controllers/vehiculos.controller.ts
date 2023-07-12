@@ -7,7 +7,7 @@ import { VehiculosService } from '../services/vehiculos.service';
 export class VehiculosController {
   constructor(private readonly herramientasService: VehiculosService) {}
 
-  @Post('register')
+  @Post('create')
   public async registerHerramienta(@Body() body:VehiculoDTO){
     return await this.herramientasService.createVehiculo(body);
   }

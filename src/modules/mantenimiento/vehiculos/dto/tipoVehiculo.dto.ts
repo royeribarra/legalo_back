@@ -1,6 +1,6 @@
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 
-export class AreaEmpresaDTO{
+export class TipoVehiculoDTO{
   @IsNotEmpty()
   @IsString()
   nombre: string;
@@ -8,26 +8,14 @@ export class AreaEmpresaDTO{
   @IsNotEmpty()
   @IsString()
   descripcion: string;
-
-  @IsNotEmpty()
-  @IsString()
-  responsale: string;
 }
 
-export class AreaEmpresaUpdateDTO{
+export class TipoVehiculoUpdateDTO{
   @IsOptional()
   @IsString()
   nombre: string;
 
   @IsOptional()
   @IsString()
-  codigo: string;
-
-  @IsOptional()
-  @IsNumber()
-  tarifa: number;
-
-  @IsOptional()
-  @IsBoolean()
-  isActive: boolean;
+  descripcion: string;
 }

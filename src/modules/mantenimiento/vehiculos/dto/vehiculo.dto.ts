@@ -1,50 +1,54 @@
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
+import { TipoVehiculoEntity } from '../entities/tipoVehiculo.entity';
 
 export class VehiculoDTO{
   @IsNotEmpty()
   @IsString()
-  nombre: string;
+  codigo: string;
 
   @IsNotEmpty()
   @IsString()
-  apellido: string;
+  placa: string;
+
+  tipoVehiculo: TipoVehiculoEntity;
 
   @IsNotEmpty()
   @IsNumber()
-  edad: number;
+  capacidadCarga: number;
 
   @IsNotEmpty()
   @IsString()
-  correo: string;
+  licencia: string;
 
   @IsNotEmpty()
   @IsString()
-  usuario: string;
+  estadoMantenimiento: string;
 
   @IsNotEmpty()
   @IsString()
-  contrasena: string;
+  disponiblidad: string;
 
   @IsNotEmpty()
   @IsString()
-  direccion: string;
+  responsable: string;
 
   @IsNotEmpty()
   @IsString()
-  distrito: string;
+  vencimientoMTC: string;
 
   @IsNotEmpty()
   @IsString()
-  provincia: string;
+  vencimientoPoliza: string;
 
   @IsNotEmpty()
   @IsString()
-  dni: string;
+  vencimientoRD: string;
 
   @IsNotEmpty()
   @IsString()
-  telefono: string;
+  vencimientoSOAT: string;
 }
+
 export class VehiculoUpdateDTO{
   @IsOptional()
   @IsString()

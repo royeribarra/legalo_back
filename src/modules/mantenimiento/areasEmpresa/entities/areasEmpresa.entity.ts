@@ -9,7 +9,7 @@ export class AreaEmpresaEntity extends BaseEntity implements IAreaEmpresa{
   @Column()
   nombre: string;
 
-  @Column()
+  @Column({nullable: true})
   descripcion: string;
 
   @Column()

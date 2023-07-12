@@ -13,6 +13,7 @@ import { SolicitudesModule } from './modules/solicitudes/solicitudes/solicitudes
 import { TiposResiduoModule } from './modules/mantenimiento/tiposResiduo/tiposResiduo.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ResiduosModule } from './modules/mantenimiento/residuos/residuos.module';
+import { VehiculosModule } from './modules/mantenimiento/vehiculos/vehiculos.module';
 
 @Module({
   imports: [
@@ -20,16 +21,17 @@ import { ResiduosModule } from './modules/mantenimiento/residuos/residuos.module
       envFilePath: `.${process.env.NODE_ENV}.env`,
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({...DataSourceConfig}), 
-    ConductoresModule,
-    UsuariosModule,
-    RolesModule,
+    TypeOrmModule.forRoot({...DataSourceConfig}),
+    AuthModule,
     ClientesModule,
-    SucursalesClienteModule,
-    SolicitudesModule,
+    ConductoresModule,
     ResiduosModule,
+    RolesModule,
+    SolicitudesModule,
+    SucursalesClienteModule,
     TiposResiduoModule,
-    AuthModule
+    UsuariosModule,
+    VehiculosModule
   ],
   controllers: [AppController],
   providers: [AppService],

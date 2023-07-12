@@ -1,7 +1,7 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { ClientesEntity } from '../../../src/modules/solicitudes/clientes/entities/clientes.entity';
-import { ClienteDTO } from 'src/modules/solicitudes/clientes/dto/cliente.dto';
+import { AreaEmpresaEntity } from 'src/modules/mantenimiento/areasEmpresa/entities/areasEmpresa.entity';
+import { AreaEmpresaDTO } from 'src/modules/mantenimiento/areasEmpresa/dto/areaEmpresa.dto';
 
 export default class AreaEmpresaSeeder implements Seeder {
   public async run(
@@ -9,47 +9,43 @@ export default class AreaEmpresaSeeder implements Seeder {
     factoryManager: SeederFactoryManager
   ): Promise<any> {
     try {
-      const clienteRepository =  dataSource.getRepository(ClientesEntity);
-      const data : ClienteDTO []= [
+      const areaRepository =  dataSource.getRepository(AreaEmpresaEntity);
+      const data : AreaEmpresaDTO []= [
         {
-          nombre: 'INCHCAPE LATAM PERU SA',
-          contactoPrincipal: 'Santiago Herrera Pérez',
-          direccion: '',
-          numeroContacto: '934 567 890',
-          codigo: 'INCHCA'
+          nombre: 'COMERCIAL',
+          descripcion: 'área encargada de negociar con los clientes.',
+          responsale: 'Carla'
         },
         {
-          nombre: 'MITSUI AUTOMOTRIZ SA',
-          contactoPrincipal: 'Isabella Rodríguez Gómez',
-          direccion: '',
-          numeroContacto: '977 123 456',
-          codigo: 'MITSUI'
+          nombre: 'TRANSPORTE',
+          descripcion: 'area encargada de manejar el tranposrte ',
+          responsale: 'Kenny'
         },
         {
-          nombre: 'DERCOCENTER SAC',
-          contactoPrincipal: 'Mateo López García',
-          direccion: '',
-          numeroContacto: '956 789 012',
-          codigo: 'DERCOC'
+          nombre: 'CALIDAD',
+          descripcion: 'Area encarga de evaluar el producto',
+          responsale: 'Arturo'
+        },
+        {
+          nombre: 'CONTROL INTERNO',
+          descripcion: 'área encargada de llevar a cabo el control de existencia y procedimientos.',
+          responsale: 'Leandra'
         },
       ];
 
       const dataToInsert = [];
 
       for (const element of data) {
-        const clienteExists = await clienteRepository.findOneBy({ nombre: element.nombre, codigo: element.codigo });
+        const clienteExists = await areaRepository.findOneBy({ nombre: element.nombre });
         if (!clienteExists) {
           dataToInsert.push(element);
         }
       }
       
-      await clienteRepository.insert(dataToInsert);
+      await areaRepository.insert(dataToInsert);
       console.log("Clientes insertados correctamente");
     } catch (error) {
       console.error('Error en el ClienteSeeder:', error);
     }
-    
   }
-
- 
 }

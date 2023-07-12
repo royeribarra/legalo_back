@@ -1,44 +1,50 @@
 import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { IUsuario } from 'src/interfaces/mantenimiento/user.interface';
-import { RolesEntity } from '../../roles/entities/roles.entity';
+import { IVehiculo } from 'src/interfaces/mantenimiento/vehiculo.interface';
+import { TipoVehiculoEntity } from './tipoVehiculo.entity';
 
 @Entity({name:'vehiculos'})
-export class VehiculosEntity extends BaseEntity implements IUsuario{
+export class VehiculosEntity extends BaseEntity implements IVehiculo{
 
   @Column()
   nombre: string;
 
-  @Column()
-  apellido: string;
+  @Column({nullable: true})
+  codigo: string;
 
   @Column()
-  edad: number;
+  placa: string;
 
   @Column()
-  correo: string;
+  capacidadCarga: number;
 
   @Column()
-  usuario: string;
+  unidadMedida: number;
 
   @Column()
-  contrasena: string;
+  certificado: string;
 
   @Column()
-  direccion: string;
+  estadoMantenimiento: string;
 
   @Column()
-  dni: string;
+  disponibilidad: string;
 
   @Column()
-  telefono: string;
+  responsable: string;
 
   @Column()
-  distrito: string;
+  vencimientoMTC: string;
 
   @Column()
-  provincia: string;
+  vencimientoPoliza: string;
 
-  @ManyToOne(() => RolesEntity, rol => rol.usuarios)
-  rol: RolesEntity;
+  @Column()
+  vencimientoRD: string;
+
+  @Column()
+  vencimientoSOAT: string;
+
+  @ManyToOne(() => TipoVehiculoEntity, tipoVehiculo => tipoVehiculo.vehiculos)
+  tipoVehiculo: TipoVehiculoEntity;
 }
