@@ -1,7 +1,7 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { TipoVehiculoEntity } from '../../modules/mantenimiento/vehiculos/entities/tipoVehiculo.entity';
-import { TipoVehiculoDTO } from 'src/modules/mantenimiento/vehiculos/dto/tipoVehiculo.dto';
+import { TipoVehiculoDTO } from '../../modules/mantenimiento/vehiculos/dto/tipoVehiculo.dto';
 
 export default class TipoVehiculoSeeder implements Seeder {
   

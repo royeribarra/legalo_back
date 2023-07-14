@@ -6,13 +6,13 @@ import { TipoVehiculoEntity } from './tipoVehiculo.entity';
 @Entity({name:'vehiculos'})
 export class VehiculosEntity extends BaseEntity implements IVehiculo{
 
-  @Column()
+  @Column({nullable: true})
   nombre: string;
 
   @Column({nullable: true})
   codigo: string;
 
-  @Column()
+  @Column({unique: true})
   placa: string;
 
   @Column()
@@ -21,7 +21,7 @@ export class VehiculosEntity extends BaseEntity implements IVehiculo{
   @Column()
   unidadMedida: number;
 
-  @Column()
+  @Column({nullable: true})
   certificado: string;
 
   @Column()
@@ -33,16 +33,16 @@ export class VehiculosEntity extends BaseEntity implements IVehiculo{
   @Column()
   responsable: string;
 
-  @Column()
+  @Column({nullable: true})
   vencimientoMTC: string;
 
-  @Column()
+  @Column({nullable: true})
   vencimientoPoliza: string;
 
-  @Column()
+  @Column({nullable: true})
   vencimientoRD: string;
 
-  @Column()
+  @Column({nullable: true})
   vencimientoSOAT: string;
 
   @ManyToOne(() => TipoVehiculoEntity, tipoVehiculo => tipoVehiculo.vehiculos)

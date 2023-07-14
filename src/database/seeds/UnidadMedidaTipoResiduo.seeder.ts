@@ -36,11 +36,6 @@ export default class UnidadMedidaTipoResiduoSeeder implements Seeder {
           descripcion: 'Unidad de peso.',
           factorConversion: '1 tonelada = 1000 kilogramos'
         },
-        {
-          unidadMedida: 'Toneladas',
-          descripcion: 'Unidad de peso.',
-          factorConversion: '1 tonelada = 1000 kilogramos'
-        },
       ];
 
       const dataToInsert = [];

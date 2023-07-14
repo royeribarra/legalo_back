@@ -2,23 +2,28 @@ import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-val
 import { TipoVehiculoEntity } from '../entities/tipoVehiculo.entity';
 
 export class VehiculoDTO{
-  @IsNotEmpty()
-  @IsString()
-  codigo: string;
+  // @IsNotEmpty()
+  // @IsString()
+  // codigo: string;
 
   @IsNotEmpty()
   @IsString()
   placa: string;
 
-  tipoVehiculo: TipoVehiculoEntity;
+  @IsNumber()
+  tipoVehiculo: number;
 
   @IsNotEmpty()
   @IsNumber()
   capacidadCarga: number;
 
   @IsNotEmpty()
-  @IsString()
-  licencia: string;
+  @IsNumber()
+  unidadMedida: number;
+
+  // @IsNotEmpty()
+  // @IsString()
+  // licencia: string;
 
   @IsNotEmpty()
   @IsString()
@@ -26,27 +31,27 @@ export class VehiculoDTO{
 
   @IsNotEmpty()
   @IsString()
-  disponiblidad: string;
+  disponibilidad: string;
 
   @IsNotEmpty()
   @IsString()
   responsable: string;
 
-  @IsNotEmpty()
-  @IsString()
-  vencimientoMTC: string;
+  // @IsNotEmpty()
+  // @IsString()
+  // vencimientoMTC: string;
 
-  @IsNotEmpty()
-  @IsString()
-  vencimientoPoliza: string;
+  // @IsNotEmpty()
+  // @IsString()
+  // vencimientoPoliza: string;
 
-  @IsNotEmpty()
-  @IsString()
-  vencimientoRD: string;
+  // @IsNotEmpty()
+  // @IsString()
+  // vencimientoRD: string;
 
-  @IsNotEmpty()
-  @IsString()
-  vencimientoSOAT: string;
+  // @IsNotEmpty()
+  // @IsString()
+  // vencimientoSOAT: string;
 }
 
 export class VehiculoUpdateDTO{

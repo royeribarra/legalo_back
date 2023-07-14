@@ -9,7 +9,7 @@ export class TipoVehiculoEntity extends BaseEntity implements ITipoVehiculo{
   @Column()
   nombre: string;
 
-  @Column({nullable: true})
+  @Column({nullable: true, type: 'text' })
   descripcion: string;
 
   @OneToMany(() => VehiculosEntity, vehiculo => vehiculo.tipoVehiculo)
