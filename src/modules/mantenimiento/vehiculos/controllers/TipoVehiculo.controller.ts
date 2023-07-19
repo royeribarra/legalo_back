@@ -1,7 +1,5 @@
 import { Body, Controller, Get, Param, Post, Put} from '@nestjs/common';
-import { VehiculoDTO, VehiculoUpdateDTO } from '../dto/vehiculo.dto';
 import { Delete } from '@nestjs/common/decorators';
-import { VehiculosService } from '../services/vehiculos.service';
 import { TipoVehiculoService } from '../services/tipoVehiculo.service';
 import { TipoVehiculoDTO, TipoVehiculoUpdateDTO } from '../dto/tipoVehiculo.dto';
 import { ApiTags } from '@nestjs/swagger';
