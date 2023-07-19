@@ -12,6 +12,7 @@ export default class ClienteSeeder implements Seeder {
       const clienteRepository =  dataSource.getRepository(ClientesEntity);
       const data : ClienteDTO []= [
         {
+          ruc: '20504667809',
           nombre: 'INCHCAPE LATAM PERU SA',
           contactoPrincipal: 'Santiago Herrera Pérez',
           direccion: '',
@@ -19,6 +20,7 @@ export default class ClienteSeeder implements Seeder {
           codigo: 'INCHCA'
         },
         {
+          ruc: '20457634160',
           nombre: 'MITSUI AUTOMOTRIZ SA',
           contactoPrincipal: 'Isabella Rodríguez Gómez',
           direccion: '',
@@ -26,6 +28,7 @@ export default class ClienteSeeder implements Seeder {
           codigo: 'MITSUI'
         },
         {
+          ruc: '20734562341 ',
           nombre: 'DERCOCENTER SAC',
           contactoPrincipal: 'Mateo López García',
           direccion: '',

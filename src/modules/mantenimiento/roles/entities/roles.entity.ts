@@ -7,7 +7,7 @@ import { RolesModulosWebEntity } from './rolModulosWeb.entity';
 @Entity({name:'roles'})
 export class RolesEntity extends BaseEntity implements IRol{
 
-  @Column()
+  @Column({unique: true})
   nombre: string;
 
   @Column()

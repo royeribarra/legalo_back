@@ -5,7 +5,7 @@ import { TiposResiduoService } from '../services/tiposResiduo.service';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { UnidadMedidaResiduoService } from '../services/unidadesMedidaResiduo.service';
 
-@ApiTags('UnidadesMedida')
+@ApiTags('Unidades Medida')
 @Controller('unidades-medida')
 export class UnidadMedidaResiduoController {
   constructor(private readonly unidadesService: UnidadMedidaResiduoService) {}

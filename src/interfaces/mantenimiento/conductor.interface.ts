@@ -10,6 +10,5 @@ export interface IConductor {
   fechaVencimientoLicencia: string;
   fechaContratacion: string;
   isActive: boolean;
-  vehiculoAsignado: number;
-  disponibilidad: number;
+  disponibilidad: string;
 }

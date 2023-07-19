@@ -4,6 +4,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ConductorDTO, ConductorUpdateDTO } from '../dto/conductor.dto';
 import { ErrorManager } from '../../../../utils/error.manager';
 import { ConductoresEntity } from '../entities/conductores.entity';
+import { VehiculosEntity } from '../../vehiculos/entities/vehiculo.entity';
 
 @Injectable()
 export class ConductoresService{
@@ -11,10 +12,22 @@ export class ConductoresService{
     @InjectRepository(ConductoresEntity) private readonly conductoresRespository: Repository<ConductoresEntity>
   ){}
 
-  public async createConductor(body: ConductorDTO): Promise<ConductoresEntity>
+  public async createConductor(body: ConductorDTO, vehiculo: VehiculosEntity): Promise<ConductoresEntity>
   {
     try {
-      const conductores : ConductoresEntity = await this.conductoresRespository.save(body);
+      const nuevoConductor = new ConductoresEntity();
+      nuevoConductor.apellido = body.apellido;
+      nuevoConductor.correo = body.correo;
+      nuevoConductor.direccion = body.direccion;
+      nuevoConductor.disponibilidad = body.disponibilidad;
+      nuevoConductor.dni = body.dni;
+      nuevoConductor.fechaContratacion = body.fechaContratacion;
+      nuevoConductor.fechaVencimientoLicencia = body.fechaVencimientoLicencia;
+      nuevoConductor.licenciaConducir = body.licenciaConducir;
+      nuevoConductor.nombre = body.nombre;
+      nuevoConductor.vehiculo = vehiculo;
+      nuevoConductor.telefono = body.telefono;
+      const conductores : ConductoresEntity = await this.conductoresRespository.save(nuevoConductor);
       return conductores;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -24,14 +37,11 @@ export class ConductoresService{
   public async findConductores(): Promise<ConductoresEntity[]>
   {
     try {
-      const conductoress : ConductoresEntity[] = await this.conductoresRespository.find();
-      if(conductoress.length === 0)
-      {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se encontró ningun usuario.'
-        });
-      }
+      const conductoress : ConductoresEntity[] = await this.conductoresRespository
+        .createQueryBuilder('conductores')
+        .leftJoinAndSelect('conductores.vehiculo', 'vehiculo')
+        .getMany();
+      
       return conductoress;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -43,6 +53,7 @@ export class ConductoresService{
     try {
       const conductores : ConductoresEntity =  await this.conductoresRespository
         .createQueryBuilder('conductores')
+        .leftJoinAndSelect('conductores.vehiculo', 'vehiculo')
         .where({id})
         .getOne();
 
@@ -50,7 +61,7 @@ export class ConductoresService{
         {
           throw new ErrorManager({
             type: 'BAD_REQUEST',
-            message: `No se encontró al usuario de Id = ${id}`
+            message: `No se encontró al conductor de Id = ${id}`
           });
         }
 
@@ -60,15 +71,28 @@ export class ConductoresService{
     }
   }
 
-  public async updateConductor(body: ConductorUpdateDTO, id: string): Promise<UpdateResult> | undefined
+  public async updateConductor(body: ConductorUpdateDTO, id: number, vehiculo: VehiculosEntity): Promise<UpdateResult> | undefined
   {
     try {
-      const conductores: UpdateResult = await this.conductoresRespository.update(id, body);
+      const dataConductor = new ConductoresEntity();
+      dataConductor.apellido = body.apellido;
+      dataConductor.correo = body.correo;
+      dataConductor.direccion = body.direccion;
+      dataConductor.disponibilidad = body.disponibilidad;
+      dataConductor.dni = body.dni;
+      dataConductor.fechaContratacion = body.fechaContratacion;
+      dataConductor.fechaVencimientoLicencia = body.fechaVencimientoLicencia;
+      dataConductor.licenciaConducir = body.licenciaConducir;
+      dataConductor.nombre = body.nombre;
+      dataConductor.vehiculo = vehiculo;
+      dataConductor.telefono = body.telefono;
+
+      const conductores: UpdateResult = await this.conductoresRespository.update(id, dataConductor);
       if(conductores.affected === 0)
       {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
-          message: 'No se pudo actualizar el usuario.'
+          message: 'No se pudo actualizar el conductor, porque no existe.'
         });
       }
       return conductores;
@@ -85,7 +109,7 @@ export class ConductoresService{
       {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
-          message: 'No se pudo eliminar el usuario, porque no existe.'
+          message: 'No se pudo eliminar el conductor, porque no existe.'
         });
       }
       return conductores;

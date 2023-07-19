@@ -14,6 +14,7 @@ import { TiposResiduoModule } from './modules/mantenimiento/tiposResiduo/tiposRe
 import { AuthModule } from './modules/auth/auth.module';
 import { ResiduosModule } from './modules/mantenimiento/residuos/residuos.module';
 import { VehiculosModule } from './modules/mantenimiento/vehiculos/vehiculos.module';
+import { AreaEmpresaModule } from './modules/mantenimiento/areasEmpresa/areaEmpresa.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { VehiculosModule } from './modules/mantenimiento/vehiculos/vehiculos.mod
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({...DataSourceConfig}),
+    AreaEmpresaModule,
     AuthModule,
     ClientesModule,
     ConductoresModule,

@@ -13,6 +13,9 @@ import UnidadMedidaTipoResiduoSeeder from './UnidadMedidaTipoResiduo.seeder';
 import TipoResiduoRelationUnidadMedidaSeeder from './TipoResiduoRelationUnidadMedida.seeder';
 import TipoVehiculoSeeder from './TipoVehiculo.seeder';
 import VehiculoSeeder from './Vehiculo.seeder';
+import AreaEmpresaSeeder from './AreaEmpresa.seeder';
+import ModuloWebSeeder from './ModuloWeb.seeder';
+import RolModuloWebSeeder from './RolModuloWeb.seeder';
 
 export default class MainSeeder implements Seeder {
   public async run(
@@ -20,6 +23,9 @@ export default class MainSeeder implements Seeder {
     factoryManager: SeederFactoryManager
   ): Promise<any> {
     await runSeeder(dataSource, RolSeeder);
+    await runSeeder(dataSource, ModuloWebSeeder);
+    await runSeeder(dataSource, RolModuloWebSeeder);
+    await runSeeder(dataSource, AreaEmpresaSeeder);
     await runSeeder(dataSource, UsuarioSeeder);
     await runSeeder(dataSource, ClienteSeeder);
     await runSeeder(dataSource, SucursalClienteSeeder);

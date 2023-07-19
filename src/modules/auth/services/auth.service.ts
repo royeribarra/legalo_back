@@ -51,7 +51,7 @@ export class AuthService {
 
     const payload : PayLoadToken= {
       rol: getUser.rol,
-      sub: getUser.id.toString()
+      usuarioId: getUser.id.toString()
     };
     return {
       accessToken: this.signJWT({
@@ -64,13 +64,13 @@ export class AuthService {
   }
 
 
-  async login(username: string, password: string): Promise<string> {
-    // Lógica de verificación de credenciales
+  // async login(username: string, password: string): Promise<string> {
+  //   // Lógica de verificación de credenciales
 
-    // Generar el token JWT
-    const payload = { username: username };
-    const token = this.jwtService.generateToken(payload);
+  //   // Generar el token JWT
+  //   const payload = { username: username };
+  //   const token = this.jwtService.generateToken(payload);
 
-    return token;
-  }
+  //   return token;
+  // }
 }

@@ -3,15 +3,20 @@ import { ConductorDTO, ConductorUpdateDTO } from '../dto/conductor.dto';
 import { Delete } from '@nestjs/common/decorators';
 import { ConductoresService } from '../services/conductores.service';
 import { ApiTags } from '@nestjs/swagger';
+import { VehiculosService } from '../../vehiculos/services/vehiculos.service';
 
-@ApiTags('conductores')
+@ApiTags('Conductores')
 @Controller('conductores')
 export class ConductoresController {
-  constructor(private readonly conductoresService: ConductoresService) {}
+  constructor(
+    private readonly conductoresService: ConductoresService,
+    private readonly vehiculoService: VehiculosService
+    ) {}
 
   @Post('register')
   public async registerConductor(@Body() body:ConductorDTO){
-    return await this.conductoresService.createConductor(body);
+    const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
+    return await this.conductoresService.createConductor(body, vehiculo);
   }
 
   @Get('all')
@@ -26,8 +31,9 @@ export class ConductoresController {
   }
 
   @Put('edit/:id')
-  public async updateConductor(@Body() body: ConductorUpdateDTO, @Param('id') id:string){
-    return await this.conductoresService.updateConductor(body, id);
+  public async updateConductor(@Body() body: ConductorUpdateDTO, @Param('id') id: number){
+    const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
+    return await this.conductoresService.updateConductor(body, id, vehiculo);
   }
 
   @Delete(':id')

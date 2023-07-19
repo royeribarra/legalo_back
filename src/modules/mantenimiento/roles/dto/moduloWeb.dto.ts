@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 
-export class MedidaSeguridadTipoResiduoDTO{
+export class ModuloWebDTO{
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -11,23 +11,16 @@ export class MedidaSeguridadTipoResiduoDTO{
   @IsNotEmpty()
   @IsString()
   descripcion: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsNumber()
-  valor: number;
 }
-export class MedidaSeguridadTipoResiduoUpdateDTO
-{
+
+export class ModuloWebUpdateDTO{
+  @ApiProperty()
   @IsOptional()
   @IsString()
   nombre: string;
 
-  @IsOptional()
-  @IsNumber()
-  valor: number;
-
+  @ApiProperty()
   @IsOptional()
   @IsString()
-  descripcion: number;
+  descripcion: string;
 }

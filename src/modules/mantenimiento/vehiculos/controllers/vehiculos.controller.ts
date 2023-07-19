@@ -4,7 +4,9 @@ import { Delete } from '@nestjs/common/decorators';
 import { VehiculosService } from '../services/vehiculos.service';
 import { TipoVehiculoService } from '../services/tipoVehiculo.service';
 import { Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Vehiculos')
 @Controller('vehiculos')
 export class VehiculosController {
   constructor(
@@ -48,7 +50,7 @@ export class VehiculosController {
   }
 
   @Get(':id')
-  public async findHerramientaById(@Param('id') id: string){
+  public async findHerramientaById(@Param('id') id: number){
     return await this.vehiculoService.findVehiculoById(id);
   }
 

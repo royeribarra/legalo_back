@@ -13,9 +13,6 @@ export class UsuariosEntity extends BaseEntity implements IUsuario{
   @Column()
   apellido: string;
 
-  @Column({ nullable: true })
-  edad: number;
-
   @Column({ unique: true })
   correo: string;
 

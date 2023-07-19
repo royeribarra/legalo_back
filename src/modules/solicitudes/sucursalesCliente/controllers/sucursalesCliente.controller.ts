@@ -4,7 +4,7 @@ import { Delete } from '@nestjs/common/decorators';
 import { SucursalesClienteService } from '../services/sucursalesCliente.service';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('sucursales-cliente')
+@ApiTags('Sucursales Cliente')
 @Controller('sucursales-client')
 export class SucursalesClienteController {
   constructor(private readonly sucursalesService: SucursalesClienteService) {}

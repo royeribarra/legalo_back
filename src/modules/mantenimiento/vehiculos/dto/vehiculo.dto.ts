@@ -1,22 +1,27 @@
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 import { TipoVehiculoEntity } from '../entities/tipoVehiculo.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class VehiculoDTO{
   // @IsNotEmpty()
   // @IsString()
   // codigo: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   placa: string;
 
+  @ApiProperty()
   @IsNumber()
   tipoVehiculo: number;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
   capacidadCarga: number;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
   unidadMedida: number;
@@ -25,14 +30,17 @@ export class VehiculoDTO{
   // @IsString()
   // licencia: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   estadoMantenimiento: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   disponibilidad: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   responsable: string;

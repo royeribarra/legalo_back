@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UnauthorizedException, Res, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service'
 import { AuthDTO } from '../dto/auth.dto';
@@ -6,6 +6,7 @@ import { Response } from 'express';
 
 @ApiTags('auth')
 @Controller('auth')
+
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -30,21 +31,5 @@ export class AuthController {
       message: 'Inicio de sesión exitoso.',
       jwt: jwt
     });
-    //return jwt;
   }
-  
-  // @Post('authInfo')
-  // public async authInfo(@Body() {usuario, contrasena}: AuthDTO)
-  // {
-  //   console.log(usuario, contrasena)
-  //   const userValidate = await this.authService.validateUser(usuario, contrasena);
-
-  //   if(!userValidate){
-  //     throw new UnauthorizedException('Data no validada.')
-  //   }
-
-  //   const jwt = await this.authService.generateJWT(userValidate);
-
-  //   return jwt;
-  // }
 }

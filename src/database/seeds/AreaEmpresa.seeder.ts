@@ -1,7 +1,7 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { AreaEmpresaEntity } from 'src/modules/mantenimiento/areasEmpresa/entities/areasEmpresa.entity';
-import { AreaEmpresaDTO } from 'src/modules/mantenimiento/areasEmpresa/dto/areaEmpresa.dto';
+import { AreaEmpresaEntity } from '../../modules/mantenimiento/areasEmpresa/entities/areasEmpresa.entity';
+import { AreaEmpresaDTO } from '../../modules/mantenimiento/areasEmpresa/dto/areaEmpresa.dto';
 
 export default class AreaEmpresaSeeder implements Seeder {
   public async run(
@@ -14,22 +14,22 @@ export default class AreaEmpresaSeeder implements Seeder {
         {
           nombre: 'COMERCIAL',
           descripcion: 'área encargada de negociar con los clientes.',
-          responsale: 'Carla'
+          responsable: 'Carla'
         },
         {
           nombre: 'TRANSPORTE',
           descripcion: 'area encargada de manejar el tranposrte ',
-          responsale: 'Kenny'
+          responsable: 'Kenny'
         },
         {
           nombre: 'CALIDAD',
           descripcion: 'Area encarga de evaluar el producto',
-          responsale: 'Arturo'
+          responsable: 'Arturo'
         },
         {
           nombre: 'CONTROL INTERNO',
           descripcion: 'área encargada de llevar a cabo el control de existencia y procedimientos.',
-          responsale: 'Leandra'
+          responsable: 'Leandra'
         },
       ];
 
@@ -43,9 +43,9 @@ export default class AreaEmpresaSeeder implements Seeder {
       }
       
       await areaRepository.insert(dataToInsert);
-      console.log("Clientes insertados correctamente");
+      console.log("Areas de la empresa insertados correctamente");
     } catch (error) {
-      console.error('Error en el ClienteSeeder:', error);
+      console.error('Error en el AreaEmpresaSeeder:', error);
     }
   }
 }

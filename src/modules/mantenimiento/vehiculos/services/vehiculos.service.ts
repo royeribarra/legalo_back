@@ -43,15 +43,23 @@ export class VehiculosService{
     }
   }
 
-  public async findVehiculoById(id: string): Promise<VehiculosEntity>
+  public async findVehiculoById(id: number): Promise<VehiculosEntity>
   {
     try {
       const vehiculo : VehiculosEntity =  await this.vehiculoRepository
-        .createQueryBuilder('usuarios')
+        .createQueryBuilder('vehiculos')
         .where({id})
         .getOne();
 
-        return vehiculo;
+      if(!vehiculo)
+      {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: `No se encontró al vehiculo de Id = ${id}`
+        });
+      }
+
+      return vehiculo;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

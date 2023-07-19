@@ -1,33 +1,36 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 
 export class TipoResiduoDTO{
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   codigo: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   nombre: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
   nivelPeligro: number;
 
+  @ApiProperty()
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
   metodoAlmacenamiento: number;
 
-  @IsNotEmpty()
-  @IsString()
-  tratamiento: string;
-
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   disposicionFinal: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  responsale: string;
+  responsable: string;
 }
 export class TipoResiduoUpdateDTO{
   @IsOptional()

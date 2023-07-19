@@ -1,7 +1,7 @@
 import { RolesEntity } from "src/modules/mantenimiento/roles/entities/roles.entity";
 
 export interface PayLoadToken{
-  sub: string,
+  usuarioId: string,
   rol: RolesEntity
 }
 
@@ -11,12 +11,14 @@ export interface AuthBody{
 }
 
 export interface AuthTokenResult{
-  role: string,
+  usuarioId: number,
+  role: RolesEntity,
   iat: number,
   exp: number
 }
 
 export interface IUseToken{
-  role: string,
+  usuarioId: number,
+  role: RolesEntity,
   isExpired: boolean
 }

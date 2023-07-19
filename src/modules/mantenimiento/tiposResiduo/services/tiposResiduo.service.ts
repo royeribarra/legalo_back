@@ -14,8 +14,8 @@ export class TiposResiduoService{
   public async createResiduo(body: TipoResiduoDTO): Promise<TiposResiduoEntity>
   {
     try {
-      const usuarios : TiposResiduoEntity = await this.residuosRespository.save(body);
-      return usuarios;
+      const residuo : TiposResiduoEntity = await this.residuosRespository.save(body);
+      return residuo;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

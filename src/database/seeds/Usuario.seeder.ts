@@ -2,16 +2,22 @@ import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { UsuariosEntity } from '../../modules/mantenimiento/usuarios/entities/usuarios.entity';
 import * as bcrypt from 'bcrypt';
-import { UsuarioDTO } from 'src/modules/mantenimiento/usuarios/dto/usuario.dto';
+import { UsuarioDTO, UsuarioSeederDTO } from '../../modules/mantenimiento/usuarios/dto/usuario.dto';
+import { RolesEntity } from '../../modules/mantenimiento/roles/entities/roles.entity';
 
 export default class UsuarioSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager
   ): Promise<any> {
+    const rolesRepository =  dataSource.getRepository(RolesEntity);
+    const userrepository =  dataSource.getRepository(UsuariosEntity);
+
+    const roles = await rolesRepository.find();
+
     try {
-      const userrepository =  dataSource.getRepository(UsuariosEntity);
-      const data : UsuarioDTO[] = [
+      
+      const data : UsuarioSeederDTO[] = [
         {
           nombre: 'Jorge',
           apellido: 'Copetrol',
@@ -21,10 +27,9 @@ export default class UsuarioSeeder implements Seeder {
           direccion: 'Jiron administrador',
           dni: '20020010',
           telefono: '990393939',
-          edad: null,
           distrito: null,
           provincia: null,
-          rol_id: 1
+          rol: roles[0]
         },
         {
           nombre: 'Susana',
@@ -35,10 +40,9 @@ export default class UsuarioSeeder implements Seeder {
           direccion: 'Jiron comercial',
           dni: '20020020',
           telefono: '990393940',
-          edad: null,
           distrito: null,
           provincia: null,
-          rol_id: 2
+          rol: roles[1]
         },
         {
           nombre: 'Alex',
@@ -49,10 +53,9 @@ export default class UsuarioSeeder implements Seeder {
           direccion: 'Jiron transporte',
           dni: '20020030',
           telefono: '990393941',
-          edad: null,
           distrito: null,
           provincia: null,
-          rol_id: 3
+          rol: roles[2]
         },
         {
           nombre: 'Lucciana',
@@ -63,10 +66,9 @@ export default class UsuarioSeeder implements Seeder {
           direccion: 'Jiron calidad',
           dni: '20020040',
           telefono: '990393943',
-          edad: null,
           distrito: null,
           provincia: null,
-          rol_id: 4
+          rol: roles[3]
         },
         {
           nombre: 'Miguel',
@@ -77,10 +79,9 @@ export default class UsuarioSeeder implements Seeder {
           direccion: 'Jiron control interno',
           dni: '20020080',
           telefono: '990393950',
-          edad: null,
           distrito: null,
           provincia: null,
-          rol_id: 5
+          rol: roles[4]
         },
       ];
 

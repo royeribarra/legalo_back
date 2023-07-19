@@ -1,6 +1,7 @@
 import { BaseEntity } from '../../../../config/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { IConductor } from 'src/interfaces/mantenimiento/conductor.interface';
+import { VehiculosEntity } from '../../vehiculos/entities/vehiculo.entity';
 
 @Entity({name:'conductores'})
 export class ConductoresEntity extends BaseEntity implements IConductor{
@@ -11,22 +12,13 @@ export class ConductoresEntity extends BaseEntity implements IConductor{
   @Column()
   apellido: string;
 
-  @Column()
-  edad: number;
-
-  @Column()
+  @Column({nullable: true})
   correo: string;
-
-  @Column()
-  usuario: string;
-
-  @Column()
-  contrasena: string;
 
   @Column()
   direccion: string;
 
-  @Column()
+  @Column({unique: true})
   dni: string;
 
   @Column()
@@ -35,21 +27,19 @@ export class ConductoresEntity extends BaseEntity implements IConductor{
   @Column()
   licenciaConducir: string;
 
-  @Column()
+  @Column({nullable: true})
   fechaContratacion: string;
 
   @Column()
   fechaVencimientoLicencia: string;
 
-  @Column()
+  @Column({default: true})
   isActive: boolean;
 
-  @Column()
-  historialAccidentes: string;
+  @OneToOne(() => VehiculosEntity, vehiculo => vehiculo.conductor)
+  @JoinColumn()
+  vehiculo: VehiculosEntity;
 
   @Column()
-  vehiculoAsignado: number;
-
-  @Column()
-  disponibilidad: number;
+  disponibilidad: string;
 }

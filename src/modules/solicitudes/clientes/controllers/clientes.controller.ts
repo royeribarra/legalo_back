@@ -6,7 +6,7 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { SucursalesClienteService } from '../../sucursalesCliente/services/sucursalesCliente.service';
 
-@ApiTags('clientes')
+@ApiTags('Clientes')
 @Controller('clientes')
 export class ClientesController {
   constructor(
@@ -55,18 +55,17 @@ export class ClientesController {
   }
 
   @Get(':id')
-  public async findClienteById(@Param('id') id: string){
+  public async findClienteById(@Param('id') id: number){
     return await this.clientesService.findClienteById(id);
   }
 
   @Put('edit/:id')
-  public async updateCliente(@Body() body: ClienteUpdateDTO, @Param('id') id:string){
+  public async updateCliente(@Body() body: ClienteUpdateDTO, @Param('id') id:number){
     return await this.clientesService.updateCliente(body, id);
   }
 
   @Delete(':id')
-  public async deleteCliente(@Param('id') id:string){
+  public async deleteCliente(@Param('id') id:number){
     return await this.clientesService.deleteCliente(id);
   }
-
 }

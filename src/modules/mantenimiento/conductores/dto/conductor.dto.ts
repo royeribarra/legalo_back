@@ -1,33 +1,116 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 
 export class ConductorDTO{
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   nombre: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  codigo: string;
+  apellido: string;
 
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  correo: string;
+  
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  direccion: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  dni: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  telefono: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  licenciaConducir: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  fechaContratacion: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  fechaVencimientoLicencia: string;
+
+  @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  tarifa: number;
+  vehiculoId: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  disponibilidad: string;
 }
 
 export class ConductorUpdateDTO{
+  @ApiProperty()
   @IsOptional()
   @IsString()
   nombre: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
-  codigo: string;
+  apellido: string;
 
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  correo: string;
+  
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  direccion: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  dni: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  telefono: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  licenciaConducir: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  fechaContratacion: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  fechaVencimientoLicencia: string;
+
+  @ApiProperty()
   @IsOptional()
   @IsNumber()
-  tarifa: number;
+  vehiculoId: number;
 
+  @ApiProperty()
   @IsOptional()
-  @IsBoolean()
-  isActive: boolean;
+  @IsString()
+  disponibilidad: string;
 }

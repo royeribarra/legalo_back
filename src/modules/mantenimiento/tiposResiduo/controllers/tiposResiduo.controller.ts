@@ -4,7 +4,7 @@ import { Delete } from '@nestjs/common/decorators';
 import { TiposResiduoService } from '../services/tiposResiduo.service';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('TiposResiduo')
+@ApiTags('Tipos Residuo')
 @Controller('tipos-residuo')
 export class TiposResiduoController {
   constructor(private readonly herramientasService: TiposResiduoService) {}

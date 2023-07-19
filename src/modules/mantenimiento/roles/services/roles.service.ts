@@ -24,37 +24,34 @@ export class RolesService{
   public async findRoles(): Promise<RolesEntity[]>
   {
     try {
-      const roles : RolesEntity[] = await this.rolesRespository.find();
-      if(roles.length === 0)
-      {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se encontró ningun usuario.'
-        });
-      }
+      const roles : RolesEntity[] = await this.rolesRespository
+      .createQueryBuilder('roles')
+      .leftJoinAndSelect('roles.modulos', 'modulos')
+      .leftJoinAndSelect('roles.usuarios', 'usuarios')
+      .getMany();
       return roles;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
 
-  public async findRolById(id: string): Promise<RolesEntity>
+  public async findRolById(id: number): Promise<RolesEntity>
   {
     try {
-      const roles : RolesEntity =  await this.rolesRespository
+      const rol : RolesEntity =  await this.rolesRespository
         .createQueryBuilder('roles')
         .where({id})
         .getOne();
 
-        if(!roles)
+        if(!rol)
         {
           throw new ErrorManager({
             type: 'BAD_REQUEST',
-            message: `No se encontró al usuario de Id = ${id}`
+            message: `No se encontró el perfil de Id = ${id}`
           });
         }
 
-        return roles;
+        return rol;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

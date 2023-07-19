@@ -1,7 +1,8 @@
 import { BaseEntity } from '../../../../config/base.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 import { IVehiculo } from 'src/interfaces/mantenimiento/vehiculo.interface';
 import { TipoVehiculoEntity } from './tipoVehiculo.entity';
+import { ConductoresEntity } from '../../conductores/entities/conductores.entity';
 
 @Entity({name:'vehiculos'})
 export class VehiculosEntity extends BaseEntity implements IVehiculo{
@@ -47,4 +48,7 @@ export class VehiculosEntity extends BaseEntity implements IVehiculo{
 
   @ManyToOne(() => TipoVehiculoEntity, tipoVehiculo => tipoVehiculo.vehiculos)
   tipoVehiculo: TipoVehiculoEntity;
+
+  @OneToOne(() => ConductoresEntity, conductor => conductor.vehiculo)
+  conductor: ConductoresEntity;
 }

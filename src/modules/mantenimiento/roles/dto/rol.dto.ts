@@ -1,33 +1,26 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 
 export class RolDTO{
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   nombre: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  codigo: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  tarifa: number;
+  descripcion: string;
 }
 
 export class RolUpdateDTO{
+  @ApiProperty()
   @IsOptional()
   @IsString()
   nombre: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
-  codigo: string;
-
-  @IsOptional()
-  @IsNumber()
-  tarifa: number;
-
-  @IsOptional()
-  @IsBoolean()
-  isActive: boolean;
+  descripcion: string;
 }

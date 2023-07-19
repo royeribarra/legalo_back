@@ -6,13 +6,13 @@ import { IAreaEmpresa } from 'src/interfaces/mantenimiento/areasEmpresa.interfac
 @Entity({name:'areasEmpresa'})
 export class AreaEmpresaEntity extends BaseEntity implements IAreaEmpresa{
 
-  @Column()
+  @Column({unique: true})
   nombre: string;
 
   @Column({nullable: true})
   descripcion: string;
 
-  @Column()
+  @Column({nullable: true})
   responsable: string;
 
   @OneToMany(() => TrackerEntity, tracker => tracker.responsable)

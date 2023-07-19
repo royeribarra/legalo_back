@@ -6,7 +6,7 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { TrackerService } from '../../tracker/services/tracker.service';
 
-@ApiTags('solicitudes')
+@ApiTags('Solicitudes')
 @Controller('solicitudes')
 export class SolicitudesController {
   constructor(

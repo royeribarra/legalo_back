@@ -1,33 +1,34 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 
 export class AreaEmpresaDTO{
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   nombre: string;
 
-  @IsNotEmpty()
+  @ApiProperty()
   @IsString()
   descripcion: string;
 
-  @IsNotEmpty()
+  @ApiProperty()
   @IsString()
-  responsale: string;
+  responsable: string;
 }
 
 export class AreaEmpresaUpdateDTO{
+  @ApiProperty()
   @IsOptional()
   @IsString()
   nombre: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
-  codigo: string;
+  descripcion: string;
 
+  @ApiProperty()
   @IsOptional()
-  @IsNumber()
-  tarifa: number;
-
-  @IsOptional()
-  @IsBoolean()
-  isActive: boolean;
+  @IsString()
+  responsable: string;
 }
