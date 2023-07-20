@@ -37,5 +37,4 @@ export class TipoVehiculoController {
   public async deleteHerramienta(@Param('id') id:string){
     return await this.tipoVehiculoService.deleteTipoVehiculo(id);
   }
-
 }
