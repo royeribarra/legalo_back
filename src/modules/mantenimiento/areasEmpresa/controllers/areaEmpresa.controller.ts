@@ -1,17 +1,22 @@
-import { Body, Controller, Get, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards} from '@nestjs/common';
 import { AreaEmpresaDTO, AreaEmpresaUpdateDTO } from '../dto/areaEmpresa.dto';
 import { Delete } from '@nestjs/common/decorators';
 import { AreaEmpresaService } from '../services/areaEmpresa.service';
-import { ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../../../auth/guards/auth.guard';
 
 @ApiTags('Areas Empresa')
 @Controller('areas-empresa')
+@UseGuards(AuthGuard)
 export class AreaEmpresaController {
   constructor(private readonly herramientasService: AreaEmpresaService) {}
 
   @ApiResponse({
     status: 201,
     description: "Area empresa creada correctamente."
+  })
+  @ApiHeader({
+    name: 'copetrol_token'
   })
   @Post('create')
   public async registerAreaEmpresa(@Body() body:AreaEmpresaDTO){

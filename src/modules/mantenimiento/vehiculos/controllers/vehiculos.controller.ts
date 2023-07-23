@@ -1,13 +1,15 @@
-import { Body, Controller, Get, Param, Post, Put, Res} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Res, UseGuards} from '@nestjs/common';
 import { VehiculoDTO, VehiculoUpdateDTO } from '../dto/vehiculo.dto';
 import { Delete } from '@nestjs/common/decorators';
 import { VehiculosService } from '../services/vehiculos.service';
 import { TipoVehiculoService } from '../services/tipoVehiculo.service';
 import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../../../auth/guards/auth.guard';
 
 @ApiTags('Vehiculos')
 @Controller('vehiculos')
+@UseGuards(AuthGuard)
 export class VehiculosController {
   constructor(
     private readonly vehiculoService: VehiculosService,
