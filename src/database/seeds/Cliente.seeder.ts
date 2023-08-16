@@ -1,6 +1,6 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { ClientesEntity } from '../../../src/modules/solicitudes/clientes/entities/clientes.entity';
+import { ClientesEntity } from '../../modules/solicitudes/clientes/entities/clientes.entity';
 import { ClienteDTO } from 'src/modules/solicitudes/clientes/dto/cliente.dto';
 
 export default class ClienteSeeder implements Seeder {
@@ -19,6 +19,7 @@ export default class ClienteSeeder implements Seeder {
           numeroContacto: '934 567 890',
           codigo: 'INCHCA'
         },
+        
         {
           ruc: '20457634160',
           nombre: 'MITSUI AUTOMOTRIZ SA',
@@ -51,8 +52,5 @@ export default class ClienteSeeder implements Seeder {
     } catch (error) {
       console.error('Error en el ClienteSeeder:', error);
     }
-    
   }
-
- 
 }
