@@ -1,27 +1,34 @@
 import { BaseEntity } from '../../../../config/base.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, Unique } from 'typeorm';
 import { ICliente } from 'src/interfaces/solicitudes/cliente.interface';
 import { SucursalesClienteEntity } from '../../sucursalesCliente/entities/sucursalesCliente.entity';
 
 @Entity({name:'clientes'})
+@Unique(['ruc', 'nombre'])
 export class ClientesEntity extends BaseEntity implements ICliente{
 
-  @Column({unique: true})
+  @Column()
   ruc: string;
 
-  @Column({unique: true})
-  nombre: string;
-
   @Column()
-  contactoPrincipal: string;
+  nombre: string;
 
   @Column()
   direccion: string;
 
-  @Column()
+  @Column({nullable: true})
+  distrito: string;
+
+  @Column({nullable: true})
+  provincia: string;
+
+  @Column({nullable: true})
+  contactoPrincipal: string;
+
+  @Column({nullable: true})
   numeroContacto: string;
 
-  @Column()
+  @Column({nullable: true})
   codigo: string;
 
   @Column({nullable: true})

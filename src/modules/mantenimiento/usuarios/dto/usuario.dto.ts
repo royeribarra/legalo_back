@@ -57,7 +57,7 @@ export class UsuarioDTO{
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  rol_id: number;
+  rolId: number;
 }
 
 export class UsuarioFormDTO{
@@ -171,7 +171,7 @@ export class UsuarioUpdateDTO{
   @ApiProperty()
   @IsOptional()
   @IsNumber()
-  rol_id: number;
+  rolId: number;
 }
 
 

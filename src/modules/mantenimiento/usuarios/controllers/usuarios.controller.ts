@@ -18,11 +18,17 @@ export class UsuariosController {
   @ApiHeader({
     name: 'copetrol_token'
   })
-  @Post('register')
-  public async registerUsuario(@Body() body:UsuarioDTO){
-    const rol = await this.rolService.findRolById(body.rol_id);
-    
-    return await this.usuariosService.createUsuario(body, rol);
+  @Post('create')
+  public async registerUsuario(@Body() body: UsuarioDTO)
+  {
+    const rol = await this.rolService.findRolById(body.rolId);
+    const { state, message, usuario } = await this.usuariosService.createUsuario(body, rol);
+
+    return {
+      state: state,
+      message: message,
+      usuario: usuario
+    }
   }
 
   @ApiHeader({
@@ -47,8 +53,12 @@ export class UsuariosController {
   })
   @Put('edit/:id')
   public async updateUsuario(@Body() body: UsuarioUpdateDTO, @Param('id') id:string){
-    const rol = await this.rolService.findRolById(body.rol_id);
-    return await this.usuariosService.updateUsuario(body, id, rol);
+    const rol = await this.rolService.findRolById(body.rolId);
+    const { usuario, state, message } = await this.usuariosService.updateUsuario(body, id, rol);
+    return {
+      state: state,
+      message: message,
+    }
   }
 
   @ApiHeader({
@@ -56,6 +66,10 @@ export class UsuariosController {
   })
   @Delete(':id')
   public async deleteUsuario(@Param('id') id:string){
-    return await this.usuariosService.deleteUsuario(id);
+    const {state, message} =  await this.usuariosService.deleteUsuario(id);
+    return {
+      state: state,
+      message: message
+    }
   }
 }

@@ -43,9 +43,14 @@ export class ClientesController {
 
   }
 
-  @Post('register')
+  @Post('create')
   public async registerCliente(@Body() body:ClienteDTO){
-    return await this.clientesService.createCliente(body);
+    const {state, message, cliente } =  await this.clientesService.createCliente(body);
+    return {
+      state: state,
+      message: message,
+      usuario: cliente
+    }
   }
 
   @Get('all')

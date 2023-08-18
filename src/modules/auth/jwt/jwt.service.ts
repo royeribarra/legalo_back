@@ -6,7 +6,7 @@ export class JwtService {
   private readonly secretKey = 'tu_clave_secreta_aqui';
 
   generateToken(payload: any): string {
-    return jwt.sign(payload, this.secretKey, { expiresIn: '1h' });
+    return jwt.sign(payload, this.secretKey, { expiresIn: '10h' });
   }
 
   verifyToken(token: string): any {

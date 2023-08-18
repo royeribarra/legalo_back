@@ -25,11 +25,35 @@ export class ClientesService{
     }
   }
 
-  public async createCliente(body: ClienteDTO): Promise<ClientesEntity>
+  public async createCliente(body: ClienteDTO)
   {
     try {
-      const clientes : ClientesEntity = await this.clienteRepository.save(body);
-      return clientes;
+      const clientExistsByRuc = await this.findBy({
+        key: 'ruc',
+        value: body.ruc
+      })
+
+      const clientExistsByNombre = await this.findBy({
+        key: 'nombre',
+        value: body.nombre
+      })
+
+      if(clientExistsByRuc || clientExistsByNombre)
+      {
+        return {
+          state: false,
+          message: `Ya existe el cliente con ruc ${body.ruc} o nombre ${body.nombre}`,
+          usuario: null
+        }
+      }
+
+      const cliente : ClientesEntity = await this.clienteRepository.save(body);
+
+      return {
+        state: true,
+        message: `Cliente creado correctamente`,
+        cliente: cliente
+      }
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -96,6 +120,20 @@ export class ClientesService{
         });
       }
       return clientes;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findBy({key, value} : { key: keyof ClienteDTO; value: any })
+  {
+    try {
+      const usuario: ClientesEntity = await this.clienteRepository.createQueryBuilder(
+        'cliente'
+      )
+      .where({[key]: value})
+      .getOne();
+      return usuario;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
