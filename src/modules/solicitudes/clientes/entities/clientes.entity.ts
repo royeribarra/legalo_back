@@ -1,6 +1,6 @@
 import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
-import { ICliente } from 'src/interfaces/solicitudes/cliente.interface';
+import { ICliente } from '../../../../interfaces/solicitudes/cliente.interface';
 import { SucursalesClienteEntity } from '../../sucursalesCliente/entities/sucursalesCliente.entity';
 
 @Entity({name:'clientes'})

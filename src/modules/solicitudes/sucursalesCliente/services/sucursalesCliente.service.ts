@@ -73,6 +73,20 @@ export class SucursalesClienteService{
     }
   }
 
+  public async findSucursalesByClienteId(id: string): Promise<SucursalesClienteEntity[]>
+  {
+    try {
+      const sucursales : SucursalesClienteEntity[] =  await this.sucursalRepository
+        .createQueryBuilder('sucursales')
+        .where('sucursales.cliente_id = :id', {id})
+        .getMany();
+
+        return sucursales;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async updateSucursal(body: SucursalClienteUpdateDTO, id: string): Promise<UpdateResult> | undefined
   {
     try {

@@ -1,6 +1,6 @@
 import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
-import { IUnidadMedidaResiduo } from 'src/interfaces/mantenimiento/residuos/unidadMedidadResiduo.interface';
+import { IUnidadMedidaResiduo } from '../../../../interfaces/mantenimiento/residuos/unidadMedidadResiduo.interface';
 import { TiposResiduoEntity } from './tiposResiduo.entity';
 
 @Entity({name:'unidadesMedidaResiduo'})

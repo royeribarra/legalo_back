@@ -1,6 +1,6 @@
 import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
-import { IVehiculo } from 'src/interfaces/mantenimiento/vehiculo.interface';
+import { IVehiculo } from '../../../../interfaces/mantenimiento/vehiculo.interface';
 import { TipoVehiculoEntity } from './tipoVehiculo.entity';
 import { ConductoresEntity } from '../../conductores/entities/conductores.entity';
 

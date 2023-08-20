@@ -1,6 +1,6 @@
 import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { IModuloWeb } from 'src/interfaces/mantenimiento/modulosWeb.interface';
+import { IModuloWeb } from '../../../../interfaces/mantenimiento/modulosWeb.interface';
 import { RolesModulosWebEntity } from './rolModulosWeb.entity';
 
 @Entity({name:'modulosWeb'})
@@ -12,10 +12,10 @@ export class ModulosWebEntity extends BaseEntity implements IModuloWeb{
   @Column()
   descripcion: string;
 
-  @Column()
+  @Column({ nullable: true })
   codigo: string;
 
-  @Column()
+  @Column({ nullable: true })
   orden: number;
 
   @OneToMany(() => RolesModulosWebEntity, rol => rol.modulo)

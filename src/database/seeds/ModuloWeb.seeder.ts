@@ -1,8 +1,8 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { RolesEntity } from '../../modules/mantenimiento/roles/entities/roles.entity';
-import { ModulosWebEntity } from 'src/modules/mantenimiento/roles/entities/modulosWeb.entity';
-import { ModuloWebDTO } from 'src/modules/mantenimiento/roles/dto/moduloWeb.dto';
+import { ModulosWebEntity } from '../../modules/mantenimiento/roles/entities/modulosWeb.entity';
+import { ModuloWebDTO } from '../../modules/mantenimiento/roles/dto/moduloWeb.dto';
 
 export default class ModuloWebSeeder implements Seeder {
   public async run(

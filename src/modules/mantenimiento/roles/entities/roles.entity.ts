@@ -1,6 +1,6 @@
 import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, JoinTable, OneToMany } from 'typeorm';
-import { IRol } from 'src/interfaces/mantenimiento/rol.interface';
+import { IRol } from '../../../../interfaces/mantenimiento/rol.interface';
 import { UsuariosEntity } from '../../usuarios/entities/usuarios.entity';
 import { RolesModulosWebEntity } from './rolModulosWeb.entity';
 

@@ -4,12 +4,12 @@ import {
     Injectable,
     UnauthorizedException,
   } from '@nestjs/common';
-  import { Reflector } from '@nestjs/core';
-  import { Request } from 'express';
-  import { PUBLIC_KEY } from 'src/constants/key-decorators';
-  import { UsuariosService } from '../../mantenimiento/usuarios/services/usuarios.service';
-  import { useToken } from 'src/utils/use.token';
-  import { IUseToken } from '../interfaces/auth.interface';
+import { Reflector } from '@nestjs/core';
+import { Request } from 'express';
+import { PUBLIC_KEY } from '../../../constants/key-decorators';
+import { UsuariosService } from '../../mantenimiento/usuarios/services/usuarios.service';
+import { useToken } from '../../../utils/use.token';
+import { IUseToken } from '../interfaces/auth.interface';
   
   @Injectable()
   export class AuthGuard implements CanActivate {

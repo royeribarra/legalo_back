@@ -1,4 +1,4 @@
-import { RolesEntity } from "src/modules/mantenimiento/roles/entities/roles.entity";
+import { RolesEntity } from "../../mantenimiento/roles/entities/roles.entity";
 
 export interface PayLoadToken{
   usuarioId: string,

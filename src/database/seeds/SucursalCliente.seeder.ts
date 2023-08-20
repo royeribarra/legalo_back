@@ -1,7 +1,7 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { SucursalesClienteEntity } from '../../modules/solicitudes/sucursalesCliente/entities/sucursalesCliente.entity';
-import { SucursalClienteDTO } from 'src/modules/solicitudes/sucursalesCliente/dto/sucursalCliente.dto';
+import { SucursalClienteDTO } from '../../modules/solicitudes/sucursalesCliente/dto/sucursalCliente.dto';
 
 export default class SucursalClienteSeeder implements Seeder {
   public async run(

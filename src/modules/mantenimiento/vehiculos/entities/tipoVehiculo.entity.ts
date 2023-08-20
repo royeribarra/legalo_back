@@ -1,6 +1,6 @@
 import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
-import { ITipoVehiculo } from 'src/interfaces/mantenimiento/tipoVehiculo.interface';
+import { ITipoVehiculo } from '../../../../interfaces/mantenimiento/tipoVehiculo.interface';
 import { VehiculosEntity } from './vehiculo.entity';
 
 @Entity({name:'tipos_vehiculo'})

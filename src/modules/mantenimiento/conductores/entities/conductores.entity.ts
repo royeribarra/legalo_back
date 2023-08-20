@@ -1,6 +1,6 @@
 import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-import { IConductor } from 'src/interfaces/mantenimiento/conductor.interface';
+import { IConductor } from '../../../../interfaces/mantenimiento/conductor.interface';
 import { VehiculosEntity } from '../../vehiculos/entities/vehiculo.entity';
 
 @Entity({name:'conductores'})

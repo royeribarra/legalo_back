@@ -5,33 +5,39 @@ import { SucursalesClienteService } from '../services/sucursalesCliente.service'
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Sucursales Cliente')
-@Controller('sucursales-client')
+@Controller('sucursales-cliente')
 export class SucursalesClienteController {
   constructor(private readonly sucursalesService: SucursalesClienteService) {}
 
   @Post('register')
-  public async registerHerramienta(@Body() body:SucursalClienteDTO){
+  public async registerSucursal(@Body() body:SucursalClienteDTO){
     return await this.sucursalesService.createSucursal(body);
   }
 
   @Get('all')
-  public async findAllHerramientas()
+  public async findAllSucursales()
   {
     return await this.sucursalesService.findSucursales();
   }
 
+  @Get('all/:clienteId')
+  public async findAllSucursalesByCliente(@Param('clienteId') clienteId: string)
+  {
+    return await this.sucursalesService.findSucursalesByClienteId(clienteId);
+  }
+
   @Get(':id')
-  public async findHerramientaById(@Param('id') id: string){
+  public async findSucursalById(@Param('id') id: string){
     return await this.sucursalesService.findSucursalById(id);
   }
 
   @Put('edit/:id')
-  public async updateHerramienta(@Body() body: SucursalClienteUpdateDTO, @Param('id') id:string){
+  public async updateSucursal(@Body() body: SucursalClienteUpdateDTO, @Param('id') id:string){
     return await this.sucursalesService.updateSucursal(body, id);
   }
 
   @Delete(':id')
-  public async deleteHerramienta(@Param('id') id:string){
+  public async deleteSucursal(@Param('id') id:string){
     return await this.sucursalesService.deleteSucursal(id);
   }
 

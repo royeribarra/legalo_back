@@ -1,6 +1,6 @@
 import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { IUsuario } from 'src/interfaces/mantenimiento/user.interface';
+import { IUsuario } from '../../../../interfaces/mantenimiento/user.interface';
 import { RolesEntity } from '../../roles/entities/roles.entity';
 import { Exclude } from '@nestjs/class-transformer';
 

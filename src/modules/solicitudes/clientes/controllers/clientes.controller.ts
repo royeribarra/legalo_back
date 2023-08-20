@@ -66,7 +66,11 @@ export class ClientesController {
 
   @Put('edit/:id')
   public async updateCliente(@Body() body: ClienteUpdateDTO, @Param('id') id:number){
-    return await this.clientesService.updateCliente(body, id);
+    const { state, message } = await this.clientesService.updateCliente(body, id);
+    return {
+      state: state,
+      message: message,
+    }
   }
 
   @Delete(':id')

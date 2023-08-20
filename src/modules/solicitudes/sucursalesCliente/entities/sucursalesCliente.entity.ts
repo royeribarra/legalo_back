@@ -1,6 +1,6 @@
 import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { ISucursalCliente } from 'src/interfaces/solicitudes/sucursalCliente.interface';
+import { ISucursalCliente } from '../../../../interfaces/solicitudes/sucursalCliente.interface';
 import { ClientesEntity } from '../../clientes/entities/clientes.entity';
 
 @Entity({name:'sucursalescliente'})
@@ -12,10 +12,10 @@ export class SucursalesClienteEntity extends BaseEntity implements ISucursalClie
   @Column()
   direccion: string;
 
-  @Column()
+  @Column({nullable: true})
   distrito: string;
 
-  @Column()
+  @Column({ nullable: true})
   provincia: string;
 
   @Column()
@@ -27,11 +27,14 @@ export class SucursalesClienteEntity extends BaseEntity implements ISucursalClie
   @Column()
   codigoSucursal: string;
 
-  @Column()
+  @Column({ nullable: true})
   latitud: string;
 
-  @Column()
+  @Column({ nullable: true})
   longitud: string;
+
+  @Column({ type: "text", nullable: true})
+  observaciones: string;
 
   @ManyToOne(() => ClientesEntity, cliente => cliente.sucursales)
   cliente: ClientesEntity;

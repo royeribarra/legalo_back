@@ -1,6 +1,6 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { TiposResiduoEntity } from 'src/modules/mantenimiento/tiposResiduo/entities/tiposResiduo.entity';
+import { TiposResiduoEntity } from '../../modules/mantenimiento/tiposResiduo/entities/tiposResiduo.entity';
 
 export default class MetodoAlmacenamientoTipoResiduoSeeder implements Seeder {
   public async run(

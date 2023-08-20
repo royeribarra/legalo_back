@@ -1,6 +1,6 @@
 import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
-import { ISolicitudRecoleccion } from 'src/interfaces/solicitudes/solicitudRecoleccion.interface';
+import { ISolicitudRecoleccion } from '../../../../interfaces/solicitudes/solicitudRecoleccion.interface';
 import { TrackerEntity } from '../../tracker/entities/tracker.entity';
 
 @Entity({name:'solicitudes'})

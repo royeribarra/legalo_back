@@ -3,7 +3,7 @@ import { JwtService } from '../jwt/jwt.service';
 import { UsuariosService } from '../../../modules/mantenimiento/usuarios/services/usuarios.service';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { UsuariosEntity } from 'src/modules/mantenimiento/usuarios/entities/usuarios.entity';
+import { UsuariosEntity } from '../../../modules/mantenimiento/usuarios/entities/usuarios.entity';
 import { PayLoadToken } from '../interfaces/auth.interface';
 
 @Injectable()
