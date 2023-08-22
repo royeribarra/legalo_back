@@ -38,14 +38,19 @@ export class SucursalClienteDTO{
   codigoSucursal: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   latitud: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   longitud: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  observaciones: string;
 
   @ApiProperty()
   @IsNotEmpty()

@@ -75,6 +75,10 @@ export class ClientesController {
 
   @Delete(':id')
   public async deleteCliente(@Param('id') id:number){
-    return await this.clientesService.deleteCliente(id);
+    const { state, message } = await this.clientesService.deleteCliente(id);
+    return {
+      state: state,
+      message: message,
+    }
   }
 }

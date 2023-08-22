@@ -54,6 +54,7 @@ export class ClientesService{
         message: `Cliente creado correctamente`,
         cliente: cliente
       }
+      
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -104,7 +105,7 @@ export class ClientesService{
         return {
           state: false,
           message: `No se pudo actualizar el cliente, porque no existe.`,
-          cliente: cliente
+          cliente: null
         }
       }
       return {
@@ -118,18 +119,25 @@ export class ClientesService{
     }
   }
 
-  public async deleteCliente(id: number): Promise<DeleteResult> | undefined
+  public async deleteCliente(id: number)
   {
     try {
-      const clientes: DeleteResult = await this.clienteRepository.delete(id);
-      if(clientes.affected === 0)
+      const cliente: DeleteResult = await this.clienteRepository.delete(id);
+      if(cliente.affected === 0)
       {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se pudo eliminar el cliente, porque no existe.'
-        });
+        // throw new ErrorManager({
+        //   type: 'BAD_REQUEST',
+        //   message: 'No se pudo eliminar el cliente, porque no existe.'
+        // });
+        return {
+          state: false,
+          message: `No se pudo eliminar el cliente, porque no existe.`,
+        }
       }
-      return clientes;
+      return {
+        state: true,
+        message: `Cliente eliminado con éxito.`,
+      }
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

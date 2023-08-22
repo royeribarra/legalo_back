@@ -6,7 +6,7 @@ import { ClientesEntity } from '../../clientes/entities/clientes.entity';
 @Entity({name:'sucursalescliente'})
 export class SucursalesClienteEntity extends BaseEntity implements ISucursalCliente{
 
-  @Column()
+  @Column({ nullable: true})
   nombre: string;
 
   @Column()

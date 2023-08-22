@@ -21,7 +21,8 @@ export default class SucursalClienteSeeder implements Seeder {
           codigoSucursal: 'INCHCA-01',
           latitud: '-12.17077411118961',
           longitud: '-76.98868150420377',
-          clienteId: 1
+          clienteId: 1,
+          observaciones: ""
         },
         {
           nombre: 'Administrador',
@@ -33,7 +34,8 @@ export default class SucursalClienteSeeder implements Seeder {
           codigoSucursal: 'INCHCA-02',
           latitud: '-11.997581265557953',
           longitud: '-77.0520783330428',
-          clienteId: 1
+          clienteId: 1,
+          observaciones: ""
         },
         {
           nombre: 'Administrador',
@@ -45,7 +47,8 @@ export default class SucursalClienteSeeder implements Seeder {
           codigoSucursal: 'MITSUI-01',
           latitud: '-12.125749530255671',
           longitud: '-77.0293857042047',
-          clienteId: 2
+          clienteId: 2,
+          observaciones: ""
         },
         {
           nombre: 'Administrador',
@@ -57,7 +60,8 @@ export default class SucursalClienteSeeder implements Seeder {
           codigoSucursal: 'MITSUI-02',
           latitud: '-11.982800611355085',
           longitud: '-77.09495580142543',
-          clienteId: 2
+          clienteId: 2,
+          observaciones: ""
         },
         {
           nombre: 'Administrador',
@@ -69,7 +73,8 @@ export default class SucursalClienteSeeder implements Seeder {
           codigoSucursal: 'DERCOC-01',
           latitud: '-12.068606529633888',
           longitud: '-77.11439527537013',
-          clienteId: 3
+          clienteId: 3,
+          observaciones: ""
         },
       ];
 

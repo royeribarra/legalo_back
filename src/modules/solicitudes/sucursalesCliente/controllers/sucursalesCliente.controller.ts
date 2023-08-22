@@ -9,9 +9,14 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
 export class SucursalesClienteController {
   constructor(private readonly sucursalesService: SucursalesClienteService) {}
 
-  @Post('register')
-  public async registerSucursal(@Body() body:SucursalClienteDTO){
-    return await this.sucursalesService.createSucursal(body);
+  @Post('create')
+  public async registerSucursal(@Body() body: SucursalClienteDTO){
+    const {state, message, cliente } = await this.sucursalesService.createSucursal(body);
+    return {
+      state: state,
+      message: message,
+      usuario: cliente
+    }
   }
 
   @Get('all')
@@ -33,12 +38,20 @@ export class SucursalesClienteController {
 
   @Put('edit/:id')
   public async updateSucursal(@Body() body: SucursalClienteUpdateDTO, @Param('id') id:string){
-    return await this.sucursalesService.updateSucursal(body, id);
+    const { state, message } = await this.sucursalesService.updateSucursal(body, id);
+    return {
+      state: state,
+      message: message,
+    }
   }
 
   @Delete(':id')
   public async deleteSucursal(@Param('id') id:string){
-    return await this.sucursalesService.deleteSucursal(id);
+    const { state, message } = await this.sucursalesService.deleteSucursal(id);
+    return {
+      state: state,
+      message: message,
+    }
   }
 
 }
