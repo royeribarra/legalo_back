@@ -13,10 +13,15 @@ export class ConductoresController {
     private readonly vehiculoService: VehiculosService
     ) {}
 
-  @Post('register')
+  @Post('create')
   public async registerConductor(@Body() body:ConductorDTO){
     const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
-    return await this.conductoresService.createConductor(body, vehiculo);
+    const { state, message, conductor } = await this.conductoresService.createConductor(body, vehiculo);
+    return {
+      state: state,
+      message: message,
+      conductor: conductor
+    }
   }
 
   @Get('all')
@@ -33,12 +38,21 @@ export class ConductoresController {
   @Put('edit/:id')
   public async updateConductor(@Body() body: ConductorUpdateDTO, @Param('id') id: number){
     const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
-    return await this.conductoresService.updateConductor(body, id, vehiculo);
+
+    const {state, message} = await this.conductoresService.updateConductor(body, id, vehiculo);
+    return {
+      state: state,
+      message: message,
+    }
   }
 
   @Delete(':id')
   public async deleteConductor(@Param('id') id:string){
-    return await this.conductoresService.deleteConductor(id);
+    const{ state, message} = await this.conductoresService.deleteConductor(id);
+    return {
+      state: state,
+      message: message
+    }
   }
 
 }

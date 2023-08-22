@@ -48,7 +48,7 @@ export class ConductorDTO{
   fechaVencimientoLicencia: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   vehiculoId: number;
 

@@ -12,8 +12,27 @@ export class ConductoresService{
     @InjectRepository(ConductoresEntity) private readonly conductoresRespository: Repository<ConductoresEntity>
   ){}
 
-  public async createConductor(body: ConductorDTO, vehiculo: VehiculosEntity): Promise<ConductoresEntity>
+  public async createConductor(body: ConductorDTO, vehiculo: VehiculosEntity)
   {
+    const conductorExistsByDni = await this.findBy({
+      key: 'dni',
+      value: body.dni
+    })
+
+    const conductorExistsByCorreo = await this.findBy({
+      key: 'correo',
+      value: body.correo
+    })
+
+    if(conductorExistsByDni || conductorExistsByCorreo)
+    {
+      return {
+        state: false,
+        message: `Ya existe el conductor con dni ${body.dni} o correo ${body.correo}`,
+        conductor: null
+      }
+    }
+
     try {
       const nuevoConductor = new ConductoresEntity();
       nuevoConductor.apellido = body.apellido;
@@ -27,8 +46,13 @@ export class ConductoresService{
       nuevoConductor.nombre = body.nombre;
       nuevoConductor.vehiculo = vehiculo;
       nuevoConductor.telefono = body.telefono;
-      const conductores : ConductoresEntity = await this.conductoresRespository.save(nuevoConductor);
-      return conductores;
+      const conductor : ConductoresEntity = await this.conductoresRespository.save(nuevoConductor);
+      
+      return {
+        state: true,
+        message: `Conductor creado correctamente`,
+        conductor: conductor
+      }
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -71,7 +95,7 @@ export class ConductoresService{
     }
   }
 
-  public async updateConductor(body: ConductorUpdateDTO, id: number, vehiculo: VehiculosEntity): Promise<UpdateResult> | undefined
+  public async updateConductor(body: ConductorUpdateDTO, id: number, vehiculo: VehiculosEntity)
   {
     try {
       const dataConductor = new ConductoresEntity();
@@ -87,32 +111,58 @@ export class ConductoresService{
       dataConductor.vehiculo = vehiculo;
       dataConductor.telefono = body.telefono;
 
-      const conductores: UpdateResult = await this.conductoresRespository.update(id, dataConductor);
-      if(conductores.affected === 0)
+      const conductor: UpdateResult = await this.conductoresRespository.update(id, dataConductor);
+      if(conductor.affected === 0)
       {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se pudo actualizar el conductor, porque no existe.'
-        });
+        // throw new ErrorManager({
+        //   type: 'BAD_REQUEST',
+        //   message: 'No se pudo actualizar el conductor, porque no existe.'
+        // });
+        return {
+          state: false,
+          message: `No se pudo actualizar el conductor, porque no existe.`,
+          conductor: conductor
+        }
       }
-      return conductores;
+      return {
+        state: true,
+        message: `Conductor actualizado correctamente`,
+        conductor: conductor
+      }
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
 
-  public async deleteConductor(id: string): Promise<DeleteResult> | undefined
+  public async deleteConductor(id: string)
   {
     try {
-      const conductores: DeleteResult = await this.conductoresRespository.delete(id);
-      if(conductores.affected === 0)
+      const conductor: DeleteResult = await this.conductoresRespository.delete(id);
+      if(conductor.affected === 0)
       {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se pudo eliminar el conductor, porque no existe.'
-        });
+        return {
+          state: false,
+          message: `El conductor ya no existe.`
+        }
       }
-      return conductores;
+      return {
+        state: true,
+        message: `Conductor eliminado con éxito.`
+      }
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findBy({key, value} : { key: keyof ConductorDTO; value: any })
+  {
+    try {
+      const conductor: ConductoresEntity = await this.conductoresRespository.createQueryBuilder(
+        'conductores'
+      )
+      .where({[key]: value})
+      .getOne();
+      return conductor;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

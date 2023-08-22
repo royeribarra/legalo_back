@@ -12,14 +12,14 @@ export class ConductoresEntity extends BaseEntity implements IConductor{
   @Column()
   apellido: string;
 
+  @Column({unique: true})
+  dni: string;
+
   @Column({nullable: true})
   correo: string;
 
   @Column()
   direccion: string;
-
-  @Column({unique: true})
-  dni: string;
 
   @Column()
   telefono: string;
@@ -33,13 +33,13 @@ export class ConductoresEntity extends BaseEntity implements IConductor{
   @Column()
   fechaVencimientoLicencia: string;
 
+  @Column()
+  disponibilidad: string;
+
   @Column({default: true})
   isActive: boolean;
 
   @OneToOne(() => VehiculosEntity, vehiculo => vehiculo.conductor)
   @JoinColumn()
   vehiculo: VehiculosEntity;
-
-  @Column()
-  disponibilidad: string;
 }
