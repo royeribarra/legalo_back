@@ -17,12 +17,12 @@ export class VehiculosController {
   ) {}
 
   @Post('create')
-  public async registerHerramienta(@Body() body: VehiculoDTO, @Res() response: Response)
+  public async registerVehiculo(@Body() body: VehiculoDTO, @Res() response: Response)
   {
-    const tipoVehiculo = await this.tipoVehiculoService.findTipoVehiculoById(body.tipoVehiculo);
+    const tipoVehiculo = await this.tipoVehiculoService.findTipoVehiculoById(body.tipoVehiculoId);
 
     const existVehiculo = await this.vehiculoService.findVehiculoBy('placa', body.placa);
-    console.log(existVehiculo)
+    
     if(existVehiculo){
       return response.json({
         message: `Ya existe un vehículo con la placa ${body.placa}`,
@@ -46,23 +46,23 @@ export class VehiculosController {
   }
 
   @Get('all')
-  public async findAllHerramientas()
+  public async findAllVehiculos()
   {
     return await this.vehiculoService.findVehiculos();
   }
 
   @Get(':id')
-  public async findHerramientaById(@Param('id') id: number){
+  public async findVehiculoById(@Param('id') id: number){
     return await this.vehiculoService.findVehiculoById(id);
   }
 
   @Put('edit/:id')
-  public async updateHerramienta(@Body() body: VehiculoUpdateDTO, @Param('id') id:string){
+  public async updateVehiculo(@Body() body: VehiculoUpdateDTO, @Param('id') id:string){
     return await this.vehiculoService.updateVehiculo(body, id);
   }
 
   @Delete(':id')
-  public async deleteHerramienta(@Param('id') id:string){
+  public async deleteVehiculo(@Param('id') id:string){
     return await this.vehiculoService.deleteVehiculo(id);
   }
 

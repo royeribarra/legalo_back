@@ -2,10 +2,12 @@ import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-val
 import { TipoVehiculoEntity } from '../entities/tipoVehiculo.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class VehiculoDTO{
-  // @IsNotEmpty()
-  // @IsString()
-  // codigo: string;
+export class VehiculoDTO
+{
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  nombre: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -14,21 +16,17 @@ export class VehiculoDTO{
 
   @ApiProperty()
   @IsNumber()
-  tipoVehiculo: number;
+  tipoVehiculoId: number;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   capacidadCarga: number;
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  unidadMedida: number;
-
-  // @IsNotEmpty()
-  // @IsString()
-  // licencia: string;
+  @IsString()
+  unidadMedida: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -41,25 +39,9 @@ export class VehiculoDTO{
   disponibilidad: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   responsable: string;
-
-  // @IsNotEmpty()
-  // @IsString()
-  // vencimientoMTC: string;
-
-  // @IsNotEmpty()
-  // @IsString()
-  // vencimientoPoliza: string;
-
-  // @IsNotEmpty()
-  // @IsString()
-  // vencimientoRD: string;
-
-  // @IsNotEmpty()
-  // @IsString()
-  // vencimientoSOAT: string;
 }
 
 export class VehiculoUpdateDTO{

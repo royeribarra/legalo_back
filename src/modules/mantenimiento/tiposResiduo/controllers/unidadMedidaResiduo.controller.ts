@@ -10,11 +10,6 @@ import { UnidadMedidaResiduoService } from '../services/unidadesMedidaResiduo.se
 export class UnidadMedidaResiduoController {
   constructor(private readonly unidadesService: UnidadMedidaResiduoService) {}
 
-  // @Post('register')
-  // public async registerUnidadMedida(@Body() body:TipoResiduoDTO){
-  //   return await this.unidadesService.createResiduo(body);
-  // }
-
   @Get('all')
   public async findAllUnidadesMedida()
   {

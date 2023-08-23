@@ -20,11 +20,12 @@ export class VehiculosService{
       newEntity.codigo = '';
       newEntity.disponibilidad = body.disponibilidad;
       newEntity.estadoMantenimiento = body.estadoMantenimiento;
-      newEntity.nombre = '';
+      newEntity.nombre = body.nombre;
       newEntity.placa = body.placa;
       newEntity.responsable = body.responsable;
       newEntity.tipoVehiculo = tipoVehiculo;
       newEntity.unidadMedida = body.unidadMedida;
+      console.log(newEntity)
       const vehiculo : VehiculosEntity = await this.vehiculoRepository.save(newEntity);
       return vehiculo;
     } catch (error) {
