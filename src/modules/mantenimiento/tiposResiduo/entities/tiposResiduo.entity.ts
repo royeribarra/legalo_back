@@ -11,22 +11,25 @@ import { TiposResiduoUnidadMedidaEntity } from './tiposResiduoUnidadMedida.entit
 @Entity({name:'tiposResiduo'})
 export class TiposResiduoEntity extends BaseEntity implements ITipoResiduo
 {
-  @Column()
+  @Column({ unique: true })
   codigo: string;
 
-  @Column()
+  @Column({ unique: true })
   nombre: string;
 
   @Column()
-  nivelPeligro: number;
+  tipo: number;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
+  nivelPeligro: string;
+
+  @Column({ nullable: true})
   metodoAlmacenamiento: number;
 
-  @Column({nullable: true})
+  @Column({ nullable: true})
   disposicionFinal: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true})
   responsable: string;
 
   @OneToMany(() => ResiduosEntity, residuo => residuo.tipoResiduo)

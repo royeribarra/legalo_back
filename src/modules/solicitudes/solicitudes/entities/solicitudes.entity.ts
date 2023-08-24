@@ -2,6 +2,7 @@ import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { ISolicitudRecoleccion } from '../../../../interfaces/solicitudes/solicitudRecoleccion.interface';
 import { TrackerEntity } from '../../tracker/entities/tracker.entity';
+import { ResiduosRecojoEntity } from '../../residuosRecojo/entities/residuosRecojo.entity';
 
 @Entity({name:'solicitudes'})
 export class SolicitudesEntity extends BaseEntity implements ISolicitudRecoleccion
@@ -48,4 +49,7 @@ export class SolicitudesEntity extends BaseEntity implements ISolicitudRecolecci
   @OneToOne(() => TrackerEntity)
   @JoinColumn()
   tracker: TrackerEntity;
+
+  @OneToMany(() => ResiduosRecojoEntity, residuo => residuo.solicitud)
+  residuosRecojo: ResiduosRecojoEntity[];
 }

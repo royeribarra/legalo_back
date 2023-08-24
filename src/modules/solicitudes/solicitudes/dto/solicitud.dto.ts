@@ -1,6 +1,25 @@
-import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
+import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, ValidateNested, IsArray } from 'class-validator';
 import { TrackerEntity } from '../../tracker/entities/tracker.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { ResiduoRecojoDTO } from '../../residuosRecojo/dto/residuosRecojo.dto';
+
+// class ResiduoRecojoDTO {
+//   @ApiProperty()
+//   @IsNotEmpty()
+//   @IsString()
+//   tipoResiduo: string;
+
+//   @ApiProperty()
+//   @IsNotEmpty()
+//   @IsString()
+//   unidadMedida: string;
+
+//   @ApiProperty()
+//   @IsNotEmpty()
+//   @IsNumber()
+//   cantidad: number;
+// }
 
 export class SolicitudDTO{
   @ApiProperty()
@@ -23,10 +42,12 @@ export class SolicitudDTO{
   @IsNumber()
   sucursalEmpresaSolicitante: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: [ResiduoRecojoDTO] })
   @IsNotEmpty()
-  @IsNumber()
-  tipoResiduo: number;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ResiduoRecojoDTO)
+  residuos: ResiduoRecojoDTO[];
 
   @ApiProperty()
   @IsNotEmpty()

@@ -37,7 +37,7 @@ export class VehiculosController {
         message: 'Vehículo creado correctamente.',
         state: true
       });
-    } 
+    }
 
     return response.json({
       message: 'Error al crear vehículo.',
@@ -57,13 +57,23 @@ export class VehiculosController {
   }
 
   @Put('edit/:id')
-  public async updateVehiculo(@Body() body: VehiculoUpdateDTO, @Param('id') id:string){
-    return await this.vehiculoService.updateVehiculo(body, id);
+  public async updateVehiculo(@Body() body: VehiculoUpdateDTO, @Param('id') id:string)
+  {
+    const {message, state } = await this.vehiculoService.updateVehiculo(body, id);
+
+    return {
+      message: message,
+      state: state
+    };
   }
 
   @Delete(':id')
   public async deleteVehiculo(@Param('id') id:string){
-    return await this.vehiculoService.deleteVehiculo(id);
+    const { state, message } =await this.vehiculoService.deleteVehiculo(id);
+    return {
+      state: state,
+      message: message,
+    }
   }
 
 }

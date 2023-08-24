@@ -15,6 +15,9 @@ export class TipoVehiculoController {
   public async registerTipoVehiculo(@Body() body: TipoVehiculoDTO)
   {
     return await this.tipoVehiculoService.createTipoVehiculo(body);
+    return {
+      message: "hola"
+    }
   }
 
   @Get('all')

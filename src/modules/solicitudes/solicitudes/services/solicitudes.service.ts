@@ -7,31 +7,48 @@ import { SolicitudesEntity } from '../entities/solicitudes.entity';
 import { MailService } from '../../../mail/services/mail.service';
 import { TrackerEntity } from '../../tracker/entities/tracker.entity';
 import { TrackerDTO } from '../../tracker/dto/tracker.dto';
+import { ResiduosRecojoEntity } from '../../residuosRecojo/entities/residuosRecojo.entity';
 
 @Injectable()
 export class SolicitudesService{
   constructor(
     @InjectRepository(SolicitudesEntity) private readonly solicitudRespository: Repository<SolicitudesEntity>,
+    @InjectRepository(ResiduosRecojoEntity) private readonly residuoRecojoRepository: Repository<ResiduosRecojoEntity>,
     @InjectRepository(TrackerEntity) private readonly trackerRepository: Repository<TrackerEntity>,
     private mailService: MailService
   ){}
 
-  public async createSolicitud(body: SolicitudDTO, tracker: TrackerDTO): Promise<SolicitudesEntity>
+  public async createSolicitud(body: SolicitudDTO, tracker: TrackerDTO)
   {
     try {
       const lastRecord = await this.solicitudRespository.createQueryBuilder('solicitudes')
         .orderBy('solicitudes.id', 'DESC')
         .getOne();
 
+      const residuosRecojo = await Promise.all(
+        body.residuos.map(async (residuoRecojoDto) => {
+          const residuoRecojo = new ResiduosRecojoEntity();
+          residuoRecojo.cantidad = residuoRecojoDto.cantidad;
+          residuoRecojo.residuo = residuoRecojoDto.tipoResiduo;
+          residuoRecojo.unidadMedida = residuoRecojoDto.unidadMedida;
+          return await this.residuoRecojoRepository.save(residuoRecojo);
+        }),
+      );
+
       const solicitudBody = {
         ...body,
-        codigo: 'COPTR-'+(lastRecord.id+1),
-        tracker: tracker
+        codigo: 'COPTR-'+(lastRecord ? lastRecord.id+1 : 1),
+        tracker: tracker,
+        residuosRecojo: residuosRecojo
       };
 
       const solicitud : SolicitudesEntity = await this.solicitudRespository.save(solicitudBody);
 
-      return solicitud;
+      return {
+        state: true,
+        message: "Su solicitud de recojo fue registrada con éxito, nuestro equipo se comunicará con usted.",
+        solicitud: solicitud
+      };
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

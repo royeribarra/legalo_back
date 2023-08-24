@@ -4,11 +4,13 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { VehiculoDTO, VehiculoUpdateDTO } from '../dto/vehiculo.dto';
 import { ErrorManager } from '../../../../utils/error.manager';
 import { VehiculosEntity } from '../entities/vehiculo.entity';
+import { TipoVehiculoService } from './tipoVehiculo.service';
 
 @Injectable()
 export class VehiculosService{
   constructor(
-    @InjectRepository(VehiculosEntity) private readonly vehiculoRepository: Repository<VehiculosEntity>
+    @InjectRepository(VehiculosEntity) private readonly vehiculoRepository: Repository<VehiculosEntity>,
+    private readonly tipoVehiculoService: TipoVehiculoService
   ){}
 
   public async createVehiculo(body: VehiculoDTO, tipoVehiculo): Promise<VehiculosEntity>
@@ -49,6 +51,7 @@ export class VehiculosService{
     try {
       const vehiculo : VehiculosEntity =  await this.vehiculoRepository
         .createQueryBuilder('vehiculos')
+        .leftJoinAndSelect('vehiculos.tipoVehiculo', 'tipoVehiculo')
         .where({id})
         .getOne();
 
@@ -80,35 +83,61 @@ export class VehiculosService{
     }
   }
 
-  public async updateVehiculo(body: VehiculoUpdateDTO, id: string): Promise<UpdateResult> | undefined
+  public async updateVehiculo(body: VehiculoUpdateDTO, id: string)
   {
-    try {
-      const usuarios: UpdateResult = await this.vehiculoRepository.update(id, body);
-      if(usuarios.affected === 0)
-      {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se pudo actualizar el usuario.'
-        });
+    const tipoVehiculo = await this.tipoVehiculoService.findTipoVehiculoById(body.tipoVehiculoId);
+    
+    if(!tipoVehiculo)
+    {
+      return {
+        state: false,
+        message: `No se pudo actualizar porque el tipo de vehículo no existe.`,
+        vehiculo: null
       }
-      return usuarios;
+    }
+
+    const { tipoVehiculoId, ...restOfBody } = body;
+
+    const newData = {
+      ...restOfBody,
+      tipoVehiculo: tipoVehiculo
+    };
+
+    try {
+      const vehiculo: UpdateResult = await this.vehiculoRepository.update(id, newData);
+      if(vehiculo.affected === 0)
+      {
+        return {
+          state: false,
+          message: `No se pudo actualizar el vehículo, porque no existe.`,
+          vehiculo: null
+        }
+      }
+      return {
+        state: true,
+        message: `Vehículo actualizado correctamente`,
+        vehiculo: vehiculo
+      }
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
 
-  public async deleteVehiculo(id: string): Promise<DeleteResult> | undefined
+  public async deleteVehiculo(id: string)
   {
     try {
-      const usuarios: DeleteResult = await this.vehiculoRepository.delete(id);
-      if(usuarios.affected === 0)
+      const vehiculo: DeleteResult = await this.vehiculoRepository.delete(id);
+      if(vehiculo.affected === 0)
       {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se pudo eliminar el usuario, porque no existe.'
-        });
+        return {
+          state: false,
+          message: `No se pudo eliminar el vehículo, porque no existe.`,
+        }
       }
-      return usuarios;
+      return {
+        state: true,
+        message: `Vehículo eliminado con éxito.`,
+      }
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

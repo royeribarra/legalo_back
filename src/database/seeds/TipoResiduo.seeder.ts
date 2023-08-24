@@ -1,6 +1,7 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { TiposResiduoEntity } from '../../modules/mantenimiento/tiposResiduo/entities/tiposResiduo.entity';
+import { TipoResiduoDTO } from 'src/modules/mantenimiento/tiposResiduo/dto/tipoResiduo.dto';
 
 export default class TipoResiduoSeeder implements Seeder {
   
@@ -10,41 +11,231 @@ export default class TipoResiduoSeeder implements Seeder {
   ): Promise<any> {
     try {
       const tipoResiduoRepository =  dataSource.getRepository(TiposResiduoEntity);
-      const data = [
+      const data : TipoResiduoDTO[] = [
         {
-          codigo: 're01',
-          nombre: 'Aceite de motor usado',
-          descripcion: 'El aceite de motor utilizado en vehículos y maquinaria, que se descarta cuando se realiza un cambio de aceite.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          codigo: 'so-01',
+          nombre: 'Absorbentes usados',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
         },
         {
-          codigo: 're02',
-          nombre: 'Aceite de cocina usado',
-          descripcion: 'El aceite utilizado para cocinar, que se desecha después de su uso en restaurantes, hogares u otras instalaciones.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          codigo: 'li-01',
+          nombre: 'Aceite usado',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 2,
+          disposicionFinal: "",
+          responsable: ""
         },
         {
-          codigo: 're03',
-          nombre: 'Combustibles vencidos',
-          descripcion: 'Los combustibles que han superado su vida útil o que ya no cumplen con las especificaciones requeridas, como gasolina, diésel, queroseno u otros combustibles.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          codigo: 'so-02',
+          nombre: 'Acerrin contaminado',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
         },
         {
-          codigo: 're04',
-          nombre: 'Lubricantes usados',
-          descripcion: 'Los lubricantes utilizados en maquinaria y equipos, como aceites lubricantes para motores, engranajes o sistemas hidráulicos.',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          codigo: 'li-02',
+          nombre: 'Agua contaminada',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 2,
+          disposicionFinal: "",
+          responsable: ""
         },
         {
-          codigo: 're05',
-          nombre: 'Aceite de transformadores y capacitores',
-          descripcion: 'Los aceites utilizados en transformadores eléctricos y capacitores, que pueden contener contaminantes peligrosos como PCB (bifenilos policlorados).',
-          nivelPeligro: 1,
-          metodoAlmacenamiento: 2
+          codigo: 'li-03',
+          nombre: 'Agua oleosa',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 2,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'li-04',
+          nombre: 'Agua residual',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 2,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-03',
+          nombre: 'Arena contaminada',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-04',
+          nombre: 'Bandeja antiderrame',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-05',
+          nombre: 'Barro contaminado',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-06',
+          nombre: 'Borras ácidas',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-07',
+          nombre: 'Coques',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'li-05',
+          nombre: 'Efluentes líquidos',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 2,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'li-06',
+          nombre: 'Filtro de aceite usado',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 2,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-08',
+          nombre: 'Filtro de aire usado',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-09',
+          nombre: 'Filtro de petroleo usado',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'li-07',
+          nombre: 'Grasa',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 2,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-10',
+          nombre: 'Lodo contaminado',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'li-08',
+          nombre: 'Refrigerante usado',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 2,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-11',
+          nombre: 'Residuos peligroso varios',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-12',
+          nombre: 'Residuo contaminados (trapos y cartón)',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-13',
+          nombre: 'Residuos peligrosos solventes usados',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-14',
+          nombre: 'Tierra contaminada',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-15',
+          nombre: 'Trapos contaminados',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-16',
+          nombre: 'Trapos contaminados y varios',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
+        },
+        {
+          codigo: 'so-17',
+          nombre: 'Trapos industriales contaminados',
+          nivelPeligro: "",
+          metodoAlmacenamiento: null,
+          tipo: 1,
+          disposicionFinal: "",
+          responsable: ""
         },
       ];
 

@@ -6,14 +6,22 @@ import { SolicitudesController } from './controllers/solicitudes.controller';
 import { MailModule } from '../../../modules/mail/mail.module';
 import { TrackerEntity } from '../tracker/entities/tracker.entity';
 import { TrackerService } from '../tracker/services/tracker.service';
+import { ResiduosRecojoService } from '../residuosRecojo/services/residuosRecojo.service';
+import { ResiduosRecojoEntity } from '../residuosRecojo/entities/residuosRecojo.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([SolicitudesEntity, TrackerEntity]),
+    TypeOrmModule.forFeature([
+      SolicitudesEntity, 
+      TrackerEntity,
+      ResiduosRecojoEntity
+    ]),
     MailModule
   ],
   providers: [
-    SolicitudesService, TrackerService
+    SolicitudesService, 
+    TrackerService,
+    ResiduosRecojoService
   ],
   controllers: [
     SolicitudesController

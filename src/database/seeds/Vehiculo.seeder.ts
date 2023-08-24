@@ -14,7 +14,7 @@ export default class VehiculoSeeder implements Seeder {
       const tiposVehiculo = await tipoRepository.find();
       const data = [
         {
-          // codigo: 'CT001',
+          nombre: 'Workercito-1',
           capacidadCarga: 30000,
           unidadMedida: 1,
           disponibilidad: 'disponible',
@@ -29,6 +29,7 @@ export default class VehiculoSeeder implements Seeder {
           tipoVehiculo: tiposVehiculo[0]
         },
         {
+          nombre: 'Workercito-2',
           // codigo: 'FR001',
           capacidadCarga: 1000,
           unidadMedida: 1,
@@ -44,6 +45,7 @@ export default class VehiculoSeeder implements Seeder {
           tipoVehiculo: tiposVehiculo[1]
         },
         {
+          nombre: 'Workercito-3',
           // codigo: 'RR002',
           capacidadCarga: 20,
           unidadMedida: 1,
@@ -59,6 +61,7 @@ export default class VehiculoSeeder implements Seeder {
           tipoVehiculo: tiposVehiculo[2]
         },
         {
+          nombre: 'Workercito-4',
           // codigo: 'CV003',
           capacidadCarga: 10,
           unidadMedida: 1,

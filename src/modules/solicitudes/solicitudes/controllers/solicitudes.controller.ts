@@ -14,25 +14,27 @@ export class SolicitudesController {
     private readonly trackerService: TrackerService
   ) {}
 
-  @Post('register')
-  public async registerSolicitud(@Body() body: SolicitudDTO, @Res() response: Response){
+  @Post('create')
+  public async registerSolicitud(@Body() body: SolicitudDTO){
     const newTracker = await this.trackerService.createTracker(body.fechaSolicitud);
     
-    const newSolicitud = await this.solicitudesService.createSolicitud(body, newTracker);
+    const { message, state, solicitud} = await this.solicitudesService.createSolicitud(body, newTracker);
 
-    await this.trackerService.asignSolicitud(newTracker, newSolicitud);
-
-    if(!newSolicitud)
+    if(!solicitud)
     {
-      return response.json({
-        status: 500,
+      return {
+        state: false,
         message: 'Hubo un problema al crear la solicitud.' 
-      });
+      };
     }
 
+    await this.trackerService.asignSolicitud(newTracker, solicitud);
     const emailConfirmacion = await this.solicitudesService.sendEmailConfirmation();
 
-    return emailConfirmacion;
+    return {
+      state: true,
+      message: message
+    };
   }
 
   @Get('all')

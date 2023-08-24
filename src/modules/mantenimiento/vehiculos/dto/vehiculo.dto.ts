@@ -42,22 +42,56 @@ export class VehiculoDTO
   @IsOptional()
   @IsString()
   responsable: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  codigo: string;
 }
 
 export class VehiculoUpdateDTO{
+  @ApiProperty()
   @IsOptional()
   @IsString()
   nombre: string;
 
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  placa: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  tipoVehiculoId: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  capacidadCarga: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  unidadMedida: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  estadoMantenimiento: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  disponibilidad: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  responsable: string;
+
+  @ApiProperty()
   @IsOptional()
   @IsString()
   codigo: string;
-
-  @IsOptional()
-  @IsNumber()
-  tarifa: number;
-
-  @IsOptional()
-  @IsBoolean()
-  isActive: boolean;
 }
