@@ -22,15 +22,6 @@ export class SolicitudesEntity extends BaseEntity implements ISolicitudRecolecci
   @Column()
   sucursalEmpresaSolicitante: number;
 
-  @Column()
-  tipoResiduo: number;
-
-  @Column()
-  unidadMedida: number;
-
-  @Column()
-  cantidad: number;
-
   @Column({nullable: true})
   cilindros: number;
 

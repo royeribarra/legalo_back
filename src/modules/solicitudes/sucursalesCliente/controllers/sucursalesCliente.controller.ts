@@ -32,7 +32,7 @@ export class SucursalesClienteController {
   }
 
   @Get(':id')
-  public async findSucursalById(@Param('id') id: string){
+  public async findSucursalById(@Param('id') id: number){
     return await this.sucursalesService.findSucursalById(id);
   }
 

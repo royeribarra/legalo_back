@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>Confirmación de Pedido</title>
+  </head>
+
+  <body class="bg-gray-100 py-20 font-sans text-gray-800">
+    <div class="flex flex-col max-w-md mx-auto bg-white p-8 border border-gray-300 rounded-lg shadow-md">
+      <img src="../img/logoCompleto.png" alt="logo AMPCO" class="self-center m-5 w-3/4">
+      <h2 class="text-2xl mb-6 text-center font-bold">
+        Confirmación de Pedido
+      </h2>
+
+      <p class="mb-4">Hemos recibido tu pedido de pedido.nombre_cliente ,</p>
+      <p class="mb-4 font-semibold">Te notificaremos con los detalles del recojo</p>
+      <p class="mb-4">Aquí están los detalles de tu pedido:</p>
+
+      <ul class="mb-4 space-y-2 text-left pl-3">
+        <li><strong>ID del Pedido:</strong> pedido.id</li>
+        <li><strong>Fecha de recojo:</strong> pedido.fecha</li>
+        <li><strong>Material:</strong> pedido.material</li>
+        <li><strong>Cantidad:</strong> pedido.cantidad</li>
+        <li><strong>Medida:</strong> pedido.medida</li>
+        <li><strong>Precio de compra estimado:</strong> $ pedido.total</li>
+      </ul>
+
+      <p class="mb-4">Tu pedido será recogido de la siguiente dirección:</p>
+
+      <address class="mb-6 p-4 border border-gray-200 rounded">
+        pedido.direccion_envio.calle <br />
+        pedido.direccion_envio.ciudad , pedido.direccion_envio.estado
+        pedido.direccion_envio.codigo_postal <br />
+        pedido.direccion_envio.pais
+      </address>
+
+      <p class="mb-4">Si tienes alguna pregunta, no dudes en <a href="#" class="text-blue-500 hover:underline">escribirnos</a>.</p>
+
+      <p>¡Gracias por elegirnos!</p>
+
+      <p class="mt-6 text-center text-gray-500 text-sm">
+        © 2023 AMPO Web. Todos los derechos reservados.
+      </p>
+    </div>
+  </body>
+</html>

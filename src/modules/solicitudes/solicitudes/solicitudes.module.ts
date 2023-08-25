@@ -10,13 +10,22 @@ import { ResiduosRecojoService } from '../residuosRecojo/services/residuosRecojo
 import { ResiduosRecojoEntity } from '../residuosRecojo/entities/residuosRecojo.entity';
 import { ClienteMailService } from '../../mail/services/clienteMail.service';
 import { ComercialMailService } from '../../mail/services/comercialMail.service';
+import { ClientesService } from '../clientes/services/clientes.service';
+import { SucursalesClienteService } from '../sucursalesCliente/services/sucursalesCliente.service';
+import { ClientesEntity } from '../clientes/entities/clientes.entity';
+import { SucursalesClienteEntity } from '../sucursalesCliente/entities/sucursalesCliente.entity';
+import { UsuariosService } from '../../mantenimiento/usuarios/services/usuarios.service';
+import { UsuariosEntity } from '../../mantenimiento/usuarios/entities/usuarios.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       SolicitudesEntity, 
       TrackerEntity,
-      ResiduosRecojoEntity
+      ResiduosRecojoEntity,
+      ClientesEntity,
+      SucursalesClienteEntity,
+      UsuariosEntity
     ]),
     MailModule
   ],
@@ -25,7 +34,10 @@ import { ComercialMailService } from '../../mail/services/comercialMail.service'
     TrackerService,
     ResiduosRecojoService,
     ClienteMailService,
-    ComercialMailService
+    ComercialMailService,
+    ClientesService,
+    SucursalesClienteService,
+    UsuariosService
   ],
   controllers: [
     SolicitudesController

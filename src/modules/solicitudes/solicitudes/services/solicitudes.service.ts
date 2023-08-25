@@ -71,6 +71,23 @@ export class SolicitudesService{
     }
   }
 
+  public async findSolicitudesBy(): Promise<SolicitudesEntity[]>
+  {
+    try {
+      const solicitudes : SolicitudesEntity[] = await this.solicitudRespository.find();
+      if(solicitudes.length === 0)
+      {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'No se encontró ningun usuario.'
+        });
+      }
+      return solicitudes;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async findSolicitudById(id: string): Promise<SolicitudesEntity>
   {
     try {

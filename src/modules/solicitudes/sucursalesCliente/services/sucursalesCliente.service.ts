@@ -94,7 +94,7 @@ export class SucursalesClienteService{
     }
   }
 
-  public async findSucursalById(id: string): Promise<SucursalesClienteEntity>
+  public async findSucursalById(id: number): Promise<SucursalesClienteEntity>
   {
     try {
       const sucursal : SucursalesClienteEntity =  await this.sucursalRepository
@@ -190,6 +190,7 @@ export class SucursalesClienteService{
       const sucursal: SucursalesClienteEntity = await this.sucursalRepository.createQueryBuilder(
         'sucursales'
       )
+      .leftJoinAndSelect('sucursales.cliente', 'cliente')
       .where({[key]: value})
       .getOne();
       return sucursal;

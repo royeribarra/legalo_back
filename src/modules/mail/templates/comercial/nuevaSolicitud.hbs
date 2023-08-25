@@ -1,8 +1,44 @@
-<p>Nueva solicitud de recojo</p>
-<p>Empresa: {{ name }},</p>
-<p>Residuos:</p>
-<p>
-  
-</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>Nuevo solicitud de recojo</title>
+  </head>
 
-<p>Favor de coordinar con el cliente.</p>
+  <body class="bg-gray-100 py-20 font-sans text-gray-800">
+    <div class="flex flex-col max-w-md mx-auto bg-white p-8 border border-gray-300 rounded-lg shadow-md">
+      <img src="../img/logoCompleto.png" alt="logo AMPCO" class="self-center m-5 w-3/4">
+      <h2 class="text-2xl mb-6 text-center font-bold">
+        Nuevo solicitud de recojo
+      </h2>
+
+      <p>Empresa: {{ clienteNombre }},</p>
+      <p>Sucursal: {{ sucursalNombre }}</p>
+      <p>Responsable de sucursal: {{ contactoNombre }}</p>
+      <p>Número de contacto: {{ numeroContacto }}</p>
+
+      <p>Residuos:</p>
+      <p>
+        {{#each residuos}}
+          <p>{{ this.tipoResiduo }}</p>
+          <br />
+          <p>{{ this.cantidad }}</p>
+          <br />
+          <p>{{ this.unidadMedida }}</p>
+        {{/each}}
+      </p>
+
+      <p>Favor de coordinar con el cliente.</p>
+
+
+      <p class="mt-6 text-center text-gray-500 text-sm">
+        © 2023 AMPO Web. Todos los derechos reservados.
+      </p>
+    </div>
+  </body>
+</html>

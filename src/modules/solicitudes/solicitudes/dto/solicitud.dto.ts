@@ -4,23 +4,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { ResiduoRecojoDTO } from '../../residuosRecojo/dto/residuosRecojo.dto';
 
-// class ResiduoRecojoDTO {
-//   @ApiProperty()
-//   @IsNotEmpty()
-//   @IsString()
-//   tipoResiduo: string;
-
-//   @ApiProperty()
-//   @IsNotEmpty()
-//   @IsString()
-//   unidadMedida: string;
-
-//   @ApiProperty()
-//   @IsNotEmpty()
-//   @IsNumber()
-//   cantidad: number;
-// }
-
 export class SolicitudDTO{
   @ApiProperty()
   @IsNotEmpty()
@@ -52,16 +35,6 @@ export class SolicitudDTO{
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  unidadMedida: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  cantidad: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
   cilindros: number;
 
   @ApiProperty()
@@ -74,9 +47,8 @@ export class SolicitudDTO{
   contactoEmpresa: string;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  estadoSolicitud: number;
+  @IsString()
+  correoContacto: string;
 
   @ApiProperty()
   @IsString()

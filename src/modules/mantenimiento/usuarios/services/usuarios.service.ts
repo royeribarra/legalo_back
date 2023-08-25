@@ -166,4 +166,18 @@ export class UsuariosService{
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  public async findUsuariosBy({key, value} : { key: keyof UsuarioDTO; value: any })
+  {
+    try {
+      const usuarios: UsuariosEntity[] = await this.usuariosRepository.createQueryBuilder(
+        'usuarios'
+      )
+      .where({ [key]: value })
+      .getMany();
+      return usuarios;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
 }
