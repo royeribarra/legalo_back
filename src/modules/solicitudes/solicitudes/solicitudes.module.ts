@@ -8,6 +8,8 @@ import { TrackerEntity } from '../tracker/entities/tracker.entity';
 import { TrackerService } from '../tracker/services/tracker.service';
 import { ResiduosRecojoService } from '../residuosRecojo/services/residuosRecojo.service';
 import { ResiduosRecojoEntity } from '../residuosRecojo/entities/residuosRecojo.entity';
+import { ClienteMailService } from '../../mail/services/clienteMail.service';
+import { ComercialMailService } from '../../mail/services/comercialMail.service';
 
 @Module({
   imports: [
@@ -21,7 +23,9 @@ import { ResiduosRecojoEntity } from '../residuosRecojo/entities/residuosRecojo.
   providers: [
     SolicitudesService, 
     TrackerService,
-    ResiduosRecojoService
+    ResiduosRecojoService,
+    ClienteMailService,
+    ComercialMailService
   ],
   controllers: [
     SolicitudesController

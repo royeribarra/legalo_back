@@ -3,7 +3,7 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { IUnidadMedidaResiduo } from '../../../../interfaces/mantenimiento/residuos/unidadMedidadResiduo.interface';
 import { TiposResiduoEntity } from './tiposResiduo.entity';
 
-@Entity({name:'unidadesMedidaResiduo'})
+@Entity({name:'unidades_medida_residuo'})
 export class UnidadesMedidaResiduoEntity extends BaseEntity implements IUnidadMedidaResiduo
 {
   @Column()

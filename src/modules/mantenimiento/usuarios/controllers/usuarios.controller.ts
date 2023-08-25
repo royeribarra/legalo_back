@@ -8,7 +8,7 @@ import { RolesService } from '../../roles/services/roles.service';
 
 @ApiTags('Usuarios')
 @Controller('usuarios')
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 export class UsuariosController {
   constructor(
     private readonly usuariosService: UsuariosService,

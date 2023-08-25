@@ -7,7 +7,7 @@ import { AuthGuard } from '../../../auth/guards/auth.guard';
 
 @ApiTags('Areas Empresa')
 @Controller('areas-empresa')
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 export class AreaEmpresaController {
   constructor(private readonly herramientasService: AreaEmpresaService) {}
 

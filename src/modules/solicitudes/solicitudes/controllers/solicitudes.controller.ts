@@ -5,13 +5,17 @@ import { SolicitudesService } from '../services/solicitudes.service';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { TrackerService } from '../../tracker/services/tracker.service';
+import { ClienteMailService } from 'src/modules/mail/services/clienteMail.service';
+import { ComercialMailService } from 'src/modules/mail/services/comercialMail.service';
 
 @ApiTags('Solicitudes')
 @Controller('solicitudes')
 export class SolicitudesController {
   constructor(
     private readonly solicitudesService: SolicitudesService,
-    private readonly trackerService: TrackerService
+    private readonly trackerService: TrackerService,
+    private readonly clienteMailService: ClienteMailService,
+    private readonly comercialMailService: ComercialMailService,
   ) {}
 
   @Post('create')
@@ -29,7 +33,8 @@ export class SolicitudesController {
     }
 
     await this.trackerService.asignSolicitud(newTracker, solicitud);
-    const emailConfirmacion = await this.solicitudesService.sendEmailConfirmation();
+    const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo();
+    const mailNuevaSolicitud = await this.comercialMailService.nuevaSolicitud();
 
     return {
       state: true,

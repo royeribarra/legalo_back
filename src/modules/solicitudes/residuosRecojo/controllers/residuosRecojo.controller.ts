@@ -8,7 +8,7 @@ import { AuthGuard } from '../../../auth/guards/auth.guard';
 
 @ApiTags('Residuos recojo')
 @Controller('residuos-recojo')
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 export class ResiduosRecojoController {
   constructor(
     private readonly residuoRecojoService: ResiduosRecojoService,

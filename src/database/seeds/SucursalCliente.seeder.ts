@@ -2,6 +2,7 @@ import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { SucursalesClienteEntity } from '../../modules/solicitudes/sucursalesCliente/entities/sucursalesCliente.entity';
 import { SucursalClienteDTO } from '../../modules/solicitudes/sucursalesCliente/dto/sucursalCliente.dto';
+import { ClientesEntity } from '../../modules/solicitudes/clientes/entities/clientes.entity';
 
 export default class SucursalClienteSeeder implements Seeder {
   public async run(
@@ -9,8 +10,12 @@ export default class SucursalClienteSeeder implements Seeder {
     factoryManager: SeederFactoryManager
   ): Promise<any> {
     try {
+      const clientesRepository =  dataSource.getRepository(ClientesEntity);
       const sucursalRepository =  dataSource.getRepository(SucursalesClienteEntity);
-      const data : SucursalClienteDTO[] = [
+
+      const clientes = await clientesRepository.find();
+
+      const data = [
         {
           nombre: 'Administrador',
           direccion: 'Calle Las Flores 123',
@@ -21,7 +26,7 @@ export default class SucursalClienteSeeder implements Seeder {
           codigoSucursal: 'INCHCA-01',
           latitud: '-12.17077411118961',
           longitud: '-76.98868150420377',
-          clienteId: 1,
+          cliente: clientes[0],
           observaciones: ""
         },
         {
@@ -34,7 +39,7 @@ export default class SucursalClienteSeeder implements Seeder {
           codigoSucursal: 'INCHCA-02',
           latitud: '-11.997581265557953',
           longitud: '-77.0520783330428',
-          clienteId: 1,
+          cliente: clientes[0],
           observaciones: ""
         },
         {
@@ -47,7 +52,7 @@ export default class SucursalClienteSeeder implements Seeder {
           codigoSucursal: 'MITSUI-01',
           latitud: '-12.125749530255671',
           longitud: '-77.0293857042047',
-          clienteId: 2,
+          cliente: clientes[1],
           observaciones: ""
         },
         {
@@ -60,7 +65,7 @@ export default class SucursalClienteSeeder implements Seeder {
           codigoSucursal: 'MITSUI-02',
           latitud: '-11.982800611355085',
           longitud: '-77.09495580142543',
-          clienteId: 2,
+          cliente: clientes[1],
           observaciones: ""
         },
         {
@@ -73,7 +78,7 @@ export default class SucursalClienteSeeder implements Seeder {
           codigoSucursal: 'DERCOC-01',
           latitud: '-12.068606529633888',
           longitud: '-77.11439527537013',
-          clienteId: 3,
+          cliente: clientes[2],
           observaciones: ""
         },
       ];

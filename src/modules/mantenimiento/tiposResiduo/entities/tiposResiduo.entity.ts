@@ -8,7 +8,7 @@ import { TiposResiduoPropiedadesEntity } from './tipoResiduoPropiedad.entity';
 import { ResiduosEntity } from '../../residuos/entities/residuos.entity';
 import { TiposResiduoUnidadMedidaEntity } from './tiposResiduoUnidadMedida.entity';
 
-@Entity({name:'tiposResiduo'})
+@Entity({name:'tipos_residuo'})
 export class TiposResiduoEntity extends BaseEntity implements ITipoResiduo
 {
   @Column({ unique: true })

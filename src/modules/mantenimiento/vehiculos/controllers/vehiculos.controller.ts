@@ -9,7 +9,7 @@ import { AuthGuard } from '../../../auth/guards/auth.guard';
 
 @ApiTags('Vehiculos')
 @Controller('vehiculos')
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 export class VehiculosController {
   constructor(
     private readonly vehiculoService: VehiculosService,

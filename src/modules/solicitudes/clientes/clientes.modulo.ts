@@ -19,6 +19,9 @@ import { SucursalesClienteEntity } from '../sucursalesCliente/entities/sucursale
   ],
   controllers: [
     ClientesController
+  ],
+  exports:[
+    ClientesService
   ]
 })
 

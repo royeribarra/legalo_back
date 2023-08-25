@@ -3,7 +3,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { ISucursalCliente } from '../../../../interfaces/solicitudes/sucursalCliente.interface';
 import { ClientesEntity } from '../../clientes/entities/clientes.entity';
 
-@Entity({name:'sucursalescliente'})
+@Entity({name:'sucursales_cliente'})
 export class SucursalesClienteEntity extends BaseEntity implements ISucursalCliente{
 
   @Column({ nullable: true})
@@ -23,6 +23,9 @@ export class SucursalesClienteEntity extends BaseEntity implements ISucursalClie
 
   @Column()
   numeroContacto: string;
+
+  @Column()
+  correoContacto: string;
 
   @Column()
   codigoSucursal: string;

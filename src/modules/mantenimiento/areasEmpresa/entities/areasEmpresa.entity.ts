@@ -3,7 +3,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { TrackerEntity } from '../../../solicitudes/tracker/entities/tracker.entity';
 import { IAreaEmpresa } from '../../../../interfaces/mantenimiento/areasEmpresa.interface';
 
-@Entity({name:'areasEmpresa'})
+@Entity({name:'areas_empresa'})
 export class AreaEmpresaEntity extends BaseEntity implements IAreaEmpresa{
 
   @Column({unique: true})

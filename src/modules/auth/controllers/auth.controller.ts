@@ -3,12 +3,19 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service'
 import { AuthDTO } from '../dto/auth.dto';
 import { Response } from 'express';
+import { ClientesService } from '../../solicitudes/clientes/services/clientes.service';
+import { SucursalesClienteService } from '../../solicitudes/sucursalesCliente/services/sucursalesCliente.service';
 
 @ApiTags('auth')
 @Controller('auth')
 
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly clienteService: ClientesService,
+    private readonly sucursalClienteService: SucursalesClienteService,
+    )
+  {}
 
   @Post('login')
   public async login(@Body() {usuario, contrasena}: AuthDTO, @Res() response: Response)
@@ -31,5 +38,36 @@ export class AuthController {
       message: 'Inicio de sesión exitoso.',
       jwt: jwt
     });
+  }
+
+  @Post('login-cliente')
+  public async loginCliente(@Body() body)
+  {
+    const existeCliente = await this.clienteService.findBy({
+      key: 'codigo',
+      value: body.codigo
+    })
+    const existeSucursalCliente = await this.sucursalClienteService.findBy({
+      key: 'codigoSucursal',
+      value: body.codigo
+    })
+    if (existeCliente) {
+      return {
+        message: 'Cliente existente.',
+        state: true,
+        info: {...existeCliente, rol: 1}
+      };
+    } else if(existeSucursalCliente){
+      return {
+        message: 'Sucursal de cliente existente.',
+        state: true,
+        info: {...existeSucursalCliente, rol: 2}
+      };
+    } 
+
+    return {
+      message: 'No existe ningún cliente con el código ingresado.',
+      state: false
+    };
   }
 }
