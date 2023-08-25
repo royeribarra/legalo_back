@@ -3,7 +3,7 @@ import { BaseEntity } from '../../../../config/base.entity';
 import { TiposResiduoEntity } from './tiposResiduo.entity';
 import { MetodosTratamientoResiduoEntity } from './metodosTratamientoResiduo.entity';
 
-@Entity({ name: 'tiposResiduo_metodosTratamiento' })
+@Entity({ name: 'tipos_residuo_metodos_tratamiento' })
 export class TiposResiduoMetodosTratamientoEntity extends BaseEntity
 {
 

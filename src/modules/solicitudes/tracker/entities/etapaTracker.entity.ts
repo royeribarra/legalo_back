@@ -3,7 +3,7 @@ import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { TrackerEntity } from './tracker.entity';
 import { IEtapaTracker } from '../../../../interfaces/solicitudes/etapaTracker.interface';
 
-@Entity({name:'etapaTracker'})
+@Entity({name:'etapa_tracker'})
 export class EtapaTrackerEntity extends BaseEntity implements IEtapaTracker{
 
   @Column()

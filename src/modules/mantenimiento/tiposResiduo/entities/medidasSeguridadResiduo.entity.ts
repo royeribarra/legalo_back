@@ -3,7 +3,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import { IPropiedadResiduo } from '../../../../interfaces/mantenimiento/residuos/propiedadResiduo.interface';
 import { TiposResiduoMedidasSeguridadEntity } from './tipoResiduoMedidaSeguridad.entity';
 
-@Entity({name:'medidasSeguridadResiduo'})
+@Entity({name:'medidas_seguridad_residuo'})
 export class MedidasSeguridadResiduoEntity extends BaseEntity implements IPropiedadResiduo
 {
   @Column()

@@ -24,7 +24,7 @@ export class SucursalesClienteEntity extends BaseEntity implements ISucursalClie
   @Column()
   numeroContacto: string;
 
-  @Column()
+  @Column({ nullable: true})
   correoContacto: string;
 
   @Column()

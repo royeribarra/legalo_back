@@ -3,7 +3,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { IModuloWeb } from '../../../../interfaces/mantenimiento/modulosWeb.interface';
 import { RolesModulosWebEntity } from './rolModulosWeb.entity';
 
-@Entity({name:'modulosWeb'})
+@Entity({name:'modulos_web'})
 export class ModulosWebEntity extends BaseEntity implements IModuloWeb{
 
   @Column({unique: true})
