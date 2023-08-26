@@ -65,10 +65,6 @@ export class SolicitudUpdateDTO{
   nombre: string;
 
   @IsOptional()
-  @IsString()
-  codigo: string;
-
-  @IsOptional()
   @IsNumber()
   tarifa: number;
 

@@ -75,13 +75,7 @@ export class SolicitudesService{
   {
     try {
       const solicitudes : SolicitudesEntity[] = await this.solicitudRespository.find();
-      if(solicitudes.length === 0)
-      {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se encontró ningun usuario.'
-        });
-      }
+      
       return solicitudes;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -147,6 +141,25 @@ export class SolicitudesService{
   public async sendEmailConfirmation(){
     try {
       await this.mailService.sendUserConfirmation();
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findSolicitudesByClienteIdBySucursalId(clienteId: string, sucursalId: string): Promise<SolicitudesEntity[]>
+  {
+    try {
+      const solicitudes : SolicitudesEntity[] = await this.solicitudRespository
+        .createQueryBuilder('solicitudes')
+        .innerJoinAndSelect('solicitudes.tracker', 'tracker')
+        .leftJoinAndSelect('tracker.etapas', 'etapas')
+        .where({
+          empresaSolicitante: clienteId,
+          sucursalEmpresaSolicitante: sucursalId
+        })
+        .getMany();
+      
+      return solicitudes;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

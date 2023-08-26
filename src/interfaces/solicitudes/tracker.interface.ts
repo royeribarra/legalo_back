@@ -7,8 +7,11 @@
 // Responsable: Un campo para especificar la persona o departamento responsable de completar el paso o etapa.
 // Archivos adjuntos: Si es relevante, puedes incluir una columna para almacenar enlaces o referencias a archivos adjuntos relacionados con el paso completado.
 
+//todo tracker debe tener 4 pasos, asignado, en camino, recogido y entregado
+
 export interface ITrackerSolicitud{
-  etapaActual: number,
+  codigo: string,
+  etapaActual: string,
   fechaInicio: string,
   fechaCompletado: string,
   descripcion: string,

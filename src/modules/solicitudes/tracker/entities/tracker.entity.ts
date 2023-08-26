@@ -9,12 +9,15 @@ import { SolicitudesEntity } from '../../solicitudes/entities/solicitudes.entity
 export class TrackerEntity extends BaseEntity implements ITrackerSolicitud
 {
   @Column()
-  etapaActual: number;
+  codigo: string;
+
+  @Column({nullable: true})
+  etapaActual: string;
 
   @Column()
   fechaInicio: string;
 
-  @Column()
+  @Column({nullable: true})
   fechaCompletado: string;
 
   @Column()
@@ -23,7 +26,7 @@ export class TrackerEntity extends BaseEntity implements ITrackerSolicitud
   @Column()
   estado: string;
 
-  @Column()
+  @Column({nullable: true})
   archivo: string;
 
   @OneToMany(() => EtapaTrackerEntity, etapa => etapa.tracker)

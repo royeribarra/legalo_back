@@ -4,8 +4,13 @@ import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-val
 export class TrackerDTO{
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  etapaActual: number;
+  @IsString()
+  codigo: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  etapaActual: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -34,8 +39,8 @@ export class TrackerDTO{
 
 export class TrackerUpdateDTO{
   @IsOptional()
-  @IsNumber()
-  etapaActual: number;
+  @IsString()
+  etapaActual: string;
 
   @IsOptional()
   @IsString()

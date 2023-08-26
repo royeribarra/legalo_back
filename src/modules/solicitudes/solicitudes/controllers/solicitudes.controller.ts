@@ -27,9 +27,8 @@ export class SolicitudesController {
     
     const newTracker = await this.trackerService.createTracker(body.fechaSolicitud);
     
-    const { message, state, solicitud} = await this.solicitudesService.createSolicitud(body, newTracker);
+    const { message, state, solicitud} = await this.solicitudesService.createSolicitud(body, newTracker.tracker);
 
-    
     if(!solicitud)
     {
       return {
@@ -37,15 +36,14 @@ export class SolicitudesController {
         message: 'Hubo un problema al crear la solicitud.' 
       };
     }
-
     
-    await this.trackerService.asignSolicitud(newTracker, solicitud);
+    await this.trackerService.asignSolicitud(newTracker.tracker, solicitud);
 
     const cliente = await this.clienteService.findClienteById(body.empresaSolicitante);
     const sucursalCliente = await this.sucursalClienteService.findSucursalById(body.sucursalEmpresaSolicitante);
 
-    const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo(sucursalCliente, cliente, body.residuos);
-    const mailNuevaSolicitud = await this.comercialMailService.nuevaSolicitud(sucursalCliente, cliente, body.residuos);
+    //const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo(sucursalCliente, cliente, body.residuos);
+    //const mailNuevaSolicitud = await this.comercialMailService.nuevaSolicitud(sucursalCliente, cliente, body.residuos);
 
     return {
       state: true,
@@ -84,10 +82,10 @@ export class SolicitudesController {
 
   @Get('/sucursal/:clienteId/:sucursalId/all')
   public async findAllSolicitudesBySucursal(
-    @Param('clienteId') id:string,
+    @Param('clienteId') clienteId:string,
     @Param('sucursalId') sucursalId: string
   )
   {
-    return await this.solicitudesService.findSolicitudesBy();
+    return await this.solicitudesService.findSolicitudesByClienteIdBySucursalId(clienteId, sucursalId);
   }
 }

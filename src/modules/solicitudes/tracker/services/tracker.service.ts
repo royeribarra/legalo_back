@@ -6,43 +6,57 @@ import { ErrorManager } from '../../../../utils/error.manager';
 import { TrackerEntity } from '../entities/tracker.entity';
 import { SolicitudDTO } from '../../solicitudes/dto/solicitud.dto';
 import { SolicitudesEntity } from '../../solicitudes/entities/solicitudes.entity';
+import { EtapaTrackerEntity } from '../entities/etapaTracker.entity';
+import { SucursalesClienteService } from '../../sucursalesCliente/services/sucursalesCliente.service';
+import { EtapaTrackerService } from './etapaTracker.service';
 
 @Injectable()
 export class TrackerService{
   constructor(
-    @InjectRepository(TrackerEntity) private readonly trackerRespository: Repository<TrackerEntity>
+    @InjectRepository(TrackerEntity) private readonly trackerRespository: Repository<TrackerEntity>,
+    private readonly etapaTrackerService: EtapaTrackerService,
   ){}
 
-  public async existeClienteByCodigo(codigo: string): Promise<Boolean>
+  public async createTracker(fechaSolicitud: string)
   {
-    try {
-      const clienteExistente = await this.trackerRespository
-        .createQueryBuilder('clientes')
-        .where('clientes.codigo = :codigo', { codigo })
-        .getOne();
-      return !!clienteExistente;
-    } catch (error) {
-      throw ErrorManager.createSignatureError(error.message);
-    }
-  }
+    const timestamp = new Date().getTime();
+    const randomComponent = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
+    const codigoAleatorio = timestamp + '' + randomComponent;
 
-  public async createTracker(fechaSolicitud: string): Promise<TrackerEntity>
-  {
-    
     try {
       const trackerDto : TrackerDTO = {
-        etapaActual: 1,
+        codigo: codigoAleatorio,
+        etapaActual: "Asignado",
         fechaInicio: fechaSolicitud,
         fechaCompletado: fechaSolicitud,
         descripcion: 'Solicitud de recolección enviada.',
-        estado: 'Completado',
+        estado: 'Pendiente',
         archivo: ''
       };
       
       const tracker : TrackerEntity = await this.trackerRespository.save(trackerDto);
-      
-      return tracker;
+
+      if(!tracker)
+      {
+        return {
+          state: false,
+          message: "No se pudo crear el tracker",
+          tracker: tracker,
+          etapaTracker: null,
+        };
+      }
+
+      const { state, message, etapaTracker } = await this.etapaTrackerService.createEtapaTracker(tracker);
+
+      return {
+        state: true,
+        message: "Tracker creado correctamente.",
+        etapaTracker: etapaTracker,
+        tracker: tracker
+      };
+
     } catch (error) {
+      console.log("trackerService L-55", error)
       throw ErrorManager.createSignatureError(error.message);
     }
   }

@@ -16,6 +16,8 @@ import { ClientesEntity } from '../clientes/entities/clientes.entity';
 import { SucursalesClienteEntity } from '../sucursalesCliente/entities/sucursalesCliente.entity';
 import { UsuariosService } from '../../mantenimiento/usuarios/services/usuarios.service';
 import { UsuariosEntity } from '../../mantenimiento/usuarios/entities/usuarios.entity';
+import { EtapaTrackerService } from '../tracker/services/etapaTracker.service';
+import { EtapaTrackerEntity } from '../tracker/entities/etapaTracker.entity';
 
 @Module({
   imports: [
@@ -25,7 +27,8 @@ import { UsuariosEntity } from '../../mantenimiento/usuarios/entities/usuarios.e
       ResiduosRecojoEntity,
       ClientesEntity,
       SucursalesClienteEntity,
-      UsuariosEntity
+      UsuariosEntity,
+      EtapaTrackerEntity
     ]),
     MailModule
   ],
@@ -37,7 +40,8 @@ import { UsuariosEntity } from '../../mantenimiento/usuarios/entities/usuarios.e
     ComercialMailService,
     ClientesService,
     SucursalesClienteService,
-    UsuariosService
+    UsuariosService,
+    EtapaTrackerService
   ],
   controllers: [
     SolicitudesController

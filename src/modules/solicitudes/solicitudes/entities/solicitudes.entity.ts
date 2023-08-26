@@ -7,9 +7,6 @@ import { ResiduosRecojoEntity } from '../../residuosRecojo/entities/residuosReco
 @Entity({name:'solicitudes'})
 export class SolicitudesEntity extends BaseEntity implements ISolicitudRecoleccion
 {
-  @Column({nullable: true})
-  codigo: string;
-
   @Column()
   fechaRecoleccion: string;
 
