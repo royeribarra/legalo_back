@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Res, Query } from '@nestjs/common';
 import { SolicitudDTO, SolicitudUpdateDTO } from '../dto/solicitud.dto';
 import { Delete } from '@nestjs/common/decorators';
 import { SolicitudesService } from '../services/solicitudes.service';
@@ -39,8 +39,8 @@ export class SolicitudesController {
     
     await this.trackerService.asignSolicitud(newTracker.tracker, solicitud);
 
-    const cliente = await this.clienteService.findClienteById(body.empresaSolicitante);
-    const sucursalCliente = await this.sucursalClienteService.findSucursalById(body.sucursalEmpresaSolicitante);
+    const cliente = await this.clienteService.findClienteById(body.clienteId);
+    const sucursalCliente = await this.sucursalClienteService.findSucursalById(body.sucursalId);
 
     //const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo(sucursalCliente, cliente, body.residuos);
     //const mailNuevaSolicitud = await this.comercialMailService.nuevaSolicitud(sucursalCliente, cliente, body.residuos);
@@ -52,9 +52,9 @@ export class SolicitudesController {
   }
 
   @Get('all')
-  public async findAllSolicitud()
+  public async findAllSolicitud(@Query() queryParams: any)
   {
-    return await this.solicitudesService.findSolicitudes();
+    return await this.solicitudesService.findSolicitudes(queryParams);
   }
 
   @Get(':id')
@@ -76,6 +76,12 @@ export class SolicitudesController {
   public async findAllSolicitudesByCliente(
     @Param('clienteId') id:string
   )
+  {
+    return await this.solicitudesService.findSolicitudesBy();
+  }
+
+  @Get('/asignacion-vehiculo/:solicitudId')
+  public async asignacionVehiculo(@Param('clienteId') id:string)
   {
     return await this.solicitudesService.findSolicitudesBy();
   }

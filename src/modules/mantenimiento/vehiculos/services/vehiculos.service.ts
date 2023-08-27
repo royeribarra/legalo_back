@@ -35,10 +35,18 @@ export class VehiculosService{
     }
   }
 
-  public async findVehiculos(): Promise<VehiculosEntity[]>
+  public async findVehiculos(queryParams): Promise<VehiculosEntity[]>
   {
+    const query = this.vehiculoRepository.createQueryBuilder('vehiculos')
+      .leftJoinAndSelect('vehiculos.tipoVehiculo', 'tipoVehiculo')
+      .leftJoinAndSelect('vehiculos.conductor', 'conductor')
+
+    if (queryParams.disponibilidad) {
+      query.andWhere('vehiculos.disponibilidad = :disponibilidad', { disponibilidad: queryParams.disponibilidad });
+    }
+
     try {
-      const vehiculos : VehiculosEntity[] = await this.vehiculoRepository.find();
+      const vehiculos: VehiculosEntity[] = await query.getMany();
       
       return vehiculos;
     } catch (error) {

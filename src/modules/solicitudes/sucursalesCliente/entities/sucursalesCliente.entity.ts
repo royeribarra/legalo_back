@@ -1,7 +1,8 @@
 import { BaseEntity } from '../../../../config/base.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { ISucursalCliente } from '../../../../interfaces/solicitudes/sucursalCliente.interface';
 import { ClientesEntity } from '../../clientes/entities/clientes.entity';
+import { SolicitudesEntity } from '../../solicitudes/entities/solicitudes.entity';
 
 @Entity({name:'sucursales_cliente'})
 export class SucursalesClienteEntity extends BaseEntity implements ISucursalCliente{
@@ -41,4 +42,7 @@ export class SucursalesClienteEntity extends BaseEntity implements ISucursalClie
 
   @ManyToOne(() => ClientesEntity, cliente => cliente.sucursales)
   cliente: ClientesEntity;
+
+  @OneToMany(() => SolicitudesEntity, solicitud => solicitud.sucursal)
+  solicitudes: SolicitudesEntity[];
 }

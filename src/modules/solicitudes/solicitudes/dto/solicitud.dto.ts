@@ -18,12 +18,12 @@ export class SolicitudDTO{
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  empresaSolicitante: number;
+  clienteId: number;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  sucursalEmpresaSolicitante: number;
+  sucursalId: number;
 
   @ApiProperty({ type: [ResiduoRecojoDTO] })
   @IsNotEmpty()

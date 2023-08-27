@@ -1,8 +1,10 @@
 import { BaseEntity } from '../../../../config/base.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { ISolicitudRecoleccion } from '../../../../interfaces/solicitudes/solicitudRecoleccion.interface';
 import { TrackerEntity } from '../../tracker/entities/tracker.entity';
 import { ResiduosRecojoEntity } from '../../residuosRecojo/entities/residuosRecojo.entity';
+import { ClientesEntity } from '../../clientes/entities/clientes.entity';
+import { SucursalesClienteEntity } from '../../sucursalesCliente/entities/sucursalesCliente.entity';
 
 @Entity({name:'solicitudes'})
 export class SolicitudesEntity extends BaseEntity implements ISolicitudRecoleccion
@@ -28,11 +30,17 @@ export class SolicitudesEntity extends BaseEntity implements ISolicitudRecolecci
   @Column()
   contactoEmpresa: string;
 
-  @Column()
+  @Column({ default: 1})
   estadoSolicitud: number;
 
   @Column({nullable: true})
   observacion: string;
+
+  @ManyToOne(() => ClientesEntity, cliente => cliente.solicitudes)
+  cliente: ClientesEntity;
+
+  @ManyToOne(() => SucursalesClienteEntity, sucursal => sucursal.solicitudes)
+  sucursal: SucursalesClienteEntity;
 
   @OneToOne(() => TrackerEntity)
   @JoinColumn()

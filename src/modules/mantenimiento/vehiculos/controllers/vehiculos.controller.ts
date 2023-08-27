@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Res, UseGuards} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Res, UseGuards, Query} from '@nestjs/common';
 import { VehiculoDTO, VehiculoUpdateDTO } from '../dto/vehiculo.dto';
 import { Delete } from '@nestjs/common/decorators';
 import { VehiculosService } from '../services/vehiculos.service';
@@ -46,9 +46,10 @@ export class VehiculosController {
   }
 
   @Get('all')
-  public async findAllVehiculos()
+  public async findAllVehiculos(@Query() queryParams: any)
   {
-    return await this.vehiculoService.findVehiculos();
+    console.log("url", queryParams)
+    return await this.vehiculoService.findVehiculos(queryParams);
   }
 
   @Get(':id')

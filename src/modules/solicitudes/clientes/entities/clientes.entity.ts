@@ -2,6 +2,7 @@ import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
 import { ICliente } from '../../../../interfaces/solicitudes/cliente.interface';
 import { SucursalesClienteEntity } from '../../sucursalesCliente/entities/sucursalesCliente.entity';
+import { SolicitudesEntity } from '../../solicitudes/entities/solicitudes.entity';
 
 @Entity({name:'clientes'})
 @Unique(['ruc', 'nombre'])
@@ -36,4 +37,7 @@ export class ClientesEntity extends BaseEntity implements ICliente{
 
   @OneToMany(() => SucursalesClienteEntity, sucursal => sucursal.cliente)
   sucursales: SucursalesClienteEntity[];
+
+  @OneToMany(() => SolicitudesEntity, solicitud => solicitud.cliente)
+  solicitudes: SolicitudesEntity[];
 }
