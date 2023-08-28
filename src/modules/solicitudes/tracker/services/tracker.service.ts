@@ -71,7 +71,7 @@ export class TrackerService{
     }
   }
 
-  public async findClientes(): Promise<TrackerEntity[]>
+  public async findTrackers(): Promise<TrackerEntity[]>
   {
     try {
       const clientes : TrackerEntity[] = await this.trackerRespository.find();
@@ -88,7 +88,7 @@ export class TrackerService{
     }
   }
 
-  public async findClienteById(id: string): Promise<TrackerEntity>
+  public async findTrackerById(id: number): Promise<TrackerEntity>
   {
     try {
       const clientes : TrackerEntity =  await this.trackerRespository
@@ -110,7 +110,7 @@ export class TrackerService{
     }
   }
 
-  public async updateCliente(body: TrackerUpdateDTO, id: string): Promise<UpdateResult> | undefined
+  public async updateTracker(body: TrackerUpdateDTO, id: number): Promise<UpdateResult> | undefined
   {
     try {
       const clientes: UpdateResult = await this.trackerRespository.update(id, body);
@@ -121,7 +121,9 @@ export class TrackerService{
     }
   }
 
-  public async deleteCliente(id: string): Promise<DeleteResult> | undefined
+
+
+  public async deleteTracker(id: string): Promise<DeleteResult> | undefined
   {
     try {
       const clientes: DeleteResult = await this.trackerRespository.delete(id);

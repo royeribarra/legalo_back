@@ -16,6 +16,7 @@ import VehiculoSeeder from './Vehiculo.seeder';
 import AreaEmpresaSeeder from './AreaEmpresa.seeder';
 import ModuloWebSeeder from './ModuloWeb.seeder';
 import RolModuloWebSeeder from './RolModuloWeb.seeder';
+import ConductorSeeder from './Conductores.seeder';
 
 export default class MainSeeder implements Seeder {
   public async run(
@@ -29,6 +30,7 @@ export default class MainSeeder implements Seeder {
     await runSeeder(dataSource, UsuarioSeeder);
     await runSeeder(dataSource, ClienteSeeder);
     await runSeeder(dataSource, SucursalClienteSeeder);
+    await runSeeder(dataSource, ConductorSeeder);
 
     await runSeeder(dataSource, TipoResiduoSeeder);
     await runSeeder(dataSource, UnidadMedidaTipoResiduoSeeder);

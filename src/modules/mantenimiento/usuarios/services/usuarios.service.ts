@@ -57,13 +57,18 @@ export class UsuariosService{
     }
   }
 
-  public async findUsuarios(): Promise<UsuariosEntity[]>
+  public async findUsuarios(queryParams): Promise<UsuariosEntity[]>
   {
+    const query = this.usuariosRepository.createQueryBuilder('usuarios')
+      .leftJoinAndSelect('usuarios.rol', 'rol');
+
+    if (queryParams.rolId) {
+      
+      query.andWhere('rol.id = :id', { id: queryParams.rolId });
+    }
     try {
-      const usuarios : UsuariosEntity[] = await this.usuariosRepository
-        .createQueryBuilder('usuarios')
-        .leftJoinAndSelect('usuarios.rol', 'rol')
-        .getMany();
+      const usuarios: UsuariosEntity[] = await query.getMany();
+      
       return usuarios;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);

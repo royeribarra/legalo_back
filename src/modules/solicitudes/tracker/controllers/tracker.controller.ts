@@ -13,30 +13,30 @@ export class TrackerController {
     ) {}
 
   @Post('register')
-  public async registerCliente(@Body() body:TrackerDTO){
+  public async registerTracker(@Body() body:TrackerDTO){
     const newDate = new Date()
     return await this.trackerService.createTracker(newDate.toLocaleDateString());
   }
 
   @Get('all')
-  public async findAllClientes()
+  public async findAllTrackers()
   {
-    return await this.trackerService.findClientes();
+    return await this.trackerService.findTrackers();
   }
 
   @Get(':id')
-  public async findClienteById(@Param('id') id: string){
-    return await this.trackerService.findClienteById(id);
+  public async findTrackerById(@Param('id') id: number){
+    return await this.trackerService.findTrackerById(id);
   }
 
   @Put('edit/:id')
-  public async updateCliente(@Body() body: TrackerUpdateDTO, @Param('id') id:string){
-    return await this.trackerService.updateCliente(body, id);
+  public async updateTracker(@Body() body: TrackerUpdateDTO, @Param('id') id:number){
+    return await this.trackerService.updateTracker(body, id);
   }
 
   @Delete(':id')
-  public async deleteCliente(@Param('id') id:string){
-    return await this.trackerService.deleteCliente(id);
+  public async deleteTracker(@Param('id') id:string){
+    return await this.trackerService.deleteTracker(id);
   }
 
 }

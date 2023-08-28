@@ -4,7 +4,10 @@ import { IConductor } from '../../../../interfaces/mantenimiento/conductor.inter
 import { VehiculosEntity } from '../../vehiculos/entities/vehiculo.entity';
 
 @Entity({name:'conductores'})
-export class ConductoresEntity extends BaseEntity implements IConductor{
+export class ConductoresEntity extends BaseEntity implements IConductor
+{
+  @Column()
+  tipo: number;
 
   @Column()
   nombre: string;

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>Nuevo Asignación de vehículo</title>
+  </head>
+
+  <body class="bg-gray-100 py-20 font-sans text-gray-800">
+    <div class="flex flex-col max-w-md mx-auto bg-white p-8 border border-gray-300 rounded-lg shadow-md">
+      <img src="../img/logoCompleto.png" alt="logo AMPCO" class="self-center m-5 w-3/4">
+      <h2 class="text-2xl mb-6 text-center font-bold">
+        Nuevo Asignación de vehículo para: {{ vehiculo.placa }}
+      </h2>
+
+      <p>Empresa: {{ clienteNombre }},</p>
+      <p>Sucursal: {{ sucursalNombre }}</p>
+      <p>Responsable de sucursal: {{ contactoNombre }}</p>
+      <p>Número de contacto: {{ numeroContacto }}</p>
+
+      <p>Se asignó al vehículo para hacer el recojo de residuos peligrosos en el lugar indicado.</p>
+
+      <p>Favor de coordinar con el cliente.</p>
+
+
+      <p class="mt-6 text-center text-gray-500 text-sm">
+        © 2023 AMPO Web. Todos los derechos reservados.
+      </p>
+    </div>
+  </body>
+</html>

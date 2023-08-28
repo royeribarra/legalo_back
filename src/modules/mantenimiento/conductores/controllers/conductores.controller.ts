@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query} from '@nestjs/common';
 import { ConductorDTO, ConductorUpdateDTO } from '../dto/conductor.dto';
 import { Delete } from '@nestjs/common/decorators';
 import { ConductoresService } from '../services/conductores.service';
@@ -25,9 +25,9 @@ export class ConductoresController {
   }
 
   @Get('all')
-  public async findAllConductores()
+  public async findAllConductores(@Query() queryParams: any)
   {
-    return await this.conductoresService.findConductores();
+    return await this.conductoresService.findConductores(queryParams);
   }
 
   @Get(':id')

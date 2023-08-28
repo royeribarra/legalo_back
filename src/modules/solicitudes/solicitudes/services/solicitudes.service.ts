@@ -10,16 +10,21 @@ import { TrackerDTO } from '../../tracker/dto/tracker.dto';
 import { ResiduosRecojoEntity } from '../../residuosRecojo/entities/residuosRecojo.entity';
 import { ClientesService } from '../../clientes/services/clientes.service';
 import { SucursalesClienteService } from '../../sucursalesCliente/services/sucursalesCliente.service';
+import { VehiculosService } from '../../../mantenimiento/vehiculos/services/vehiculos.service';
+import { TrackerService } from '../../tracker/services/tracker.service';
+import { EtapaTrackerService } from '../../tracker/services/etapaTracker.service';
 
 @Injectable()
 export class SolicitudesService{
   constructor(
     @InjectRepository(SolicitudesEntity) private readonly solicitudRespository: Repository<SolicitudesEntity>,
     @InjectRepository(ResiduosRecojoEntity) private readonly residuoRecojoRepository: Repository<ResiduosRecojoEntity>,
-    @InjectRepository(TrackerEntity) private readonly trackerRepository: Repository<TrackerEntity>,
     private readonly clienteService: ClientesService,
     private readonly sucursalService: SucursalesClienteService,
-    private mailService: MailService
+    private readonly mailService: MailService,
+    private readonly vehiculoService: VehiculosService,
+    private readonly trackerService: TrackerService,
+    private readonly etapaTrackerService: EtapaTrackerService,
   ){}
 
   public async createSolicitud(body: SolicitudDTO, tracker: TrackerDTO)
@@ -97,7 +102,8 @@ export class SolicitudesService{
   {
     try {
       const roles : SolicitudesEntity =  await this.solicitudRespository
-        .createQueryBuilder('roles')
+        .createQueryBuilder('solicitudes')
+        .leftJoinAndSelect('solicitudes.tracker', 'tracker')
         .where({id})
         .getOne();
 
@@ -118,15 +124,15 @@ export class SolicitudesService{
   public async updateSolicitud(body, id: string): Promise<UpdateResult> | undefined
   {
     try {
-      const roles: UpdateResult = await this.solicitudRespository.update(id, body);
-      if(roles.affected === 0)
+      const solicitudes: UpdateResult = await this.solicitudRespository.update(id, body);
+      if(solicitudes.affected === 0)
       {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
-          message: 'No se pudo actualizar el usuario.'
+          message: 'No se pudo actualizar el vehiculo.'
         });
       }
-      return roles;
+      return solicitudes;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -172,6 +178,55 @@ export class SolicitudesService{
       
       return solicitudes;
     } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async asignacionVehiculo(body: any)
+  {
+    const solicitudInfo = await this.findSolicitudById(body.solicitudId);
+    const bodySolicitud = {
+      estadoSolicitud: 2
+    }
+
+    const vehiculoInfo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
+    const bodyVehiculo = {
+      ...vehiculoInfo,
+      tipoVehiculoId: vehiculoInfo.tipoVehiculo.id,
+      disponibilidad: "No disponible (programado para recojo)"
+    }
+    const trackerInfo = await this.trackerService.findTrackerById(solicitudInfo.tracker.id);
+    const bodyTracker = {
+      ...trackerInfo,
+      etapaActual: "En camino"
+    }
+
+    const etapasTracker = await this.etapaTrackerService.findEtapas({trackerId: trackerInfo.id});
+    if (etapasTracker.length > 0) {
+      for (const etapa of etapasTracker) {
+        const bodyEtapa = {
+          ...etapa,
+          estado: "Finalizado"
+        }
+        await this.etapaTrackerService.updateEtapaTracker(bodyEtapa, bodyEtapa.id);
+      }
+    }
+    
+    try {
+      const solicitud = await this.updateSolicitud(bodySolicitud, body.solicitudId);
+      
+      const vehiculo = await this.vehiculoService.updateVehiculo(bodyVehiculo, body.vehiculoId);
+      
+      const tracker = await this.trackerService.updateTracker(bodyTracker, solicitudInfo.tracker.id);
+      
+      const newEtapa = await this.etapaTrackerService.createSegundaEtapaTracker(trackerInfo);
+      
+      return {
+        state: true,
+        message: "La asignación se realizó correctamente"
+      };
+    } catch (error) {
+      console.log("Error en la asignacionVehiculo.")
       throw ErrorManager.createSignatureError(error.message);
     }
   }

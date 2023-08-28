@@ -9,6 +9,8 @@ import { ClienteMailService } from 'src/modules/mail/services/clienteMail.servic
 import { ComercialMailService } from 'src/modules/mail/services/comercialMail.service';
 import { ClientesService } from '../../clientes/services/clientes.service';
 import { SucursalesClienteService } from '../../sucursalesCliente/services/sucursalesCliente.service';
+import { VehiculosService } from '../../../mantenimiento/vehiculos/services/vehiculos.service';
+import { TransporteMailService } from '../../../mail/services/transporteMail.service';
 
 @ApiTags('Solicitudes')
 @Controller('solicitudes')
@@ -18,8 +20,10 @@ export class SolicitudesController {
     private readonly trackerService: TrackerService,
     private readonly clienteMailService: ClienteMailService,
     private readonly comercialMailService: ComercialMailService,
+    private readonly transporteMailService: TransporteMailService,
     private readonly clienteService: ClientesService,
     private readonly sucursalClienteService: SucursalesClienteService,
+    private readonly vehiculoService: VehiculosService,
   ) {}
 
   @Post('create')
@@ -80,10 +84,24 @@ export class SolicitudesController {
     return await this.solicitudesService.findSolicitudesBy();
   }
 
-  @Get('/asignacion-vehiculo/:solicitudId')
-  public async asignacionVehiculo(@Param('clienteId') id:string)
+  @Post('/asignacion-vehiculo')
+  public async asignacionVehiculo(@Body() body: any)
   {
-    return await this.solicitudesService.findSolicitudesBy();
+    //body={solicitudId: 2, vehiculoId: 3, clienteId: 1, sucursalId: 2}
+    const cliente = await this.clienteService.findClienteById(body.clienteId);
+    
+    const sucursalCliente = await this.sucursalClienteService.findSucursalById(body.clienteId);
+    
+    const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
+    
+    const { state, message } = await this.solicitudesService.asignacionVehiculo(body);
+    
+    const mailVehiculoAsignado = await this.transporteMailService.nuevaAsignacion(sucursalCliente, cliente, vehiculo);
+
+    return {
+      state: true,
+      message: message
+    };
   }
 
   @Get('/sucursal/:clienteId/:sucursalId/all')

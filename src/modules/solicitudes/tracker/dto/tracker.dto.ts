@@ -18,6 +18,7 @@ export class TrackerDTO{
   fechaInicio: string;
 
   @ApiProperty()
+  @IsOptional()
   @IsString()
   fechaCompletado: string;
 
@@ -38,26 +39,37 @@ export class TrackerDTO{
 }
 
 export class TrackerUpdateDTO{
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  codigo: string;
+
+  @ApiProperty()
   @IsOptional()
   @IsString()
   etapaActual: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   fechaInicio: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   fechaCompletado: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   descripcion: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   estado: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   archivo: string;

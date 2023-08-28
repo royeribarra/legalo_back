@@ -13,10 +13,7 @@ export class ComercialMailService {
 
   async nuevaSolicitud(sucursal: SucursalesClienteEntity, cliente: ClientesEntity, residuos: any) 
   {
-    const usersComercial = await this.usuarioService.findUsuariosBy({
-      key: 'rolId',
-      value: 2
-    });
+    const usersComercial = await this.usuarioService.findUsuarios({rolId: 2});
 
     try {
       await Promise.all(usersComercial.map(async element => {

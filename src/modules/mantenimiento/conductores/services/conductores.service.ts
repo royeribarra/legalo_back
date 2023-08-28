@@ -58,13 +58,18 @@ export class ConductoresService{
     }
   }
 
-  public async findConductores(): Promise<ConductoresEntity[]>
+  public async findConductores(queryParams): Promise<ConductoresEntity[]>
   {
+    const query = this.conductoresRespository.createQueryBuilder('conductores')
+      .leftJoinAndSelect('conductores.vehiculo', 'vehiculo');
+
+    if (queryParams.disponibilidad) {
+      
+      query.andWhere('conductores.disponibilidad = :disponibilidad', { disponibilidad: queryParams.disponibilidad });
+    }
+
     try {
-      const conductoress : ConductoresEntity[] = await this.conductoresRespository
-        .createQueryBuilder('conductores')
-        .leftJoinAndSelect('conductores.vehiculo', 'vehiculo')
-        .getMany();
+      const conductoress: ConductoresEntity[] = await query.getMany();
       
       return conductoress;
     } catch (error) {

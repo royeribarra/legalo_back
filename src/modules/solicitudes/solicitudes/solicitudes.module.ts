@@ -18,6 +18,11 @@ import { UsuariosService } from '../../mantenimiento/usuarios/services/usuarios.
 import { UsuariosEntity } from '../../mantenimiento/usuarios/entities/usuarios.entity';
 import { EtapaTrackerService } from '../tracker/services/etapaTracker.service';
 import { EtapaTrackerEntity } from '../tracker/entities/etapaTracker.entity';
+import { VehiculosService } from '../../mantenimiento/vehiculos/services/vehiculos.service';
+import { VehiculosEntity } from '../../mantenimiento/vehiculos/entities/vehiculo.entity';
+import { TipoVehiculoService } from '../../mantenimiento/vehiculos/services/tipoVehiculo.service';
+import { TipoVehiculoEntity } from '../../mantenimiento/vehiculos/entities/tipoVehiculo.entity';
+import { TransporteMailService } from '../../mail/services/transporteMail.service';
 
 @Module({
   imports: [
@@ -28,20 +33,25 @@ import { EtapaTrackerEntity } from '../tracker/entities/etapaTracker.entity';
       ClientesEntity,
       SucursalesClienteEntity,
       UsuariosEntity,
-      EtapaTrackerEntity
+      EtapaTrackerEntity,
+      VehiculosEntity,
+      TipoVehiculoEntity
     ]),
     MailModule
   ],
   providers: [
+    ClienteMailService,
+    TransporteMailService,
     SolicitudesService, 
     TrackerService,
     ResiduosRecojoService,
-    ClienteMailService,
     ComercialMailService,
     ClientesService,
     SucursalesClienteService,
     UsuariosService,
-    EtapaTrackerService
+    EtapaTrackerService,
+    VehiculosService,
+    TipoVehiculoService
   ],
   controllers: [
     SolicitudesController

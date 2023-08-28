@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 export interface IConductor {
+  tipo: number;
   nombre: string;
   apellido: string;
   correo: string;

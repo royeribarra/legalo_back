@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards, Query} from '@nestjs/common';
 import { UsuarioDTO, UsuarioUpdateDTO } from '../dto/usuario.dto';
 import { Delete } from '@nestjs/common/decorators';
 import { UsuariosService } from '../services/usuarios.service';
@@ -35,9 +35,9 @@ export class UsuariosController {
     name: 'copetrol_token'
   })
   @Get('all')
-  public async findAllUsuarios()
+  public async findAllUsuarios(@Query() queryParams: any)
   {
-    return await this.usuariosService.findUsuarios();
+    return await this.usuariosService.findUsuarios(queryParams);
   }
 
   @ApiHeader({

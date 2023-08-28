@@ -1,7 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 
-export class ConductorDTO{
+export class ConductorDTO
+{
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  tipo: number;
+
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
