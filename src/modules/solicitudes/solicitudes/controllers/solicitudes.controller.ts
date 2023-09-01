@@ -104,6 +104,17 @@ export class SolicitudesController {
     };
   }
 
+  @Post('/asignacion-transportista')
+  public async asignacionTransportista(@Body() body: any)
+  {
+    const { state, message } = await this.solicitudesService.asignacionTranportista(body);
+  
+    return {
+      state: state,
+      message: message
+    };
+  }
+
   @Get('/sucursal/:clienteId/:sucursalId/all')
   public async findAllSolicitudesBySucursal(
     @Param('clienteId') clienteId:string,

@@ -87,6 +87,43 @@ export class EtapaTrackerService{
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  public async createTerceraEtapaTracker(tracker: TrackerEntity)
+  {
+    const newEtapa : EtapaTrackerDTO = {
+      nombre: "Recogido",
+      descripcion: "El material ya fue recogido del local.",
+      estado: "Pendiente",
+      fechaInicio: tracker.fechaInicio,
+      fechaFinalizacion: "tercera etapa",
+      responsable: "tercera etapa",
+      trackerId: tracker.id
+    };
+
+    const etapaEntity= {...newEtapa, tracker: tracker};
+    try {
+
+      const etapaTracker : EtapaTrackerEntity = await this.etapaRepository.save(etapaEntity);
+
+      if(!etapaTracker){
+        return {
+          state: false,
+          message: "No se pudo crear la etapa del tracker",
+          etapaTracker: etapaTracker
+        };
+      }
+      
+      return {
+        state: true,
+        message: "Etapa creada correctamente",
+        etapaTracker: etapaTracker
+      };
+
+    } catch (error) {
+      console.log("etapaTrackerService L-123", error)
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
   
   public async findEtapas(queryParams): Promise<EtapaTrackerEntity[]>
   {

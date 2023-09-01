@@ -7,6 +7,7 @@ import { TiposResiduoNormativasEntity } from './tipoResiduoNormativa.entity';
 import { TiposResiduoPropiedadesEntity } from './tipoResiduoPropiedad.entity';
 import { ResiduosEntity } from '../../residuos/entities/residuos.entity';
 import { TiposResiduoUnidadMedidaEntity } from './tiposResiduoUnidadMedida.entity';
+import { ResiduosRecojoEntity } from '../../../solicitudes/residuosRecojo/entities/residuosRecojo.entity';
 
 @Entity({name:'tipos_residuo'})
 export class TiposResiduoEntity extends BaseEntity implements ITipoResiduo
@@ -55,4 +56,7 @@ export class TiposResiduoEntity extends BaseEntity implements ITipoResiduo
   @OneToMany(() => TiposResiduoUnidadMedidaEntity, unidad => unidad.tipoResiduo)
   @JoinTable()
   unidadesMedida: TiposResiduoUnidadMedidaEntity;
+
+  @OneToMany(() => ResiduosRecojoEntity, residuo => residuo.residuo)
+  residuosRecojo: ResiduosRecojoEntity[];
 }

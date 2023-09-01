@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>Solicitud registrada</title>
+  </head>
+
+  <body class="bg-gray-100 py-20 font-sans text-gray-800">
+    <div class="flex flex-col max-w-md mx-auto bg-white p-8 border border-gray-300 rounded-lg shadow-md">
+      <img src="../img/logoCompleto.png" alt="logo AMPCO" class="self-center m-5 w-3/4">
+      <h2 class="text-2xl mb-6 text-center font-bold">
+        Solicitud registrada
+      </h2>
+
+      <p>Hola: {{ contactoNombre }}</p>
+      <p>responsable de : {{ clienteNombre }},</p>
+
+      <p>Se asignó al siguiente personal de nuestra empresa que será el encargado de realizar el proceso de recojo:</p>
+
+      <p>Supervisor: {{ supervisor.nombre }}</p>
+      <p>Conductor: {{ conductor.nombre }}</p>
+      <p>Recuerda que el recojo se realizará en las instalaciones que están registradas en nuestro sistema: {{ direccionSucursal }}.
+      </p>
+
+      <p class="mb-4">Si tienes alguna pregunta, no dudes en <a href="#" class="text-blue-500 hover:underline">escribirnos</a>.</p>
+
+      <p>¡Gracias por elegirnos!</p>
+
+      <p class="mt-6 text-center text-gray-500 text-sm">
+        © 2023 AMPO Web. Todos los derechos reservados.
+      </p>
+    </div>
+  </body>
+</html>

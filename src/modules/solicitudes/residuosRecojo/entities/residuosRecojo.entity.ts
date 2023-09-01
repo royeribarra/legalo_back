@@ -2,13 +2,11 @@ import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
 import { IResiduoRecojo } from '../../../../interfaces/solicitudes/residuoRecojo.interface';
 import { SolicitudesEntity } from '../../solicitudes/entities/solicitudes.entity';
+import { TiposResiduoEntity } from '../../../mantenimiento/tiposResiduo/entities/tiposResiduo.entity';
 
 @Entity({name:'residuos_recojo'})
-export class ResiduosRecojoEntity extends BaseEntity implements IResiduoRecojo{
-
-  @Column({nullable: true})
-  residuo: string;
-
+export class ResiduosRecojoEntity extends BaseEntity implements IResiduoRecojo
+{
   @Column({nullable: true})
   cantidad: number;
 
@@ -17,4 +15,7 @@ export class ResiduosRecojoEntity extends BaseEntity implements IResiduoRecojo{
 
   @ManyToOne(() => SolicitudesEntity, solicitud => solicitud.residuosRecojo)
   solicitud: SolicitudesEntity;
+
+  @ManyToOne(() => TiposResiduoEntity, residuo => residuo.residuos)
+  residuo: TiposResiduoEntity;
 }

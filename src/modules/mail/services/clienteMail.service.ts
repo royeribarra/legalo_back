@@ -2,6 +2,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { SucursalesClienteEntity } from '../../solicitudes/sucursalesCliente/entities/sucursalesCliente.entity';
 import { ClientesEntity } from '../../solicitudes/clientes/entities/clientes.entity';
+import { ConductoresEntity } from '../../mantenimiento/conductores/entities/conductores.entity';
 
 @Injectable()
 export class ClienteMailService {
@@ -19,6 +20,26 @@ export class ClienteMailService {
           clienteNombre: cliente.nombre,
           direccionSucursal: sucursal.direccion,
           residuos: residuos
+        },
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async asignacionTransportista(cliente: ClientesEntity, sucursal: SucursalesClienteEntity, conductor: ConductoresEntity, supervisor: ConductoresEntity) 
+  {
+    try {
+      await this.mailerService.sendMail({
+        to: sucursal.correoContacto,
+        subject: 'Selección de conductor.',
+        template: './cliente/asignacionConductor',
+        context: {
+          contactoNombre: sucursal.contacto,
+          clienteNombre: cliente.nombre,
+          direccionSucursal: sucursal.direccion,
+          supervisor: supervisor,
+          conductor: conductor
         },
       });
     } catch (error) {

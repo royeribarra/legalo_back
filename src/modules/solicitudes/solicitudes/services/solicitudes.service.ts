@@ -13,6 +13,9 @@ import { SucursalesClienteService } from '../../sucursalesCliente/services/sucur
 import { VehiculosService } from '../../../mantenimiento/vehiculos/services/vehiculos.service';
 import { TrackerService } from '../../tracker/services/tracker.service';
 import { EtapaTrackerService } from '../../tracker/services/etapaTracker.service';
+import { ClienteMailService } from '../../../mail/services/clienteMail.service';
+import { ConductoresService } from '../../../mantenimiento/conductores/services/conductores.service';
+import { TiposResiduoService } from '../../../mantenimiento/tiposResiduo/services/tiposResiduo.service';
 
 @Injectable()
 export class SolicitudesService{
@@ -25,6 +28,9 @@ export class SolicitudesService{
     private readonly vehiculoService: VehiculosService,
     private readonly trackerService: TrackerService,
     private readonly etapaTrackerService: EtapaTrackerService,
+    private readonly clienteMailService: ClienteMailService,
+    private readonly conductorService: ConductoresService,
+    private readonly tipoResiduoService: TiposResiduoService,
   ){}
 
   public async createSolicitud(body: SolicitudDTO, tracker: TrackerDTO)
@@ -38,9 +44,11 @@ export class SolicitudesService{
 
       const residuosRecojo = await Promise.all(
         body.residuos.map(async (residuoRecojoDto) => {
+          const tipoResiduo = await this.tipoResiduoService.findResiduoById(residuoRecojoDto.tipoResiduoId);
           const residuoRecojo = new ResiduosRecojoEntity();
+
           residuoRecojo.cantidad = residuoRecojoDto.cantidad;
-          residuoRecojo.residuo = residuoRecojoDto.tipoResiduo;
+          residuoRecojo.residuo = tipoResiduo;
           residuoRecojo.unidadMedida = residuoRecojoDto.unidadMedida;
           return await this.residuoRecojoRepository.save(residuoRecojo);
         }),
@@ -227,6 +235,41 @@ export class SolicitudesService{
       };
     } catch (error) {
       console.log("Error en la asignacionVehiculo.")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async asignacionTranportista(body: any)
+  {
+    const cliente = await this.clienteService.findClienteById(body.clienteId);
+    const sucursal = await this.sucursalService.findSucursalById(body.sucursalId);
+    const conductor = await this.conductorService.findConductorById(body.conductorId);
+    const supervisor = await this.conductorService.findConductorById(body.supervisorId);
+    const solicitudInfo = await this.findSolicitudById(body.solicitudId);
+    const bodySolicitud = {
+      estadoSolicitud: 3
+    }
+    const trackerInfo = await this.trackerService.findTrackerById(solicitudInfo.tracker.id);
+    const bodyTracker = {
+      ...trackerInfo,
+      etapaActual: "Recogido",
+      estado: "Pendiente"
+    }
+    try {
+      const solicitud = await this.updateSolicitud(bodySolicitud, body.solicitudId);
+      
+      const tracker = await this.trackerService.updateTracker(bodyTracker, solicitudInfo.tracker.id);
+      
+      const newEtapa = await this.etapaTrackerService.createSegundaEtapaTracker(trackerInfo);
+      
+      const mailTransportistaAsignado = await this.clienteMailService.asignacionTransportista(cliente, sucursal, conductor, supervisor);
+
+      return {
+        state: true,
+        message: "La asignación se realizó correctamente"
+      };
+    } catch (error) {
+      console.log("Error en la asignacionTransportista.")
       throw ErrorManager.createSignatureError(error.message);
     }
   }
