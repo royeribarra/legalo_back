@@ -23,7 +23,8 @@ export default class ConductorSeeder implements Seeder {
           fechaContratacion: "2023-01-15",
           fechaVencimientoLicencia: "2025-01-15",
           vehiculoId: 1,
-          disponibilidad: "Tiempo completo",
+          // disponibilidad: "Tiempo completo",
+          disponibilidad: "Disponible",
         },
         {
           tipo: 1,
@@ -37,7 +38,8 @@ export default class ConductorSeeder implements Seeder {
           fechaContratacion: "2022-11-20",
           fechaVencimientoLicencia: "2024-11-20",
           vehiculoId: 2,
-          disponibilidad: "Medio tiempo",
+          // disponibilidad: "Medio tiempo",
+          disponibilidad: "Disponible",
         },
         {
           tipo: 2,
@@ -51,7 +53,8 @@ export default class ConductorSeeder implements Seeder {
           fechaContratacion: "2023-03-10",
           fechaVencimientoLicencia: "2025-03-10",
           vehiculoId: null,
-          disponibilidad: "Flexible",
+          // disponibilidad: "Flexible",
+          disponibilidad: "Disponible",
         },
         {
           tipo: 2,
@@ -65,7 +68,8 @@ export default class ConductorSeeder implements Seeder {
           fechaContratacion: "2023-07-05",
           fechaVencimientoLicencia: "2025-07-05",
           vehiculoId: 3,
-          disponibilidad: "Fines de semana",
+          // disponibilidad: "Fines de semana",
+          disponibilidad: "Disponible",
         },
       ];
 

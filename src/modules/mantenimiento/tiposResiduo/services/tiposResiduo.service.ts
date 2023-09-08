@@ -56,7 +56,7 @@ export class TiposResiduoService{
         {
           throw new ErrorManager({
             type: 'BAD_REQUEST',
-            message: `No se encontró al usuario de Id = ${id}`
+            message: `No se encontró al residuo de Id = ${id}`
           });
         }
 

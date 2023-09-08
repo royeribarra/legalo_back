@@ -26,11 +26,11 @@ export class TrackerService{
     try {
       const trackerDto : TrackerDTO = {
         codigo: codigoAleatorio,
-        etapaActual: "Asignado",
+        etapaActual: "Solicitud registrada",
         fechaInicio: fechaSolicitud,
         fechaCompletado: fechaSolicitud,
         descripcion: 'Solicitud de recolección enviada.',
-        estado: 'Pendiente',
+        estado: 'Finalizado',
         archivo: ''
       };
       
@@ -46,7 +46,7 @@ export class TrackerService{
         };
       }
 
-      const { state, message, etapaTracker } = await this.etapaTrackerService.createEtapaTracker(tracker);
+      const { state, message, etapaTracker } = await this.etapaTrackerService.createEtapaTracker(tracker, 1);
 
       return {
         state: true,
@@ -110,12 +110,23 @@ export class TrackerService{
     }
   }
 
-  public async updateTracker(body: TrackerUpdateDTO, id: number): Promise<UpdateResult> | undefined
+  public async updateTracker(body, id: number)
   {
     try {
-      const clientes: UpdateResult = await this.trackerRespository.update(id, body);
-      
-      return clientes;
+      const tracker: UpdateResult = await this.trackerRespository.update(id, body);
+      if(tracker.affected === 0)
+      {
+        return {
+          state: false,
+          message: "No se pudo actualizar el tracker",
+          tracker: tracker
+        };
+      }
+      return {
+        state: true,
+        message: "Tracker actualizado correctamente",
+        tracker: tracker
+      };
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

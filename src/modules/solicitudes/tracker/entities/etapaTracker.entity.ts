@@ -4,8 +4,8 @@ import { TrackerEntity } from './tracker.entity';
 import { IEtapaTracker } from '../../../../interfaces/solicitudes/etapaTracker.interface';
 
 @Entity({name:'etapa_tracker'})
-export class EtapaTrackerEntity extends BaseEntity implements IEtapaTracker{
-
+export class EtapaTrackerEntity extends BaseEntity implements IEtapaTracker
+{
   @Column()
   nombre: string;
 
@@ -15,13 +15,13 @@ export class EtapaTrackerEntity extends BaseEntity implements IEtapaTracker{
   @Column()
   estado: string;
 
-  @Column()
+  @Column({nullable: true})
   fechaInicio: string;
 
-  @Column()
+  @Column({nullable: true})
   fechaFinalizacion: string;
 
-  @Column()
+  @Column({nullable: true})
   responsable: string;
 
   @ManyToOne(() => TrackerEntity, tracker => tracker.etapas)

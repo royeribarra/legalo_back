@@ -62,12 +62,12 @@ export class SolicitudesController {
   }
 
   @Get(':id')
-  public async findSolicitudById(@Param('id') id: string){
+  public async findSolicitudById(@Param('id') id: number){
     return await this.solicitudesService.findSolicitudById(id);
   }
 
   @Put('edit/:id')
-  public async updateSolicitud(@Body() body: SolicitudUpdateDTO, @Param('id') id:string){
+  public async updateSolicitud(@Body() body: SolicitudUpdateDTO, @Param('id') id: number){
     return await this.solicitudesService.updateSolicitud(body, id);
   }
 
@@ -115,12 +115,29 @@ export class SolicitudesController {
     };
   }
 
-  @Get('/sucursal/:clienteId/:sucursalId/all')
-  public async findAllSolicitudesBySucursal(
-    @Param('clienteId') clienteId:string,
-    @Param('sucursalId') sucursalId: string
-  )
+  @Post('/indicar-llegada-cliente')
+  public async indicarHoraLlegadaCliente(@Body() body: any)
   {
-    return await this.solicitudesService.findSolicitudesByClienteIdBySucursalId(clienteId, sucursalId);
+    //body={solicitudId: 2, clienteId: 1, sucursalId: 2}
+    
+    const { state, message } = await this.solicitudesService.indicarHoraLlegadaCliente(body.solicitudId);
+
+    return {
+      state: state,
+      message: message
+    };
+  }
+
+  @Post('/indicar-salida-cliente')
+  public async indicarHoraSalidaCliente(@Body() body: any)
+  {
+    //body={solicitudId: 2, clienteId: 1, sucursalId: 2}
+    
+    const { state, message } = await this.solicitudesService.indicarHoraSalidaCliente(body.solicitudId);
+
+    return {
+      state: state,
+      message: message
+    };
   }
 }

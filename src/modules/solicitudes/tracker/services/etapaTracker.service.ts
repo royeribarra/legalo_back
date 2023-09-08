@@ -14,19 +14,106 @@ export class EtapaTrackerService{
     @InjectRepository(EtapaTrackerEntity) private readonly etapaRepository: Repository<EtapaTrackerEntity>,
   ){}
 
-  public async createEtapaTracker(tracker: TrackerEntity)
-  {
-    const newEtapa : EtapaTrackerDTO = {
-      nombre: "Asignado",
+  etapas = [
+    {
+      id: 1,
+      nombre: "Solicitud registrada",
       descripcion: "Se asignará un vehículo de transporte para ",
       estado: "Pendiente",
-      fechaInicio: tracker.fechaInicio,
       fechaFinalizacion: "tracker.fechaCompletado",
       responsable: "tracker.responsable.nombre",
-      trackerId: tracker.id
+    },
+    {
+      id: 2,
+      nombre: "Solicitud reprogramada",
+      descripcion: "Se asignará un vehículo de transporte para ",
+      estado: "Pendiente",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    },
+    {
+      id: 3,
+      nombre: "Vehículo asignado",
+      descripcion: "Se asignó el vehículo que recojerá el residuo.",
+      estado: "Finalizado",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    },
+    {
+      id: 4,
+      nombre: "Transportista asignado",
+      descripcion: "Se asignó al transportista responsable.",
+      estado: "Finalizado",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    },
+    {
+      id: 5,
+      nombre: "En camino a recojo",
+      descripcion: "Se asignará un vehículo de transporte para ",
+      estado: "Pendiente",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    },
+    {
+      id: 6,
+      nombre: "Recolección en proceso",
+      descripcion: "Se asignará un vehículo de transporte para ",
+      estado: "Pendiente",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    },
+    {
+      id: 7,
+      nombre: "Residuos entregados a planta",
+      descripcion: "Se asignará un vehículo de transporte para ",
+      estado: "Pendiente",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    },
+    {
+      id: 8,
+      nombre: "Evaluación de residuos",
+      descripcion: "Se asignará un vehículo de transporte para ",
+      estado: "Pendiente",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    },
+    {
+      id: 9,
+      nombre: "Certificado de manifiesto",
+      descripcion: "Se asignará un vehículo de transporte para ",
+      estado: "Pendiente",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    },
+    {
+      id: 10,
+      nombre: "Pago programado",
+      descripcion: "Se asignará un vehículo de transporte para ",
+      estado: "Pendiente",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    },
+    {
+      id: 11,
+      nombre: "Pagado",
+      descripcion: "Se asignará un vehículo de transporte para ",
+      estado: "Pendiente",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    }
+  ]
+
+  public async createEtapaTracker(tracker: TrackerEntity, etapaNumber: number)
+  {
+    const newEtapa = this.etapas.find((etapa)=>etapa.id === etapaNumber);
+   
+    const etapaEntity= {
+      ...newEtapa, 
+      tracker: tracker,
     };
 
-    const etapaEntity= {...newEtapa, tracker: tracker};
     try {
 
       const etapaTracker : EtapaTrackerEntity = await this.etapaRepository.save(etapaEntity);

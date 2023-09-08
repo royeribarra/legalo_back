@@ -108,7 +108,7 @@ export class SucursalesClienteService{
         {
           throw new ErrorManager({
             type: 'BAD_REQUEST',
-            message: `No se encontró al usuario de Id = ${id}`
+            message: `No se encontró a la sucursal de Id = ${id}`
           });
         }
 

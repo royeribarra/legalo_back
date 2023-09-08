@@ -1,13 +1,15 @@
 import { Body, Controller, Get, Param, Post, Put} from '@nestjs/common';
 import { SucursalClienteDTO, SucursalClienteUpdateDTO } from '../dto/sucursalCliente.dto';
-import { Delete } from '@nestjs/common/decorators';
+import { Delete, Query } from '@nestjs/common/decorators';
 import { SucursalesClienteService } from '../services/sucursalesCliente.service';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Sucursales Cliente')
 @Controller('sucursales-cliente')
 export class SucursalesClienteController {
-  constructor(private readonly sucursalesService: SucursalesClienteService) {}
+  constructor(
+     readonly sucursalesService: SucursalesClienteService
+    ) {}
 
   @Post('create')
   public async registerSucursal(@Body() body: SucursalClienteDTO){
@@ -53,5 +55,4 @@ export class SucursalesClienteController {
       message: message,
     }
   }
-
 }

@@ -15,7 +15,7 @@ import { ClientesEntity } from '../clientes/entities/clientes.entity';
   ],
   providers: [
     SucursalesClienteService,
-    ClientesService
+    ClientesService,
   ],
   controllers: [
     SucursalesClienteController

@@ -15,12 +15,6 @@ export class SolicitudesEntity extends BaseEntity implements ISolicitudRecolecci
   @Column()
   fechaSolicitud: string;
 
-  @Column()
-  empresaSolicitante: number;
-
-  @Column()
-  sucursalEmpresaSolicitante: number;
-
   @Column({nullable: true})
   cilindros: number;
 

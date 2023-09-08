@@ -80,10 +80,28 @@ export class SolicitudesService{
     const query = this.solicitudRespository.createQueryBuilder('solicitudes')
       .leftJoinAndSelect('solicitudes.cliente', 'cliente')
       .leftJoinAndSelect('solicitudes.sucursal', 'sucursal')
-      .leftJoinAndSelect('solicitudes.residuosRecojo', 'residuosRecojo');
+      .leftJoinAndSelect('solicitudes.residuosRecojo', 'residuosRecojo')
+      .leftJoinAndSelect('residuosRecojo.residuo', 'residuo')
+      .leftJoinAndSelect('solicitudes.tracker', 'tracker')
+      .leftJoinAndSelect('tracker.etapas', 'etapas');
 
-    if (queryParams.estadoSolicitud) {
-      query.andWhere('solicitudes.estadoSolicitud = :estadoSolicitud', { estadoSolicitud: queryParams.estadoSolicitud });
+    if (queryParams.estadoSolicitud && queryParams.estadoSolicitud.length > 0) {
+      const valoresNumericos = queryParams.estadoSolicitud.map(Number);
+      query.andWhere('solicitudes.estadoSolicitud IN (:...estadosSolicitud)', { estadosSolicitud: valoresNumericos });
+      
+    }
+    // else{
+    //   if (queryParams.estadoSolicitud) {
+    //     query.andWhere('solicitudes.estadoSolicitud = :estadoSolicitud', { estadoSolicitud: queryParams.estadoSolicitud });
+    //   }
+    // }
+
+    if (queryParams.clienteId) {
+      query.andWhere('cliente.id = :clienteId', { clienteId: queryParams.clienteId });
+    }
+
+    if (queryParams.sucursalId) {
+      query.andWhere('sucursal.id = :sucursalId', { sucursalId: queryParams.sucursalId });
     }
 
     try {
@@ -106,7 +124,7 @@ export class SolicitudesService{
     }
   }
 
-  public async findSolicitudById(id: string): Promise<SolicitudesEntity>
+  public async findSolicitudById(id: number): Promise<SolicitudesEntity>
   {
     try {
       const roles : SolicitudesEntity =  await this.solicitudRespository
@@ -129,18 +147,23 @@ export class SolicitudesService{
     }
   }
 
-  public async updateSolicitud(body, id: string): Promise<UpdateResult> | undefined
+  public async updateSolicitud(body, id: number)
   {
     try {
-      const solicitudes: UpdateResult = await this.solicitudRespository.update(id, body);
-      if(solicitudes.affected === 0)
+      const solicitud: UpdateResult = await this.solicitudRespository.update(id, body);
+      if(solicitud.affected === 0)
       {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'No se pudo actualizar el vehiculo.'
-        });
+        return {
+          state: false,
+          message: "No se pudo actualizar la solicitud",
+          solicitud: null
+        };
       }
-      return solicitudes;
+      return {
+        state: true,
+        message: "Solicitud actualizada correctamente",
+        solicitud: solicitud
+      };
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -194,7 +217,7 @@ export class SolicitudesService{
   {
     const solicitudInfo = await this.findSolicitudById(body.solicitudId);
     const bodySolicitud = {
-      estadoSolicitud: 2
+      estadoSolicitud: 3
     }
 
     const vehiculoInfo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
@@ -206,7 +229,7 @@ export class SolicitudesService{
     const trackerInfo = await this.trackerService.findTrackerById(solicitudInfo.tracker.id);
     const bodyTracker = {
       ...trackerInfo,
-      etapaActual: "En camino"
+      etapaActual: "Vehículo asignado"
     }
 
     const etapasTracker = await this.etapaTrackerService.findEtapas({trackerId: trackerInfo.id});
@@ -227,11 +250,11 @@ export class SolicitudesService{
       
       const tracker = await this.trackerService.updateTracker(bodyTracker, solicitudInfo.tracker.id);
       
-      const newEtapa = await this.etapaTrackerService.createSegundaEtapaTracker(trackerInfo);
+      const newEtapa = await this.etapaTrackerService.createEtapaTracker(trackerInfo, 3);
       
       return {
         state: true,
-        message: "La asignación se realizó correctamente"
+        message: "La asignación de vehículo se realizó correctamente"
       };
     } catch (error) {
       console.log("Error en la asignacionVehiculo.")
@@ -247,29 +270,88 @@ export class SolicitudesService{
     const supervisor = await this.conductorService.findConductorById(body.supervisorId);
     const solicitudInfo = await this.findSolicitudById(body.solicitudId);
     const bodySolicitud = {
-      estadoSolicitud: 3
+      estadoSolicitud: 4
     }
     const trackerInfo = await this.trackerService.findTrackerById(solicitudInfo.tracker.id);
     const bodyTracker = {
       ...trackerInfo,
-      etapaActual: "Recogido",
-      estado: "Pendiente"
+      etapaActual: "Transportista asignado",
+      estado: "Finalizado"
     }
     try {
       const solicitud = await this.updateSolicitud(bodySolicitud, body.solicitudId);
       
       const tracker = await this.trackerService.updateTracker(bodyTracker, solicitudInfo.tracker.id);
       
-      const newEtapa = await this.etapaTrackerService.createSegundaEtapaTracker(trackerInfo);
+      const newEtapa1 = await this.etapaTrackerService.createEtapaTracker(trackerInfo, 4);
+      const newEtapa2 = await this.etapaTrackerService.createEtapaTracker(trackerInfo, 5);
       
       const mailTransportistaAsignado = await this.clienteMailService.asignacionTransportista(cliente, sucursal, conductor, supervisor);
 
+      
+
       return {
         state: true,
-        message: "La asignación se realizó correctamente"
+        message: "La asignación de transportista se realizó correctamente"
       };
     } catch (error) {
       console.log("Error en la asignacionTransportista.")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async indicarHoraLlegadaCliente(solicitudId: number)
+  {
+    const solicitudInfo = await this.findSolicitudById(solicitudId);
+    const bodyUpdateSolicitud = {
+      estadoSolicitud: 6
+    };
+    const bodyUpdateTracker = {
+      etapaActual: "Recolección en proceso.",
+      estado: "En proceso"
+    }
+
+    try {
+      const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, solicitudId);
+      
+      const tracker = await this.trackerService.updateTracker(bodyUpdateTracker, solicitudInfo.tracker.id);
+      
+      const newEtapa = await this.etapaTrackerService.createEtapaTracker(solicitudInfo.tracker, 6);
+
+      return {
+        state: true,
+        message: "La asignación de llegada al cliente se realizó correctamente"
+      };
+    } catch (error) {
+      console.log("Error en la llegadaCliente.")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async indicarHoraSalidaCliente(solicitudId: number)
+  {
+    const solicitudInfo = await this.findSolicitudById(solicitudId);
+    const bodyUpdateSolicitud = {
+      estadoSolicitud: 7
+    };
+    const bodyUpdateTracker = {
+      etapaActual: "Residuos entregados a planta.",
+      estado: "Pendiente"
+    }
+
+    try {
+      const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, solicitudId);
+      
+      const tracker = await this.trackerService.updateTracker(bodyUpdateTracker, solicitudInfo.tracker.id);
+      
+      const newEtapa = await this.etapaTrackerService.createEtapaTracker(solicitudInfo.tracker, 7);
+
+      return {
+        state: true,
+        message: "La asignación de salida del cliente se realizó correctamente"
+      };
+    } catch (error) {
+      console.log("Error en la salidaCliente.")
       throw ErrorManager.createSignatureError(error.message);
     }
   }
