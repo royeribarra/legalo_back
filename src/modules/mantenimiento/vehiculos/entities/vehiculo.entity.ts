@@ -20,6 +20,9 @@ export class VehiculosEntity extends BaseEntity implements IVehiculo{
   capacidadCarga: number;
 
   @Column()
+  capacidadUsada: number;
+
+  @Column()
   unidadMedida: string;
 
   @Column({nullable: true})

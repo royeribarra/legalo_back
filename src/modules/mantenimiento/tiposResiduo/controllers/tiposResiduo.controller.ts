@@ -7,32 +7,32 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
 @ApiTags('Tipos Residuo')
 @Controller('tipos-residuo')
 export class TiposResiduoController {
-  constructor(private readonly herramientasService: TiposResiduoService) {}
+  constructor(private readonly tipoResiduoService: TiposResiduoService) {}
 
   @Post('register')
   public async registerTipoResiduo(@Body() body:TipoResiduoDTO){
-    return await this.herramientasService.createResiduo(body);
+    return await this.tipoResiduoService.createResiduo(body);
   }
 
   @Get('all')
   public async findAllTiposResiduo()
   {
-    return await this.herramientasService.findResiduos();
+    return await this.tipoResiduoService.findResiduos();
   }
 
   @Get(':id')
-  public async findTipoResiduoById(@Param('id') id: string){
-    return await this.herramientasService.findResiduoById(id);
+  public async findTipoResiduoById(@Param('id') id: number){
+    return await this.tipoResiduoService.findResiduoById(id);
   }
 
   @Put('edit/:id')
   public async updateTipoResiduo(@Body() body: TipoResiduoUpdateDTO, @Param('id') id:string){
-    return await this.herramientasService.updateResiduo(body, id);
+    return await this.tipoResiduoService.updateResiduo(body, id);
   }
 
   @Delete(':id')
   public async deleteTipoResiduo(@Param('id') id:string){
-    return await this.herramientasService.deleteResiduo(id);
+    return await this.tipoResiduoService.deleteResiduo(id);
   }
 
 }

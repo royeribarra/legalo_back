@@ -44,23 +44,16 @@ export class TiposResiduoService{
     }
   }
 
-  public async findResiduoById(id: string): Promise<TiposResiduoEntity>
+  public async findResiduoById(id: number): Promise<TiposResiduoEntity>
   {
     try {
-      const usuarios : TiposResiduoEntity =  await this.residuosRespository
-        .createQueryBuilder('usuarios')
+      const tipoResiduo : TiposResiduoEntity =  await this.residuosRespository
+        .createQueryBuilder('tiposResiduo')
+        .leftJoinAndSelect('tiposResiduo.unidadesMedida', 'unidadesMedida')
         .where({id})
         .getOne();
 
-        if(!usuarios)
-        {
-          throw new ErrorManager({
-            type: 'BAD_REQUEST',
-            message: `No se encontró al residuo de Id = ${id}`
-          });
-        }
-
-        return usuarios;
+        return tipoResiduo;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

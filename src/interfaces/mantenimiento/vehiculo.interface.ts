@@ -3,6 +3,7 @@ export interface IVehiculo{
   codigo: string,
   placa: string,
   capacidadCarga: number,
+  capacidadUsada: number,
   unidadMedida: string,
   certificado: string,
   // licencia: string,

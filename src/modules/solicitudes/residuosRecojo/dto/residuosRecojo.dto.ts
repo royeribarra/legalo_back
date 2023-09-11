@@ -5,8 +5,8 @@ export class ResiduoRecojoDTO
 {
   @ApiProperty()
   @IsOptional()
-  @IsString()
-  tipoResiduoId: string;
+  @IsNumber()
+  tipoResiduoId: number;
 
   @ApiProperty()
   @IsOptional()
