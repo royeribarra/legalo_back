@@ -4,10 +4,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { TrackerDTO, TrackerUpdateDTO } from '../dto/tracker.dto';
 import { ErrorManager } from '../../../../utils/error.manager';
 import { TrackerEntity } from '../entities/tracker.entity';
-import { SolicitudDTO } from '../../solicitudes/dto/solicitud.dto';
 import { SolicitudesEntity } from '../../solicitudes/entities/solicitudes.entity';
-import { EtapaTrackerEntity } from '../entities/etapaTracker.entity';
-import { SucursalesClienteService } from '../../sucursalesCliente/services/sucursalesCliente.service';
 import { EtapaTrackerService } from './etapaTracker.service';
 
 @Injectable()

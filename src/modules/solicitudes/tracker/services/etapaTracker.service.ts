@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { TrackerDTO, TrackerUpdateDTO } from '../dto/tracker.dto';
 import { ErrorManager } from '../../../../utils/error.manager';
 import { TrackerEntity } from '../entities/tracker.entity';
-import { SolicitudesEntity } from '../../solicitudes/entities/solicitudes.entity';
 import { EtapaTrackerEntity } from '../entities/etapaTracker.entity';
 import { EtapaTrackerDTO } from '../dto/etapaTracker.dto';
 

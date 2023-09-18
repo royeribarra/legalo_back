@@ -140,4 +140,17 @@ export class SolicitudesController {
       message: message
     };
   }
+
+  @Post('/asignar-cantidad-residuo')
+  public async asignarCantidadResiduo(@Body() body: any)
+  {
+    //body={solicitudId: 2, clienteId: 1, sucursalId: 2}
+    
+    const { state, message } = await this.solicitudesService.asignarCantidadResiduo(body);
+
+    return {
+      state: state,
+      message: message
+    };
+  }
 }

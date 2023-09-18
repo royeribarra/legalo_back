@@ -1,4 +1,5 @@
 export interface ITransporteAsignado{
+  fechaRecoleccion: string,
   horaLlegadaCliente: string,
   horaSalidaCliente: string,
   horaLlegadaPlanta: string,

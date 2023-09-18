@@ -27,6 +27,8 @@ import { ConductoresService } from '../../mantenimiento/conductores/services/con
 import { ConductoresEntity } from '../../mantenimiento/conductores/entities/conductores.entity';
 import { TiposResiduoService } from '../../mantenimiento/tiposResiduo/services/tiposResiduo.service';
 import { TiposResiduoEntity } from '../../mantenimiento/tiposResiduo/entities/tiposResiduo.entity';
+import { TransporteAsignadoService } from '../transporteAsignado/services/transporteAsignado.service';
+import { TransporteAsignadoEntity } from '../transporteAsignado/entities/transporteAsignado.entity';
 
 @Module({
   imports: [
@@ -41,7 +43,8 @@ import { TiposResiduoEntity } from '../../mantenimiento/tiposResiduo/entities/ti
       VehiculosEntity,
       TipoVehiculoEntity,
       ConductoresEntity,
-      TiposResiduoEntity
+      TiposResiduoEntity,
+      TransporteAsignadoEntity
     ]),
     MailModule
   ],
@@ -59,7 +62,8 @@ import { TiposResiduoEntity } from '../../mantenimiento/tiposResiduo/entities/ti
     VehiculosService,
     TipoVehiculoService,
     ConductoresService,
-    TiposResiduoService
+    TiposResiduoService,
+    TransporteAsignadoService
   ],
   controllers: [
     SolicitudesController

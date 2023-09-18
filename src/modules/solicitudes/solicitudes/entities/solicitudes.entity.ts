@@ -5,6 +5,7 @@ import { TrackerEntity } from '../../tracker/entities/tracker.entity';
 import { ResiduosRecojoEntity } from '../../residuosRecojo/entities/residuosRecojo.entity';
 import { ClientesEntity } from '../../clientes/entities/clientes.entity';
 import { SucursalesClienteEntity } from '../../sucursalesCliente/entities/sucursalesCliente.entity';
+import { TransporteAsignadoEntity } from '../../transporteAsignado/entities/transporteAsignado.entity';
 
 @Entity({name:'solicitudes'})
 export class SolicitudesEntity extends BaseEntity implements ISolicitudRecoleccion
@@ -39,6 +40,10 @@ export class SolicitudesEntity extends BaseEntity implements ISolicitudRecolecci
   @OneToOne(() => TrackerEntity)
   @JoinColumn()
   tracker: TrackerEntity;
+
+  @OneToOne(() => TransporteAsignadoEntity)
+  @JoinColumn()
+  asignacionTransporte: TransporteAsignadoEntity;
 
   @OneToMany(() => ResiduosRecojoEntity, residuo => residuo.solicitud)
   residuosRecojo: ResiduosRecojoEntity[];

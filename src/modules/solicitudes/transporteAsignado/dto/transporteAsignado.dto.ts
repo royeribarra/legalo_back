@@ -1,41 +1,45 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 
-export class TransporteAsignadoDTO{
+export class TransporteAsignadoDTO
+{
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
-  codigo: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  etapaActual: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  fechaInicio: string;
+  @IsNumber()
+  solicitudId: number;
 
   @ApiProperty()
   @IsOptional()
-  @IsString()
-  fechaCompletado: string;
+  @IsNumber()
+  conductorId: number;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  descripcion: string;
+  @IsNumber()
+  supervisorId: number;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  estado: string;
+  @IsNumber()
+  vehiculoId: number;
 
   @ApiProperty()
-  @IsOptional()
   @IsString()
-  archivo: string;
+  fechaRecoleccion: string;
+
+  @ApiProperty()
+  @IsString()
+  horaLlegadaCliente: string;
+
+  @ApiProperty()
+  @IsString()
+  horaSalidaCliente: string;
+
+  @ApiProperty()
+  @IsString()
+  horaLlegadaPlanta: string;
+
+  @ApiProperty()
+  @IsString()
+  horaSalidaPlanta: string;
 }
 
 export class TransporteAsignadoUpdateDTO{

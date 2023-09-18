@@ -1,4 +1,6 @@
 export interface IResiduoRecojo{
-  cantidad: number,
+  cantidadRecoleccion: number,
+  cantidadReal: number,
+  cantidadDesperdicio: number,
   unidadMedida: string
 }

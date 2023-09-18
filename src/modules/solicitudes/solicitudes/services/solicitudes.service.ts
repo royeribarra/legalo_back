@@ -5,7 +5,6 @@ import { SolicitudDTO, SolicitudUpdateDTO } from '../dto/solicitud.dto';
 import { ErrorManager } from '../../../../utils/error.manager';
 import { SolicitudesEntity } from '../entities/solicitudes.entity';
 import { MailService } from '../../../mail/services/mail.service';
-import { TrackerEntity } from '../../tracker/entities/tracker.entity';
 import { TrackerDTO } from '../../tracker/dto/tracker.dto';
 import { ResiduosRecojoEntity } from '../../residuosRecojo/entities/residuosRecojo.entity';
 import { ClientesService } from '../../clientes/services/clientes.service';
@@ -16,6 +15,8 @@ import { EtapaTrackerService } from '../../tracker/services/etapaTracker.service
 import { ClienteMailService } from '../../../mail/services/clienteMail.service';
 import { ConductoresService } from '../../../mantenimiento/conductores/services/conductores.service';
 import { TiposResiduoService } from '../../../mantenimiento/tiposResiduo/services/tiposResiduo.service';
+import { format } from 'date-fns';
+import { TransporteAsignadoService } from '../../transporteAsignado/services/transporteAsignado.service';
 
 @Injectable()
 export class SolicitudesService{
@@ -31,6 +32,7 @@ export class SolicitudesService{
     private readonly clienteMailService: ClienteMailService,
     private readonly conductorService: ConductoresService,
     private readonly tipoResiduoService: TiposResiduoService,
+    private readonly transporteAsignadoService: TransporteAsignadoService,
   ){}
 
   public async createSolicitud(body: SolicitudDTO, tracker: TrackerDTO)
@@ -47,7 +49,7 @@ export class SolicitudesService{
           const tipoResiduo = await this.tipoResiduoService.findResiduoById(residuoRecojoDto.tipoResiduoId);
           const residuoRecojo = new ResiduosRecojoEntity();
 
-          residuoRecojo.cantidad = residuoRecojoDto.cantidad;
+          residuoRecojo.cantidadRecoleccion = residuoRecojoDto.cantidad;
           residuoRecojo.residuo = tipoResiduo;
           residuoRecojo.unidadMedida = residuoRecojoDto.unidadMedida;
           return await this.residuoRecojoRepository.save(residuoRecojo);
@@ -60,7 +62,8 @@ export class SolicitudesService{
         tracker: tracker,
         residuosRecojo: residuosRecojo,
         cliente: cliente,
-        sucursal: sucursal
+        sucursal: sucursal,
+        fechaRecoleccion: format(new Date(body.fechaRecoleccion), 'dd-MM-yyyy')
       };
 
       const solicitud : SolicitudesEntity = await this.solicitudRespository.save(solicitudBody);
@@ -244,6 +247,11 @@ export class SolicitudesService{
     }
     
     try {
+      const nuevaAsignacion = await this.transporteAsignadoService.createAsignacion({
+        solicitudId: body.solicitudId,
+        vehiculoId: body.vehiculoId
+      });
+
       const solicitud = await this.updateSolicitud(bodySolicitud, body.solicitudId);
       
       const vehiculo = await this.vehiculoService.updateVehiculo(bodyVehiculo, body.vehiculoId);
@@ -352,6 +360,46 @@ export class SolicitudesService{
       };
     } catch (error) {
       console.log("Error en la salidaCliente.")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async asignarCantidadResiduo(body)
+  {
+    const solicitudInfo = await this.findSolicitudById(body.solicitudId);
+    const bodyUpdateSolicitud = {
+      estadoSolicitud: 8,
+    };
+    const bodyUpdateTracker = {
+      etapaActual: "Residuos revisados en recepción, cálculo de cantidades.",
+      estado: "Pendiente"
+    }
+
+    const bodyResiduoRecojo = {
+      cantidadReal: body.cantidadReal,
+      cantidadDesperdicio: body.cantidadOtros
+    }
+
+    try {
+      // const residuoRecojo = await this.residuoRecojoRepository
+      // .createQueryBuilder('residuos')
+      // .where(`residuos.id = :id`, { id: body.residuoRecojoId })
+      // .getOne();
+
+       await this.residuoRecojoRepository.update(body.residuoRecojoId, bodyResiduoRecojo);
+
+      const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, body.solicitudId);
+      
+      const tracker = await this.trackerService.updateTracker(bodyUpdateTracker, solicitudInfo.tracker.id);
+      
+      const newEtapa = await this.etapaTrackerService.createEtapaTracker(solicitudInfo.tracker, 8);
+
+      return {
+        state: true,
+        message: "La asignación de cantidad de los residuso de recojo se realizó correctamente"
+      };
+    } catch (error) {
+      console.log("Error en la Asignación de cantidades.")
       throw ErrorManager.createSignatureError(error.message);
     }
   }

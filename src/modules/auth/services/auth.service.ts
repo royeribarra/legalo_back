@@ -51,7 +51,8 @@ export class AuthService {
 
     const payload : PayLoadToken= {
       rol: getUser.rol,
-      usuarioId: getUser.id.toString()
+      usuarioId: getUser.id.toString(),
+      user: getUser
     };
     return {
       accessToken: this.signJWT({

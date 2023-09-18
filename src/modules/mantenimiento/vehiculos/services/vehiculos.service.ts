@@ -40,9 +40,14 @@ export class VehiculosService{
     const query = this.vehiculoRepository.createQueryBuilder('vehiculos')
       .leftJoinAndSelect('vehiculos.tipoVehiculo', 'tipoVehiculo')
       .leftJoinAndSelect('vehiculos.conductor', 'conductor')
+      .leftJoinAndSelect('vehiculos.asignaciones', 'asignaciones')
 
-    if (queryParams.disponibilidad) {
-      query.andWhere('vehiculos.disponibilidad = :disponibilidad', { disponibilidad: queryParams.disponibilidad });
+    // if (queryParams.disponibilidad) {
+    //   query.andWhere('vehiculos.disponibilidad = :disponibilidad', { disponibilidad: queryParams.disponibilidad });
+    // }
+
+    if (queryParams.disponibleForThe) {
+      query.andWhere('asignaciones.fechaRecoleccion IS NULL OR asignaciones.fechaRecoleccion != :fechaRecoleccion', { fechaRecoleccion: queryParams.disponibleForThe })
     }
 
     try {
@@ -62,14 +67,6 @@ export class VehiculosService{
         .leftJoinAndSelect('vehiculos.tipoVehiculo', 'tipoVehiculo')
         .where({id})
         .getOne();
-
-      if(!vehiculo)
-      {
-        throw new ErrorManager({
-          type: 'NOT_FOUND',
-          message: `No se encontró al vehiculo de Id = ${id}`
-        });
-      }
 
       return vehiculo;
     } catch (error) {

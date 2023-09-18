@@ -2,26 +2,31 @@ import { BaseEntity } from '../../../../config/base.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { ITransporteAsignado } from 'src/interfaces/solicitudes/transporteAsignado.interface';
 import { ConductoresEntity } from '../../../mantenimiento/conductores/entities/conductores.entity';
+import { VehiculosEntity } from '../../../mantenimiento/vehiculos/entities/vehiculo.entity';
+import { SolicitudesEntity } from '../../solicitudes/entities/solicitudes.entity';
 
 @Entity({name:'transporte_asignado'})
 export class TransporteAsignadoEntity extends BaseEntity implements ITransporteAsignado
 {
   @Column()
+  fechaRecoleccion: string;
+
+  @Column({nullable: true})
   horaLlegadaCliente: string;
 
-  @Column()
+  @Column({nullable: true})
   horaSalidaCliente: string;
 
-  @Column()
+  @Column({nullable: true})
   horaLlegadaPlanta: string;
 
-  @Column()
+  @Column({nullable: true})
   horaSalidaPlanta: string;
 
-  @Column()
+  @Column({nullable: true})
   observaciones: string;
 
-  @Column()
+  @Column({nullable: true})
   cilindros: number;
 
   @ManyToOne(() => ConductoresEntity)
@@ -31,4 +36,12 @@ export class TransporteAsignadoEntity extends BaseEntity implements ITransporteA
   @ManyToOne(() => ConductoresEntity)
   @JoinColumn({ name: 'id_conductor', referencedColumnName: 'id' })
   conductor: ConductoresEntity;
+
+  @ManyToOne(() => VehiculosEntity, vehiculo => vehiculo.asignaciones)
+  @JoinColumn()
+  vehiculo: VehiculosEntity;
+
+  @OneToOne(() => SolicitudesEntity)
+  @JoinColumn()
+  pedido: SolicitudesEntity;
 }
