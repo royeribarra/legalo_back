@@ -125,6 +125,7 @@ export class TrackerService{
         tracker: tracker
       };
     } catch (error) {
+      console.log(error, "error en el trackerService-updateTracker")
       throw ErrorManager.createSignatureError(error.message);
     }
   }

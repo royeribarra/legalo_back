@@ -131,7 +131,7 @@ export class EtapaTrackerService{
       };
 
     } catch (error) {
-      console.log("etapaTrackerService L-56", error)
+      console.log("etapaTrackerService-createEtapaTracker", error)
       throw ErrorManager.createSignatureError(error.message);
     }
   }

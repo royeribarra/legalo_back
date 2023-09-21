@@ -43,5 +43,5 @@ export class TransporteAsignadoEntity extends BaseEntity implements ITransporteA
 
   @OneToOne(() => SolicitudesEntity)
   @JoinColumn()
-  pedido: SolicitudesEntity;
+  solicitud: SolicitudesEntity;
 }

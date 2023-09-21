@@ -47,6 +47,11 @@ export class VehiculoDTO
   @IsOptional()
   @IsString()
   codigo: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  succionador: boolean;
 }
 
 export class VehiculoUpdateDTO{

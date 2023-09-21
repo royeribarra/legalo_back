@@ -1,9 +1,10 @@
 import { BaseEntity } from '../../../../config/base.entity';
-import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { IVehiculo } from '../../../../interfaces/mantenimiento/vehiculo.interface';
 import { TipoVehiculoEntity } from './tipoVehiculo.entity';
 import { ConductoresEntity } from '../../conductores/entities/conductores.entity';
 import { TransporteAsignadoEntity } from '../../../solicitudes/transporteAsignado/entities/transporteAsignado.entity';
+import { VehiculoUnidadMedidaEntity } from './vehiculoUnidadMedida.entity';
 
 @Entity({name:'vehiculos'})
 export class VehiculosEntity extends BaseEntity implements IVehiculo{
@@ -25,6 +26,9 @@ export class VehiculosEntity extends BaseEntity implements IVehiculo{
 
   @Column()
   unidadMedida: string;
+
+  @Column({default: false})
+  succionador: boolean;
 
   @Column({nullable: true})
   certificado: string;
@@ -58,4 +62,8 @@ export class VehiculosEntity extends BaseEntity implements IVehiculo{
 
   @OneToMany(() => TransporteAsignadoEntity, transporte => transporte.vehiculo)
   asignaciones: TransporteAsignadoEntity[];
+
+  @OneToMany(() => VehiculoUnidadMedidaEntity, unidad => unidad.vehiculo)
+  @JoinTable()
+  unidadesMedida: VehiculoUnidadMedidaEntity;
 }

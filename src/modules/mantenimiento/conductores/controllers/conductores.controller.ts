@@ -31,7 +31,7 @@ export class ConductoresController {
   }
 
   @Get(':id')
-  public async findConductorById(@Param('id') id: string){
+  public async findConductorById(@Param('id') id: number){
     return await this.conductoresService.findConductorById(id);
   }
 

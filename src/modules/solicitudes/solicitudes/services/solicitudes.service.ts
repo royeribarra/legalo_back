@@ -78,12 +78,27 @@ export class SolicitudesService{
     }
   }
 
+  public async reprogramarSolicitud(body)
+  {
+    const bodyUpdate = {
+      ...new SolicitudesEntity(),
+      motivoReprogramacion: body.motivo,
+      fechaRecoleccion: body.nuevaFecha
+    }
+    const solicitud = await this.updateSolicitud(bodyUpdate, body.solicitudId);
+    return {
+      state: true,
+      message: "Solicitud reprogramada con éxito."
+    }
+  }
+
   public async findSolicitudes(queryParams): Promise<SolicitudesEntity[]>
   {
     const query = this.solicitudRespository.createQueryBuilder('solicitudes')
       .leftJoinAndSelect('solicitudes.cliente', 'cliente')
       .leftJoinAndSelect('solicitudes.sucursal', 'sucursal')
       .leftJoinAndSelect('solicitudes.residuosRecojo', 'residuosRecojo')
+      .leftJoinAndSelect('solicitudes.asignacionTransporte', 'asignacionTransporte')
       .leftJoinAndSelect('residuosRecojo.residuo', 'residuo')
       .leftJoinAndSelect('solicitudes.tracker', 'tracker')
       .leftJoinAndSelect('tracker.etapas', 'etapas');
@@ -133,6 +148,12 @@ export class SolicitudesService{
       const roles : SolicitudesEntity =  await this.solicitudRespository
         .createQueryBuilder('solicitudes')
         .leftJoinAndSelect('solicitudes.tracker', 'tracker')
+        .leftJoinAndSelect('solicitudes.cliente', 'cliente')
+        .leftJoinAndSelect('solicitudes.sucursal', 'sucursal')
+        .leftJoinAndSelect('solicitudes.residuosRecojo', 'residuosRecojo')
+        .leftJoinAndSelect('solicitudes.asignacionTransporte', 'asignacionTransporte')
+        .leftJoinAndSelect('residuosRecojo.residuo', 'residuo')
+        .leftJoinAndSelect('tracker.etapas', 'etapas')
         .where({id})
         .getOne();
 
@@ -152,6 +173,7 @@ export class SolicitudesService{
 
   public async updateSolicitud(body, id: number)
   {
+    console.log(body)
     try {
       const solicitud: UpdateResult = await this.solicitudRespository.update(id, body);
       if(solicitud.affected === 0)
@@ -168,6 +190,7 @@ export class SolicitudesService{
         solicitud: solicitud
       };
     } catch (error) {
+      console.log("error en updateSolicitud")
       throw ErrorManager.createSignatureError(error.message);
     }
   }
@@ -219,9 +242,9 @@ export class SolicitudesService{
   public async asignacionVehiculo(body: any)
   {
     const solicitudInfo = await this.findSolicitudById(body.solicitudId);
-    const bodySolicitud = {
-      estadoSolicitud: 3
-    }
+    // const bodySolicitud = {
+    //   estadoSolicitud: 3
+    // }
 
     const vehiculoInfo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
     const bodyVehiculo = {
@@ -252,9 +275,12 @@ export class SolicitudesService{
         vehiculoId: body.vehiculoId
       });
 
-      const solicitud = await this.updateSolicitud(bodySolicitud, body.solicitudId);
+      const updateSolicitud = await this.updateSolicitud({
+        estadoSolicitud: 3,
+        asignacionTransporte: nuevaAsignacion.asignacionTransporte
+      }, body.solicitudId);
       
-      const vehiculo = await this.vehiculoService.updateVehiculo(bodyVehiculo, body.vehiculoId);
+      const updateVehiculo = await this.vehiculoService.updateVehiculo(bodyVehiculo, body.vehiculoId);
       
       const tracker = await this.trackerService.updateTracker(bodyTracker, solicitudInfo.tracker.id);
       
@@ -286,8 +312,15 @@ export class SolicitudesService{
       etapaActual: "Transportista asignado",
       estado: "Finalizado"
     }
+    const bodyTransporteAsignado = {
+      conductorId: parseInt(body.conductorId),
+      supervisorId: parseInt(body.supervisorId)
+    }
+    
     try {
       const solicitud = await this.updateSolicitud(bodySolicitud, body.solicitudId);
+      console.log(solicitudInfo, "solicitud");
+      const updateTransporte = await this.transporteAsignadoService.updateTransporteAsignado(bodyTransporteAsignado, solicitudInfo.asignacionTransporte.id);
       
       const tracker = await this.trackerService.updateTracker(bodyTracker, solicitudInfo.tracker.id);
       
@@ -303,7 +336,7 @@ export class SolicitudesService{
         message: "La asignación de transportista se realizó correctamente"
       };
     } catch (error) {
-      console.log("Error en la asignacionTransportista.")
+      console.log("Error en solicitudService - asignacionTransportista.")
       throw ErrorManager.createSignatureError(error.message);
     }
   }

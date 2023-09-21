@@ -11,7 +11,7 @@ export class ClienteMailService {
   async solicitudRecojo(sucursal: SucursalesClienteEntity, cliente: ClientesEntity, residuos: any) 
   {
     try {
-      await this.mailerService.sendMail({
+      const response = await this.mailerService.sendMail({
         to: sucursal.correoContacto,
         subject: 'Tu solicitud ha sido registrada.',
         template: './cliente/solicitudRecojo',
@@ -22,8 +22,12 @@ export class ClienteMailService {
           residuos: residuos
         },
       });
+      return {
+        state: true,
+        message: "Se envió el mensaje al cliente con éxito."
+      }
     } catch (error) {
-      console.log(error)
+      console.log('error mailServiceSolicitudRecojo', error)
     }
   }
 

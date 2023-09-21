@@ -11,11 +11,15 @@ import { ClientesService } from '../../clientes/services/clientes.service';
 import { SucursalesClienteService } from '../../sucursalesCliente/services/sucursalesCliente.service';
 import { VehiculosService } from '../../../mantenimiento/vehiculos/services/vehiculos.service';
 import { TransporteMailService } from '../../../mail/services/transporteMail.service';
+import { ResiduosRecojoEntity } from '../../residuosRecojo/entities/residuosRecojo.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @ApiTags('Solicitudes')
 @Controller('solicitudes')
 export class SolicitudesController {
   constructor(
+    @InjectRepository(ResiduosRecojoEntity) private readonly residuoRecojoRepository: Repository<ResiduosRecojoEntity>,
     private readonly solicitudesService: SolicitudesService,
     private readonly trackerService: TrackerService,
     private readonly clienteMailService: ClienteMailService,
@@ -27,12 +31,13 @@ export class SolicitudesController {
   ) {}
 
   @Post('create')
-  public async registerSolicitud(@Body() body: SolicitudDTO){
+  public async registerSolicitud(@Body() body: SolicitudDTO)
+  {
     
     const newTracker = await this.trackerService.createTracker(body.fechaSolicitud);
     
     const { message, state, solicitud} = await this.solicitudesService.createSolicitud(body, newTracker.tracker);
-
+    
     if(!solicitud)
     {
       return {
@@ -40,17 +45,24 @@ export class SolicitudesController {
         message: 'Hubo un problema al crear la solicitud.' 
       };
     }
-    
+
     await this.trackerService.asignSolicitud(newTracker.tracker, solicitud);
 
-    const cliente = await this.clienteService.findClienteById(body.clienteId);
-    const sucursalCliente = await this.sucursalClienteService.findSucursalById(body.sucursalId);
-
-    //const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo(sucursalCliente, cliente, body.residuos);
-    //const mailNuevaSolicitud = await this.comercialMailService.nuevaSolicitud(sucursalCliente, cliente, body.residuos);
+    const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo(solicitud.sucursal, solicitud.cliente, solicitud.residuosRecojo);
+    const mailNuevaSolicitud = await this.comercialMailService.nuevaSolicitud(solicitud.sucursal, solicitud.cliente, solicitud.residuosRecojo);
 
     return {
       state: true,
+      message: message
+    };
+  }
+
+  @Post('reprogramar')
+  public async reprogramarSolicitud(@Body() body: any)
+  {
+    const { state, message } = await this.solicitudesService.reprogramarSolicitud(body);
+    return {
+      state: state,
       message: message
     };
   }

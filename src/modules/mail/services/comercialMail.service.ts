@@ -31,8 +31,12 @@ export class ComercialMailService {
           },
         });
       }));
+      return {
+        state: true,
+        message: "Se envió el mensaje al area comercial con éxito."
+      }
     } catch (error) {
-      console.log(error);
+      console.log('error comercialmailService nuevaSolicitud', error)
     }
   }
 }

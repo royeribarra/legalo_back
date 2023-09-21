@@ -77,7 +77,7 @@ export class ConductoresService{
     }
   }
 
-  public async findConductorById(id: string): Promise<ConductoresEntity>
+  public async findConductorById(id: number): Promise<ConductoresEntity>
   {
     try {
       const conductores : ConductoresEntity =  await this.conductoresRespository
@@ -96,6 +96,7 @@ export class ConductoresService{
 
         return conductores;
     } catch (error) {
+      console.log(error, "error en conductorService - findConductorbyId")
       throw ErrorManager.createSignatureError(error.message);
     }
   }

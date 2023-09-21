@@ -31,6 +31,9 @@ export class SolicitudesEntity extends BaseEntity implements ISolicitudRecolecci
   @Column({nullable: true})
   observacion: string;
 
+  @Column({nullable: true})
+  motivoReprogramacion: string;
+
   @ManyToOne(() => ClientesEntity, cliente => cliente.solicitudes)
   cliente: ClientesEntity;
 

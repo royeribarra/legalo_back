@@ -13,24 +13,22 @@ export class VehiculosService{
     private readonly tipoVehiculoService: TipoVehiculoService
   ){}
 
-  public async createVehiculo(body: VehiculoDTO, tipoVehiculo): Promise<VehiculosEntity>
+  public async createVehiculo(body: VehiculoDTO, tipoVehiculo)
   {
     try {
       const newEntity = new VehiculosEntity();
-      newEntity.capacidadCarga = body.capacidadCarga;
-      newEntity.certificado = '';
-      newEntity.codigo = '';
-      newEntity.disponibilidad = body.disponibilidad;
-      newEntity.estadoMantenimiento = body.estadoMantenimiento;
-      newEntity.nombre = body.nombre;
-      newEntity.placa = body.placa;
-      newEntity.responsable = body.responsable;
-      newEntity.tipoVehiculo = tipoVehiculo;
-      newEntity.unidadMedida = body.unidadMedida;
-      console.log(newEntity)
-      const vehiculo : VehiculosEntity = await this.vehiculoRepository.save(newEntity);
-      return vehiculo;
+      const newBody = {
+        ...body,
+        tipoVehiculo: tipoVehiculo
+      }
+      const vehiculo : VehiculosEntity = await this.vehiculoRepository.save(newBody);
+      return {
+        state: true,
+        message: `Vehículo creado correctamente`,
+        usuario: vehiculo
+      }
     } catch (error) {
+      console.log(error, "No se pudo crear el vehículo.")
       throw ErrorManager.createSignatureError(error.message);
     }
   }

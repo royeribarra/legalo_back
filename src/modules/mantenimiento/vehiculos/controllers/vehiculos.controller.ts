@@ -30,18 +30,10 @@ export class VehiculosController {
       });
     } 
 
-    const newVehiculo = await this.vehiculoService.createVehiculo(body, tipoVehiculo);
-
-    if(newVehiculo){
-      return response.json({
-        message: 'Vehículo creado correctamente.',
-        state: true
-      });
-    }
-
+    const {state,message} = await this.vehiculoService.createVehiculo(body, tipoVehiculo);
     return response.json({
-      message: 'Error al crear vehículo.',
-      state: false
+      message: message,
+      state: state
     });
   }
 
