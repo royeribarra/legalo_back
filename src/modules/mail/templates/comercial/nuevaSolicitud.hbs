@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
+    {{!-- <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
-    />
+    /> --}}
     <title>Nuevo solicitud de recojo</title>
   </head>
 
@@ -24,17 +24,17 @@
 
       <p>Residuos:</p>
 
-      <table style="width: 100%; border: 1px solid #d1d5db; border-collapse: collapse;">
+      <table style="width: 100%; border: 1px solid #000000; border-collapse: collapse;">
         <tr>
-          <th style="border: 1px solid #d1d5db; padding: 0.5rem 1rem;">Residuo</th>
-          <th style="border: 1px solid #d1d5db; padding: 0.5rem 1rem;">Cantidad</th>
-          <th style="border: 1px solid #d1d5db; padding: 0.5rem 1rem;">Unidad de medida</th>
+          <th style="border: 1px solid #000000; padding: 0.5rem 1rem;">Residuo</th>
+          <th style="border: 1px solid #000000; padding: 0.5rem 1rem;">Cantidad</th>
+          <th style="border: 1px solid #000000; padding: 0.5rem 1rem;">Unidad de medida</th>
         </tr>
         {{#each residuos}}
           <tr>
-            <td style="border: 1px solid #d1d5db; padding: 0.5rem 1rem;">{{ this.residuo.nombre }}</td>
-            <td style="border: 1px solid #d1d5db; padding: 0.5rem 1rem;">{{ this.cantidadRecoleccion }}</td>
-            <td style="border: 1px solid #d1d5db; padding: 0.5rem 1rem;">{{ this.unidadMedida }}</td>
+            <td style="border: 1px solid #000000; padding: 0.5rem 1rem;">{{ this.residuo.nombre }}</td>
+            <td style="border: 1px solid #000000; padding: 0.5rem 1rem;">{{ this.cantidadRecoleccion }}</td>
+            <td style="border: 1px solid #000000; padding: 0.5rem 1rem;">{{ this.unidadMedida }}</td>
           </tr>
         {{/each}}
       </table>

@@ -29,6 +29,7 @@ import { TiposResiduoService } from '../../mantenimiento/tiposResiduo/services/t
 import { TiposResiduoEntity } from '../../mantenimiento/tiposResiduo/entities/tiposResiduo.entity';
 import { TransporteAsignadoService } from '../transporteAsignado/services/transporteAsignado.service';
 import { TransporteAsignadoEntity } from '../transporteAsignado/entities/transporteAsignado.entity';
+import { CalidadMailService } from 'src/modules/mail/services/calidadMail.service';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { TransporteAsignadoEntity } from '../transporteAsignado/entities/transpo
   ],
   providers: [
     ClienteMailService,
+    CalidadMailService,
     TransporteMailService,
     SolicitudesService, 
     TrackerService,

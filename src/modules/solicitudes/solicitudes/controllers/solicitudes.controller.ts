@@ -24,10 +24,7 @@ export class SolicitudesController {
     private readonly trackerService: TrackerService,
     private readonly clienteMailService: ClienteMailService,
     private readonly comercialMailService: ComercialMailService,
-    private readonly transporteMailService: TransporteMailService,
-    private readonly clienteService: ClientesService,
-    private readonly sucursalClienteService: SucursalesClienteService,
-    private readonly vehiculoService: VehiculosService,
+    private readonly transporteMailService: TransporteMailService
   ) {}
 
   @Post('create')
@@ -37,22 +34,14 @@ export class SolicitudesController {
     const newTracker = await this.trackerService.createTracker(body.fechaSolicitud);
     
     const { message, state, solicitud} = await this.solicitudesService.createSolicitud(body, newTracker.tracker);
-    
-    if(!solicitud)
-    {
-      return {
-        state: false,
-        message: 'Hubo un problema al crear la solicitud.' 
-      };
-    }
 
-    await this.trackerService.asignSolicitud(newTracker.tracker, solicitud);
+    const asignSolicitud = await this.trackerService.asignSolicitud(newTracker.tracker, solicitud);
 
     const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo(solicitud.sucursal, solicitud.cliente, solicitud.residuosRecojo);
     const mailNuevaSolicitud = await this.comercialMailService.nuevaSolicitud(solicitud.sucursal, solicitud.cliente, solicitud.residuosRecojo);
 
     return {
-      state: true,
+      state: state,
       message: message
     };
   }
@@ -99,19 +88,12 @@ export class SolicitudesController {
   @Post('/asignacion-vehiculo')
   public async asignacionVehiculo(@Body() body: any)
   {
-    //body={solicitudId: 2, vehiculoId: 3, clienteId: 1, sucursalId: 2}
-    const cliente = await this.clienteService.findClienteById(body.clienteId);
-    
-    const sucursalCliente = await this.sucursalClienteService.findSucursalById(body.clienteId);
-    
-    const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
-    
     const { state, message } = await this.solicitudesService.asignacionVehiculo(body);
     
-    const mailVehiculoAsignado = await this.transporteMailService.nuevaAsignacion(sucursalCliente, cliente, vehiculo);
+    const mailVehiculoAsignado = await this.transporteMailService.asignacionVehiculo(body.clienteId, body.sucursalId, body.vehiculoId);
 
     return {
-      state: true,
+      state: state,
       message: message
     };
   }
@@ -119,8 +101,9 @@ export class SolicitudesController {
   @Post('/asignacion-transportista')
   public async asignacionTransportista(@Body() body: any)
   {
+    
     const { state, message } = await this.solicitudesService.asignacionTranportista(body);
-  
+    // const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo(solicitud.sucursal, solicitud.cliente, solicitud.residuosRecojo);
     return {
       state: state,
       message: message
@@ -134,6 +117,7 @@ export class SolicitudesController {
     
     const { state, message } = await this.solicitudesService.indicarHoraLlegadaCliente(body.solicitudId);
 
+    // const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo(solicitud.sucursal, solicitud.cliente, solicitud.residuosRecojo);
     return {
       state: state,
       message: message
@@ -146,6 +130,7 @@ export class SolicitudesController {
     //body={solicitudId: 2, clienteId: 1, sucursalId: 2}
     
     const { state, message } = await this.solicitudesService.indicarHoraSalidaCliente(body.solicitudId);
+    // const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo(solicitud.sucursal, solicitud.cliente, solicitud.residuosRecojo);
 
     return {
       state: state,
@@ -156,9 +141,33 @@ export class SolicitudesController {
   @Post('/asignar-cantidad-residuo')
   public async asignarCantidadResiduo(@Body() body: any)
   {
+    const { state, message } = await this.solicitudesService.asignarCantidadResiduo(body);
+
+    return {
+      state: state,
+      message: message
+    };
+  }
+
+  @Post('/recepcion-asignar-cantidad')
+  public async validarCantidadIngresadaRecepcion(@Body() body: any)
+  {
     //body={solicitudId: 2, clienteId: 1, sucursalId: 2}
     
-    const { state, message } = await this.solicitudesService.asignarCantidadResiduo(body);
+    const { state, message } = await this.solicitudesService.validarCantidadIngresadaRecepcion(body);
+
+    return {
+      state: state,
+      message: message
+    };
+  }
+
+  @Post('/calidad-asignar-cantidad')
+  public async validarCantidadIngresadaCalidad(@Body() body: any)
+  {
+    //body={solicitudId: 2, clienteId: 1, sucursalId: 2}
+    
+    const { state, message } = await this.solicitudesService.validarCantidadIngresadaCalidad(body);
 
     return {
       state: state,

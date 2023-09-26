@@ -17,6 +17,7 @@ import { ConductoresService } from '../../../mantenimiento/conductores/services/
 import { TiposResiduoService } from '../../../mantenimiento/tiposResiduo/services/tiposResiduo.service';
 import { format } from 'date-fns';
 import { TransporteAsignadoService } from '../../transporteAsignado/services/transporteAsignado.service';
+import { CalidadMailService } from 'src/modules/mail/services/calidadMail.service';
 
 @Injectable()
 export class SolicitudesService{
@@ -30,6 +31,7 @@ export class SolicitudesService{
     private readonly trackerService: TrackerService,
     private readonly etapaTrackerService: EtapaTrackerService,
     private readonly clienteMailService: ClienteMailService,
+    private readonly calidadMailService: CalidadMailService,
     private readonly conductorService: ConductoresService,
     private readonly tipoResiduoService: TiposResiduoService,
     private readonly transporteAsignadoService: TransporteAsignadoService,
@@ -102,6 +104,10 @@ export class SolicitudesService{
       .leftJoinAndSelect('residuosRecojo.residuo', 'residuo')
       .leftJoinAndSelect('solicitudes.tracker', 'tracker')
       .leftJoinAndSelect('tracker.etapas', 'etapas');
+      
+      // .orderBy('solicitudes.fechaRecoleccion', 'ASC');
+    
+    
 
     if (queryParams.estadoSolicitud && queryParams.estadoSolicitud.length > 0) {
       const valoresNumericos = queryParams.estadoSolicitud.map(Number);
@@ -122,8 +128,16 @@ export class SolicitudesService{
       query.andWhere('sucursal.id = :sucursalId', { sucursalId: queryParams.sucursalId });
     }
 
+    // query.addSelect([
+    //   `DATE_FORMAT(solicitudes.fechaRecoleccion, '%d-%m-%Y') AS formattedFechaRecoleccion`
+    // ]);
+
+    // query.orderBy('formattedFechaRecoleccion', 'ASC');
+
     try {
-      const solicitudes: SolicitudesEntity[] = await query.getMany();
+      const solicitudes: SolicitudesEntity[] = await query
+     
+      .getMany();
       
       return solicitudes;
     } catch (error) {
@@ -399,6 +413,25 @@ export class SolicitudesService{
 
   public async asignarCantidadResiduo(body)
   {
+    const bodyResiduoRecojo = {
+      cantidadReal: body.cantidadReal,
+      cantidadDesperdicio: body.cantidadOtros
+    }
+
+    try {
+      const response = await this.residuoRecojoRepository.update(body.residuoRecojoId, bodyResiduoRecojo);
+      return {
+        state: true,
+        message: "La asignación de cantidad de los residuso de recojo se realizó correctamente"
+      };
+    } catch (error) {
+      console.log("Error en la Asignación de cantidades.")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async validarCantidadIngresadaRecepcion(body)
+  {
     const solicitudInfo = await this.findSolicitudById(body.solicitudId);
     const bodyUpdateSolicitud = {
       estadoSolicitud: 8,
@@ -407,20 +440,8 @@ export class SolicitudesService{
       etapaActual: "Residuos revisados en recepción, cálculo de cantidades.",
       estado: "Pendiente"
     }
-
-    const bodyResiduoRecojo = {
-      cantidadReal: body.cantidadReal,
-      cantidadDesperdicio: body.cantidadOtros
-    }
-
+    console.log(solicitudInfo)
     try {
-      // const residuoRecojo = await this.residuoRecojoRepository
-      // .createQueryBuilder('residuos')
-      // .where(`residuos.id = :id`, { id: body.residuoRecojoId })
-      // .getOne();
-
-       await this.residuoRecojoRepository.update(body.residuoRecojoId, bodyResiduoRecojo);
-
       const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, body.solicitudId);
       
       const tracker = await this.trackerService.updateTracker(bodyUpdateTracker, solicitudInfo.tracker.id);
@@ -429,10 +450,40 @@ export class SolicitudesService{
 
       return {
         state: true,
-        message: "La asignación de cantidad de los residuso de recojo se realizó correctamente"
+        message: "La asignación de cantidad de los residuos por parte de recepción se realizó correctamente"
       };
     } catch (error) {
-      console.log("Error en la Asignación de cantidades.")
+      console.log("Error en la Asignación de recepcion.")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async validarCantidadIngresadaCalidad(body)
+  {
+    const solicitudInfo = await this.findSolicitudById(body.solicitudId);
+    const bodyUpdateSolicitud = {
+      estadoSolicitud: 9,
+    };
+    const bodyUpdateTracker = {
+      etapaActual: "Residuos revisados en calidad, emisión de laboratorio.",
+      estado: "Pendiente"
+    }
+    console.log(solicitudInfo)
+    try {
+      const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, body.solicitudId);
+      
+      const tracker = await this.trackerService.updateTracker(bodyUpdateTracker, solicitudInfo.tracker.id);
+      
+      const newEtapa = await this.etapaTrackerService.createEtapaTracker(solicitudInfo.tracker, 9);
+
+      const mailLastEtapa = await this.calidadMailService.informeCantidadResiduo(solicitudInfo);
+
+      return {
+        state: true,
+        message: "La asignación de cantidad de los residuos por parte de recepción se realizó correctamente"
+      };
+    } catch (error) {
+      console.log("Error en la Asignación de recepcion.")
       throw ErrorManager.createSignatureError(error.message);
     }
   }
