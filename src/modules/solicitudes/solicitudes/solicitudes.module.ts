@@ -30,6 +30,10 @@ import { TiposResiduoEntity } from '../../mantenimiento/tiposResiduo/entities/ti
 import { TransporteAsignadoService } from '../transporteAsignado/services/transporteAsignado.service';
 import { TransporteAsignadoEntity } from '../transporteAsignado/entities/transporteAsignado.entity';
 import { CalidadMailService } from 'src/modules/mail/services/calidadMail.service';
+import { UnidadMedidaResiduoService } from 'src/modules/mantenimiento/tiposResiduo/services/unidadesMedidaResiduo.service';
+import { UnidadesMedidaResiduoEntity } from 'src/modules/mantenimiento/tiposResiduo/entities/unidadesMedidaResiduo.entity';
+import { TipoResiduoUnidadMedidaService } from 'src/modules/mantenimiento/tiposResiduo/services/tipoResiduoUnidadMedida.service';
+import { TiposResiduoUnidadMedidaEntity } from 'src/modules/mantenimiento/tiposResiduo/entities/tiposResiduoUnidadMedida.entity';
 
 @Module({
   imports: [
@@ -45,7 +49,9 @@ import { CalidadMailService } from 'src/modules/mail/services/calidadMail.servic
       TipoVehiculoEntity,
       ConductoresEntity,
       TiposResiduoEntity,
-      TransporteAsignadoEntity
+      TransporteAsignadoEntity,
+      UnidadesMedidaResiduoEntity,
+      TiposResiduoUnidadMedidaEntity
     ]),
     MailModule
   ],
@@ -65,7 +71,9 @@ import { CalidadMailService } from 'src/modules/mail/services/calidadMail.servic
     TipoVehiculoService,
     ConductoresService,
     TiposResiduoService,
-    TransporteAsignadoService
+    TransporteAsignadoService,
+    UnidadMedidaResiduoService,
+    TipoResiduoUnidadMedidaService
   ],
   controllers: [
     SolicitudesController

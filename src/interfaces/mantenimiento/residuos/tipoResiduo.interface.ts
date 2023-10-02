@@ -4,6 +4,6 @@ export interface ITipoResiduo{
   tipo: number,
   nivelPeligro: string,
   disposicionFinal: string,
-  metodoAlmacenamiento: number,
+  metodoAlmacenamiento: string,
   responsable: string
 }

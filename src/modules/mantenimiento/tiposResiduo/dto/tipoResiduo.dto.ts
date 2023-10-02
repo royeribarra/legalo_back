@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean } from 'class-validator';
+import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsArray } from 'class-validator';
 
 export class TipoResiduoDTO
 {
@@ -19,51 +19,86 @@ export class TipoResiduoDTO
   nombre: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   nivelPeligro: string;
 
   @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  metodoAlmacenamiento: number;
+  @IsOptional()
+  @IsString()
+  metodoAlmacenamiento: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   disposicionFinal: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   responsable: string;
+
+  @ApiProperty()
+  @IsArray()
+  unidadesMedida: number[];
 }
+
 export class TipoResiduoUpdateDTO{
+  @ApiProperty()
   @IsOptional()
   @IsString()
   codigo: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   nombre: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   nivelPeligro: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
-  metodoAlmacenamiento: number;
+  metodoAlmacenamiento: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   tratamiento: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   disposicionFinal: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   responsale: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsArray()
+  unidadesMedida: number[];
+}
+
+export class TipoResiduoSeedDTO
+{
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  codigo: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  tipo: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  nombre: string;
 }

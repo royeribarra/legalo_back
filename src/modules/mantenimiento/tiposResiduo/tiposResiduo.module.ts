@@ -10,6 +10,8 @@ import { TiposResiduoEntity } from './entities/tiposResiduo.entity';
 import { UnidadMedidaResiduoController } from './controllers/unidadMedidaResiduo.controller';
 import { UnidadMedidaResiduoService } from './services/unidadesMedidaResiduo.service';
 import { UnidadesMedidaResiduoEntity } from './entities/unidadesMedidaResiduo.entity';
+import { TipoResiduoUnidadMedidaService } from './services/tipoResiduoUnidadMedida.service';
+import { TiposResiduoUnidadMedidaEntity } from './entities/tiposResiduoUnidadMedida.entity';
 
 @Module({
   imports: [
@@ -19,12 +21,14 @@ import { UnidadesMedidaResiduoEntity } from './entities/unidadesMedidaResiduo.en
       TiposResiduoNormativasEntity,
       TiposResiduoPropiedadesEntity,
       TiposResiduoEntity,
-      UnidadesMedidaResiduoEntity
+      UnidadesMedidaResiduoEntity,
+      TiposResiduoUnidadMedidaEntity
     ])
   ],
   providers: [
     TiposResiduoService,
-    UnidadMedidaResiduoService
+    UnidadMedidaResiduoService,
+    TipoResiduoUnidadMedidaService
   ],
   controllers: [
     TiposResiduoController,

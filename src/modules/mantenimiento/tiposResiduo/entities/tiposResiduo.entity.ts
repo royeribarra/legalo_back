@@ -25,7 +25,7 @@ export class TiposResiduoEntity extends BaseEntity implements ITipoResiduo
   nivelPeligro: string;
 
   @Column({ nullable: true})
-  metodoAlmacenamiento: number;
+  metodoAlmacenamiento: string;
 
   @Column({ nullable: true})
   disposicionFinal: string;

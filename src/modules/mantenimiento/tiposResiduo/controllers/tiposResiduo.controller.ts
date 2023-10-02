@@ -9,9 +9,13 @@ import { ApiParam, ApiTags } from '@nestjs/swagger';
 export class TiposResiduoController {
   constructor(private readonly tipoResiduoService: TiposResiduoService) {}
 
-  @Post('register')
-  public async registerTipoResiduo(@Body() body:TipoResiduoDTO){
-    return await this.tipoResiduoService.createResiduo(body);
+  @Post('create')
+  public async registerTipoResiduo(@Body() body: TipoResiduoDTO){
+    const { state, message } = await this.tipoResiduoService.createResiduo(body);
+    return  {
+      state,
+      message
+    }
   }
 
   @Get('all')
@@ -26,7 +30,7 @@ export class TiposResiduoController {
   }
 
   @Put('edit/:id')
-  public async updateTipoResiduo(@Body() body: TipoResiduoUpdateDTO, @Param('id') id:string){
+  public async updateTipoResiduo(@Body() body: TipoResiduoUpdateDTO, @Param('id') id: number){
     return await this.tipoResiduoService.updateResiduo(body, id);
   }
 

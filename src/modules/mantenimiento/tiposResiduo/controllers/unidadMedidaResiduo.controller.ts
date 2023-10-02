@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query} from '@nestjs/common';
 import { TipoResiduoDTO, TipoResiduoUpdateDTO } from '../dto/tipoResiduo.dto';
 import { Delete } from '@nestjs/common/decorators';
 import { TiposResiduoService } from '../services/tiposResiduo.service';
@@ -11,10 +11,11 @@ export class UnidadMedidaResiduoController {
   constructor(private readonly unidadesService: UnidadMedidaResiduoService) {}
 
   @Get('all')
-  public async findAllUnidadesMedida()
+  public async findAllUnidadesMedida(@Query() queryParams: any)
   {
-    return await this.unidadesService.findUnidades();
+    return await this.unidadesService.findUnidades(queryParams);
   }
+
 
   // @Get(':id')
   // public async findUnidadMedidaById(@Param('id') id: string){
