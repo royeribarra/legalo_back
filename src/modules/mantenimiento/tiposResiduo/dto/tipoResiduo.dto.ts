@@ -4,7 +4,7 @@ import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsArray } from '
 export class TipoResiduoDTO
 {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   codigo: string;
 

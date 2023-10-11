@@ -21,17 +21,17 @@ export class TiposResiduoService{
   {
     const { unidadesMedida, ...newBody } = body;
 
-    const residuoExistsByCodigo = await this.findBy({
-      key: 'nombre',
-      value: body.nombre
-    })
+    // const residuoExistsByCodigo = await this.findBy({
+    //   key: 'nombre',
+    //   value: body.nombre
+    // })
 
     const residuoExistsByNombre = await this.findBy({
       key: 'codigo',
       value: body.codigo
     })
 
-    if(residuoExistsByCodigo || residuoExistsByNombre)
+    if(residuoExistsByNombre)
     {
       return {
         state: false,
@@ -40,8 +40,15 @@ export class TiposResiduoService{
       }
     }
 
+    const lastCodigo = await this.findLastCodigo(body.tipo);
+    console.log("lastCodigo",lastCodigo)
     try {
-      const residuo : TiposResiduoEntity = await this.residuosRespository.save(newBody);
+
+
+      const residuo : TiposResiduoEntity = await this.residuosRespository.save({
+        ...newBody,
+        codigo: lastCodigo
+      });
 
       for (const unidadMedidaId of body.unidadesMedida) {
         const unidadMedida = await this.unidadMedidaService.findUnidadMedidaById(unidadMedidaId);
@@ -97,7 +104,11 @@ export class TiposResiduoService{
       const tipoResiduo = await this.findResiduoById(id);
   
       if (!tipoResiduo) {
-        throw new Error('Tipo de Residuo no encontrado');
+        //throw new Error('Tipo de Residuo no encontrado');
+        return {
+          state: false,
+          message: "El tipo de residuo no se pudo actualizar por que no fue encontrado."
+        }
       }
       
       const deleteRelations = await this.tipoResiduoUnidadMedidaService.deleteRelationByResiduoId(id);
@@ -117,7 +128,7 @@ export class TiposResiduoService{
     }
   }
 
-  public async deleteResiduo(id: string): Promise<DeleteResult> | undefined
+  public async deleteResiduo(id: number): Promise<DeleteResult> | undefined
   {
     try {
       const usuarios: DeleteResult = await this.residuosRespository.delete(id);
@@ -143,6 +154,68 @@ export class TiposResiduoService{
       .where({[key]: value})
       .getOne();
       return residuo;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findLastCodigo(tipo: number)
+  {
+    
+    try {
+      const residuo: TiposResiduoEntity = await this.residuosRespository.createQueryBuilder(
+        'residuos'
+      )
+      .where('tipo = :tipo', {tipo})
+      .orderBy('id', 'DESC')
+      .getOne();
+
+      if (residuo) {
+        // Verifica el formato del código antes de dividirlo
+        const codigoParts = residuo.codigo.split('-');
+        if (codigoParts.length === 2) {
+          // Extrae el número del código del último registro
+          const lastCodeNumber = parseInt(codigoParts[1]);
+          let nextCode;
+  
+          // Genera el próximo código basado en el último registro
+          switch (tipo) {
+            case 1:
+              nextCode = `so-${lastCodeNumber + 1}`;
+              break;
+            case 2:
+              nextCode = `li-${lastCodeNumber + 1}`;
+              break;
+            case 3:
+              nextCode = `ss-${lastCodeNumber + 1}`;
+              break;
+            default:
+              console.log('Mensaje');
+          }
+  
+          // Devuelve el próximo código
+          return nextCode;
+        }
+      }else{
+        let nextCode = "";
+        switch(tipo)
+        {
+          case 1:
+            nextCode = `so-1`;
+            break;
+          case 2:
+            nextCode = `li-1`;
+            break;
+          case 3:
+            nextCode = `ss-1`;
+            break;
+          default:
+            console.log('Mensaje');
+
+        }
+        return nextCode;
+      }
+
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

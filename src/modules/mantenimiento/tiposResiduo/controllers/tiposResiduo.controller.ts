@@ -11,6 +11,7 @@ export class TiposResiduoController {
 
   @Post('create')
   public async registerTipoResiduo(@Body() body: TipoResiduoDTO){
+    
     const { state, message } = await this.tipoResiduoService.createResiduo(body);
     return  {
       state,
@@ -35,7 +36,7 @@ export class TiposResiduoController {
   }
 
   @Delete(':id')
-  public async deleteTipoResiduo(@Param('id') id:string){
+  public async deleteTipoResiduo(@Param('id') id: number){
     return await this.tipoResiduoService.deleteResiduo(id);
   }
 
