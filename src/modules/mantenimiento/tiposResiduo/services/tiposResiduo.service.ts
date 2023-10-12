@@ -128,18 +128,21 @@ export class TiposResiduoService{
     }
   }
 
-  public async deleteResiduo(id: number): Promise<DeleteResult> | undefined
+  public async deleteResiduo(id: number)
   {
     try {
-      const usuarios: DeleteResult = await this.residuosRespository.delete(id);
-      if(usuarios.affected === 0)
+      const residuo: DeleteResult = await this.residuosRespository.softDelete(id);
+      if(residuo.affected === 0)
       {
         throw new ErrorManager({
           type: 'BAD_REQUEST',
-          message: 'No se pudo eliminar el usuario, porque no existe.'
+          message: 'No se pudo eliminar el residuo, porque no existe.'
         });
       }
-      return usuarios;
+      return {
+        state: true,
+        message: "Tipo de residuo eliminado correctamente."
+      };
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

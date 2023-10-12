@@ -1,4 +1,4 @@
-import { CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, DeleteDateColumn } from 'typeorm';
 
 export abstract class BaseEntity{
   @PrimaryGeneratedColumn()
@@ -15,4 +15,11 @@ export abstract class BaseEntity{
     name: 'updated_at'
   })
   updatedAt: Date;
+
+  @DeleteDateColumn({
+    type: 'timestamp',
+    name: 'deleted_at',
+    nullable: true,
+  })
+  deletedAt: Date;
 }

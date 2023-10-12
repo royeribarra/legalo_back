@@ -10,7 +10,8 @@ export class TiposResiduoController {
   constructor(private readonly tipoResiduoService: TiposResiduoService) {}
 
   @Post('create')
-  public async registerTipoResiduo(@Body() body: TipoResiduoDTO){
+  public async registerTipoResiduo(@Body() body: TipoResiduoDTO)
+  {
     
     const { state, message } = await this.tipoResiduoService.createResiduo(body);
     return  {
@@ -37,7 +38,11 @@ export class TiposResiduoController {
 
   @Delete(':id')
   public async deleteTipoResiduo(@Param('id') id: number){
-    return await this.tipoResiduoService.deleteResiduo(id);
+    const {state, message} = await this.tipoResiduoService.deleteResiduo(id);
+    return {
+      state,
+      message
+    }
   }
 
 }
