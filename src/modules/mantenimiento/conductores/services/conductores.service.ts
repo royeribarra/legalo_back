@@ -46,6 +46,7 @@ export class ConductoresService{
       nuevoConductor.nombre = body.nombre;
       nuevoConductor.vehiculo = vehiculo;
       nuevoConductor.telefono = body.telefono;
+      nuevoConductor.tipo = body.tipo;
       const conductor : ConductoresEntity = await this.conductoresRespository.save(nuevoConductor);
       
       return {

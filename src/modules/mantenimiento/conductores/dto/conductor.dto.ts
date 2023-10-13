@@ -44,7 +44,6 @@ export class ConductorDTO
   licenciaConducir: string;
 
   @ApiProperty()
-  @IsNotEmpty()
   @IsString()
   fechaContratacion: string;
 

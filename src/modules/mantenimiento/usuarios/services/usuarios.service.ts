@@ -163,7 +163,9 @@ export class UsuariosService{
     try {
       const usuario: UsuariosEntity = await this.usuariosRepository.createQueryBuilder(
         'usuario'
-      ).addSelect('usuario.contrasena')
+      )
+      .leftJoinAndSelect('usuario.rol', 'rol')
+      .addSelect('usuario.contrasena')
       .where({[key]: value})
       .getOne();
       return usuario;

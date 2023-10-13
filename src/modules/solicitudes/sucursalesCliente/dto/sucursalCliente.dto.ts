@@ -33,7 +33,6 @@ export class SucursalClienteDTO{
   numeroContacto: string;
 
   @ApiProperty()
-  @IsNotEmpty()
   @IsString()
   codigoSucursal: string;
 
