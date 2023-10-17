@@ -144,7 +144,7 @@ export class ConductoresService{
   public async deleteConductor(id: string)
   {
     try {
-      const conductor: DeleteResult = await this.conductoresRespository.delete(id);
+      const conductor: DeleteResult = await this.conductoresRespository.softDelete(id);
       if(conductor.affected === 0)
       {
         return {

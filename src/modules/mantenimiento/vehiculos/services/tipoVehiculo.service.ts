@@ -64,7 +64,7 @@ export class TipoVehiculoService{
   public async deleteTipoVehiculo(id: string): Promise<DeleteResult> | undefined
   {
     try {
-      const usuarios: DeleteResult = await this.tipoVehiculoRepository.delete(id);
+      const usuarios: DeleteResult = await this.tipoVehiculoRepository.softDelete(id);
       if(usuarios.affected === 0)
       {
         throw new ErrorManager({

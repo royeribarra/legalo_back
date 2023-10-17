@@ -135,7 +135,7 @@ export class TrackerService{
   public async deleteTracker(id: string): Promise<DeleteResult> | undefined
   {
     try {
-      const clientes: DeleteResult = await this.trackerRespository.delete(id);
+      const clientes: DeleteResult = await this.trackerRespository.softDelete(id);
       if(clientes.affected === 0)
       {
         throw new ErrorManager({

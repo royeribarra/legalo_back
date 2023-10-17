@@ -163,7 +163,7 @@ export class SucursalesClienteService{
   public async deleteSucursal(id: string)
   {
     try {
-      const usuarios: DeleteResult = await this.sucursalRepository.delete(id);
+      const usuarios: DeleteResult = await this.sucursalRepository.softDelete(id);
       if(usuarios.affected === 0)
       {
         // throw new ErrorManager({

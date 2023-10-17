@@ -212,7 +212,7 @@ export class SolicitudesService{
   public async deleteSolicitud(id: string): Promise<DeleteResult> | undefined
   {
     try {
-      const roles: DeleteResult = await this.solicitudRespository.delete(id);
+      const roles: DeleteResult = await this.solicitudRespository.softDelete(id);
       if(roles.affected === 0)
       {
         throw new ErrorManager({

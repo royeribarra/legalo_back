@@ -77,7 +77,7 @@ export class RolesService{
   public async deleteRol(id: string): Promise<DeleteResult> | undefined
   {
     try {
-      const roles: DeleteResult = await this.rolesRespository.delete(id);
+      const roles: DeleteResult = await this.rolesRespository.softDelete(id);
       if(roles.affected === 0)
       {
         throw new ErrorManager({

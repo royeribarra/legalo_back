@@ -73,7 +73,7 @@ export class ResiduosRecojoService{
   public async deleteVehiculo(id: string)
   {
     try {
-      const vehiculo: DeleteResult = await this.vehiculoRepository.delete(id);
+      const vehiculo: DeleteResult = await this.vehiculoRepository.softDelete(id);
       if(vehiculo.affected === 0)
       {
         return {

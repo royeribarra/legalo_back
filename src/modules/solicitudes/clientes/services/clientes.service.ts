@@ -122,7 +122,7 @@ export class ClientesService{
   public async deleteCliente(id: number)
   {
     try {
-      const cliente: DeleteResult = await this.clienteRepository.delete(id);
+      const cliente: DeleteResult = await this.clienteRepository.softDelete(id);
       if(cliente.affected === 0)
       {
         // throw new ErrorManager({

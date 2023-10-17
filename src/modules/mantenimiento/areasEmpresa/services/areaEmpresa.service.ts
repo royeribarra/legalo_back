@@ -73,7 +73,7 @@ export class AreaEmpresaService{
   public async deleteAreaEmpresa(id: number): Promise<DeleteResult> | undefined
   {
     try {
-      const areas: DeleteResult = await this.areasRepository.delete(id);
+      const areas: DeleteResult = await this.areasRepository.softDelete(id);
       if(areas.affected === 0)
       {
         throw new ErrorManager({

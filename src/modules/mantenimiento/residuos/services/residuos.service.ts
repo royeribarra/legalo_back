@@ -77,7 +77,7 @@ export class ResiduosService{
   public async deleteResiduo(id: string): Promise<DeleteResult> | undefined
   {
     try {
-      const usuarios: DeleteResult = await this.usuariosRespository.delete(id);
+      const usuarios: DeleteResult = await this.usuariosRespository.softDelete(id);
       if(usuarios.affected === 0)
       {
         throw new ErrorManager({

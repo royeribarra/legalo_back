@@ -141,7 +141,7 @@ export class UsuariosService{
   public async deleteUsuario(id: string)
   {
     try {
-      const usuarios: DeleteResult = await this.usuariosRepository.delete(id);
+      const usuarios: DeleteResult = await this.usuariosRepository.softDelete(id);
       if(usuarios.affected === 0)
       {
         return {
