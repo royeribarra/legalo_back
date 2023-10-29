@@ -18,10 +18,10 @@ export class ClientesEntity extends BaseEntity implements ICliente{
   direccion: string;
 
   @Column({nullable: true})
-  distrito: string;
+  distritoId: number;
 
   @Column({nullable: true})
-  provincia: string;
+  provinciaId: number;
 
   @Column({nullable: true})
   contactoPrincipal: string;

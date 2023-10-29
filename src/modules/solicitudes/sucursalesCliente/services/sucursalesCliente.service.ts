@@ -29,9 +29,7 @@ export class SucursalesClienteService{
   public async createSucursal(body: SucursalClienteDTO)
   {
     const cliente = await this.clienteService.findClienteById(body.clienteId);
-    console.log(cliente)
     if (!cliente) {
-      //throw new Error(`Cliente con id ${body.clienteId} no sé encontró.`);
       return {
         state: false,
         message: `Cliente con id ${body.clienteId} no sé encontró.`,
@@ -58,13 +56,13 @@ export class SucursalesClienteService{
       data.codigoSucursal = body.codigoSucursal;
       data.contacto = body.contacto;
       data.direccion = body.direccion;
-      data.distrito = body.distrito;
+      data.distritoId = body.distritoId;
       data.latitud = body.latitud;
       data.longitud = body.longitud;
       data.nombre = body.nombre;
       data.numeroContacto = body.numeroContacto;
       data.observaciones = body.observaciones;
-      data.provincia = body.provincia;
+      data.provinciaId = body.provinciaId;
 
       const sucursal : SucursalesClienteEntity = await this.sucursalRepository.save(data);
       return {
@@ -132,26 +130,25 @@ export class SucursalesClienteService{
     }
   }
 
-  public async updateSucursal(body: SucursalClienteUpdateDTO, id: string)
+  public async updateSucursal(body: SucursalClienteUpdateDTO, id: number)
   {
     try {
-      const sucursal: UpdateResult = await this.sucursalRepository.update(id, body);
+      const cliente = await this.clienteService.findClienteById(body.clienteId);
+      const { clienteId, ...newBody } = body;
+      
+      const sucursal: UpdateResult = await this.sucursalRepository.update(id, {...newBody, cliente: cliente});
       if(sucursal.affected === 0)
       {
-        // throw new ErrorManager({
-        //   type: 'BAD_REQUEST',
-        //   message: 'No se pudo actualizar el usuario.'
-        // });
         return {
           state: false,
-          message: `No se pudo actualizar el cliente, porque no existe.`,
+          message: `No se pudo actualizar la sucursal, porque no existe.`,
           cliente: null
         }
       }
 
       return {
         state: true,
-        message: `Cliente actualizado correctamente`,
+        message: `Sucursal actualizado correctamente`,
         cliente: sucursal
       }
 

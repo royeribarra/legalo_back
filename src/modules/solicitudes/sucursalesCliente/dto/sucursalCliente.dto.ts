@@ -14,13 +14,13 @@ export class SucursalClienteDTO{
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
-  distrito: string;
+  @IsNumber()
+  distritoId: number;
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
-  provincia: string;
+  @IsNumber()
+  provinciaId: number;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -58,19 +58,57 @@ export class SucursalClienteDTO{
 }
 
 export class SucursalClienteUpdateDTO{
+  @ApiProperty()
   @IsOptional()
   @IsString()
   nombre: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
   direccion: string;
 
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  distritoId: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  provinciaId: number;
+
+  @ApiProperty()
   @IsOptional()
   @IsString()
   contacto: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
+  numeroContacto: string;
+
+  @ApiProperty()
+  @IsOptional()
   codigoSucursal: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  latitud: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  longitud: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  observaciones: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  clienteId: number;
 }

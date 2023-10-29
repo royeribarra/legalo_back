@@ -39,7 +39,7 @@ export class SucursalesClienteController {
   }
 
   @Put('edit/:id')
-  public async updateSucursal(@Body() body: SucursalClienteUpdateDTO, @Param('id') id:string){
+  public async updateSucursal(@Body() body: SucursalClienteUpdateDTO, @Param('id') id: number){
     const { state, message } = await this.sucursalesService.updateSucursal(body, id);
     return {
       state: state,

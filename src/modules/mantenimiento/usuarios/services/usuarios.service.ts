@@ -98,8 +98,9 @@ export class UsuariosService{
     }
   }
 
-  public async updateUsuario(body: UsuarioUpdateDTO, id: string, rol: RolesEntity)
+  public async updateUsuario(body: UsuarioUpdateDTO, id: number, rol: RolesEntity)
   {
+    const userInfo = this.findUsuarioById(id);
     try {
       const data = new UsuariosEntity();
       data.rol = rol;
@@ -112,14 +113,11 @@ export class UsuariosService{
       data.provincia = body.provincia;
       data.telefono = body.telefono;
       data.usuario = body.usuario;
+      data.contrasena = body.contrasena? await bcrypt.hash(body.contrasena, +process.env.HASH_SALT) : (await userInfo).contrasena;
 
       const usuario: UpdateResult = await this.usuariosRepository.update(id, data);
       if(usuario.affected === 0)
       {
-        // throw new ErrorManager({
-        //   type: 'NOT_FOUND',
-        //   message: 'No se pudo actualizar el usuario.'
-        // });
         return {
           state: false,
           message: `No se pudo actualizar el usuario, porque no existe.`,

@@ -52,7 +52,7 @@ export class UsuariosController {
     name: 'copetrol_token'
   })
   @Put('edit/:id')
-  public async updateUsuario(@Body() body: UsuarioUpdateDTO, @Param('id') id:string){
+  public async updateUsuario(@Body() body: UsuarioUpdateDTO, @Param('id') id: number){
     const rol = await this.rolService.findRolById(body.rolId);
     const { usuario, state, message } = await this.usuariosService.updateUsuario(body, id, rol);
     return {

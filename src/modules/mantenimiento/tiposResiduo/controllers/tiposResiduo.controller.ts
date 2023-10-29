@@ -12,7 +12,6 @@ export class TiposResiduoController {
   @Post('create')
   public async registerTipoResiduo(@Body() body: TipoResiduoDTO)
   {
-    
     const { state, message } = await this.tipoResiduoService.createResiduo(body);
     return  {
       state,

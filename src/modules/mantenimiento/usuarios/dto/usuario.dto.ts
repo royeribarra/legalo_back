@@ -30,7 +30,7 @@ export class UsuarioDTO{
   contrasena: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   direccion: string;
 
@@ -50,7 +50,7 @@ export class UsuarioDTO{
   dni: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   telefono: string;
 
@@ -58,63 +58,6 @@ export class UsuarioDTO{
   @IsNotEmpty()
   @IsNumber()
   rolId: number;
-}
-
-export class UsuarioFormDTO{
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  nombre: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  apellido: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  correo: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  usuario: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  contrasena: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  direccion: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  distrito: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  provincia: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  dni: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  telefono: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
-  rol_id: number;
 }
 
 export class UsuarioUpdateDTO{
@@ -173,7 +116,6 @@ export class UsuarioUpdateDTO{
   @IsNumber()
   rolId: number;
 }
-
 
 export class UsuarioSeederDTO{
   @ApiProperty()

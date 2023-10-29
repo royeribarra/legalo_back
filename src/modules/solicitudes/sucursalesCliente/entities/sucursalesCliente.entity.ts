@@ -14,10 +14,10 @@ export class SucursalesClienteEntity extends BaseEntity implements ISucursalClie
   direccion: string;
 
   @Column({nullable: true})
-  distrito: string;
+  distritoId: number;
 
   @Column({ nullable: true})
-  provincia: string;
+  provinciaId: number;
 
   @Column()
   contacto: string;

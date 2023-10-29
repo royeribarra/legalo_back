@@ -17,7 +17,9 @@ export default class ClienteSeeder implements Seeder {
           contactoPrincipal: 'Santiago Herrera Pérez',
           direccion: '',
           numeroContacto: '934 567 890',
-          codigo: 'INCHCA'
+          codigo: 'INCHCA',
+          provinciaId: 1,
+          distritoId: 1
         },
         
         {
@@ -26,7 +28,9 @@ export default class ClienteSeeder implements Seeder {
           contactoPrincipal: 'Isabella Rodríguez Gómez',
           direccion: '',
           numeroContacto: '977 123 456',
-          codigo: 'MITSUI'
+          codigo: 'MITSUI',
+          provinciaId: 1,
+          distritoId: 1
         },
         {
           ruc: '20734562341 ',
@@ -34,7 +38,9 @@ export default class ClienteSeeder implements Seeder {
           contactoPrincipal: 'Mateo López García',
           direccion: '',
           numeroContacto: '956 789 012',
-          codigo: 'DERCOC'
+          codigo: 'DERCOC',
+          provinciaId: 1,
+          distritoId: 1
         },
       ];
 

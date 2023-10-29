@@ -21,33 +21,37 @@ export class TiposResiduoService{
   {
     const { unidadesMedida, ...newBody } = body;
 
-    // const residuoExistsByCodigo = await this.findBy({
-    //   key: 'nombre',
-    //   value: body.nombre
+    // const residuoExistsByNombre = await this.findBy({
+    //   key: 'codigo',
+    //   value: body.codigo
     // })
 
-    const residuoExistsByNombre = await this.findBy({
-      key: 'codigo',
-      value: body.codigo
-    })
-
-    if(residuoExistsByNombre)
-    {
-      return {
-        state: false,
-        message: `Ya existe el tipo de residuo con código ${body.codigo} o nombre ${body.nombre}`,
-        tipoResiduo: null
-      }
-    }
+    // if(residuoExistsByNombre)
+    // {
+    //   return {
+    //     state: false,
+    //     message: `Ya existe el tipo de residuo con código ${body.codigo} o nombre ${body.nombre}`,
+    //     tipoResiduo: null
+    //   }
+    // }
 
     const lastCodigo = await this.findLastCodigo(body.tipo);
-    console.log("lastCodigo",lastCodigo)
+    console.log("lastCodigo", lastCodigo)
+    const residuoExistsByCodigo = await this.findBy({
+      key: 'codigo',
+      value: lastCodigo
+    });
+
+    if(residuoExistsByCodigo)
+    {
+      var lastCodigoDelete = await this.findLastCodigoDelete(body.tipo);
+      console.log("lastCodigoDelete", lastCodigoDelete)
+    }
+
     try {
-
-
       const residuo : TiposResiduoEntity = await this.residuosRespository.save({
         ...newBody,
-        codigo: lastCodigo
+        codigo: residuoExistsByCodigo? lastCodigoDelete : lastCodigo
       });
 
       for (const unidadMedidaId of body.unidadesMedida) {
@@ -104,7 +108,6 @@ export class TiposResiduoService{
       const tipoResiduo = await this.findResiduoById(id);
   
       if (!tipoResiduo) {
-        //throw new Error('Tipo de Residuo no encontrado');
         return {
           state: false,
           message: "El tipo de residuo no se pudo actualizar por que no fue encontrado."
@@ -164,7 +167,6 @@ export class TiposResiduoService{
 
   public async findLastCodigo(tipo: number)
   {
-    
     try {
       const residuo: TiposResiduoEntity = await this.residuosRespository.createQueryBuilder(
         'residuos'
@@ -174,14 +176,10 @@ export class TiposResiduoService{
       .getOne();
 
       if (residuo) {
-        // Verifica el formato del código antes de dividirlo
         const codigoParts = residuo.codigo.split('-');
         if (codigoParts.length === 2) {
-          // Extrae el número del código del último registro
           const lastCodeNumber = parseInt(codigoParts[1]);
           let nextCode;
-  
-          // Genera el próximo código basado en el último registro
           switch (tipo) {
             case 1:
               nextCode = `so-${lastCodeNumber + 1}`;
@@ -195,8 +193,6 @@ export class TiposResiduoService{
             default:
               console.log('Mensaje');
           }
-  
-          // Devuelve el próximo código
           return nextCode;
         }
       }else{
@@ -214,7 +210,61 @@ export class TiposResiduoService{
             break;
           default:
             console.log('Mensaje');
+        }
+        return nextCode;
+      }
 
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findLastCodigoDelete(tipo: number)
+  {
+    try {
+      const residuo: TiposResiduoEntity = await this.residuosRespository.createQueryBuilder(
+        'residuos'
+      )
+      .where('tipo = :tipo', {tipo})
+      .andWhere('residuos.deleted_at IS NOT NULL')
+      .orderBy('id', 'DESC')
+      .getOne();
+
+      if (residuo) {
+        const codigoParts = residuo.codigo.split('-');
+        if (codigoParts.length === 2) {
+          const lastCodeNumber = parseInt(codigoParts[1]);
+          let nextCode;
+          switch (tipo) {
+            case 1:
+              nextCode = `so-${lastCodeNumber + 1}`;
+              break;
+            case 2:
+              nextCode = `li-${lastCodeNumber + 1}`;
+              break;
+            case 3:
+              nextCode = `ss-${lastCodeNumber + 1}`;
+              break;
+            default:
+              console.log('Mensaje');
+          }
+          return nextCode;
+        }
+      }else{
+        let nextCode = "";
+        switch(tipo)
+        {
+          case 1:
+            nextCode = `so-1`;
+            break;
+          case 2:
+            nextCode = `li-1`;
+            break;
+          case 3:
+            nextCode = `ss-1`;
+            break;
+          default:
+            console.log('Mensaje');
         }
         return nextCode;
       }

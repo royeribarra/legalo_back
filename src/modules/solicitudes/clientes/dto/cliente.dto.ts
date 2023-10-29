@@ -31,6 +31,14 @@ export class ClienteDTO{
   @IsNotEmpty()
   @IsString()
   codigo: string;
+
+  @IsOptional()
+  @IsNumber()
+  provinciaId: number;
+
+  @IsOptional()
+  @IsNumber()
+  distritoId: number;
 }
 
 export class ClienteUpdateDTO{
