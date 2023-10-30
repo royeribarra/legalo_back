@@ -48,7 +48,7 @@ export class EtapaTrackerService{
     {
       id: 5,
       nombre: "En camino a recojo",
-      descripcion: "Se asignará un vehículo de transporte para ",
+      descripcion: "El transporte se dirige hacia el local.",
       estado: "Pendiente",
       fechaFinalizacion: "tracker.fechaCompletado",
       responsable: "tracker.responsable.nombre",
@@ -56,13 +56,21 @@ export class EtapaTrackerService{
     {
       id: 6,
       nombre: "Recolección en proceso",
-      descripcion: "Se asignará un vehículo de transporte para ",
+      descripcion: "El equipo de transporte se encuentra en el proceso de recolección.",
       estado: "Pendiente",
       fechaFinalizacion: "tracker.fechaCompletado",
       responsable: "tracker.responsable.nombre",
     },
     {
       id: 7,
+      nombre: "En camino a entrega a planta",
+      descripcion: "El transporte está en camino a planta",
+      estado: "Pendiente",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    },
+    {
+      id: 8,
       nombre: "Residuos entregados a planta",
       descripcion: "Se asignará un vehículo de transporte para ",
       estado: "Pendiente",
@@ -70,16 +78,8 @@ export class EtapaTrackerService{
       responsable: "tracker.responsable.nombre",
     },
     {
-      id: 8,
-      nombre: "Evaluación de residuos",
-      descripcion: "Se asignará un vehículo de transporte para ",
-      estado: "Pendiente",
-      fechaFinalizacion: "tracker.fechaCompletado",
-      responsable: "tracker.responsable.nombre",
-    },
-    {
       id: 9,
-      nombre: "Certificado de manifiesto",
+      nombre: "Evaluación de residuos en recepción",
       descripcion: "Se asignará un vehículo de transporte para ",
       estado: "Pendiente",
       fechaFinalizacion: "tracker.fechaCompletado",
@@ -87,7 +87,7 @@ export class EtapaTrackerService{
     },
     {
       id: 10,
-      nombre: "Pago programado",
+      nombre: "Certificado de manifiesto",
       descripcion: "Se asignará un vehículo de transporte para ",
       estado: "Pendiente",
       fechaFinalizacion: "tracker.fechaCompletado",
@@ -95,6 +95,14 @@ export class EtapaTrackerService{
     },
     {
       id: 11,
+      nombre: "Pago programado",
+      descripcion: "Se asignará un vehículo de transporte para ",
+      estado: "Pendiente",
+      fechaFinalizacion: "tracker.fechaCompletado",
+      responsable: "tracker.responsable.nombre",
+    },
+    {
+      id: 12,
       nombre: "Pagado",
       descripcion: "Se asignará un vehículo de transporte para ",
       estado: "Pendiente",

@@ -339,11 +339,8 @@ export class SolicitudesService{
       const tracker = await this.trackerService.updateTracker(bodyTracker, solicitudInfo.tracker.id);
       
       const newEtapa1 = await this.etapaTrackerService.createEtapaTracker(trackerInfo, 4);
-      const newEtapa2 = await this.etapaTrackerService.createEtapaTracker(trackerInfo, 5);
       
       const mailTransportistaAsignado = await this.clienteMailService.asignacionTransportista(cliente, sucursal, conductor, supervisor);
-
-      
 
       return {
         state: true,
@@ -351,6 +348,34 @@ export class SolicitudesService{
       };
     } catch (error) {
       console.log("Error en solicitudService - asignacionTransportista.")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async indicarHoraCaminoRecojo(solicitudId: number)
+  {
+    const solicitudInfo = await this.findSolicitudById(solicitudId);
+    const bodyUpdateSolicitud = {
+      estadoSolicitud: 5
+    };
+    const bodyUpdateTracker = {
+      etapaActual: "En camino a recojo",
+      estado: "En proceso"
+    }
+
+    try {
+      const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, solicitudId);
+      
+      const tracker = await this.trackerService.updateTracker(bodyUpdateTracker, solicitudInfo.tracker.id);
+      
+      const newEtapa = await this.etapaTrackerService.createEtapaTracker(solicitudInfo.tracker, 5);
+
+      return {
+        state: true,
+        message: "El registro de hora de salida se hizo correctamente."
+      };
+    } catch (error) {
+      console.log("Error en la llegadaCliente.")
       throw ErrorManager.createSignatureError(error.message);
     }
   }
@@ -390,7 +415,7 @@ export class SolicitudesService{
       estadoSolicitud: 7
     };
     const bodyUpdateTracker = {
-      etapaActual: "Residuos entregados a planta.",
+      etapaActual: "En camino a entrega a planta.",
       estado: "Pendiente"
     }
 
@@ -411,11 +436,39 @@ export class SolicitudesService{
     }
   }
 
+  public async indicarHoraLlegadaPlanta(solicitudId: number)
+  {
+    const solicitudInfo = await this.findSolicitudById(solicitudId);
+    const bodyUpdateSolicitud = {
+      estadoSolicitud: 8
+    };
+    const bodyUpdateTracker = {
+      etapaActual: "Residuos entregados a planta.",
+      estado: "Pendiente"
+    }
+
+    try {
+      const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, solicitudId);
+      
+      const tracker = await this.trackerService.updateTracker(bodyUpdateTracker, solicitudInfo.tracker.id);
+      
+      const newEtapa = await this.etapaTrackerService.createEtapaTracker(solicitudInfo.tracker, 8);
+
+      return {
+        state: true,
+        message: "La hora de llegada a planta se registró con éxito."
+      };
+    } catch (error) {
+      console.log("Error en la indicarHoraLlegadaPlanta.")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async asignarCantidadResiduo(body)
   {
     const bodyResiduoRecojo = {
       cantidadReal: body.cantidadReal,
-      cantidadDesperdicio: body.cantidadOtros
+      cantidadDesperdicio: body.cantidadDesperdicio
     }
 
     try {
@@ -430,23 +483,23 @@ export class SolicitudesService{
     }
   }
 
-  public async validarCantidadIngresadaRecepcion(body)
+  public async validarCantidadIngresadaRecepcion(solicitudId: number)
   {
-    const solicitudInfo = await this.findSolicitudById(body.solicitudId);
+    const solicitudInfo = await this.findSolicitudById(solicitudId);
     const bodyUpdateSolicitud = {
-      estadoSolicitud: 8,
+      estadoSolicitud: 9,
     };
     const bodyUpdateTracker = {
-      etapaActual: "Residuos revisados en recepción, cálculo de cantidades.",
+      etapaActual: "Evaluación de residuos en recepción.",
       estado: "Pendiente"
     }
-    console.log(solicitudInfo)
+
     try {
-      const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, body.solicitudId);
+      const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, solicitudId);
       
       const tracker = await this.trackerService.updateTracker(bodyUpdateTracker, solicitudInfo.tracker.id);
       
-      const newEtapa = await this.etapaTrackerService.createEtapaTracker(solicitudInfo.tracker, 8);
+      const newEtapa = await this.etapaTrackerService.createEtapaTracker(solicitudInfo.tracker, 9);
 
       return {
         state: true,
@@ -458,11 +511,11 @@ export class SolicitudesService{
     }
   }
 
-  public async validarCantidadIngresadaCalidad(body)
+  public async validarCantidadIngresadaCalidad(solicitudId: number)
   {
-    const solicitudInfo = await this.findSolicitudById(body.solicitudId);
+    const solicitudInfo = await this.findSolicitudById(solicitudId);
     const bodyUpdateSolicitud = {
-      estadoSolicitud: 9,
+      estadoSolicitud: 10,
     };
     const bodyUpdateTracker = {
       etapaActual: "Residuos revisados en calidad, emisión de laboratorio.",
@@ -470,11 +523,11 @@ export class SolicitudesService{
     }
     console.log(solicitudInfo)
     try {
-      const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, body.solicitudId);
+      const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, solicitudId);
       
       const tracker = await this.trackerService.updateTracker(bodyUpdateTracker, solicitudInfo.tracker.id);
       
-      const newEtapa = await this.etapaTrackerService.createEtapaTracker(solicitudInfo.tracker, 9);
+      const newEtapa = await this.etapaTrackerService.createEtapaTracker(solicitudInfo.tracker, 10);
 
       const mailLastEtapa = await this.calidadMailService.informeCantidadResiduo(solicitudInfo);
 

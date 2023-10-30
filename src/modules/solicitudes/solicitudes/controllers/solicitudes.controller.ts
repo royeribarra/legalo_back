@@ -110,6 +110,20 @@ export class SolicitudesController {
     };
   }
 
+  @Post('/indicar-camino-recojo')
+  public async indicarHoraCaminoRecojo(@Body() body: any)
+  {
+    //body={solicitudId: 2, clienteId: 1, sucursalId: 2}
+    
+    const { state, message } = await this.solicitudesService.indicarHoraCaminoRecojo(body.solicitudId);
+
+    // const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo(solicitud.sucursal, solicitud.cliente, solicitud.residuosRecojo);
+    return {
+      state: state,
+      message: message
+    };
+  }
+
   @Post('/indicar-llegada-cliente')
   public async indicarHoraLlegadaCliente(@Body() body: any)
   {
@@ -138,6 +152,20 @@ export class SolicitudesController {
     };
   }
 
+  @Post('/indicar-llegada-planta')
+  public async indicarHoraLlegadaPlanta(@Body() body: any)
+  {
+    //body={solicitudId: 2, clienteId: 1, sucursalId: 2}
+    
+    const { state, message } = await this.solicitudesService.indicarHoraLlegadaPlanta(body.solicitudId);
+    // const mailSolicitudRecojo = await this.clienteMailService.solicitudRecojo(solicitud.sucursal, solicitud.cliente, solicitud.residuosRecojo);
+
+    return {
+      state: state,
+      message: message
+    };
+  }
+
   @Post('/asignar-cantidad-residuo')
   public async asignarCantidadResiduo(@Body() body: any)
   {
@@ -154,7 +182,7 @@ export class SolicitudesController {
   {
     //body={solicitudId: 2, clienteId: 1, sucursalId: 2}
     
-    const { state, message } = await this.solicitudesService.validarCantidadIngresadaRecepcion(body);
+    const { state, message } = await this.solicitudesService.validarCantidadIngresadaRecepcion(body.solicitudId);
 
     return {
       state: state,
@@ -167,7 +195,7 @@ export class SolicitudesController {
   {
     //body={solicitudId: 2, clienteId: 1, sucursalId: 2}
     
-    const { state, message } = await this.solicitudesService.validarCantidadIngresadaCalidad(body);
+    const { state, message } = await this.solicitudesService.validarCantidadIngresadaCalidad(body.solicitudId);
 
     return {
       state: state,
