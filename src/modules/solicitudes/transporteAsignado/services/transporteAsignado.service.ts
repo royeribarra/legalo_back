@@ -98,4 +98,28 @@ export class TransporteAsignadoService{
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  public async obtenerTodos(queryParams): Promise<TransporteAsignadoEntity[]>
+  {
+    const query = this.asignacionRepository.createQueryBuilder('asignaciones')
+                  .leftJoinAndSelect('asignaciones.vehiculo', 'vehiculo');
+
+    if (queryParams.startDate && queryParams.endDate) 
+    {
+      const startDate = queryParams.startDate;
+      const endDate = queryParams.endDate;
+      query.where('asignaciones.fechaRecoleccion BETWEEN :startDate AND :endDate', {
+        startDate,
+        endDate,
+      });
+    }
+
+    try {
+      const vehiculos: TransporteAsignadoEntity[] = await query.getMany();
+      
+      return vehiculos;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
 }

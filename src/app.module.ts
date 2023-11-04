@@ -16,6 +16,7 @@ import { ResiduosModule } from './modules/mantenimiento/residuos/residuos.module
 import { VehiculosModule } from './modules/mantenimiento/vehiculos/vehiculos.module';
 import { AreaEmpresaModule } from './modules/mantenimiento/areasEmpresa/areaEmpresa.module';
 import { TipoVehiculoService } from './modules/mantenimiento/vehiculos/services/tipoVehiculo.service';
+import { TransporteAsignadoModule } from './modules/solicitudes/transporteAsignado/transporteAsignado.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { TipoVehiculoService } from './modules/mantenimiento/vehiculos/services/
     TiposResiduoModule,
     UsuariosModule,
     VehiculosModule,
+    TransporteAsignadoModule
   ],
   controllers: [AppController],
   providers: [AppService],

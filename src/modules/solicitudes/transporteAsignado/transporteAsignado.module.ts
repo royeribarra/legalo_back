@@ -8,18 +8,26 @@ import { SolicitudesEntity } from '../solicitudes/entities/solicitudes.entity';
 import { VehiculosService } from '../../mantenimiento/vehiculos/services/vehiculos.service';
 import { VehiculosEntity } from '../../mantenimiento/vehiculos/entities/vehiculo.entity';
 import { SolicitudesModule } from '../solicitudes/solicitudes.module';
+import { ConductoresService } from 'src/modules/mantenimiento/conductores/services/conductores.service';
+import { ConductoresEntity } from 'src/modules/mantenimiento/conductores/entities/conductores.entity';
+import { TipoVehiculoService } from 'src/modules/mantenimiento/vehiculos/services/tipoVehiculo.service';
+import { TipoVehiculoEntity } from 'src/modules/mantenimiento/vehiculos/entities/tipoVehiculo.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       TransporteAsignadoEntity,
       SolicitudesEntity,
-      VehiculosEntity
+      VehiculosEntity,
+      ConductoresEntity,
+      TipoVehiculoEntity
     ])
   ],
   providers: [
     TransporteAsignadoService,
-    VehiculosService
+    VehiculosService,
+    ConductoresService,
+    TipoVehiculoService
   ],
   controllers: [
     TransporteAsignadoController

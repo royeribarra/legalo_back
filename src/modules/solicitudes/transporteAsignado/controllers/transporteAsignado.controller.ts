@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Res} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query} from '@nestjs/common';
 import { TransporteAsignadoDTO, TransporteAsignadoUpdateDTO } from '../dto/transporteAsignado.dto';
 import { Delete } from '@nestjs/common/decorators';
 import { TransporteAsignadoService } from '../services/transporteAsignado.service';
@@ -9,9 +9,13 @@ import { Response } from 'express';
 @Controller('transporte-asignado')
 export class TransporteAsignadoController {
   constructor(
-    private readonly trackerService: TransporteAsignadoService
+    private readonly transporteAsignadoService: TransporteAsignadoService
     ) {}
 
-  
-
+    @Get('all')
+    public async findAllVehiculos(@Query() queryParams: any)
+    {
+      console.log("url", queryParams)
+      return await this.transporteAsignadoService.obtenerTodos(queryParams);
+    }
 }
