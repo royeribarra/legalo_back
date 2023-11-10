@@ -36,16 +36,13 @@ export class TiposResiduoService{
     // }
 
     const lastCodigo = await this.findLastCodigo(body.tipo);
-    console.log("lastCodigo", lastCodigo)
     const residuoExistsByCodigo = await this.findBy({
       key: 'codigo',
       value: lastCodigo
     });
-
     if(residuoExistsByCodigo)
     {
       var lastCodigoDelete = await this.findLastCodigoDelete(body.tipo);
-      console.log("lastCodigoDelete", lastCodigoDelete)
     }
 
     try {
@@ -172,6 +169,7 @@ export class TiposResiduoService{
         'residuos'
       )
       .where('tipo = :tipo', {tipo})
+      .withDeleted()
       .orderBy('id', 'DESC')
       .getOne();
 
