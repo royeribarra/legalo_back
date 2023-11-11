@@ -256,10 +256,6 @@ export class SolicitudesService{
   public async asignacionVehiculo(body: any)
   {
     const solicitudInfo = await this.findSolicitudById(body.solicitudId);
-    // const bodySolicitud = {
-    //   estadoSolicitud: 3
-    // }
-
     const vehiculoInfo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
     const bodyVehiculo = {
       ...vehiculoInfo,

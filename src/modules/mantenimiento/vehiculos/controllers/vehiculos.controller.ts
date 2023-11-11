@@ -40,8 +40,13 @@ export class VehiculosController {
   @Get('all')
   public async findAllVehiculos(@Query() queryParams: any)
   {
-    console.log("url", queryParams)
     return await this.vehiculoService.findVehiculos(queryParams);
+  }
+
+  @Get('all-disponibles')
+  public async findAllDisponibles(@Query() queryParams: any)
+  {
+    return await this.vehiculoService.findVehiculosDisponibles(queryParams);
   }
 
   @Get(':id')

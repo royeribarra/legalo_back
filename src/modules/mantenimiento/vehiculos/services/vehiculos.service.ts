@@ -56,6 +56,48 @@ export class VehiculosService{
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+  
+  public async findVehiculosDisponibles(queryParams): Promise<VehiculosEntity[]>
+  {
+    const query = this.vehiculoRepository.createQueryBuilder('vehiculos')
+      .leftJoinAndSelect('vehiculos.tipoVehiculo', 'tipoVehiculo')
+      .leftJoinAndSelect('vehiculos.conductor', 'conductor')
+      .leftJoinAndSelect('vehiculos.asignaciones', 'asignaciones')
+
+    if (queryParams.fechaRecoleccion && queryParams.cantidad) {
+      const subquery = this.vehiculoRepository.createQueryBuilder('subquery')
+        .select('COALESCE(SUM(asignaciones.cantidad_total_usada), 0)', 'totalAsignado') // No sumamos la cantidad extra aquí
+        .innerJoin('subquery.asignaciones', 'asignaciones')
+        .where('subquery.id = vehiculos.id')
+        .andWhere('asignaciones.fecha_recoleccion = :fechaRecoleccion');
+    
+      query.addSelect(`(${subquery.getQuery()})`, 'totalAsignado');
+      query.andWhere(`(${subquery.getQuery()}) + :cantidad <= vehiculos.capacidad_carga`, {
+        fechaRecoleccion: queryParams.fechaRecoleccion,
+        cantidad: queryParams.cantidad
+      });
+    }
+    
+    try {
+      const vehiculos: VehiculosEntity[] = await query.getRawMany();
+      const vehiculosCopy = [...vehiculos as any];
+      
+      const resultadosConCapacidadDisponible = vehiculosCopy.map(vehiculo => {
+        // Verificar si la propiedad temporal totalAsignado está presente
+        const capacidadDisponible = vehiculo.totalAsignado
+          ? vehiculo.capacidadCarga - vehiculo.totalAsignado
+          : vehiculo.capacidadCarga;
+        return {
+          ...vehiculo,
+          capacidadDisponible: capacidadDisponible
+        };
+      });
+      
+      return resultadosConCapacidadDisponible;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
 
   public async findVehiculoById(id: number): Promise<VehiculosEntity>
   {
