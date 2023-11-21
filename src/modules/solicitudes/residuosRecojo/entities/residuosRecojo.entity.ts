@@ -7,14 +7,17 @@ import { TiposResiduoEntity } from '../../../mantenimiento/tiposResiduo/entities
 @Entity({name:'residuos_recojo'})
 export class ResiduosRecojoEntity extends BaseEntity implements IResiduoRecojo
 {
-  @Column({nullable: true})
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   cantidadRecoleccion: number;
 
-  @Column({nullable: true})
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   cantidadReal: number;
 
-  @Column({nullable: true})
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   cantidadDesperdicio: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  cantidadUniversal: number;
 
   @Column({nullable: true})
   unidadMedida: string;

@@ -29,6 +29,9 @@ export class TransporteAsignadoEntity extends BaseEntity implements ITransporteA
   @Column({nullable: true})
   cilindros: number;
 
+  @Column({nullable: true})
+  cantidadTotalUsada: number;
+
   @ManyToOne(() => ConductoresEntity)
   @JoinColumn({ name: 'id_conductor_supervisor', referencedColumnName: 'id' })
   conductorSupervisor: ConductoresEntity;

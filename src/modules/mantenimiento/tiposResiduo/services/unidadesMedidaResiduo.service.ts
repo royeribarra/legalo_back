@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ErrorManager } from '../../../../utils/error.manager';
 import { UnidadesMedidaResiduoEntity } from '../entities/unidadesMedidaResiduo.entity';
+import { UnidadMedidaTipoResiduoDTO } from '../dto/unidadMedidaTipoResiduo.dto';
 
 @Injectable()
 export class UnidadMedidaResiduoService{
@@ -43,6 +44,20 @@ export class UnidadMedidaResiduoService{
         }
 
         return unidad;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findBy({key, value} : { key: keyof UnidadMedidaTipoResiduoDTO; value: any })
+  {
+    try {
+      const unidad: UnidadesMedidaResiduoEntity = await this.unidadRepository.createQueryBuilder(
+        'unidad'
+      )
+      .where({[key]: value})
+      .getOne();
+      return unidad;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

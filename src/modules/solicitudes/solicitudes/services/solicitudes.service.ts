@@ -18,6 +18,7 @@ import { TiposResiduoService } from '../../../mantenimiento/tiposResiduo/service
 import { format } from 'date-fns';
 import { TransporteAsignadoService } from '../../transporteAsignado/services/transporteAsignado.service';
 import { CalidadMailService } from 'src/modules/mail/services/calidadMail.service';
+import { UnidadMedidaResiduoService } from 'src/modules/mantenimiento/tiposResiduo/services/unidadesMedidaResiduo.service';
 
 @Injectable()
 export class SolicitudesService{
@@ -34,6 +35,7 @@ export class SolicitudesService{
     private readonly calidadMailService: CalidadMailService,
     private readonly conductorService: ConductoresService,
     private readonly tipoResiduoService: TiposResiduoService,
+    private readonly unidadMedidaService: UnidadMedidaResiduoService,
     private readonly transporteAsignadoService: TransporteAsignadoService,
   ){}
 
@@ -49,11 +51,16 @@ export class SolicitudesService{
       const residuosRecojo = await Promise.all(
         body.residuos.map(async (residuoRecojoDto) => {
           const tipoResiduo = await this.tipoResiduoService.findResiduoById(residuoRecojoDto.tipoResiduoId);
+          const unidadMedida = await this.unidadMedidaService.findBy({
+            key: 'unidadMedida',
+            value: residuoRecojoDto.unidadMedida
+          });
           const residuoRecojo = new ResiduosRecojoEntity();
 
           residuoRecojo.cantidadRecoleccion = residuoRecojoDto.cantidad;
           residuoRecojo.residuo = tipoResiduo;
           residuoRecojo.unidadMedida = residuoRecojoDto.unidadMedida;
+          residuoRecojo.cantidadUniversal = unidadMedida.factorConversion * residuoRecojoDto.cantidad;
           return await this.residuoRecojoRepository.save(residuoRecojo);
         }),
       );
@@ -187,7 +194,6 @@ export class SolicitudesService{
 
   public async updateSolicitud(body, id: number)
   {
-    console.log(body)
     try {
       const solicitud: UpdateResult = await this.solicitudRespository.update(id, body);
       if(solicitud.affected === 0)
@@ -329,7 +335,6 @@ export class SolicitudesService{
     
     try {
       const solicitud = await this.updateSolicitud(bodySolicitud, body.solicitudId);
-      console.log(solicitudInfo, "solicitud");
       const updateTransporte = await this.transporteAsignadoService.updateTransporteAsignado(bodyTransporteAsignado, solicitudInfo.asignacionTransporte.id);
       
       const tracker = await this.trackerService.updateTracker(bodyTracker, solicitudInfo.tracker.id);
@@ -517,7 +522,6 @@ export class SolicitudesService{
       etapaActual: "Residuos revisados en calidad, emisión de laboratorio.",
       estado: "Pendiente"
     }
-    console.log(solicitudInfo)
     try {
       const solicitud = await this.updateSolicitud(bodyUpdateSolicitud, solicitudId);
       

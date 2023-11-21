@@ -20,16 +20,20 @@ export class TransporteAsignadoService{
   public async createAsignacion(body: any)
   {
     const solicitud = await this.serviceRepository
-      .createQueryBuilder('solicitudes')
-      .where('solicitudes.id = :id', {id: body.solicitudId})
+      .createQueryBuilder('solicitud')
+      .leftJoinAndSelect('solicitud.residuosRecojo', 'residuosRecojo')
+      .where('solicitud.id = :id', {id: body.solicitudId})
       .getOne();
     const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
     
+    const cantidadGlobal = solicitud.residuosRecojo.reduce((suma, residuo) => suma + residuo.cantidadUniversal, 0);
+
     const newBody = {
       ...new TransporteAsignadoEntity(),
       vehiculo,
       solicitud: solicitud,
-      fechaRecoleccion: solicitud.fechaRecoleccion
+      fechaRecoleccion: solicitud.fechaRecoleccion,
+      cantidadTotalUsada: cantidadGlobal
     };
 
     try {
@@ -48,7 +52,6 @@ export class TransporteAsignadoService{
 
   public async updateTransporteAsignado(body: any, id: number)
   {
-    console.log(body, "conductor")
     const conductor = await this.conductorService.findConductorById(body.conductorId);
     const supervisor = await this.conductorService.findConductorById(body.supervisorId); 
     const newBody = {

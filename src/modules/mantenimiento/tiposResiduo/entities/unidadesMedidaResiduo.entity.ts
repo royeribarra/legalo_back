@@ -14,8 +14,8 @@ export class UnidadesMedidaResiduoEntity extends BaseEntity implements IUnidadMe
   @Column({ type: 'text' })
   descripcion: string;
 
-  @Column({ nullable: true })
-  factorConversion: string;
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  factorConversion: number;
 
   @OneToMany(() => TiposResiduoEntity, tipo => tipo.residuos)
   tiposResiduo: TiposResiduoEntity;

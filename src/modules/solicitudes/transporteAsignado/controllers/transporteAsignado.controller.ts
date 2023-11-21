@@ -15,7 +15,6 @@ export class TransporteAsignadoController {
     @Get('all')
     public async findAllVehiculos(@Query() queryParams: any)
     {
-      console.log("url", queryParams)
       return await this.transporteAsignadoService.obtenerTodos(queryParams);
     }
 }

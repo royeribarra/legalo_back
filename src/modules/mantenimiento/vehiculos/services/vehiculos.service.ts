@@ -57,47 +57,73 @@ export class VehiculosService{
     }
   }
   
-  public async findVehiculosDisponibles(queryParams): Promise<VehiculosEntity[]>
-  {
-    const query = this.vehiculoRepository.createQueryBuilder('vehiculos')
+  public async findVehiculosDisponibles(queryParams): Promise<VehiculosEntity[]> {
+    // Consulta para obtener todos los vehículos y su capacidad utilizada en la fecha dada
+    const vehiculosConCapacidadUsada = await this.vehiculoRepository.createQueryBuilder('vehiculos')
       .leftJoinAndSelect('vehiculos.tipoVehiculo', 'tipoVehiculo')
       .leftJoinAndSelect('vehiculos.conductor', 'conductor')
       .leftJoinAndSelect('vehiculos.asignaciones', 'asignaciones')
-
-    if (queryParams.fechaRecoleccion && queryParams.cantidad) {
-      const subquery = this.vehiculoRepository.createQueryBuilder('subquery')
-        .select('COALESCE(SUM(asignaciones.cantidad_total_usada), 0)', 'totalAsignado') // No sumamos la cantidad extra aquí
-        .innerJoin('subquery.asignaciones', 'asignaciones')
-        .where('subquery.id = vehiculos.id')
-        .andWhere('asignaciones.fecha_recoleccion = :fechaRecoleccion');
-    
-      query.addSelect(`(${subquery.getQuery()})`, 'totalAsignado');
-      query.andWhere(`(${subquery.getQuery()}) + :cantidad <= vehiculos.capacidad_carga`, {
+      .leftJoinAndSelect('asignaciones.solicitud', 'solicitud')
+      .leftJoinAndSelect('solicitud.residuosRecojo', 'residuosRecojo')
+      .where('asignaciones.fechaRecoleccion = :fechaRecoleccion', {
         fechaRecoleccion: queryParams.fechaRecoleccion,
-        cantidad: queryParams.cantidad
-      });
-    }
+      })
+      .getMany();
+      
+    // Calcular la capacidad total utilizada por vehículo en la fecha dada
+    const capacidadUsadaPorVehiculo = vehiculosConCapacidadUsada.map(vehiculo => {
+      const totalAsignado = vehiculo.asignaciones.reduce((total, asignacion) => {
+        return total + (asignacion.cantidadTotalUsada || 0);
+      }, 0);
+      return {
+        vehiculo,
+        totalAsignado,
+      };
+    });
+  
+    // Consulta para obtener todos los vehículos sin restricciones
+    const vehiculosSinRestricciones = await this.vehiculoRepository.createQueryBuilder('vehiculos')
+      .leftJoinAndSelect('vehiculos.tipoVehiculo', 'tipoVehiculo')
+      .leftJoinAndSelect('vehiculos.conductor', 'conductor')
+      .leftJoinAndSelect('vehiculos.asignaciones', 'asignaciones')
+      .leftJoinAndSelect('asignaciones.solicitud', 'solicitud')
+      .leftJoinAndSelect('solicitud.residuosRecojo', 'residuosRecojo')
+      .getMany();
     
-    try {
-      const vehiculos: VehiculosEntity[] = await query.getRawMany();
-      const vehiculosCopy = [...vehiculos as any];
-      
-      const resultadosConCapacidadDisponible = vehiculosCopy.map(vehiculo => {
-        // Verificar si la propiedad temporal totalAsignado está presente
-        const capacidadDisponible = vehiculo.totalAsignado
-          ? vehiculo.capacidadCarga - vehiculo.totalAsignado
-          : vehiculo.capacidadCarga;
-        return {
-          ...vehiculo,
-          capacidadDisponible: capacidadDisponible
-        };
-      });
-      
-      return resultadosConCapacidadDisponible;
-    } catch (error) {
-      throw ErrorManager.createSignatureError(error.message);
-    }
+    // Agregar la propiedad totalUsado a cada vehículo en vehiculosSinRestricciones
+    const vehiculosConTotalUsado = vehiculosSinRestricciones.map(vehiculo => {
+      const capacidadUsadaPorVehiculoEnFecha = capacidadUsadaPorVehiculo.find(item => item.vehiculo.id === vehiculo.id);
+  
+      return {
+        ...vehiculo,
+        totalUsado: capacidadUsadaPorVehiculoEnFecha ? capacidadUsadaPorVehiculoEnFecha.totalAsignado : 0,
+      };
+    });
+   
+    // Filtrar los vehículos por capacidad
+    
+    const vehiculosFiltrados = vehiculosConTotalUsado.filter(vehiculo => {
+      const capacidadUsadaPorVehiculoEnFecha = capacidadUsadaPorVehiculo.find(item => item.vehiculo.id === vehiculo.id);
+  
+      if (capacidadUsadaPorVehiculoEnFecha) {
+        return capacidadUsadaPorVehiculoEnFecha.totalAsignado + Number(queryParams.cantidad) <= vehiculo.capacidadCarga;
+      } else {
+        console.log("no existe existe capacidadUsadaPorVehiculoEnFecha")
+        // Si no encontramos la capacidad utilizada para el vehículo en la fecha,
+        // evaluamos la capacidad de carga directamente
+        return queryParams.cantidad <= vehiculo.capacidadCarga;
+      }
+    });
+  
+    return vehiculosFiltrados;
   }
+  
+  
+  
+  
+  
+  
+  
 
   public async findVehiculoById(id: number): Promise<VehiculosEntity>
   {
