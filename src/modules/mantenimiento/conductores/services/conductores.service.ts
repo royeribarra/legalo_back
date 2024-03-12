@@ -19,16 +19,39 @@ export class ConductoresService{
       value: body.dni
     })
 
+    if(conductorExistsByDni)
+    {
+      return {
+        state: false,
+        message: `Ya existe el conductor con dni ${body.dni}`,
+        conductor: null
+      }
+    }
+
     const conductorExistsByCorreo = await this.findBy({
       key: 'correo',
       value: body.correo
     })
 
-    if(conductorExistsByDni || conductorExistsByCorreo)
+    if(conductorExistsByCorreo)
     {
       return {
         state: false,
-        message: `Ya existe el conductor con dni ${body.dni} o correo ${body.correo}`,
+        message: `Ya existe el conductor con correo ${body.correo}`,
+        conductor: null
+      }
+    }
+
+    const conductorExistsByLicencia = await this.findBy({
+      key: 'licenciaConducir',
+      value: body.licenciaConducir
+    })
+
+    if(conductorExistsByLicencia)
+    {
+      return {
+        state: false,
+        message: `Ya existe el conductor con licencia ${body.licenciaConducir}`,
         conductor: null
       }
     }
