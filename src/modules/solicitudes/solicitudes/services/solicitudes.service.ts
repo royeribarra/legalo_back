@@ -110,6 +110,7 @@ export class SolicitudesService{
       .leftJoinAndSelect('solicitudes.asignacionTransporte', 'asignacionTransporte')
       .leftJoinAndSelect('asignacionTransporte.conductorSupervisor', 'conductorSupervisor')
       .leftJoinAndSelect('asignacionTransporte.conductor', 'conductor')
+      .leftJoinAndSelect('asignacionTransporte.vehiculo', 'vehiculo')
       .leftJoinAndSelect('residuosRecojo.residuo', 'residuo')
       .leftJoinAndSelect('solicitudes.tracker', 'tracker')
       .leftJoinAndSelect('tracker.etapas', 'etapas');
