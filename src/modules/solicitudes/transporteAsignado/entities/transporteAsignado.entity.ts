@@ -41,7 +41,6 @@ export class TransporteAsignadoEntity extends BaseEntity implements ITransporteA
   conductor: ConductoresEntity;
 
   @ManyToOne(() => VehiculosEntity, vehiculo => vehiculo.asignaciones)
-  @JoinColumn()
   vehiculo: VehiculosEntity;
 
   @OneToOne(() => SolicitudesEntity)
