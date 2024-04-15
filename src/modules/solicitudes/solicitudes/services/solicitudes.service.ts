@@ -108,6 +108,8 @@ export class SolicitudesService{
       .leftJoinAndSelect('solicitudes.sucursal', 'sucursal')
       .leftJoinAndSelect('solicitudes.residuosRecojo', 'residuosRecojo')
       .leftJoinAndSelect('solicitudes.asignacionTransporte', 'asignacionTransporte')
+      .leftJoinAndSelect('asignacionTransporte.conductorSupervisor', 'conductorSupervisor')
+      .leftJoinAndSelect('asignacionTransporte.conductor', 'conductor')
       .leftJoinAndSelect('residuosRecojo.residuo', 'residuo')
       .leftJoinAndSelect('solicitudes.tracker', 'tracker')
       .leftJoinAndSelect('tracker.etapas', 'etapas');
