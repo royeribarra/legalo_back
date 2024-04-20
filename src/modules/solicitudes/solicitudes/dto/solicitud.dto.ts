@@ -61,14 +61,6 @@ export class SolicitudDTO{
 
 export class SolicitudUpdateDTO{
   @IsOptional()
-  @IsString()
-  nombre: string;
-
-  @IsOptional()
   @IsNumber()
-  tarifa: number;
-
-  @IsOptional()
-  @IsBoolean()
-  isActive: boolean;
+  estadoSolicitud: number;
 }

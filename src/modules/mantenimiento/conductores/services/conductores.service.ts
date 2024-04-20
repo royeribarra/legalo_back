@@ -112,10 +112,11 @@ export class ConductoresService{
 
         if(!conductores)
         {
-          throw new ErrorManager({
-            type: 'BAD_REQUEST',
-            message: `No se encontró al conductor de Id = ${id}`
-          });
+          // throw new ErrorManager({
+          //   type: 'BAD_REQUEST',
+          //   message: `No se encontró al conductor de Id = ${id}`
+          // });
+          return null;
         }
 
         return conductores;

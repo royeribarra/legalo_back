@@ -25,6 +25,7 @@ export class TransporteAsignadoService{
       .where('solicitud.id = :id', {id: body.solicitudId})
       .getOne();
     const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
+    // const existAsignacion = await this.findBySolicitud(body.solicitudId);
     
     const cantidadGlobal = solicitud.residuosRecojo.reduce((suma, residuo) => suma + residuo.cantidadUniversal, 0);
 
@@ -35,6 +36,13 @@ export class TransporteAsignadoService{
       fechaRecoleccion: solicitud.fechaRecoleccion,
       cantidadTotalUsada: cantidadGlobal
     };
+
+    // console.log("existAsignacion", existAsignacion);
+    // if(existAsignacion)
+    // {
+    //   await this.updateTransporteAsignado(newBody, solicitud.id);
+    //   return;
+    // }
 
     try {
       const newAsignacion : TransporteAsignadoEntity = await this.asignacionRepository.save(newBody);
@@ -53,19 +61,23 @@ export class TransporteAsignadoService{
   public async updateTransporteAsignado(body: any, id: number)
   {
     const conductor = await this.conductorService.findConductorById(body.conductorId);
-    const supervisor = await this.conductorService.findConductorById(body.supervisorId); 
+    const supervisor = await this.conductorService.findConductorById(body.supervisorId);
+    const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
     const newBody = {
       ...new TransporteAsignadoEntity(),
       conductor: conductor,
-      conductorSupervisor: supervisor
+      conductorSupervisor: supervisor,
+      vehiculo: vehiculo
     };
     
     try {
       const vehiculo: UpdateResult = await this.asignacionRepository.update(id, newBody);
-      
+      const asignacionTransporte = await this.findAsignacionById(id);
+
       return {
         state: true,
-        message: "Se actualizó la asignación correctamente."
+        message: "Se actualizó la asignación correctamente.",
+        asignacionTransporte: asignacionTransporte
       };
     } catch (error) {
       console.log(error, "error en transporteAsignadoService-updateAsignacion")
@@ -121,6 +133,44 @@ export class TransporteAsignadoService{
       const vehiculos: TransporteAsignadoEntity[] = await query.getMany();
       
       return vehiculos;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findBySolicitud(solicitudId: any): Promise<TransporteAsignadoEntity>
+  {
+    console.log("linea 143", solicitudId)
+    const query = this.asignacionRepository.createQueryBuilder('asignaciones')
+                  .leftJoinAndSelect('asignaciones.vehiculo', 'vehiculo')
+                  .leftJoinAndSelect('asignaciones.solicitud', 'solicitud')
+                  .where('solicitud.id = :solicitudId', { solicitudId: solicitudId });
+
+    try {
+      const asignacion: TransporteAsignadoEntity = await query.getOne();
+      return asignacion;
+    } catch (error) {
+      // throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findAsignacionById(id: number): Promise<TransporteAsignadoEntity>
+  {
+    try {
+      const asignacion : TransporteAsignadoEntity =  await this.asignacionRepository
+        .createQueryBuilder('transporteAsignado')
+        .where({id})
+        .getOne();
+
+        if(!asignacion)
+        {
+          throw new ErrorManager({
+            type: 'BAD_REQUEST',
+            message: `No se encontró la asignación de Id = ${id}`
+          });
+        }
+
+        return asignacion;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

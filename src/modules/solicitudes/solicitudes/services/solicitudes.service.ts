@@ -287,16 +287,22 @@ export class SolicitudesService{
         await this.etapaTrackerService.updateEtapaTracker(bodyEtapa, bodyEtapa.id);
       }
     }
-    
+    const existAsignacion = await this.transporteAsignadoService.findBySolicitud(body.solicitudId);
+    console.log(existAsignacion, "linea 291")
     try {
-      const nuevaAsignacion = await this.transporteAsignadoService.createAsignacion({
+
+      const asignacion = existAsignacion ? await this.transporteAsignadoService.updateTransporteAsignado({
+          solicitudId: body.solicitudId,
+          vehiculoId: body.vehiculoId
+        }, existAsignacion.id)
+       : await this.transporteAsignadoService.createAsignacion({
         solicitudId: body.solicitudId,
         vehiculoId: body.vehiculoId
       });
 
       const updateSolicitud = await this.updateSolicitud({
         estadoSolicitud: 3,
-        asignacionTransporte: nuevaAsignacion.asignacionTransporte
+        asignacionTransporte: asignacion.asignacionTransporte
       }, body.solicitudId);
       
       const updateVehiculo = await this.vehiculoService.updateVehiculo(bodyVehiculo, body.vehiculoId);
