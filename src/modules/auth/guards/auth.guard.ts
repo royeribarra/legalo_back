@@ -50,8 +50,8 @@ import { IUseToken } from '../interfaces/auth.interface';
         throw new UnauthorizedException('Invalid user');
       }
   
-      req.idUser = user.id
-      req.roleUser = user.rol
+      // req.idUser = user.id
+      // req.roleUser = user.rol
       return true;
     }
   }
