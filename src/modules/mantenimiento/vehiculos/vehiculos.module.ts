@@ -5,7 +5,7 @@ import { VehiculosService } from './services/vehiculos.service';
 import { VehiculosController } from './controllers/vehiculos.controller';
 import { TipoVehiculoService } from './services/tipoVehiculo.service';
 import { TipoVehiculoEntity } from './entities/tipoVehiculo.entity';
-import { TipoVehiculoController } from './controllers/tipoVehiculo.controller';
+import { TipoVehiculoController } from './controllers/TipoVehiculo.controller';
 import { UsuariosService } from '../usuarios/services/usuarios.service';
 import { UsuariosEntity } from '../usuarios/entities/usuarios.entity';
 
