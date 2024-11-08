@@ -15,7 +15,6 @@ export interface IAbogado {
     apellidos: string;
     direccion: string;
     correo: string;
-    contrasena: string;
 
     sobre_ti: string;
     grado_academico: string;
@@ -32,7 +31,7 @@ export interface IAbogado {
     experiencias: IExperiencia[];
     educaciones: IEducacion[];
     especialidades: IEspecialidad[];
-    
+
     aplicaciones: IAplicacion[];
     trabajos: ITrabajo[];
 }

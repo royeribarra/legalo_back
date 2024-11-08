@@ -1,48 +1,33 @@
-import { BaseEntity } from '../../../../config/base.entity';
+
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-import { IConductor } from '../../../../interfaces/mantenimiento/conductor.interface';
-import { VehiculosEntity } from '../../vehiculos/entities/vehiculo.entity';
+import { UsuariosEntity } from 'src/modules/usuario/usuarios.entity';
+import { ICliente } from 'src/interfaces/Cliente.interface';
+import { BaseEntity } from 'src/config/base.entity';
 
 @Entity({name:'conductores'})
-export class ConductoresEntity extends BaseEntity implements IConductor
+export class ClientesEntity extends BaseEntity implements ICliente
 {
   @Column()
-  tipo: number;
+  nombres: string;
 
   @Column()
-  nombre: string;
+  apellidos: string;
 
   @Column()
-  apellido: string;
-
-  @Column({unique: true})
-  dni: string;
-
-  @Column({nullable: true})
   correo: string;
 
   @Column()
-  direccion: string;
+  tipo_persona: string;
 
   @Column()
-  telefono: string;
+  razon_social: string;
 
   @Column()
-  licenciaConducir: string;
-
-  @Column({nullable: true})
-  fechaContratacion: string;
+  telefono_contacto: string;
 
   @Column()
-  fechaVencimientoLicencia: string;
+  opinion: string;
 
-  @Column()
-  disponibilidad: string;
-
-  @Column({default: true})
-  isActive: boolean;
-
-  @OneToOne(() => VehiculosEntity, vehiculo => vehiculo.conductor)
-  @JoinColumn()
-  vehiculo: VehiculosEntity;
+  @OneToOne(() => UsuariosEntity, (usuario) => usuario.cliente)
+  usuario: UsuariosEntity;
 }

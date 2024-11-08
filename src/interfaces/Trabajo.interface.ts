@@ -8,5 +8,4 @@ export interface ITrabajo {
     fecha_inicio: string;
     fecha_fin: string;
     estado: number;
-    
 }
