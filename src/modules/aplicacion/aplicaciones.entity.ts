@@ -1,11 +1,10 @@
 
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-import { UsuariosEntity } from 'src/modules/usuario/usuarios.entity';
-import { ICliente } from 'src/interfaces/Cliente.interface';
-import { BaseEntity } from 'src/config/base.entity';
-import { IAplicacion } from 'src/interfaces/Aplicacion.interface';
+import { BaseEntity } from '../../../src/config/base.entity';
+import { IAplicacion } from '../../../src/interfaces/Aplicacion.interface';
 import { OfertasEntity } from '../oferta/oferta.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
+import { TrabajosEntity } from '../trabajo/trabajos.entity';
 
 @Entity({name:'aplicaciones'})
 export class AplicacionesEntity extends BaseEntity implements IAplicacion
@@ -21,4 +20,7 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
 
   @OneToOne(() => AbogadosEntity, (abogado) => abogado.aplicaciones)
   abogado: AbogadosEntity;
+
+  @OneToOne(() => TrabajosEntity, (trabajo) => trabajo.aplicacion)
+  trabajo: TrabajosEntity;
 }

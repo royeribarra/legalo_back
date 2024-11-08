@@ -1,15 +1,15 @@
 import { Body, Controller, Get, Param, Post, Put, UseGuards} from '@nestjs/common';
-import { RolDTO, RolUpdateDTO } from '../dto/rol.dto';
+import { RolDTO, RolUpdateDTO } from './perfil.dto';
 import { Delete } from '@nestjs/common/decorators';
-import { RolesService } from '../services/roles.service';
+import { PerfilesService } from './perfiles.services';
 import { ApiTags } from '@nestjs/swagger';
 
 
-@ApiTags('Roles')
-@Controller('roles')
+@ApiTags('Perfiles')
+@Controller('perfiles')
 
-export class RolesController {
-  constructor(private readonly rolService: RolesService) {}
+export class PerfilesController {
+  constructor(private readonly rolService: PerfilesService) {}
 
   @Post('register')
   public async registerRol(@Body() body:RolDTO){

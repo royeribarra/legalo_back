@@ -1,8 +1,8 @@
-import { IProfile } from "./Perfil.interface";
+import { IPerfil } from "./Perfil.interface";
 
 export interface IUsuario {
     usuario: string;
     contrasena: string;
     correo: string;
-    perfil: IProfile;
+    perfil: IPerfil;
 }

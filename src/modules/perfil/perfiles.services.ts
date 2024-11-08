@@ -1,30 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { RolDTO, RolUpdateDTO } from '../dto/rol.dto';
-import { ErrorManager } from '../../../../utils/error.manager';
-import { RolesEntity } from '../entities/roles.entity';
+import { RolDTO, RolUpdateDTO } from './perfil.dto';
+import { ErrorManager } from '../../utils/error.manager';
+import { PerfilesEntity } from './perfiles.entity';
 
 @Injectable()
-export class RolesService{
+export class PerfilesService{
   constructor(
-    @InjectRepository(RolesEntity) private readonly rolesRespository: Repository<RolesEntity>
+    @InjectRepository(PerfilesEntity) private readonly rolesRespository: Repository<PerfilesEntity>
   ){}
 
-  public async createRol(body: RolDTO): Promise<RolesEntity>
+  public async createRol(body: RolDTO): Promise<PerfilesEntity>
   {
     try {
-      const roles : RolesEntity = await this.rolesRespository.save(body);
+      const roles : PerfilesEntity = await this.rolesRespository.save(body);
       return roles;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
   }
 
-  public async findRoles(): Promise<RolesEntity[]>
+  public async findRoles(): Promise<PerfilesEntity[]>
   {
     try {
-      const roles : RolesEntity[] = await this.rolesRespository
+      const roles : PerfilesEntity[] = await this.rolesRespository
       .createQueryBuilder('roles')
       .leftJoinAndSelect('roles.modulos', 'modulos')
       .leftJoinAndSelect('roles.usuarios', 'usuarios')
@@ -35,10 +35,10 @@ export class RolesService{
     }
   }
 
-  public async findRolById(id: number): Promise<RolesEntity>
+  public async findRolById(id: number): Promise<PerfilesEntity>
   {
     try {
-      const rol : RolesEntity =  await this.rolesRespository
+      const rol : PerfilesEntity =  await this.rolesRespository
         .createQueryBuilder('roles')
         .where({id})
         .getOne();

@@ -2,10 +2,10 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { UsuarioDTO, UsuarioUpdateDTO } from '../dto/usuario.dto';
-import { ErrorManager } from '../../../../utils/error.manager';
-import { UsuariosEntity } from '../entities/usuarios.entity';
-import { RolesEntity } from '../../roles/entities/roles.entity';
+import { UsuarioDTO, UsuarioUpdateDTO } from './usuario.dto';
+import { ErrorManager } from '../../utils/error.manager';
+import { UsuariosEntity } from './usuarios.entity';
+import { PerfilesEntity } from '../perfil/perfiles.entity';
 
 @Injectable()
 export class UsuariosService{
@@ -13,7 +13,7 @@ export class UsuariosService{
     @InjectRepository(UsuariosEntity) private readonly usuariosRepository: Repository<UsuariosEntity>
   ){}
 
-  public async createUsuario(body: UsuarioDTO, rol: RolesEntity)
+  public async createUsuario(body: UsuarioDTO, rol: number)
   {
     const userExists = await this.findBy({
       key: 'correo',
@@ -31,7 +31,6 @@ export class UsuariosService{
 
     try {
       const data = new UsuariosEntity();
-      data.rol = rol;
       data.correo = body.correo;
       data.direccion = body.direccion;
       data.distrito = body.distrito;
@@ -98,12 +97,11 @@ export class UsuariosService{
     }
   }
 
-  public async updateUsuario(body: UsuarioUpdateDTO, id: number, rol: RolesEntity)
+  public async updateUsuario(body: UsuarioUpdateDTO, id: number)
   {
     const userInfo = this.findUsuarioById(id);
     try {
       const data = new UsuariosEntity();
-      data.rol = rol;
       data.correo = body.correo;
       data.direccion = body.direccion;
       data.distrito = body.distrito;

@@ -1,8 +1,8 @@
 
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { Exclude } from '@nestjs/class-transformer';
-import { IUsuario } from 'src/interfaces/Usuario.interface';
-import { BaseEntity } from 'src/config/base.entity';
+import { IUsuario } from '../../../src/interfaces/Usuario.interface';
+import { BaseEntity } from '../../../src/config/base.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { PerfilesEntity } from '../perfil/perfiles.entity';
@@ -49,7 +49,6 @@ export class UsuariosEntity extends BaseEntity implements IUsuario{
   @JoinColumn()
   cliente?: ClientesEntity;
 
-  @OneToOne(() => PerfilesEntity, (perfil) => perfil.usuario)
-  @JoinColumn()
+  @ManyToOne(() => PerfilesEntity, (perfil) => perfil.usuarios)
   perfil: PerfilesEntity;
 }

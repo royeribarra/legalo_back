@@ -1,4 +1,4 @@
-export interface IProfile {
+export interface IPerfil {
     nombre: string;
     descripcion: string;
 }

@@ -1,5 +1,4 @@
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail } from 'class-validator';
-import { RolesEntity } from '../../roles/entities/roles.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UsuarioDTO{
@@ -167,7 +166,4 @@ export class UsuarioSeederDTO{
   @IsNotEmpty()
   @IsString()
   telefono: string;
-
-  @IsNotEmpty()
-  rol: RolesEntity;
 }

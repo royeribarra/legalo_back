@@ -1,11 +1,11 @@
-import { BaseEntity } from '../../../../config/base.entity';
+
 import { Column, Entity, JoinTable, OneToMany } from 'typeorm';
-import { IRol } from '../../../../interfaces/mantenimiento/rol.interface';
-import { UsuariosEntity } from '../../usuarios/entities/usuarios.entity';
-import { RolesModulosWebEntity } from './rolModulosWeb.entity';
+import { IPerfil } from '../../../src/interfaces/Perfil.interface';
+import { UsuariosEntity } from '../usuario/usuarios.entity';
+import { BaseEntity } from '../../../src/config/base.entity';
 
 @Entity({name:'perfiles'})
-export class PerfilesEntity extends BaseEntity implements IRol{
+export class PerfilesEntity extends BaseEntity implements IPerfil{
 
   @Column({unique: true})
   nombre: string;
@@ -13,10 +13,6 @@ export class PerfilesEntity extends BaseEntity implements IRol{
   @Column()
   descripcion: string;
 
-  @OneToMany(() => UsuariosEntity, usuario => usuario.rol)
+  @OneToMany(() => UsuariosEntity, (usuario) => usuario.perfil)
   usuarios: UsuariosEntity[];
-
-  @OneToMany(() => RolesModulosWebEntity, modulo => modulo.rol)
-  @JoinTable()
-  modulos: RolesModulosWebEntity[];
 }

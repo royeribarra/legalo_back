@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
-import { BaseEntity } from 'src/config/base.entity';
-import { IHabilidadDura } from 'src/interfaces/HabilidadDura.interface';
+import { BaseEntity } from '../../../src/config/base.entity';
+import { IHabilidadDura } from '../../../src/interfaces/HabilidadDura.interface';
 
 @Entity()
 export class HabilidadesDuraEntity extends BaseEntity implements IHabilidadDura{

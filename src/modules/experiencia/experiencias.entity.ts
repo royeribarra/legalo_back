@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
-import { BaseEntity } from 'src/config/base.entity';
-import { IExperiencia } from 'src/interfaces/Experiencia.interface';
+import { BaseEntity } from '../../../src/config/base.entity';
+import { IExperiencia } from '../../../src/interfaces/Experiencia.interface';
 
 @Entity()
 export class ExperienciasEntity extends BaseEntity implements IExperiencia{

@@ -17,6 +17,7 @@ import { VehiculosModule } from './modules/mantenimiento/vehiculos/vehiculos.mod
 import { AreaEmpresaModule } from './modules/mantenimiento/areasEmpresa/areaEmpresa.module';
 import { TipoVehiculoService } from './modules/mantenimiento/vehiculos/services/tipoVehiculo.service';
 import { TransporteAsignadoModule } from './modules/solicitudes/transporteAsignado/transporteAsignado.module';
+import { AbogadoModule } from './modules/abogado/abogado.module';
 
 @Module({
   imports: [
@@ -25,18 +26,7 @@ import { TransporteAsignadoModule } from './modules/solicitudes/transporteAsigna
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({...DataSourceConfig}),
-    AreaEmpresaModule,
-    AuthModule,
-    ClientesModule,
-    ConductoresModule,
-    ResiduosModule,
-    RolesModule,
-    SolicitudesModule,
-    SucursalesClienteModule,
-    TiposResiduoModule,
-    UsuariosModule,
-    VehiculosModule,
-    TransporteAsignadoModule
+    AbogadoModule
   ],
   controllers: [AppController],
   providers: [AppService],

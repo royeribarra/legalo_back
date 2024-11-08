@@ -1,10 +1,12 @@
 
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
-import { UsuariosEntity } from 'src/modules/usuario/usuarios.entity';
-import { ICliente } from 'src/interfaces/Cliente.interface';
-import { BaseEntity } from 'src/config/base.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { UsuariosEntity } from '../../../../src/modules/usuario/usuarios.entity';
+import { ICliente } from '../../../../src/interfaces/Cliente.interface';
+import { BaseEntity } from '../../../../src/config/base.entity';
+import { OfertasEntity } from '../../../../src/modules/oferta/oferta.entity';
+import { TrabajosEntity } from '../../../../src/modules/trabajo/trabajos.entity';
 
-@Entity({name:'conductores'})
+@Entity({name:'clientes'})
 export class ClientesEntity extends BaseEntity implements ICliente
 {
   @Column()
@@ -30,4 +32,10 @@ export class ClientesEntity extends BaseEntity implements ICliente
 
   @OneToOne(() => UsuariosEntity, (usuario) => usuario.cliente)
   usuario: UsuariosEntity;
+
+  @OneToMany(() => OfertasEntity, (oferta) => oferta.cliente)
+  ofertas: OfertasEntity[];
+
+  @OneToMany(() => TrabajosEntity, (trabajo) => trabajo.cliente)
+  trabajos: TrabajosEntity[];
 }

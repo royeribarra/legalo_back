@@ -1,17 +1,17 @@
 
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
-import { IAbogado } from 'src/interfaces/Abogado.interface';
-import { UsuariosEntity } from 'src/modules/usuario/usuarios.entity';
-import { BaseEntity } from 'src/config/base.entity';
-import { HabilidadesBlandaEntity } from 'src/modules/habilidadBlanda/habilidadesBlanda.entity';
-import { HabilidadesDuraEntity } from 'src/modules/habilidadDura/habilidadesDura.entity';
-import { IndustriasEntity } from 'src/modules/industria/industrias.entity';
-import { ServiciosEntity } from 'src/modules/servicio/servicios.entity';
-import { ExperienciasEntity } from 'src/modules/experiencia/experiencias.entity';
-import { EducacionesEntity } from 'src/modules/educacion/educaciones.entity';
-import { EspecialidadesEntity } from 'src/modules/especialidad/especialidades.entity';
-import { AplicacionesEntity } from 'src/modules/aplicacion/aplicaciones.entity';
-import { TrabajosEntity } from 'src/modules/trabajo/trabajos.entity';
+import { IAbogado } from '../../../../src/interfaces/Abogado.interface';
+import { UsuariosEntity } from '../../../../src/modules/usuario/usuarios.entity';
+import { BaseEntity } from '../../../../src/config/base.entity';
+import { HabilidadesBlandaEntity } from '../../../../src/modules/habilidadBlanda/habilidadesBlanda.entity';
+import { HabilidadesDuraEntity } from '../../../../src/modules/habilidadDura/habilidadesDura.entity';
+import { IndustriasEntity } from '../../../../src/modules/industria/industrias.entity';
+import { ServiciosEntity } from '../../../../src/modules/servicio/servicios.entity';
+import { ExperienciasEntity } from '../../../../src/modules/experiencia/experiencias.entity';
+import { EducacionesEntity } from '../../../../src/modules/educacion/educaciones.entity';
+import { EspecialidadesEntity } from '../../../../src/modules/especialidad/especialidades.entity';
+import { AplicacionesEntity } from '../../../../src/modules/aplicacion/aplicaciones.entity';
+import { TrabajosEntity } from '../../../../src/modules/trabajo/trabajos.entity';
 
 @Entity({name:'abogados'})
 export class AbogadosEntity extends BaseEntity implements IAbogado

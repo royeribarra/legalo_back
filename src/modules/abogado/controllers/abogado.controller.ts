@@ -1,58 +1,57 @@
 import { Body, Controller, Get, Param, Post, Put, Query} from '@nestjs/common';
-import { ConductorDTO, ConductorUpdateDTO } from '../dto/conductor.dto';
 import { Delete } from '@nestjs/common/decorators';
-import { ConductoresService } from '../services/conductores.service';
 import { ApiTags } from '@nestjs/swagger';
-import { VehiculosService } from '../../vehiculos/services/vehiculos.service';
+import { AbogadosService } from '../services/abogados.service';
+import { AbogadoDTO } from '../dto/abogado.dto';
 
-@ApiTags('Conductores')
-@Controller('conductores')
-export class ConductoresController {
+@ApiTags('Abogados')
+@Controller('abogados')
+export class AbogadosController {
   constructor(
-    private readonly conductoresService: ConductoresService,
-    private readonly vehiculoService: VehiculosService
+    private readonly abogadosService: AbogadosService,
     ) {}
 
   @Post('create')
-  public async registerConductor(@Body() body:ConductorDTO){
-    const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
-    const { state, message, conductor } = await this.conductoresService.createConductor(body, vehiculo);
+  public async registerAbogado(@Body() body: AbogadoDTO){
+    // const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
+    // const { state, message, conductor } = await this.abogadosService.createAbogado(body);
     return {
-      state: state,
-      message: message,
-      conductor: conductor
+      // state: state,
+      // message: message,
+      // conductor: conductor,
+      body: body
     }
   }
 
-  @Get('all')
-  public async findAllConductores(@Query() queryParams: any)
-  {
-    return await this.conductoresService.findConductores(queryParams);
-  }
+  // @Get('all')
+  // public async findAllConductores(@Query() queryParams: any)
+  // {
+  //   return await this.abogadosService.findConductores(queryParams);
+  // }
 
-  @Get(':id')
-  public async findConductorById(@Param('id') id: number){
-    return await this.conductoresService.findConductorById(id);
-  }
+  // @Get(':id')
+  // public async findConductorById(@Param('id') id: number){
+  //   return await this.abogadosService.findConductorById(id);
+  // }
 
-  @Put('edit/:id')
-  public async updateConductor(@Body() body: ConductorUpdateDTO, @Param('id') id: number){
-    const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
+  // @Put('edit/:id')
+  // public async updateConductor(@Body() body: ConductorUpdateDTO, @Param('id') id: number){
+  //   const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
 
-    const {state, message} = await this.conductoresService.updateConductor(body, id, vehiculo);
-    return {
-      state: state,
-      message: message,
-    }
-  }
+  //   const {state, message} = await this.abogadosService.updateConductor(body, id, vehiculo);
+  //   return {
+  //     state: state,
+  //     message: message,
+  //   }
+  // }
 
-  @Delete(':id')
-  public async deleteConductor(@Param('id') id:string){
-    const{ state, message} = await this.conductoresService.deleteConductor(id);
-    return {
-      state: state,
-      message: message
-    }
-  }
+  // @Delete(':id')
+  // public async deleteConductor(@Param('id') id:string){
+  //   const{ state, message} = await this.abogadosService.deleteConductor(id);
+  //   return {
+  //     state: state,
+  //     message: message
+  //   }
+  // }
 
 }

@@ -1,16 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany } from 'typeorm';
-import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { BaseEntity } from '../../../src/config/base.entity';
-import { IServicio } from '../../../src/interfaces/Servicio.interface';
 import { OfertasEntity } from '../oferta/oferta.entity';
+import { IPreguntaOferta } from '../../../src/interfaces/PreguntaOferta.interface';
 
 @Entity()
-export class ServiciosEntity extends BaseEntity implements IServicio{
+export class PreguntasOfertaEntity extends BaseEntity implements IPreguntaOferta{
   @Column()
-  nombre: string;
-
-  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.servicios)
-  abogado: AbogadosEntity;
+  pregunta: string;
 
   @ManyToMany(() => OfertasEntity, (oferta) => oferta.servicios)
   ofertas: OfertasEntity[];

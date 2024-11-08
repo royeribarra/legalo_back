@@ -16,5 +16,4 @@ export interface ICliente{
 
     ofertas: IOferta[];
     trabajos: ITrabajo[];
-    aplicaciones: IAplicacion[];
 }

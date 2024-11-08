@@ -1,14 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToOne } from 'typeorm';
-import { AbogadosEntity } from '../abogado/entities/abogados.entity';
-import { BaseEntity } from 'src/config/base.entity';
-import { IExperiencia } from 'src/interfaces/Experiencia.interface';
-import { IOferta } from 'src/interfaces/Oferta.interface';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToOne, OneToMany } from 'typeorm';
+import { BaseEntity } from '../../../src/config/base.entity';
+import { IOferta } from '../../../src/interfaces/Oferta.interface';
 import { EspecialidadesEntity } from '../especialidad/especialidades.entity';
 import { ServiciosEntity } from '../servicio/servicios.entity';
-import { ClientesEntity } from '../solicitudes/clientes/entities/clientes.entity';
+import { ClientesEntity } from '../cliente/entities/clientes.entity';
+import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
+import { PreguntasOfertaEntity } from '../preguntas_oferta/preguntasOferta.entity';
 
 @Entity()
 export class OfertasEntity extends BaseEntity implements IOferta{
+  @Column()
+  titulo: string;
+
+  @Column()
+  descripcion: string;
+
   @Column()
   documento_url: string;
 
@@ -19,13 +25,7 @@ export class OfertasEntity extends BaseEntity implements IOferta{
   experiencia_abogado: string;
 
   @Column()
-  titulo: string;
-
-  @Column()
   salario: string;
-
-  @Column()
-  descripcion: string;
 
   @Column()
   estado: string;
@@ -38,12 +38,12 @@ export class OfertasEntity extends BaseEntity implements IOferta{
   @JoinTable()
   servicios: ServiciosEntity[];
 
-  @OneToOne(() => ClientesEntity, (cliente) => cliente.oferta)
+  @ManyToOne(() => ClientesEntity, (cliente) => cliente.ofertas)
   cliente: ClientesEntity;
 
-  @Column()
-  salario: string;
+  @OneToMany(() => AplicacionesEntity, (aplicacion) => aplicacion.oferta)
+  aplicaciones: AplicacionesEntity[];
 
-  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.aplicaciones)
-  abogado: AbogadosEntity;
+  @OneToMany(() => PreguntasOfertaEntity, (preguntas) => preguntas.ofertas)
+  preguntas_oferta: PreguntasOfertaEntity[];
 }

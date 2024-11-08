@@ -1,8 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
+import { BaseEntity } from '../../../src/config/base.entity';
+import { IIndutria } from '../../../src/interfaces/Industria.interface';
 
 @Entity()
-export class IndustriasEntity {
+export class IndustriasEntity extends BaseEntity implements IIndutria{
   @Column()
   nombre: string;
 
