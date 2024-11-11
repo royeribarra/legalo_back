@@ -15,7 +15,7 @@ import { SucursalesClienteService } from '../sucursalesCliente/services/sucursal
 import { ClientesEntity } from '../clientes/entities/clientes.entity';
 import { SucursalesClienteEntity } from '../sucursalesCliente/entities/sucursalesCliente.entity';
 import { UsuariosService } from '../../mantenimiento/usuarios/services/usuarios.service';
-import { UsuariosEntity } from '../../mantenimiento/usuarios/entities/usuarios.entity';
+import { UsuariosPasadoEntity } from '../../mantenimiento/usuarios/entities/usuarios.entity';
 import { EtapaTrackerService } from '../tracker/services/etapaTracker.service';
 import { EtapaTrackerEntity } from '../tracker/entities/etapaTracker.entity';
 import { VehiculosService } from '../../mantenimiento/vehiculos/services/vehiculos.service';
@@ -43,7 +43,7 @@ import { TiposResiduoUnidadMedidaEntity } from 'src/modules/mantenimiento/tiposR
       ResiduosRecojoEntity,
       ClientesEntity,
       SucursalesClienteEntity,
-      UsuariosEntity,
+      UsuariosPasadoEntity,
       EtapaTrackerEntity,
       VehiculosEntity,
       TipoVehiculoEntity,

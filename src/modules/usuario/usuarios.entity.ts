@@ -11,10 +11,10 @@ import { PerfilesEntity } from '../perfil/perfiles.entity';
 export class UsuariosEntity extends BaseEntity implements IUsuario{
 
   @Column()
-  nombre: string;
+  nombres: string;
 
   @Column()
-  apellido: string;
+  apellidos: string;
 
   @Column({ unique: true })
   correo: string;
@@ -35,11 +35,14 @@ export class UsuariosEntity extends BaseEntity implements IUsuario{
   @Column()
   telefono: string;
 
-  @Column({ nullable: true })
-  distrito: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  activationCode: string;
 
-  @Column({ nullable: true })
-  provincia: string;
+  @Column({ type: 'timestamp', nullable: true })
+  activationCodeExpires: Date;
+
+  @Column({ type: 'boolean', default: false })
+  isActive: boolean;
 
   @OneToOne(() => AbogadosEntity, (abogado) => abogado.usuario)
   @JoinColumn()
@@ -48,7 +51,4 @@ export class UsuariosEntity extends BaseEntity implements IUsuario{
   @OneToOne(() => ClientesEntity, (cliente) => cliente.usuario)
   @JoinColumn()
   cliente?: ClientesEntity;
-
-  @ManyToOne(() => PerfilesEntity, (perfil) => perfil.usuarios)
-  perfil: PerfilesEntity;
 }

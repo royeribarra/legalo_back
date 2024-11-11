@@ -4,13 +4,13 @@ import * as bcrypt from 'bcrypt';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { UsuarioDTO, UsuarioUpdateDTO } from '../dto/usuario.dto';
 import { ErrorManager } from '../../../../utils/error.manager';
-import { UsuariosEntity } from '../entities/usuarios.entity';
+import { UsuariosPasadoEntity } from '../entities/usuarios.entity';
 import { RolesEntity } from '../../roles/entities/roles.entity';
 
 @Injectable()
 export class UsuariosService{
   constructor(
-    @InjectRepository(UsuariosEntity) private readonly usuariosRepository: Repository<UsuariosEntity>
+    @InjectRepository(UsuariosPasadoEntity) private readonly usuariosRepository: Repository<UsuariosPasadoEntity>
   ){}
 
   public async createUsuario(body: UsuarioDTO, rol: RolesEntity)
@@ -30,7 +30,7 @@ export class UsuariosService{
     }
 
     try {
-      const data = new UsuariosEntity();
+      const data = new UsuariosPasadoEntity();
       data.rol = rol;
       data.correo = body.correo;
       data.direccion = body.direccion;
@@ -44,7 +44,7 @@ export class UsuariosService{
 
       data.contrasena = await bcrypt.hash(body.contrasena, +process.env.HASH_SALT);
       
-      const usuario : UsuariosEntity = await this.usuariosRepository.save(data);
+      const usuario : UsuariosPasadoEntity = await this.usuariosRepository.save(data);
       
       return {
         state: true,
@@ -57,7 +57,7 @@ export class UsuariosService{
     }
   }
 
-  public async findUsuarios(queryParams): Promise<UsuariosEntity[]>
+  public async findUsuarios(queryParams): Promise<UsuariosPasadoEntity[]>
   {
     const query = this.usuariosRepository.createQueryBuilder('usuarios')
       .leftJoinAndSelect('usuarios.rol', 'rol');
@@ -67,7 +67,7 @@ export class UsuariosService{
       query.andWhere('rol.id = :id', { id: queryParams.rolId });
     }
     try {
-      const usuarios: UsuariosEntity[] = await query.getMany();
+      const usuarios: UsuariosPasadoEntity[] = await query.getMany();
       
       return usuarios;
     } catch (error) {
@@ -75,10 +75,10 @@ export class UsuariosService{
     }
   }
 
-  public async findUsuarioById(id: number): Promise<UsuariosEntity>
+  public async findUsuarioById(id: number): Promise<UsuariosPasadoEntity>
   {
     try {
-      const usuario : UsuariosEntity =  await this.usuariosRepository
+      const usuario : UsuariosPasadoEntity =  await this.usuariosRepository
         .createQueryBuilder('usuarios')
         .leftJoinAndSelect('usuarios.rol', 'rol')
         .where({id})
@@ -102,7 +102,7 @@ export class UsuariosService{
   {
     const userInfo = this.findUsuarioById(id);
     try {
-      const data = new UsuariosEntity();
+      const data = new UsuariosPasadoEntity();
       data.rol = rol;
       data.correo = body.correo;
       data.direccion = body.direccion;
@@ -159,7 +159,7 @@ export class UsuariosService{
   public async findBy({key, value} : { key: keyof UsuarioDTO; value: any })
   {
     try {
-      const usuario: UsuariosEntity = await this.usuariosRepository.createQueryBuilder(
+      const usuario: UsuariosPasadoEntity = await this.usuariosRepository.createQueryBuilder(
         'usuario'
       )
       .leftJoinAndSelect('usuario.rol', 'rol')
@@ -175,7 +175,7 @@ export class UsuariosService{
   public async findUsuariosBy({key, value} : { key: keyof UsuarioDTO; value: any })
   {
     try {
-      const usuarios: UsuariosEntity[] = await this.usuariosRepository.createQueryBuilder(
+      const usuarios: UsuariosPasadoEntity[] = await this.usuariosRepository.createQueryBuilder(
         'usuarios'
       )
       .where({ [key]: value })

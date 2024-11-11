@@ -14,12 +14,11 @@ export class AbogadosController {
   @Post('create')
   public async registerAbogado(@Body() body: AbogadoDTO){
     // const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
-    // const { state, message, conductor } = await this.abogadosService.createAbogado(body);
+    const { state, message, abogado } = await this.abogadosService.createAbogado(body);
     return {
-      // state: state,
-      // message: message,
-      // conductor: conductor,
-      body: body
+      state: state,
+      message: message,
+      abogado: abogado
     }
   }
 
@@ -29,10 +28,10 @@ export class AbogadosController {
   //   return await this.abogadosService.findConductores(queryParams);
   // }
 
-  // @Get(':id')
-  // public async findConductorById(@Param('id') id: number){
-  //   return await this.abogadosService.findConductorById(id);
-  // }
+  @Get(':id')
+  public async findConductorById(@Param('id') id: number){
+    return await this.abogadosService.findAbogadoById(id);
+  }
 
   // @Put('edit/:id')
   // public async updateConductor(@Body() body: ConductorUpdateDTO, @Param('id') id: number){

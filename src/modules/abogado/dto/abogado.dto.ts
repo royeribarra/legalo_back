@@ -28,6 +28,21 @@ export class AbogadoDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
+  contrasena: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  dni: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  telefono: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
   direccion: string;
 
   @ApiProperty()

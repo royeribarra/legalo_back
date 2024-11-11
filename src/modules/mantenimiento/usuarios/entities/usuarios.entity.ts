@@ -4,8 +4,8 @@ import { IUsuario } from '../../../../interfaces/mantenimiento/user.interface';
 import { RolesEntity } from '../../roles/entities/roles.entity';
 import { Exclude } from '@nestjs/class-transformer';
 
-@Entity({name:'usuarios'})
-export class UsuariosEntity extends BaseEntity implements IUsuario{
+@Entity({name:'usuarios_past'})
+export class UsuariosPasadoEntity extends BaseEntity implements IUsuario{
 
   @Column()
   nombre: string;

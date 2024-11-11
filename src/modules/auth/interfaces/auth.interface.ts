@@ -1,14 +1,15 @@
-import { UsuariosEntity } from "../../mantenimiento/usuarios/entities/usuarios.entity";
+
+
+import { UsuariosEntity } from "../../../../src/modules/usuario/usuarios.entity";
 import { RolesEntity } from "../../mantenimiento/roles/entities/roles.entity";
 
 export interface PayLoadToken{
   usuarioId: string,
-  rol: RolesEntity,
   user: UsuariosEntity
 }
 
 export interface AuthBody{
-  usuario: string,
+  correo: string,
   contrasena: string
 }
 

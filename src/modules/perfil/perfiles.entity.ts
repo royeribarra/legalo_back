@@ -12,7 +12,4 @@ export class PerfilesEntity extends BaseEntity implements IPerfil{
 
   @Column()
   descripcion: string;
-
-  @OneToMany(() => UsuariosEntity, (usuario) => usuario.perfil)
-  usuarios: UsuariosEntity[];
 }

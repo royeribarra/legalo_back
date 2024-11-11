@@ -6,49 +6,61 @@ import { UsuarioDTO, UsuarioUpdateDTO } from './usuario.dto';
 import { ErrorManager } from '../../utils/error.manager';
 import { UsuariosEntity } from './usuarios.entity';
 import { PerfilesEntity } from '../perfil/perfiles.entity';
+import { AbogadosEntity } from '../abogado/entities/abogados.entity';
+import { ClientesEntity } from '../cliente/entities/clientes.entity';
 
 @Injectable()
 export class UsuariosService{
   constructor(
-    @InjectRepository(UsuariosEntity) private readonly usuariosRepository: Repository<UsuariosEntity>
+    @InjectRepository(UsuariosEntity) private readonly usuariosRepository: Repository<UsuariosEntity>,
+    @InjectRepository(AbogadosEntity) private readonly abogadosRepository: Repository<AbogadosEntity>,
+    @InjectRepository(ClientesEntity) private readonly clientesRepository: Repository<ClientesEntity>,
   ){}
 
-  public async createUsuario(body: UsuarioDTO, rol: number)
+  public async createUsuario(datosUsuario: UsuarioDTO)
   {
     const userExists = await this.findBy({
       key: 'correo',
-      value: body.correo
+      value: datosUsuario.correo
     })
 
     if(userExists)
     {
       return {
         state: false,
-        message: `Ya existe el usuario con correo ${body.correo}`,
+        message: `Ya existe el usuario con correo ${datosUsuario.correo}`,
         usuario: null
       }
     }
 
     try {
-      const data = new UsuariosEntity();
-      data.correo = body.correo;
-      data.direccion = body.direccion;
-      data.distrito = body.distrito;
-      data.dni = body.dni;
-      data.nombre = body.nombre;
-      data.apellido = body.apellido;
-      data.provincia = body.provincia;
-      data.telefono = body.telefono;
-      data.usuario = body.usuario;
+      const usuario = new UsuariosEntity();
+      usuario.correo = datosUsuario.correo;
+      usuario.dni = datosUsuario.dni;
+      usuario.nombres = datosUsuario.nombres;
+      usuario.apellidos = datosUsuario.apellidos;
+      usuario.telefono = datosUsuario.telefono;
 
-      data.contrasena = await bcrypt.hash(body.contrasena, +process.env.HASH_SALT);
+      if (datosUsuario.abogadoId) {
+        usuario.abogado = await this.abogadosRepository.findOneBy({
+          id: datosUsuario.abogadoId,
+        });
+      }
+  
+      if (datosUsuario.clienteId) {
+        usuario.cliente = await this.clientesRepository.findOneBy({
+          id: datosUsuario.clienteId,
+        });
+      }
+
+      usuario.contrasena = await bcrypt.hash(usuario.contrasena, +process.env.HASH_SALT);
       
-      const usuario : UsuariosEntity = await this.usuariosRepository.save(data);
+      const newUsuario : UsuariosEntity = await this.usuariosRepository.save(usuario);
       
       return {
         state: true,
         message: `Usuario creado correctamente`,
-        usuario: usuario
+        usuario: newUsuario
       }
 
     } catch (error) {
@@ -103,12 +115,9 @@ export class UsuariosService{
     try {
       const data = new UsuariosEntity();
       data.correo = body.correo;
-      data.direccion = body.direccion;
-      data.distrito = body.distrito;
       data.dni = body.dni;
-      data.nombre = body.nombre;
-      data.apellido = body.apellido;
-      data.provincia = body.provincia;
+      data.nombres = body.nombre;
+      data.apellidos = body.apellido;
       data.telefono = body.telefono;
       data.usuario = body.usuario;
       data.contrasena = body.contrasena? await bcrypt.hash(body.contrasena, +process.env.HASH_SALT) : (await userInfo).contrasena;
@@ -182,5 +191,23 @@ export class UsuariosService{
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
+  }
+
+  public async saveActivationCode(correo: string, activationCode: string, expiresAt: Date): Promise<void> {
+    const user = await this.usuariosRepository.findOne({ where: { correo } });
+    user.activationCode = activationCode;
+    user.activationCodeExpires = expiresAt;
+    await this.usuariosRepository.save(user);
+  }
+
+  public async findUserByActivationCode(code: string): Promise<UsuariosEntity | null> {
+    return this.usuariosRepository.findOne({ where: { activationCode: code } });
+  }
+
+  public async activateUser(userId: number): Promise<void> {
+    const user = await this.usuariosRepository.findOne({ where: { id: userId } });
+    user.isActive = true;
+    user.activationCode = null;
+    await this.usuariosRepository.save(user);
   }
 }

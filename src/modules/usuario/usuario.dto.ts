@@ -1,16 +1,18 @@
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { ClientesEntity } from '../cliente/entities/clientes.entity';
+import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 
 export class UsuarioDTO{
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  nombre: string;
+  nombres: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  apellido: string;
+  apellidos: string;
 
   @ApiProperty()
   @IsEmail({}, { message: 'El correo electrónico no es válido.' })
@@ -21,27 +23,7 @@ export class UsuarioDTO{
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  usuario: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
   contrasena: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  direccion: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  distrito: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  provincia: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -55,8 +37,16 @@ export class UsuarioDTO{
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  rolId: number;
+  @IsString()
+  perfil: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  abogadoId?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  clienteId?: number;
 }
 
 export class UsuarioUpdateDTO{

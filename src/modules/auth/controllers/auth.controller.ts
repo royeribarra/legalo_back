@@ -18,9 +18,9 @@ export class AuthController {
   {}
 
   @Post('login')
-  public async login(@Body() {usuario, contrasena}: AuthDTO, @Res() response: Response)
+  public async login(@Body() {correo, contrasena}: AuthDTO, @Res() response: Response)
   {
-    const userValidate = await this.authService.validateUser(usuario, contrasena);
+    const userValidate = await this.authService.validateUser(correo, contrasena);
 
     if(!userValidate){
       //throw new UnauthorizedException('Data no validada.')

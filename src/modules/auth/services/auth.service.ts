@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '../jwt/jwt.service';
-import { UsuariosService } from '../../../modules/mantenimiento/usuarios/services/usuarios.service';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import { UsuariosEntity } from '../../../modules/mantenimiento/usuarios/entities/usuarios.entity';
 import { PayLoadToken } from '../interfaces/auth.interface';
+import { UsuariosEntity } from '../../usuario/usuarios.entity';
+import { UsuariosService } from '../../../../src/modules/usuario/usuario.service';
 
 @Injectable()
 export class AuthService {
@@ -15,18 +15,10 @@ export class AuthService {
 
   }
   public async validateUser(usuario: string, contrasena: string){
-    const userByUsername = await this.userService.findBy({
-      key: 'usuario',
-      value: usuario
-    });
     const userByEmail = await this.userService.findBy({
       key: 'correo',
       value: usuario
     });
-    if(userByUsername){
-      const match = await bcrypt.compare(contrasena, userByUsername.contrasena);
-      if (match) return userByUsername;
-    }
     if(userByEmail){
       const match = await bcrypt.compare(contrasena, userByEmail.contrasena);
       if (match) return userByEmail;
@@ -50,7 +42,6 @@ export class AuthService {
     const getUser = await this.userService.findUsuarioById(user.id);
 
     const payload : PayLoadToken= {
-      rol: getUser.rol,
       usuarioId: getUser.id.toString(),
       user: getUser
     };

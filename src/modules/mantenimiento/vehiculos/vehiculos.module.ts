@@ -7,14 +7,14 @@ import { TipoVehiculoService } from './services/tipoVehiculo.service';
 import { TipoVehiculoEntity } from './entities/tipoVehiculo.entity';
 import { TipoVehiculoController } from './controllers/TipoVehiculo.controller';
 import { UsuariosService } from '../usuarios/services/usuarios.service';
-import { UsuariosEntity } from '../usuarios/entities/usuarios.entity';
+import { UsuariosPasadoEntity } from '../usuarios/entities/usuarios.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       VehiculosEntity, 
       TipoVehiculoEntity,
-      UsuariosEntity
+      UsuariosPasadoEntity
     ])
   ],
   providers: [

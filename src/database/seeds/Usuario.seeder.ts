@@ -1,6 +1,6 @@
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
-import { UsuariosEntity } from '../../modules/mantenimiento/usuarios/entities/usuarios.entity';
+import { UsuariosPasadoEntity } from '../../modules/mantenimiento/usuarios/entities/usuarios.entity';
 import * as bcrypt from 'bcrypt';
 import { UsuarioDTO, UsuarioSeederDTO } from '../../modules/mantenimiento/usuarios/dto/usuario.dto';
 import { RolesEntity } from '../../modules/mantenimiento/roles/entities/roles.entity';
@@ -11,7 +11,7 @@ export default class UsuarioSeeder implements Seeder {
     factoryManager: SeederFactoryManager
   ): Promise<any> {
     const rolesRepository =  dataSource.getRepository(RolesEntity);
-    const userrepository =  dataSource.getRepository(UsuariosEntity);
+    const userrepository =  dataSource.getRepository(UsuariosPasadoEntity);
 
     const roles = await rolesRepository.find();
 

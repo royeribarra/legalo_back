@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards, Query} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseGuards, Query, BadRequestException} from '@nestjs/common';
 import { UsuarioDTO, UsuarioUpdateDTO } from './usuario.dto';
 import { Delete } from '@nestjs/common/decorators';
 import { UsuariosService } from './usuario.service';
@@ -18,7 +18,7 @@ export class UsuariosController {
   @Post('create')
   public async registerUsuario(@Body() body: UsuarioDTO)
   {
-    const { state, message, usuario } = await this.usuariosService.createUsuario(body, 1);
+    const { state, message, usuario } = await this.usuariosService.createUsuario(body);
 
     return {
       state: state,
@@ -66,5 +66,24 @@ export class UsuariosController {
       state: state,
       message: message
     }
+  }
+
+  @Get()
+  async activateAccount(@Query('codigo') codigo: string) {
+    const user = await this.usuariosService.findUserByActivationCode(codigo);
+
+    if (!user) {
+      throw new BadRequestException('Código de activación inválido o expirado');
+    }
+
+    // Verifica si el código no ha expirado
+    const currentDate = new Date();
+    if (user.activationCodeExpires < currentDate) {
+      throw new BadRequestException('El código de activación ha expirado');
+    }
+
+    // Activa la cuenta del usuario
+    await this.usuariosService.activateUser(user.id);
+    return { message: 'Cuenta activada correctamente' };
   }
 }
