@@ -12,6 +12,7 @@ import { HabilidadesDuraEntity } from '../../../../src/modules/habilidadDura/hab
 import { IndustriasEntity } from '../../../../src/modules/industria/industrias.entity';
 import { ServiciosEntity } from '../../../../src/modules/servicio/servicios.entity';
 import { UsuariosService } from '../../../../src/modules/usuario/usuario.service';
+import { AbogadoMailService } from '../../../../src/modules/mail/services/abogadoMail.service';
 
 @Injectable()
 export class AbogadosService{
@@ -26,6 +27,7 @@ export class AbogadosService{
     @InjectRepository(IndustriasEntity) private readonly industriaRepository: Repository<IndustriasEntity>,
     @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
     private readonly usuariosService: UsuariosService,
+    private readonly abogadoMailService: AbogadoMailService
   ){}
 
   public async createAbogado(body: AbogadoDTO)
@@ -151,8 +153,12 @@ export class AbogadosService{
         perfil: "Abogado",
         abogadoId: abogado.id
       }
+      console.log("creacion de usuario");
       const usuario = await this.usuariosService.createUsuario(datosUsuario);
+      
 
+      const { state } = await this.abogadoMailService.sendActivationEmail(body.correo, body.nombres, body.apellidos);
+      console.log("envio de mail");
       return {
         state: true,
         message: `Abogado creado correctamente`,

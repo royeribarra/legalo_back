@@ -26,7 +26,7 @@ export class UsuariosEntity extends BaseEntity implements IUsuario{
   @Column({ select: false })
   contrasena: string;
 
-  @Column()
+  @Column({ nullable: true })
   direccion: string;
 
   @Column({ unique: true })

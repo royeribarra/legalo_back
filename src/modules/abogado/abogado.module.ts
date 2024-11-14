@@ -11,6 +11,7 @@ import { HabilidadesBlandaEntity } from '../habilidadBlanda/habilidadesBlanda.en
 import { ServiciosEntity } from '../servicio/servicios.entity';
 import { IndustriasEntity } from '../industria/industrias.entity';
 import { UsuariosModule } from '../usuario/usuario.module';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UsuariosModule } from '../usuario/usuario.module';
       IndustriasEntity
     ]),
     UsuariosModule,
+    MailModule
   ],
   providers: [
     AbogadosService

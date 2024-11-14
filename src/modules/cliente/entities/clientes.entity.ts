@@ -22,6 +22,9 @@ export class ClientesEntity extends BaseEntity implements ICliente
   tipo_persona: string;
 
   @Column()
+  documento: string;
+
+  @Column()
   razon_social: string;
 
   @Column()

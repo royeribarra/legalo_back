@@ -10,8 +10,7 @@ export const useToken = (token: string) : IUseToken | string => {
     
     return{
       usuarioId: decode.usuarioId,
-      isExpired: +expiresDate <= +currentDate / 1000,
-      role: decode.role
+      isExpired: +expiresDate <= +currentDate / 1000
     }
   } catch (error) {
     return 'Token is invalid';

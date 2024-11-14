@@ -68,9 +68,9 @@ export class UsuariosController {
     }
   }
 
-  @Get()
-  async activateAccount(@Query('codigo') codigo: string) {
-    const user = await this.usuariosService.findUserByActivationCode(codigo);
+  @Post('verify-activation')
+  async activateAccount(@Body() body: any) {
+    const user = await this.usuariosService.findUserByActivationCode(body.code);
 
     if (!user) {
       throw new BadRequestException('Código de activación inválido o expirado');
@@ -84,6 +84,6 @@ export class UsuariosController {
 
     // Activa la cuenta del usuario
     await this.usuariosService.activateUser(user.id);
-    return { message: 'Cuenta activada correctamente' };
+    return { message: 'Cuenta activada correctamente', user, success: true };
   }
 }

@@ -40,7 +40,8 @@ export class UsuariosService{
       usuario.nombres = datosUsuario.nombres;
       usuario.apellidos = datosUsuario.apellidos;
       usuario.telefono = datosUsuario.telefono;
-
+      usuario.usuario = "user" + datosUsuario.dni;
+      
       if (datosUsuario.abogadoId) {
         usuario.abogado = await this.abogadosRepository.findOneBy({
           id: datosUsuario.abogadoId,
@@ -52,11 +53,10 @@ export class UsuariosService{
           id: datosUsuario.clienteId,
         });
       }
-
-      usuario.contrasena = await bcrypt.hash(usuario.contrasena, +process.env.HASH_SALT);
+      usuario.contrasena = await bcrypt.hash(datosUsuario.contrasena, +process.env.HASH_SALT);
       
       const newUsuario : UsuariosEntity = await this.usuariosRepository.save(usuario);
-      
+      console.log(newUsuario)
       return {
         state: true,
         message: `Usuario creado correctamente`,
@@ -64,6 +64,7 @@ export class UsuariosService{
       }
 
     } catch (error) {
+      console.log(error, "error creando usuario")
       throw ErrorManager.createSignatureError(error.message);
     }
   }
@@ -91,7 +92,6 @@ export class UsuariosService{
     try {
       const usuario : UsuariosEntity =  await this.usuariosRepository
         .createQueryBuilder('usuarios')
-        .leftJoinAndSelect('usuarios.rol', 'rol')
         .where({id})
         .getOne();
 
@@ -169,8 +169,9 @@ export class UsuariosService{
       const usuario: UsuariosEntity = await this.usuariosRepository.createQueryBuilder(
         'usuario'
       )
-      .leftJoinAndSelect('usuario.rol', 'rol')
       .addSelect('usuario.contrasena')
+      .leftJoinAndSelect('usuario.cliente', 'cliente')
+      .leftJoinAndSelect('usuario.abogado', 'abogado')
       .where({[key]: value})
       .getOne();
       return usuario;
@@ -201,6 +202,7 @@ export class UsuariosService{
   }
 
   public async findUserByActivationCode(code: string): Promise<UsuariosEntity | null> {
+    console.log(code)
     return this.usuariosRepository.findOne({ where: { activationCode: code } });
   }
 
