@@ -18,6 +18,8 @@ export interface IAbogado {
 
     sobre_ti: string;
     grado_academico: string;
+    cip: string;
+    colegio: string;
 
     video_url: string;
     foto_url: string;

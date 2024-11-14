@@ -58,6 +58,16 @@ export class AbogadoDTO {
   @ApiProperty()
   @IsOptional()
   @IsString()
+  cip: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  colegio: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
   video: string;
 
   @ApiProperty()

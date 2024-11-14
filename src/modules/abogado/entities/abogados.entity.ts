@@ -32,6 +32,12 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   sobre_ti: string;
 
   @Column()
+  cip: string;
+
+  @Column()
+  colegio: string;
+
+  @Column()
   grado_academico: string;
 
   @Column()

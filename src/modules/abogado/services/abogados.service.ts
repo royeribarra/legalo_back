@@ -93,7 +93,9 @@ export class AbogadosService{
       nuevoAbogado.grado_academico = body.grado_academico;
       nuevoAbogado.nombres = body.nombres;
       nuevoAbogado.sobre_ti = body.sobre_ti;
-      
+      nuevoAbogado.cip = body.cip;
+      nuevoAbogado.colegio = body.colegio;
+
       nuevoAbogado.habilidadesBlandas = [];
       nuevoAbogado.habilidadesDuras = [];
       nuevoAbogado.industrias = [];
