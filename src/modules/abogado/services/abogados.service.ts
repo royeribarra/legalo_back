@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { AbogadoDTO } from '../dto/abogado.dto';
@@ -13,6 +13,7 @@ import { IndustriasEntity } from '../../../../src/modules/industria/industrias.e
 import { ServiciosEntity } from '../../../../src/modules/servicio/servicios.entity';
 import { UsuariosService } from '../../../../src/modules/usuario/usuario.service';
 import { AbogadoMailService } from '../../../../src/modules/mail/services/abogadoMail.service';
+import { TempFilesService } from '../../../../src/modules/tmp/tmpFile.service';
 
 @Injectable()
 export class AbogadosService{
@@ -27,7 +28,8 @@ export class AbogadosService{
     @InjectRepository(IndustriasEntity) private readonly industriaRepository: Repository<IndustriasEntity>,
     @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
     private readonly usuariosService: UsuariosService,
-    private readonly abogadoMailService: AbogadoMailService
+    private readonly abogadoMailService: AbogadoMailService,
+    private readonly tempFilesService: TempFilesService
   ){}
 
   public async createAbogado(body: AbogadoDTO)
@@ -105,6 +107,11 @@ export class AbogadosService{
       nuevoAbogado.pdf_url = '';
       nuevoAbogado.video_url = '';
 
+      const tempFile = await this.tempFilesService.getFileByDni(body.dni);
+      if (!tempFile) {
+        throw new BadRequestException('Archivo temporal no encontrado');
+      }
+      nuevoAbogado.foto_url = tempFile.filePath;
       const abogado : AbogadosEntity = await this.abogadosRespository.save(nuevoAbogado);
 
       for (const educacion of educaciones) {

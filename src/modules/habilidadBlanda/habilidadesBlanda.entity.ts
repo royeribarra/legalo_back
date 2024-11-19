@@ -3,7 +3,7 @@ import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { BaseEntity } from '../../../src/config/base.entity';
 import { IHabilidaBlanda } from '../../../src/interfaces/HabilidadBlanda.interface';
 
-@Entity()
+@Entity({name:'habilidades_blandas'})
 export class HabilidadesBlandaEntity extends BaseEntity implements IHabilidaBlanda{
   @Column()
   nombre: string;

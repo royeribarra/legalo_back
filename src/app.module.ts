@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { AbogadoModule } from './modules/abogado/abogado.module';
 import { ClienteModule } from './modules/cliente/cliente.module';
+import { TmpModule } from './modules/tmp/tmp.module';
+import { OfertaModule } from './modules/oferta/oferta.module';
 
 @Module({
   imports: [
@@ -17,7 +19,9 @@ import { ClienteModule } from './modules/cliente/cliente.module';
     TypeOrmModule.forRoot({...DataSourceConfig}),
     AuthModule,
     AbogadoModule,
-    ClienteModule
+    ClienteModule,
+    TmpModule,
+    OfertaModule
   ],
   controllers: [AppController],
   providers: [AppService],

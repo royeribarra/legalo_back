@@ -1,8 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AbogadosEntity } from './entities/abogados.entity';
-import { AbogadosService } from './services/abogados.service';
-import { AbogadosController } from './controllers/abogado.controller';
 import { EducacionesEntity } from '../educacion/educaciones.entity';
 import { EspecialidadesEntity } from '../especialidad/especialidades.entity';
 import { ExperienciasEntity } from '../experiencia/experiencias.entity';
@@ -14,11 +11,14 @@ import { UsuariosModule } from '../usuario/usuario.module';
 import { MailModule } from '../mail/mail.module';
 import { TempFilesService } from '../tmp/tmpFile.service';
 import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
+import { OfertasEntity } from './oferta.entity';
+import { OfertaService } from './oferta.service';
+import { OfertaController } from './oferta.controller';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      AbogadosEntity,
+      OfertasEntity,
       EducacionesEntity,
       EspecialidadesEntity,
       ExperienciasEntity,
@@ -32,12 +32,12 @@ import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
     MailModule
   ],
   providers: [
-    AbogadosService,
+    OfertaService,
     TempFilesService
   ],
   controllers: [
-    AbogadosController
+    OfertaController
   ]
 })
 
-export class AbogadoModule {}
+export class OfertaModule {}

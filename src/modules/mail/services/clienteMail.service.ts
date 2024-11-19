@@ -1,53 +1,46 @@
-import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { SucursalesClienteEntity } from '../../solicitudes/sucursalesCliente/entities/sucursalesCliente.entity';
-import { ClientesEntity } from '../../solicitudes/clientes/entities/clientes.entity';
-import { ConductoresEntity } from '../../mantenimiento/conductores/entities/conductores.entity';
+import * as nodemailer from 'nodemailer';
+import { randomBytes } from 'crypto';
+import { UsuariosService } from '../../../../src/modules/usuario/usuario.service';
+import { MailerService } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class ClienteMailService {
-  constructor(private mailerService: MailerService) {}
+export class AbogadoMailService {
+    constructor(
+        private mailerService: MailerService,
+        private readonly usuarioService: UsuariosService,
+        private configService: ConfigService
+    ) {}
 
-  async solicitudRecojo(sucursal: SucursalesClienteEntity, cliente: ClientesEntity, residuos: any) 
-  {
+  async sendActivationEmail(userEmail: string, nombres: string, apellidos: string){
+    const activationCode = randomBytes(16).toString('hex');  // Genera un código aleatorio de 32 caracteres
+    const expirationTime = new Date();
+    expirationTime.setHours(expirationTime.getHours() + 24); // Establece el tiempo de expiración a 24 horas
+
+    // Guarda el código de activación y la fecha de expiración en la base de datos
+    await this.usuarioService.saveActivationCode(userEmail, activationCode, expirationTime);
+    console.log("llegue aqui")
+    const appUrl = this.configService.get<string>('REACT_APP_URL');
+    const linkActivacion = `${appUrl}/registro/cliente/bienvenida?code_activation=${activationCode}`;
     try {
-      const response = await this.mailerService.sendMail({
-        to: sucursal.correoContacto,
-        subject: 'Tu solicitud ha sido registrada.',
-        template: './cliente/solicitudRecojo',
-        context: {
-          contactoNombre: sucursal.contacto,
-          clienteNombre: cliente.nombre,
-          direccionSucursal: sucursal.direccion,
-          residuos: residuos
-        },
-      });
-      return {
-        state: true,
-        message: "Se envió el mensaje al cliente con éxito."
+        const response = await this.mailerService.sendMail({
+          to: userEmail,
+          subject: 'Bienvenido a Legalo.',
+          template: './abogado/bienvenido',
+          context: {
+            nombres: nombres,
+            apellidos: apellidos,
+            linkActivacion: linkActivacion,
+            tiempoExpiracion: expirationTime
+          },
+        });
+        return {
+          state: true,
+          message: "Se envió el mensaje al cliente con éxito."
+        }
+      } catch (error) {
+        console.log('error mailServiceAbogado', error)
       }
-    } catch (error) {
-      console.log('error mailServiceSolicitudRecojo', error)
-    }
-  }
-
-  async asignacionTransportista(cliente: ClientesEntity, sucursal: SucursalesClienteEntity, conductor: ConductoresEntity, supervisor: ConductoresEntity) 
-  {
-    try {
-      await this.mailerService.sendMail({
-        to: sucursal.correoContacto,
-        subject: 'Selección de conductor.',
-        template: './cliente/asignacionConductor',
-        context: {
-          contactoNombre: sucursal.contacto,
-          clienteNombre: cliente.nombre,
-          direccionSucursal: sucursal.direccion,
-          supervisor: supervisor,
-          conductor: conductor
-        },
-      });
-    } catch (error) {
-      console.log(error)
-    }
   }
 }

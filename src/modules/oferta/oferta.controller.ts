@@ -5,24 +5,24 @@ import { diskStorage } from "multer";
 import { v4 as uuidv4 } from "uuid";
 import { extname } from "path";
 import { ApiTags } from '@nestjs/swagger';
-import { AbogadosService } from '../services/abogados.service';
-import { AbogadoDTO } from '../dto/abogado.dto';
+import { OfertaService } from './oferta.service';
+import { OfertaDTO } from './oferta.dto';
 
-@ApiTags('Abogados')
-@Controller('abogados')
-export class AbogadosController {
+@ApiTags('Ofertas')
+@Controller('ofertas')
+export class OfertaController {
   constructor(
-    private readonly abogadosService: AbogadosService,
+    private readonly ofertaService: OfertaService,
     ) {}
 
   @Post('create')
-  public async registerAbogado(@Body() body: AbogadoDTO){
+  public async registerAbogado(@Body() body: OfertaDTO){
     // const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
-    const { state, message, abogado } = await this.abogadosService.createAbogado(body);
+    const { state, message, oferta } = await this.ofertaService.createOferta(body);
     return {
       state: state,
       message: message,
-      abogado: abogado
+      oferta: oferta
     }
   }
 
@@ -34,7 +34,7 @@ export class AbogadosController {
 
   @Get(':id')
   public async findConductorById(@Param('id') id: number){
-    return await this.abogadosService.findAbogadoById(id);
+    return await this.ofertaService.findOfertaById(id);
   }
 
   // @Post()

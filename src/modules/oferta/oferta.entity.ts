@@ -7,8 +7,11 @@ import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { PreguntasOfertaEntity } from '../preguntas_oferta/preguntasOferta.entity';
 
-@Entity()
+@Entity({name:'ofertas'})
 export class OfertasEntity extends BaseEntity implements IOferta{
+  @Column()
+  uso: string;
+
   @Column()
   titulo: string;
 
@@ -25,7 +28,10 @@ export class OfertasEntity extends BaseEntity implements IOferta{
   experiencia_abogado: string;
 
   @Column()
-  salario: string;
+  salario_minimo: string;
+
+  @Column()
+  salario_maximo: string;
 
   @Column()
   estado: string;

@@ -21,6 +21,7 @@ export class AuthService {
     });
     if(userByEmail){
       const match = await bcrypt.compare(contrasena, userByEmail.contrasena);
+      if(!userByEmail.isActive) return null;
       if (match) return userByEmail;
     }
     return null;

@@ -14,5 +14,6 @@ declare namespace NodeJS{
     MAIL_USER: string;
     MAIL_PASSWORD: string;
     MAIL_FROM: string;
+    REACT_APP_URL: string;
   }
 }

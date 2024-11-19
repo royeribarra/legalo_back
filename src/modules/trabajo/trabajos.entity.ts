@@ -5,7 +5,7 @@ import { ITrabajo } from '../../../src/interfaces/Trabajo.interface';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 
-@Entity()
+@Entity({name: 'trabajos'})
 export class TrabajosEntity extends BaseEntity implements ITrabajo{
   @Column()
   estado: number;

@@ -4,7 +4,7 @@ import { BaseEntity } from '../../../src/config/base.entity';
 import { IServicio } from '../../../src/interfaces/Servicio.interface';
 import { OfertasEntity } from '../oferta/oferta.entity';
 
-@Entity()
+@Entity({name: 'servicios'})
 export class ServiciosEntity extends BaseEntity implements IServicio{
   @Column()
   nombre: string;

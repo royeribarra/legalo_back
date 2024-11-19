@@ -3,12 +3,14 @@ import * as nodemailer from 'nodemailer';
 import { randomBytes } from 'crypto';
 import { UsuariosService } from '../../../../src/modules/usuario/usuario.service';
 import { MailerService } from '@nestjs-modules/mailer';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AbogadoMailService {
     constructor(
         private mailerService: MailerService,
-        private readonly usuarioService: UsuariosService
+        private readonly usuarioService: UsuariosService,
+        private configService: ConfigService
     ) {}
 
   async sendActivationEmail(userEmail: string, nombres: string, apellidos: string){
@@ -18,7 +20,9 @@ export class AbogadoMailService {
 
     // Guarda el código de activación y la fecha de expiración en la base de datos
     await this.usuarioService.saveActivationCode(userEmail, activationCode, expirationTime);
-
+    const appUrl = this.configService.get<string>('REACT_APP_URL');
+    console.log(appUrl)
+    const linkActivacion = `${appUrl}/registro/abogado/bienvenida?code_activation=${activationCode}`;
     try {
         const response = await this.mailerService.sendMail({
           to: userEmail,
@@ -27,7 +31,7 @@ export class AbogadoMailService {
           context: {
             nombres: nombres,
             apellidos: apellidos,
-            codigoDeActivacion: activationCode,
+            linkActivacion: linkActivacion,
             tiempoExpiracion: expirationTime
           },
         });

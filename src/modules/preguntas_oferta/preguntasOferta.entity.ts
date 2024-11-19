@@ -3,7 +3,7 @@ import { BaseEntity } from '../../../src/config/base.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
 import { IPreguntaOferta } from '../../../src/interfaces/PreguntaOferta.interface';
 
-@Entity()
+@Entity({name: 'preguntas_oferta'})
 export class PreguntasOfertaEntity extends BaseEntity implements IPreguntaOferta{
   @Column()
   pregunta: string;

@@ -31,10 +31,10 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   @Column()
   sobre_ti: string;
 
-  @Column()
+  @Column({nullable: true})
   cip: string;
 
-  @Column()
+  @Column({nullable: true})
   colegio: string;
 
   @Column()

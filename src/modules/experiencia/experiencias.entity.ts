@@ -3,7 +3,7 @@ import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { BaseEntity } from '../../../src/config/base.entity';
 import { IExperiencia } from '../../../src/interfaces/Experiencia.interface';
 
-@Entity()
+@Entity({name:'experiencias'})
 export class ExperienciasEntity extends BaseEntity implements IExperiencia{
   @Column()
   fecha_fin: string;

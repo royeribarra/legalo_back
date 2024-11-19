@@ -33,7 +33,7 @@ export class ClienteDTO {
   telefono: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   empresa: string;
 

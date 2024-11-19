@@ -24,7 +24,7 @@ export class ClientesEntity extends BaseEntity implements ICliente
   @Column()
   documento: string;
 
-  @Column()
+  @Column({nullable: true})
   razon_social: string;
 
   @Column()

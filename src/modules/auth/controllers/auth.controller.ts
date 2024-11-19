@@ -3,7 +3,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service'
 import { AuthDTO } from '../dto/auth.dto';
 import { Response } from 'express';
-import { ClientesService } from '../../solicitudes/clientes/services/clientes.service';
 // import { SucursalesClienteService } from '../../solicitudes/sucursalesCliente/services/sucursalesCliente.service';
 
 @ApiTags('auth')

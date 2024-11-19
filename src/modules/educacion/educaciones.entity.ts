@@ -5,7 +5,7 @@ import { IEducacion } from '../../../src/interfaces/Educacion.interface';
 
 @Entity()
 export class EducacionesEntity extends BaseEntity implements IEducacion{
-  @Column()
+  @Column({name:'educaciones'})
   fecha_fin: string;
 
   @Column()
@@ -20,7 +20,7 @@ export class EducacionesEntity extends BaseEntity implements IEducacion{
   @Column()
   ubicacion: string;
 
-  @Column()
+  @Column({nullable: true})
   descripcion: string;
 
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.habilidadesBlandas)
