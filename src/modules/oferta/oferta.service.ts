@@ -97,4 +97,32 @@ export class OfertaService{
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  async aceptarPostulacion(ofertaId: number, postulacionId: number): Promise<Trabajo> {
+    const oferta = await this.ofertaRepository.findOne(ofertaId);
+    const postulacion = await this.postulacionRepository.findOne(postulacionId);
+    
+    if (!oferta || !postulacion) {
+      throw new Error('Oferta o postulación no encontrada');
+    }
+
+    // Crear el trabajo
+    const trabajo = this.trabajoRepository.create({
+      cliente: oferta.cliente,
+      abogado: postulacion.abogado,
+      oferta: oferta,
+      postulacion: postulacion,
+      fechaInicio: new Date(),
+      estado: 'en curso',
+    });
+    
+    // Guardar el trabajo y actualizar la postulación
+    await this.trabajoRepository.save(trabajo);
+    
+    // Marcar la postulación como parte del trabajo
+    postulacion.trabajo = trabajo;
+    await this.postulacionRepository.save(postulacion);
+
+    return trabajo;
+  }
 }
