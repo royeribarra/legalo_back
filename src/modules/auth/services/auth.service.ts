@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { PayLoadToken } from '../interfaces/auth.interface';
 import { UsuariosEntity } from '../../usuario/usuarios.entity';
-import { UsuariosService } from '../../../../src/modules/usuario/usuario.service';
+import { UsuariosService } from '../../usuario/usuario.service';
 
 @Injectable()
 export class AuthService {
