@@ -14,6 +14,8 @@ import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
 import { OfertasEntity } from './oferta.entity';
 import { OfertaService } from './oferta.service';
 import { OfertaController } from './oferta.controller';
+import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
+import { TrabajosEntity } from '../trabajo/trabajos.entity';
 
 @Module({
   imports: [
@@ -26,7 +28,9 @@ import { OfertaController } from './oferta.controller';
       HabilidadesBlandaEntity,
       ServiciosEntity,
       IndustriasEntity,
-      TmpImageFileEntity
+      TmpImageFileEntity,
+      AplicacionesEntity,
+      TrabajosEntity
     ]),
     UsuariosModule,
     MailModule

@@ -107,11 +107,11 @@ export class AbogadosService{
       nuevoAbogado.pdf_url = '';
       nuevoAbogado.video_url = '';
 
-      const tempFile = await this.tempFilesService.getFileByDni(body.dni);
-      if (!tempFile) {
-        throw new BadRequestException('Archivo temporal no encontrado');
-      }
-      nuevoAbogado.foto_url = tempFile.filePath;
+      // const tempFile = await this.tempFilesService.getFileByDni(body.dni);
+      // if (!tempFile) {
+      //   throw new BadRequestException('Archivo temporal no encontrado');
+      // }
+      // nuevoAbogado.foto_url = tempFile.filePath;
       const abogado : AbogadosEntity = await this.abogadosRespository.save(nuevoAbogado);
 
       for (const educacion of educaciones) {

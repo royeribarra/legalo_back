@@ -8,11 +8,15 @@ import { ServiciosEntity } from '../servicio/servicios.entity';
 import { OfertasEntity } from './oferta.entity';
 import { TempFilesService } from '../tmp/tmpFile.service';
 import { ErrorManager } from 'src/utils/error.manager';
+import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
+import { TrabajosEntity } from '../trabajo/trabajos.entity';
 
 @Injectable()
 export class OfertaService{
   constructor(
     @InjectRepository(OfertasEntity) private readonly ofertaRepository: Repository<OfertasEntity>,
+    @InjectRepository(AplicacionesEntity) private readonly aplicacionRepository: Repository<AplicacionesEntity>,
+    @InjectRepository(TrabajosEntity) private readonly trabajoRepository: Repository<TrabajosEntity>,
     private readonly tempFilesService: TempFilesService
   ){}
 
@@ -98,31 +102,31 @@ export class OfertaService{
     }
   }
 
-  async aceptarPostulacion(ofertaId: number, postulacionId: number): Promise<Trabajo> {
-    const oferta = await this.ofertaRepository.findOne(ofertaId);
-    const postulacion = await this.postulacionRepository.findOne(postulacionId);
+  // async aceptarPostulacion(ofertaId: number, postulacionId: number): Promise<TrabajosEntity> {
+  //   const oferta = await this.ofertaRepository.findOne(ofertaId);
+  //   const postulacion = await this.aplicacionRepository.findOne(postulacionId);
     
-    if (!oferta || !postulacion) {
-      throw new Error('Oferta o postulación no encontrada');
-    }
+  //   if (!oferta || !postulacion) {
+  //     throw new Error('Oferta o postulación no encontrada');
+  //   }
 
-    // Crear el trabajo
-    const trabajo = this.trabajoRepository.create({
-      cliente: oferta.cliente,
-      abogado: postulacion.abogado,
-      oferta: oferta,
-      postulacion: postulacion,
-      fechaInicio: new Date(),
-      estado: 'en curso',
-    });
+  //   // Crear el trabajo
+  //   const trabajo = this.trabajoRepository.create({
+  //     cliente: oferta.cliente,
+  //     abogado: postulacion.abogado,
+  //     oferta: oferta,
+  //     postulacion: postulacion,
+  //     fechaInicio: new Date(),
+  //     estado: 'en curso',
+  //   });
     
-    // Guardar el trabajo y actualizar la postulación
-    await this.trabajoRepository.save(trabajo);
+  //   // Guardar el trabajo y actualizar la postulación
+  //   await this.trabajoRepository.save(trabajo);
     
-    // Marcar la postulación como parte del trabajo
-    postulacion.trabajo = trabajo;
-    await this.postulacionRepository.save(postulacion);
+  //   // Marcar la postulación como parte del trabajo
+  //   postulacion.trabajo = trabajo;
+  //   await this.aplicacionRepository.save(postulacion);
 
-    return trabajo;
-  }
+  //   return trabajo;
+  // }
 }
