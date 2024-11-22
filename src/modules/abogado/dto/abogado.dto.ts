@@ -1,13 +1,13 @@
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { HabilidadBlandaDTO } from '../../../../src/modules/habilidadBlanda/habilidadBlanda.dto';
-import { HabilidadDuraDTO } from '../../../../src/modules/habilidadDura/habilidadDura.dto';
-import { IndustriaDTO } from '../../../../src/modules/industria/industria.dto';
-import { ServicioDTO } from '../../../../src/modules/servicio/servicio.dto';
-import { ExperienciaDTO } from '../../../../src/modules/experiencia/experiencia.dto';
-import { EducacionDTO } from '../../../../src/modules/educacion/educacion.dto';
-import { EspecialidadDTO } from '../../../../src/modules/especialidad/especialidad.dto';
+import { HabilidadBlandaDTO } from '../../habilidadBlanda/habilidadBlanda.dto';
+import { HabilidadDuraDTO } from '../../habilidadDura/habilidadDura.dto';
+import { IndustriaDTO } from '../../industria/industria.dto';
+import { ServicioDTO } from '../../servicio/servicio.dto';
+import { ExperienciaDTO } from '../../experiencia/experiencia.dto';
+import { EducacionDTO } from '../../educacion/educacion.dto';
+import { EspecialidadDTO } from '../../especialidad/especialidad.dto';
 
 export class AbogadoDTO {
   @ApiProperty()

@@ -1,10 +1,10 @@
 
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
-import { UsuariosEntity } from '../../../../src/modules/usuario/usuarios.entity';
-import { ICliente } from '../../../../src/interfaces/Cliente.interface';
-import { BaseEntity } from '../../../../src/config/base.entity';
-import { OfertasEntity } from '../../../../src/modules/oferta/oferta.entity';
-import { TrabajosEntity } from '../../../../src/modules/trabajo/trabajos.entity';
+import { UsuariosEntity } from '../../usuario/usuarios.entity';
+import { ICliente } from '../../../interfaces/Cliente.interface';
+import { BaseEntity } from '../../../config/base.entity';
+import { OfertasEntity } from '../../oferta/oferta.entity';
+import { TrabajosEntity } from '../../trabajo/trabajos.entity';
 
 @Entity({name:'clientes'})
 export class ClientesEntity extends BaseEntity implements ICliente

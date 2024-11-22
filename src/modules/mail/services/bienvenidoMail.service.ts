@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { randomBytes } from 'crypto';
-import { UsuariosService } from '../../../../src/modules/usuario/usuario.service';
+import { UsuariosService } from '../../usuario/usuario.service';
 
 @Injectable()
 export class MailService {

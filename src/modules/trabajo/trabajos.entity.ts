@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
-import { BaseEntity } from '../../../src/config/base.entity';
-import { ITrabajo } from '../../../src/interfaces/Trabajo.interface';
+import { BaseEntity } from '../../config/base.entity';
+import { ITrabajo } from '../../interfaces/Trabajo.interface';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 

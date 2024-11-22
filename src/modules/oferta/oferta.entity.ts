@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToOne, OneToMany } from 'typeorm';
-import { BaseEntity } from '../../../src/config/base.entity';
-import { IOferta } from '../../../src/interfaces/Oferta.interface';
+import { BaseEntity } from '../../config/base.entity';
+import { IOferta } from '../../interfaces/Oferta.interface';
 import { EspecialidadesEntity } from '../especialidad/especialidades.entity';
 import { ServiciosEntity } from '../servicio/servicios.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';

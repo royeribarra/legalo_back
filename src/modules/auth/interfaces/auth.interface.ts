@@ -1,6 +1,6 @@
 
 
-import { UsuariosEntity } from "../../../../src/modules/usuario/usuarios.entity";
+import { UsuariosEntity } from "../../usuario/usuarios.entity";
 
 export interface PayLoadToken{
   usuarioId: string,

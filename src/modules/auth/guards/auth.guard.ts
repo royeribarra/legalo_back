@@ -9,7 +9,7 @@ import { Request } from 'express';
 import { PUBLIC_KEY } from '../../../constants/key-decorators';
 import { useToken } from '../../../utils/use.token';
 import { IUseToken } from '../interfaces/auth.interface';
-import { UsuariosService } from '../../../../src/modules/usuario/usuario.service';
+import { UsuariosService } from '../../usuario/usuario.service';
   
   @Injectable()
   export class AuthGuard implements CanActivate {

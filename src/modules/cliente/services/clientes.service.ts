@@ -3,15 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ClienteDTO } from '../dto/cliente.dto';
 import { ErrorManager } from '../../../utils/error.manager';
-import { EducacionesEntity } from '../../../../src/modules/educacion/educaciones.entity';
-import { EspecialidadesEntity } from '../../../../src/modules/especialidad/especialidades.entity';
-import { ExperienciasEntity } from '../../../../src/modules/experiencia/experiencias.entity';
-import { HabilidadesBlandaEntity } from '../../../../src/modules/habilidadBlanda/habilidadesBlanda.entity';
-import { HabilidadesDuraEntity } from '../../../../src/modules/habilidadDura/habilidadesDura.entity';
-import { IndustriasEntity } from '../../../../src/modules/industria/industrias.entity';
-import { ServiciosEntity } from '../../../../src/modules/servicio/servicios.entity';
-import { UsuariosService } from '../../../../src/modules/usuario/usuario.service';
-import { AbogadoMailService } from '../../../../src/modules/mail/services/abogadoMail.service';
+import { EducacionesEntity } from '../../educacion/educaciones.entity';
+import { EspecialidadesEntity } from '../../especialidad/especialidades.entity';
+import { ExperienciasEntity } from '../../experiencia/experiencias.entity';
+import { HabilidadesBlandaEntity } from '../../habilidadBlanda/habilidadesBlanda.entity';
+import { HabilidadesDuraEntity } from '../../habilidadDura/habilidadesDura.entity';
+import { IndustriasEntity } from '../../industria/industrias.entity';
+import { ServiciosEntity } from '../../servicio/servicios.entity';
+import { UsuariosService } from '../../usuario/usuario.service';
+import { AbogadoMailService } from '../../mail/services/abogadoMail.service';
 import { ClientesEntity } from '../entities/clientes.entity';
 
 @Injectable()

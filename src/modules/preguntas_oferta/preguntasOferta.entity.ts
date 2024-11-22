@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany } from 'typeorm';
-import { BaseEntity } from '../../../src/config/base.entity';
+import { BaseEntity } from '../../config/base.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
-import { IPreguntaOferta } from '../../../src/interfaces/PreguntaOferta.interface';
+import { IPreguntaOferta } from '../../interfaces/PreguntaOferta.interface';
 
 @Entity({name: 'preguntas_oferta'})
 export class PreguntasOfertaEntity extends BaseEntity implements IPreguntaOferta{
