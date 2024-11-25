@@ -10,5 +10,8 @@ export class TmpImageFileEntity extends BaseEntity{
   correo: string;
 
   @Column()
+  nombreArchivo: string;
+
+  @Column()
   filePath: string;
 }

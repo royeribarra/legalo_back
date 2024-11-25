@@ -12,7 +12,7 @@ export class TempFilesService {
     private readonly tempFileRepository: Repository<TmpImageFileEntity>,
   ) {}
 
-    async saveTempFile(file: Express.Multer.File, dni: string, correo: string) {
+    async saveTempFile(file: Express.Multer.File, dni: string, correo: string, nombreArchivo: string) {
         // Limpiar el DNI para evitar caracteres no válidos
         const cleanDni = dni.replace(/["']/g, ""); 
     
@@ -40,7 +40,7 @@ export class TempFilesService {
         fs.renameSync(file.path, filePath);
     
         // Guardar en la base de datos
-        const tempFile = this.tempFileRepository.create({ dni: cleanDni, filePath, correo });
+        const tempFile = this.tempFileRepository.create({ dni: cleanDni, filePath, correo, nombreArchivo });
         const savedFile = await this.tempFileRepository.save(tempFile);
     
         return {
@@ -70,6 +70,11 @@ export class TempFilesService {
         if (!tempFile) {
         throw new NotFoundException(`Archivo temporal con ID ${dni} no encontrado.`);
         }
+        return tempFile;
+    }
+
+    async getFileByNombreArchivo(correo: string, nombreArchivo: string): Promise<TmpImageFileEntity | null> {
+        const tempFile = await this.tempFileRepository.findOne({ where: { correo: correo, nombreArchivo: nombreArchivo } });
         return tempFile;
     }
 }

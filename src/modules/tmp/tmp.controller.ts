@@ -11,10 +11,11 @@ import { TempFilesService } from './tmpFile.service';
   export class TempFilesController {
     constructor(private readonly tempFilesService: TempFilesService) {}
 
-    @Post('upload-profile-img')
-    @UseInterceptors(FileInterceptor('profileImg'))
+    @Post('upload-abogado-imagen')
+    @UseInterceptors(FileInterceptor('file'))
     async uploadTempFile(
         @UploadedFile() file: Express.Multer.File,
+        @Body('nombreArchivo') nombreArchivo: string,
         @Body('dni') dni: string,
         @Body('correo') correo: string,
       ) {
@@ -22,8 +23,30 @@ import { TempFilesService } from './tmpFile.service';
           throw new Error('Archivo no proporcionado');
         }
       
-        const {fileId, path} = await this.tempFilesService.saveTempFile(file, dni, correo);
+        const {fileId, path} = await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
       
         return { success: true, fileId };
+    }
+
+    @Post('upload-abogado-cv')
+    @UseInterceptors(FileInterceptor('file')) // Asegúrate de que el nombre coincida con el enviado desde el frontend
+    async uploadFileCv(
+      @UploadedFile() file: Express.Multer.File,
+      @Body('nombreArchivo') nombreArchivo: string,
+      @Body('dni') dni: string,
+      @Body('correo') correo: string,
+    ) {
+      return await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
+    }
+
+    @Post('upload-abogado-cul')
+    @UseInterceptors(FileInterceptor('file')) // Asegúrate de que el nombre coincida con el enviado desde el frontend
+    async uploadFileCul(
+      @UploadedFile() file: Express.Multer.File,
+      @Body('nombreArchivo') nombreArchivo: string,
+      @Body('dni') dni: string,
+      @Body('correo') correo: string,
+    ) {
+      return await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
     }
 }

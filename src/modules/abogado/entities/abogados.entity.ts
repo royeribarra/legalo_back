@@ -40,17 +40,17 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   @Column()
   grado_academico: string;
 
-  @Column()
+  @Column({nullable: true})
   video_url: string;
 
-  @Column()
+  @Column({nullable: true})
   cul_url: string;
 
-  @Column()
+  @Column({nullable: true})
   foto_url: string;
 
-  @Column()
-  pdf_url: string;
+  @Column({nullable: true})
+  cv_url: string;
 
   @OneToMany(() => HabilidadesBlandaEntity, (habilidad) => habilidad.abogado)
   habilidadesBlandas: HabilidadesBlandaEntity[];

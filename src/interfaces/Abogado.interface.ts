@@ -23,7 +23,7 @@ export interface IAbogado {
 
     video_url: string;
     foto_url: string;
-    pdf_url: string;
+    cv_url: string;
     cul_url: string;
 
     habilidadesBlandas: IHabilidaBlanda[];

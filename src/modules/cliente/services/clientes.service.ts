@@ -33,6 +33,19 @@ export class ClienteService{
   public async createCliente(body: ClienteDTO)
   {
 
+    const abogadoExists = await this.findBy({
+      key: 'correo',
+      value: body.correo
+    })
+
+    if(abogadoExists)
+    {
+      return {
+        state: false,
+        message: `Ya existe un cliente registado con correo ${body.correo}`,
+        usuario: null
+      }
+    }
     try {
       const nuevoAbogado = new ClientesEntity();
       nuevoAbogado.nombres = body.nombres;
@@ -98,6 +111,20 @@ export class ClienteService{
         return abogado;
     } catch (error) {
       console.log(error, "error en conductorService - findConductorbyId")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findBy({key, value} : { key: keyof ClienteDTO; value: any })
+  {
+    try {
+      const usuario: ClientesEntity = await this.clienteRepository.createQueryBuilder(
+        'clientes'
+      )
+      .where({[key]: value})
+      .getOne();
+      return usuario;
+    } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
   }

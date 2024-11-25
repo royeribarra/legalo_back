@@ -34,6 +34,20 @@ export class AbogadosService{
 
   public async createAbogado(body: AbogadoDTO)
   {
+    const abogadoExists = await this.findBy({
+      key: 'correo',
+      value: body.correo
+    })
+
+    if(abogadoExists)
+    {
+      return {
+        state: false,
+        message: `Ya existe un abogado registado con correo ${body.correo}`,
+        usuario: null
+      }
+    }
+
     const educaciones = body.educaciones.map((educacionDTO) => {
       const educacion = new EducacionesEntity();
       educacion.descripcion = educacionDTO.descripcion;
@@ -104,14 +118,15 @@ export class AbogadosService{
       nuevoAbogado.servicios = [];
       nuevoAbogado.foto_url = '';
       nuevoAbogado.cul_url = '';
-      nuevoAbogado.pdf_url = '';
+      nuevoAbogado.cv_url = '';
       nuevoAbogado.video_url = '';
 
-      // const tempFile = await this.tempFilesService.getFileByDni(body.dni);
-      // if (!tempFile) {
-      //   throw new BadRequestException('Archivo temporal no encontrado');
-      // }
-      // nuevoAbogado.foto_url = tempFile.filePath;
+      const tempFileCv = await this.tempFilesService.getFileByNombreArchivo(body.dni, 'cv_url');
+      if (tempFileCv) {
+        // throw new BadRequestException('Archivo temporal no encontrado');
+        nuevoAbogado.cv_url = tempFileCv.filePath;
+      }
+      
       const abogado : AbogadosEntity = await this.abogadosRespository.save(nuevoAbogado);
 
       for (const educacion of educaciones) {
@@ -157,7 +172,7 @@ export class AbogadosService{
         apellidos: body.apellidos,
         correo: body.correo,
         contrasena: body.contrasena,
-        dni: body.direccion,
+        dni: body.dni,
         telefono: body.telefono,
         perfil: "Abogado",
         abogadoId: abogado.id
@@ -204,6 +219,20 @@ export class AbogadosService{
         return abogado;
     } catch (error) {
       console.log(error, "error en conductorService - findConductorbyId")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findBy({key, value} : { key: keyof AbogadoDTO; value: any })
+  {
+    try {
+      const usuario: AbogadosEntity = await this.abogadosRespository.createQueryBuilder(
+        'abogados'
+      )
+      .where({[key]: value})
+      .getOne();
+      return usuario;
+    } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
   }

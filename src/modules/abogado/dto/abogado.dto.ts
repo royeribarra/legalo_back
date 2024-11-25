@@ -78,7 +78,7 @@ export class AbogadoDTO {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  pdf: string;
+  cv: string;
 
   @ApiProperty()
   @IsOptional()
