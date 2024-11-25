@@ -21,13 +21,12 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
   app.enableCors({
-    origin: [
-      'https://legalo.pe', // Permite solicitudes desde este dominio (producción)
-      'http://localhost:3000', // Permite solicitudes desde este dominio (desarrollo)
-    ],
+    origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true, // Habilita cookies y encabezados de autenticación
   });
+
+  app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .setTitle('Copetrol Api.')
