@@ -6,7 +6,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class AbogadoMailService {
+export class ClienteMailService {
     constructor(
         private mailerService: MailerService,
         private readonly usuarioService: UsuariosService,
@@ -27,7 +27,7 @@ export class AbogadoMailService {
         const response = await this.mailerService.sendMail({
           to: userEmail,
           subject: 'Bienvenido a Legalo.',
-          template: './abogado/bienvenido',
+          template: './cliente/bienvenido',
           context: {
             nombres: nombres,
             apellidos: apellidos,
@@ -40,7 +40,7 @@ export class AbogadoMailService {
           message: "Se envió el mensaje al cliente con éxito."
         }
       } catch (error) {
-        console.log('error mailServiceAbogado', error)
+        console.log('error mailServiceCliente', error)
       }
   }
 }

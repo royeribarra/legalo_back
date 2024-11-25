@@ -49,4 +49,15 @@ import { TempFilesService } from './tmpFile.service';
     ) {
       return await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
     }
+
+    @Post('upload-oferta-documento')
+    @UseInterceptors(FileInterceptor('file')) // Asegúrate de que el nombre coincida con el enviado desde el frontend
+    async uploadFileOferta(
+      @UploadedFile() file: Express.Multer.File,
+      @Body('nombreArchivo') nombreArchivo: string,
+      @Body('dni') dni: string,
+      @Body('correo') correo: string,
+    ) {
+      return await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
+    }
 }

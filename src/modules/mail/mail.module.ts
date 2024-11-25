@@ -6,6 +6,7 @@ import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AbogadoMailService } from './services/abogadoMail.service';
 import { UsuariosModule } from '../usuario/usuario.module';
+import { ClienteMailService } from './services/clienteMail.service';
 
 @Global() // 👈 global module
 @Module({
@@ -41,8 +42,9 @@ import { UsuariosModule } from '../usuario/usuario.module';
   ],
   providers: [
     MailService,
-    AbogadoMailService
+    AbogadoMailService,
+    ClienteMailService
   ],
-  exports: [MailService, AbogadoMailService],
+  exports: [MailService, AbogadoMailService, ClienteMailService],
 })
 export class MailModule {}

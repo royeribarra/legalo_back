@@ -18,7 +18,7 @@ export class OfertasEntity extends BaseEntity implements IOferta{
   @Column()
   descripcion: string;
 
-  @Column()
+  @Column({nullable: true})
   documento_url: string;
 
   @Column()

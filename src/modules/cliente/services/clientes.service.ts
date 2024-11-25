@@ -13,6 +13,7 @@ import { ServiciosEntity } from '../../servicio/servicios.entity';
 import { UsuariosService } from '../../usuario/usuario.service';
 import { AbogadoMailService } from '../../mail/services/abogadoMail.service';
 import { ClientesEntity } from '../entities/clientes.entity';
+import { ClienteMailService } from '../../mail/services/clienteMail.service';
 
 @Injectable()
 export class ClienteService{
@@ -27,7 +28,7 @@ export class ClienteService{
     @InjectRepository(IndustriasEntity) private readonly industriaRepository: Repository<IndustriasEntity>,
     @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
     private readonly usuariosService: UsuariosService,
-    private readonly abogadoMailService: AbogadoMailService
+    private readonly clienteMailService: ClienteMailService
   ){}
 
   public async createCliente(body: ClienteDTO)
@@ -73,7 +74,7 @@ export class ClienteService{
       const usuario = await this.usuariosService.createUsuario(datosUsuario);
       
 
-      const { state } = await this.abogadoMailService.sendActivationEmail(body.correo, body.nombres, body.apellidos);
+      const { state } = await this.clienteMailService.sendActivationEmail(body.correo, body.nombres, body.apellidos);
       console.log("envio de mail");
       return {
         state: true,
