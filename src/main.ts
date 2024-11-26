@@ -20,11 +20,7 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
-  app.enableCors({
-    origin: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    credentials: true, // Habilita cookies y encabezados de autenticación
-  });
+  app.enableCors();
 
   app.setGlobalPrefix('api');
 
