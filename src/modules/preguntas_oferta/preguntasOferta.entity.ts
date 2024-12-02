@@ -8,6 +8,10 @@ export class PreguntasOfertaEntity extends BaseEntity implements IPreguntaOferta
   @Column()
   pregunta: string;
 
-  @ManyToMany(() => OfertasEntity, (oferta) => oferta.servicios)
-  ofertas: OfertasEntity[];
+  // @ManyToMany(() => OfertasEntity, (oferta) => oferta.servicios)
+  // ofertas: OfertasEntity[];
+  @ManyToOne(() => OfertasEntity, (oferta) => oferta.preguntas_oferta, {
+    onDelete: 'CASCADE',
+  })
+  ofertas: OfertasEntity;
 }

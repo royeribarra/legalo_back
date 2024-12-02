@@ -19,12 +19,12 @@ export class UsuariosService{
 
   public async createUsuario(datosUsuario: UsuarioDTO)
   {
-    const userExists = await this.findBy({
+    const userExistsCorreo = await this.findBy({
       key: 'correo',
       value: datosUsuario.correo
     })
 
-    if(userExists)
+    if(userExistsCorreo)
     {
       return {
         state: false,
@@ -32,6 +32,19 @@ export class UsuariosService{
         usuario: null
       }
     }
+
+    const userExistsDni = await this.findBy({
+      key: 'dni',
+      value: datosUsuario.dni
+    })
+    if(userExistsDni)
+      {
+        return {
+          state: false,
+          message: `Ya existe el usuario con dni ${datosUsuario.correo}`,
+          usuario: null
+        }
+      }
 
     try {
       const usuario = new UsuariosEntity();

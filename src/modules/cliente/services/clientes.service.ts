@@ -33,18 +33,18 @@ export class ClienteService{
 
   public async createCliente(body: ClienteDTO)
   {
-
-    const abogadoExists = await this.findBy({
+    const clienteExists = await this.findBy({
       key: 'correo',
       value: body.correo
     })
 
-    if(abogadoExists)
+    if(clienteExists)
     {
       return {
         state: false,
         message: `Ya existe un cliente registado con correo ${body.correo}`,
-        usuario: null
+        usuario: null,
+        cliente: null
       }
     }
     try {
@@ -58,7 +58,7 @@ export class ClienteService{
       nuevoAbogado.telefono_contacto = body.telefono;
       nuevoAbogado.tipo_persona = body.tipoPersona;
 
-      const abogado : ClientesEntity = await this.clienteRepository.save(nuevoAbogado);
+      const cliente : ClientesEntity = await this.clienteRepository.save(nuevoAbogado);
 
       const datosUsuario = {
         nombres: body.nombres,
@@ -68,7 +68,7 @@ export class ClienteService{
         dni: body.documento,
         telefono: body.telefono,
         perfil: "Cliente",
-        clienteId: abogado.id
+        clienteId: cliente.id
       }
       console.log("creacion de usuario");
       const usuario = await this.usuariosService.createUsuario(datosUsuario);
@@ -79,9 +79,24 @@ export class ClienteService{
       return {
         state: true,
         message: `Cliente creado correctamente`,
-        abogado: abogado,
+        cliente: cliente,
         usuario: usuario
       }
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findClientes(queryParams): Promise<ClientesEntity[]>
+  {
+    const query = this.clienteRepository.createQueryBuilder('clientes')
+      .leftJoinAndSelect('clientes.usuario', 'usuarios')
+      .leftJoinAndSelect('clientes.ofertas', 'ofertas')
+      .leftJoinAndSelect('clientes.trabajos', 'trabajos');
+    try {
+      const clientes: ClientesEntity[] = await query.getMany();
+      
+      return clientes;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

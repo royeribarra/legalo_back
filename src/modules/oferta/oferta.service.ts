@@ -10,6 +10,7 @@ import { TempFilesService } from '../tmp/tmpFile.service';
 import { ErrorManager } from 'src/utils/error.manager';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
+import { ClientesEntity } from '../cliente/entities/clientes.entity';
 
 @Injectable()
 export class OfertaService{
@@ -17,32 +18,22 @@ export class OfertaService{
     @InjectRepository(OfertasEntity) private readonly ofertaRepository: Repository<OfertasEntity>,
     @InjectRepository(AplicacionesEntity) private readonly aplicacionRepository: Repository<AplicacionesEntity>,
     @InjectRepository(TrabajosEntity) private readonly trabajoRepository: Repository<TrabajosEntity>,
-    private readonly tempFilesService: TempFilesService
+    @InjectRepository(ClientesEntity) private readonly clienteRepository: Repository<ClientesEntity>,
+    @InjectRepository(ClientesEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
+    @InjectRepository(ClientesEntity) private readonly preguntaRepository: Repository<PreguntasOfertaEntity>,
+    @InjectRepository(ClientesEntity) private readonly especialidadRepository: Repository<EspecialidadesEntity>,
+    private readonly tempFilesService: TempFilesService,
   ){}
 
   public async createOferta(body: OfertaDTO)
   {
-    const preguntas = body.preguntas.map((preguntaDTO) => {
-      const pregunta = new PreguntasOfertaEntity();
-      pregunta.pregunta = preguntaDTO.nombre;
-      pregunta.ofertas = null;
-      return pregunta;
+    const cliente = await this.clienteRepository.findOneBy({
+      id: body.clienteId,
     });
 
-    const especialidades = body.especialidades.map((especialidadDTO) => {
-      const especialidad = new EspecialidadesEntity();
-      especialidad.nombre = especialidadDTO.nombre;
-      especialidad.ofertas = null;
-      return especialidad;
-    });
-
-    const servicios = body.servicios.map((servicioDTO) => {
-      const servicio = new ServiciosEntity();
-      servicio.nombre = servicioDTO.nombre;
-      servicio.ofertas = null;
-      return servicio;
-    });
-
+    if (!cliente) {
+      throw new Error('Cliente no encontrado');
+    }
     try {
       const nuevaOferta = new OfertasEntity();
       nuevaOferta.descripcion = body.descripcion;
@@ -53,16 +44,41 @@ export class OfertaService{
       nuevaOferta.titulo = body.titulo;
       nuevaOferta.uso = body.uso;
       nuevaOferta.estado = "Creado";
+      nuevaOferta.cliente = cliente;
 
-      // const tempFile = await this.tempFilesService.getFileByDni('700');
-      // if (!tempFile) {
-      //   throw new BadRequestException('Archivo temporal no encontrado');
-      // }
-      // nuevaOferta.documento_url = tempFile.filePath;
+      const tempFile = await this.tempFilesService.getFileByClientId(body.clienteId);
+      if (!tempFile) {
+        throw new BadRequestException('Archivo temporal no encontrado');
+      }
+      nuevaOferta.documento_url = tempFile.filePath;
 
       const oferta : OfertasEntity = await this.ofertaRepository.save(nuevaOferta);
 
-      console.log("envio de mail");
+      
+      const especialidades = body.especialidades.map((especialidadDTO) => {
+        const especialidad = new EspecialidadesEntity();
+        especialidad.nombre = especialidadDTO.nombre;
+        return especialidad;
+      });
+      // oferta.especialidades = await this.especialidadRepository.save(especialidades);
+  
+      // Servicios
+      const servicios = body.servicios.map((servicioDTO) => {
+        const servicio = new ServiciosEntity();
+        servicio.nombre = servicioDTO.nombre;
+        return servicio;
+      });
+      // oferta.serviciosOferta = await this.servicioRepository.save(servicios);
+  
+      // Preguntas
+      const preguntas = body.preguntas.map((preguntaDTO) => {
+        const pregunta = new PreguntasOfertaEntity();
+        pregunta.pregunta = preguntaDTO.nombre;
+        return pregunta;
+      });
+      oferta.preguntas_oferta = await this.preguntaRepository.save(preguntas);
+      await this.ofertaRepository.save(oferta);
+
       return {
         state: true,
         message: `Oferta creado correctamente`,

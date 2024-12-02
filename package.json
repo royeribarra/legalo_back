@@ -40,6 +40,7 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "mysql2": "^3.4.2",
+    "nestjs-form-data": "^1.9.92",
     "nodemailer": "^6.9.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",

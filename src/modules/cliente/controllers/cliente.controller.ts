@@ -12,21 +12,21 @@ export class ClienteController {
     ) {}
 
   @Post('create')
-  public async registerAbogado(@Body() body: ClienteDTO){
+  public async registerCliente(@Body() body: ClienteDTO){
     // const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
-    const { state, message, abogado } = await this.clienteService.createCliente(body);
+    const { state, message, cliente } = await this.clienteService.createCliente(body);
     return {
       state: state,
       message: message,
-      abogado: abogado
+      cliente: cliente
     }
   }
 
-  // @Get('all')
-  // public async findAllConductores(@Query() queryParams: any)
-  // {
-  //   return await this.abogadosService.findConductores(queryParams);
-  // }
+  @Get('all')
+  public async findAllClientes(@Query() queryParams: any)
+  {
+    return await this.clienteService.findClientes(queryParams);
+  }
 
   @Get(':id')
   public async findClienteById(@Param('id') id: number){

@@ -47,3 +47,50 @@ export class ClienteDTO {
   @IsString()
   contrasena: string;
 }
+
+export class ClienteSeederDTO {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  nombres: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  apellidos: string;
+
+  @ApiProperty()
+  @IsEmail({}, { message: 'El correo electrónico no es válido.' })
+  @IsNotEmpty()
+  correo: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  documento: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  tipo_persona: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  telefono_contacto: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  empresa: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  opinion: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  contrasena: string;
+}

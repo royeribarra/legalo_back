@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToOne, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
 import { IOferta } from '../../interfaces/Oferta.interface';
 import { EspecialidadesEntity } from '../especialidad/especialidades.entity';
@@ -6,9 +6,12 @@ import { ServiciosEntity } from '../servicio/servicios.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { PreguntasOfertaEntity } from '../preguntas_oferta/preguntasOferta.entity';
+import { ServiciosOfertaEntity } from '../servicio/servicioOferta.entity';
+import { IndustriasOfertaEntity } from '../industria/industriaOferta.entity';
+import { EspecialidadesOfertaEntity } from '../especialidad/especialidadOferta.entity';
 
-@Entity({name:'ofertas'})
-export class OfertasEntity extends BaseEntity implements IOferta{
+@Entity({ name: 'ofertas' })
+export class OfertasEntity extends BaseEntity implements IOferta {
   @Column()
   uso: string;
 
@@ -18,7 +21,7 @@ export class OfertasEntity extends BaseEntity implements IOferta{
   @Column()
   descripcion: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   documento_url: string;
 
   @Column()
@@ -36,13 +39,14 @@ export class OfertasEntity extends BaseEntity implements IOferta{
   @Column()
   estado: string;
 
-  @ManyToMany(() => EspecialidadesEntity)
-  @JoinTable()
-  especialidades: EspecialidadesEntity[];
+  @OneToMany(() => EspecialidadesOfertaEntity, (especialidadOferta) => especialidadOferta.oferta)
+  especialidadesOferta: EspecialidadesOfertaEntity[];
 
-  @ManyToMany(() => ServiciosEntity)
-  @JoinTable()
-  servicios: ServiciosEntity[];
+  @OneToMany(() => ServiciosOfertaEntity, (servicioOferta) => servicioOferta.oferta)
+  serviciosOferta: ServiciosOfertaEntity[];
+
+  @OneToMany(() => IndustriasOfertaEntity, (industriaOferta) => industriaOferta.oferta)
+  industriasOferta: IndustriasOfertaEntity[];
 
   @ManyToOne(() => ClientesEntity, (cliente) => cliente.ofertas)
   cliente: ClientesEntity;
@@ -50,6 +54,8 @@ export class OfertasEntity extends BaseEntity implements IOferta{
   @OneToMany(() => AplicacionesEntity, (aplicacion) => aplicacion.oferta)
   aplicaciones: AplicacionesEntity[];
 
-  @OneToMany(() => PreguntasOfertaEntity, (preguntas) => preguntas.ofertas)
+  @OneToMany(() => PreguntasOfertaEntity, (pregunta) => pregunta.ofertas, {
+    cascade: true,
+  })
   preguntas_oferta: PreguntasOfertaEntity[];
 }

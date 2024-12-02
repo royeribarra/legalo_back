@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -9,6 +9,10 @@ import { AbogadoModule } from './modules/abogado/abogado.module';
 import { ClienteModule } from './modules/cliente/cliente.module';
 import { TmpModule } from './modules/tmp/tmp.module';
 import { OfertaModule } from './modules/oferta/oferta.module';
+import { NestjsFormDataModule } from 'nestjs-form-data';
+import { ServicioModule } from './modules/servicio/servicio.module';
+import { IndustriaModule } from './modules/industria/industria.module';
+import { EspecialidadModule } from './modules/especialidad/especialidad.module';
 
 @Module({
   imports: [
@@ -17,13 +21,23 @@ import { OfertaModule } from './modules/oferta/oferta.module';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({...DataSourceConfig}),
+    NestjsFormDataModule,
     AuthModule,
     AbogadoModule,
     ClienteModule,
     TmpModule,
-    OfertaModule
+    OfertaModule,
+    ServicioModule,
+    IndustriaModule,
+    EspecialidadModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  private readonly logger = new Logger(AppModule.name);
+
+  onModuleInit() {
+    this.logger.log('AppModule initialized'); // Log global al inicializar el módulo
+  }
+}

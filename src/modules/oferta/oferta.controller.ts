@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors, UsePipes, ValidationPipe  } from '@nestjs/common';
 import { Delete } from '@nestjs/common/decorators';
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
@@ -7,6 +7,7 @@ import { extname } from "path";
 import { ApiTags } from '@nestjs/swagger';
 import { OfertaService } from './oferta.service';
 import { OfertaDTO } from './oferta.dto';
+import { FormDataRequest } from "nestjs-form-data";
 
 @ApiTags('Ofertas')
 @Controller('ofertas')
@@ -16,7 +17,10 @@ export class OfertaController {
     ) {}
 
   @Post('create')
-  public async registerAbogado(@Body() body: OfertaDTO){
+  @UsePipes(new ValidationPipe({ transform: true }))
+  // @UseInterceptors(FileInterceptor('file')) 
+  // @FormDataRequest()
+  public async registerOferta(@Body() body: OfertaDTO){
     // const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
     const { state, message, oferta } = await this.ofertaService.createOferta(body);
     return {

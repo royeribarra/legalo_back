@@ -3,14 +3,20 @@ import { BaseEntity } from '../../config/base.entity';
 
 @Entity({name: 'tmp_img_files'})
 export class TmpImageFileEntity extends BaseEntity{
-  @Column()
+  @Column({nullable: true})
   dni: string;
 
-  @Column()
+  @Column({nullable: true})
   correo: string;
 
   @Column()
   nombreArchivo: string;
+
+  @Column({ nullable: true})
+  idFront: string;
+
+  @Column({ nullable: true})
+  clienteId: number;
 
   @Column()
   filePath: string;

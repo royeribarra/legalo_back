@@ -48,6 +48,20 @@ export class AbogadosService{
       }
     }
 
+    const abogadoExistsDni = await this.findBy({
+      key: 'dni',
+      value: body.dni
+    })
+
+    if(abogadoExistsDni)
+    {
+      return {
+        state: false,
+        message: `Ya existe un abogado registado con dni ${body.correo}`,
+        usuario: null
+      }
+    }
+
     const educaciones = body.educaciones.map((educacionDTO) => {
       const educacion = new EducacionesEntity();
       educacion.descripcion = educacionDTO.descripcion;
@@ -78,25 +92,25 @@ export class AbogadosService{
     });
 
     const habilidadesBlandas = body.habilidadesBlandas.map((habilidadDTO) => {
-      const habilidad = new EspecialidadesEntity();
+      const habilidad = new HabilidadesBlandaEntity();
       habilidad.nombre = habilidadDTO.nombre;
       return habilidad;
     });
 
     const habilidadesDuras = body.habilidadesDuras.map((habilidadDTO) => {
-      const habilidad = new EspecialidadesEntity();
+      const habilidad = new HabilidadesDuraEntity();
       habilidad.nombre = habilidadDTO.nombre;
       return habilidad;
     });
 
     const industrias = body.industrias.map((industriaDTO) => {
-      const especialidad = new EspecialidadesEntity();
+      const especialidad = new IndustriasEntity();
       especialidad.nombre = industriaDTO.nombre;
       return especialidad;
     });
 
     const servicios = body.servicios.map((servicioDTO) => {
-      const especialidad = new EspecialidadesEntity();
+      const especialidad = new ServiciosEntity();
       especialidad.nombre = servicioDTO.nombre;
       return especialidad;
     });
@@ -114,8 +128,9 @@ export class AbogadosService{
 
       nuevoAbogado.habilidadesBlandas = [];
       nuevoAbogado.habilidadesDuras = [];
-      nuevoAbogado.industrias = [];
-      nuevoAbogado.servicios = [];
+      nuevoAbogado.industriasAbogado = [];
+      nuevoAbogado.serviciosAbogado = [];
+      nuevoAbogado.especialidadesAbogado = [];
       nuevoAbogado.foto_url = '';
       nuevoAbogado.cul_url = '';
       nuevoAbogado.cv_url = '';
@@ -133,9 +148,9 @@ export class AbogadosService{
         educacion.abogado = abogado;
       }
 
-      for (const especialidad of especialidades) {
-        especialidad.abogado = abogado;
-      }
+      // for (const especialidad of especialidades) {
+      //   especialidad.abogado = abogado;
+      // }
 
       for (const experiencia of experiencias) {
         experiencia.abogado = abogado;
@@ -149,13 +164,13 @@ export class AbogadosService{
         habilidad.abogado = abogado;
       }
 
-      for (const servicio of servicios) {
-        servicio.abogado = abogado;
-      }
+      // for (const servicio of servicios) {
+      //   servicio.abogado = abogado;
+      // }
 
-      for (const industria of industrias) {
-        industria.abogado = abogado;
-      }
+      // for (const industria of industrias) {
+      //   industria.abogado = abogado;
+      // }
       
   
       await this.educacionesRepository.save(educaciones);
@@ -189,6 +204,28 @@ export class AbogadosService{
         abogado: abogado,
         usuario: usuario
       }
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findAbogados(queryParams): Promise<AbogadosEntity[]>
+  {
+    const query = this.abogadosRespository.createQueryBuilder('abogados')
+      .leftJoinAndSelect('abogados.habilidadesBlandas', 'habilidadesBlandas')
+      .leftJoinAndSelect('abogados.habilidadesDuras', 'habilidadesDuras')
+      .leftJoinAndSelect('abogados.industrias', 'industrias')
+      .leftJoinAndSelect('abogados.servicios', 'servicios')
+      .leftJoinAndSelect('abogados.experiencias', 'experiencias')
+      .leftJoinAndSelect('abogados.educaciones', 'educaciones')
+      .leftJoinAndSelect('abogados.especialidades', 'especialidades')
+      .leftJoinAndSelect('abogados.usuario', 'usuario')
+      .leftJoinAndSelect('abogados.aplicaciones', 'aplicaciones')
+      .leftJoinAndSelect('abogados.trabajos', 'trabajos');
+    try {
+      const clientes: AbogadosEntity[] = await query.getMany();
+      
+      return clientes;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }

@@ -110,22 +110,23 @@ export class UsuarioSeederDTO{
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  nombre: string;
+  nombres: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  apellido: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  correo: string;
+  apellidos: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
   usuario: string;
+
+  @ApiProperty()
+  @IsEmail({}, { message: 'El correo electrónico no es válido.' })
+  @IsNotEmpty()
+  @IsString()
+  correo: string;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -135,25 +136,25 @@ export class UsuarioSeederDTO{
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  direccion: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  distrito: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  provincia: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
   dni: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   telefono: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  perfil: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  abogado: AbogadosEntity;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  cliente: ClientesEntity;
 }

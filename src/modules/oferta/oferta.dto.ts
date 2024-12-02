@@ -1,12 +1,18 @@
 import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail, ValidateNested } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import { EspecialidadDTO } from '../especialidad/especialidad.dto';
 import { PreguntaDTO } from '../preguntas_oferta/preguntasOferta.dto';
 import { ServicioDTO } from '../servicio/servicio.dto';
 import { SalarioDTO } from './salario.dto';
 
 export class OfertaDTO {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  @Type(() => Number)
+  clienteId: number;
+
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -24,6 +30,8 @@ export class OfertaDTO {
 
   @ApiProperty()
   @IsNotEmpty()
+  @ValidateNested()
+  @Type(() => SalarioDTO)
   presupuesto: SalarioDTO;
 
   @ApiProperty()

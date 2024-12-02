@@ -28,11 +28,11 @@ export interface IAbogado {
 
     habilidadesBlandas: IHabilidaBlanda[];
     habilidadesDuras: IHabilidadDura[];
-    industrias: IIndutria[];
-    servicios: IServicio[];
+    // industrias: IIndutria[];
+    // servicios: IServicio[];
     experiencias: IExperiencia[];
     educaciones: IEducacion[];
-    especialidades: IEspecialidad[];
+    // especialidades: IEspecialidad[];
 
     aplicaciones: IAplicacion[];
     trabajos: ITrabajo[];

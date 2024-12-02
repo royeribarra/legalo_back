@@ -1,5 +1,4 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { Delete } from '@nestjs/common/decorators';
+import { Body, Controller, Get, Param, Post, Query, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { v4 as uuidv4 } from "uuid";
@@ -26,11 +25,11 @@ export class AbogadosController {
     }
   }
 
-  // @Get('all')
-  // public async findAllConductores(@Query() queryParams: any)
-  // {
-  //   return await this.abogadosService.findConductores(queryParams);
-  // }
+  @Get('all')
+  public async findAllAbogados(@Query() queryParams: any)
+  {
+    return await this.abogadosService.findAbogados(queryParams);
+  }
 
   @Get(':id')
   public async findConductorById(@Param('id') id: number){

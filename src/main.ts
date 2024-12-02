@@ -3,10 +3,13 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as morgan from 'morgan';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  
+  // const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  process.env.PROJECT_ROOT = process.cwd();
   app.use(morgan('dev'));
 
   app.useGlobalPipes(
@@ -21,6 +24,9 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
   app.enableCors();
+  app.useStaticAssets(join(process.cwd(), 'public'), {
+    prefix: '/public/', // Esto añade un prefijo a las URLs de los archivos
+  });
 
   app.setGlobalPrefix('api');
 

@@ -23,6 +23,11 @@ import { TempFilesService } from './tmpFile.service';
           throw new Error('Archivo no proporcionado');
         }
       
+        const checkExiste = await this.tempFilesService.checkExistFile(dni, correo, nombreArchivo);
+        if(checkExiste){
+          return { success: false, fileId: 'Ya existe un archivo img para este abogado.' };
+        }
+
         const {fileId, path} = await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
       
         return { success: true, fileId };
@@ -36,7 +41,13 @@ import { TempFilesService } from './tmpFile.service';
       @Body('dni') dni: string,
       @Body('correo') correo: string,
     ) {
-      return await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
+      const checkExiste = await this.tempFilesService.checkExistFile(dni, correo, nombreArchivo);
+      if(checkExiste){
+        return { success: false, fileId: 'Ya existe un archivo cv para este abogado.' };
+      }
+      const {fileId, path} = await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
+      
+      return { success: true, fileId };
     }
 
     @Post('upload-abogado-cul')
@@ -47,7 +58,13 @@ import { TempFilesService } from './tmpFile.service';
       @Body('dni') dni: string,
       @Body('correo') correo: string,
     ) {
-      return await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
+      const checkExiste = await this.tempFilesService.checkExistFile(dni, correo, nombreArchivo);
+      if(checkExiste){
+        return { success: false, fileId: 'Ya existe un archivo cul para este abogado.' };
+      }
+      const {fileId, path} = await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
+      
+      return { success: true, fileId };
     }
 
     @Post('upload-oferta-documento')
@@ -55,9 +72,9 @@ import { TempFilesService } from './tmpFile.service';
     async uploadFileOferta(
       @UploadedFile() file: Express.Multer.File,
       @Body('nombreArchivo') nombreArchivo: string,
-      @Body('dni') dni: string,
-      @Body('correo') correo: string,
+      @Body('clienteId') clienteId: string,
+      @Body('fileId') fileId: string,
     ) {
-      return await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
+      return await this.tempFilesService.saveTempFileOferta(file, clienteId, nombreArchivo, fileId);
     }
 }

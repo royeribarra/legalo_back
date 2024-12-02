@@ -13,8 +13,8 @@ export interface IOferta {
     salario_minimo: string;
     salario_maximo: string;
 
-    servicios: IServicio[];
-    especialidades: IEspecialidad[];
+    // servicios: IServicio[];
+    // especialidades: IEspecialidad[];
     preguntas_oferta: IPreguntaOferta[];
 
     cliente: ICliente;

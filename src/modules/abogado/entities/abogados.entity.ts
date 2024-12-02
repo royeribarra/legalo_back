@@ -12,6 +12,9 @@ import { EducacionesEntity } from '../../educacion/educaciones.entity';
 import { EspecialidadesEntity } from '../../especialidad/especialidades.entity';
 import { AplicacionesEntity } from '../../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../../trabajo/trabajos.entity';
+import { ServiciosAbogadoEntity } from '../../servicio/servicioAbogado.entity';
+import { EspecialidadesAbogadoEntity } from '../../especialidad/especialidadAbogado.entity';
+import { IndustriasAbogadoEntity } from '../../industria/industriaAbogado.entity';
 
 @Entity({name:'abogados'})
 export class AbogadosEntity extends BaseEntity implements IAbogado
@@ -21,6 +24,9 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
 
   @Column()
   apellidos: string;
+
+  @Column()
+  dni: string;
 
   @Column()
   direccion: string;
@@ -58,11 +64,13 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   @OneToMany(() => HabilidadesDuraEntity, (habilidad) => habilidad.abogado)
   habilidadesDuras: HabilidadesDuraEntity[];
 
-  @OneToMany(() => IndustriasEntity, (industria) => industria.abogado)
-  industrias: IndustriasEntity[];
+  @OneToMany(() => IndustriasAbogadoEntity, (industria) => industria.abogado)
+  industriasAbogado: IndustriasAbogadoEntity[];
 
-  @OneToMany(() => ServiciosEntity, (servicio) => servicio.abogado)
-  servicios: ServiciosEntity[];
+  // @OneToMany(() => ServiciosEntity, (servicio) => servicio.abogado)
+  // servicios: ServiciosEntity[];
+  @OneToMany(() => ServiciosAbogadoEntity, (servicioAbogado) => servicioAbogado.abogado)
+  serviciosAbogado: ServiciosAbogadoEntity[];
 
   @OneToMany(() => ExperienciasEntity, (experiencia) => experiencia.abogado)
   experiencias: ExperienciasEntity[];
@@ -70,8 +78,8 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   @OneToMany(() => EducacionesEntity, (educacion) => educacion.abogado)
   educaciones: EducacionesEntity[];
 
-  @OneToMany(() => EspecialidadesEntity, (especialidad) => especialidad.abogado)
-  especialidades: EspecialidadesEntity[];
+  @OneToMany(() => EspecialidadesAbogadoEntity, (especialidad) => especialidad.abogado)
+  especialidadesAbogado: EspecialidadesAbogadoEntity[];
 
   @OneToOne(() => UsuariosEntity, (usuario) => usuario.abogado)
   usuario: UsuariosEntity;
