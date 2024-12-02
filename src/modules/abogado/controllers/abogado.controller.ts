@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Param, Post, Query, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { v4 as uuidv4 } from "uuid";
 import { extname } from "path";
 import { ApiTags } from '@nestjs/swagger';
 import { AbogadosService } from '../services/abogados.service';
-import { AbogadoDTO } from '../dto/abogado.dto';
+import { AbogadoDTO, AbogadoUpdateDTO } from '../dto/abogado.dto';
 
 @ApiTags('Abogados')
 @Controller('abogados')
@@ -54,18 +54,17 @@ export class AbogadosController {
   //   return { message: "Archivo subido exitosamente", filename: file.filename };
   // }
 
-  
 
-  // @Put('edit/:id')
-  // public async updateConductor(@Body() body: ConductorUpdateDTO, @Param('id') id: number){
-  //   const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
 
-  //   const {state, message} = await this.abogadosService.updateConductor(body, id, vehiculo);
-  //   return {
-  //     state: state,
-  //     message: message,
-  //   }
-  // }
+  @Put('edit/:id')
+  public async updateAbogado(@Body() body: AbogadoUpdateDTO, @Param('id') id: number)
+  {
+    const {state, message} = await this.abogadosService.updateAbogado(body, id);
+    return {
+      state: state,
+      message: message,
+    }
+  }
 
   // @Delete(':id')
   // public async deleteConductor(@Param('id') id:string){

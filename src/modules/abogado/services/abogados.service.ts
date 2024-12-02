@@ -1,7 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { AbogadoDTO } from '../dto/abogado.dto';
+import { AbogadoDTO, AbogadoUpdateDTO } from '../dto/abogado.dto';
 import { ErrorManager } from '../../../utils/error.manager';
 import { AbogadosEntity } from '../entities/abogados.entity';
 import { EducacionesEntity } from '../../educacion/educaciones.entity';
@@ -18,7 +18,7 @@ import { TempFilesService } from '../../tmp/tmpFile.service';
 @Injectable()
 export class AbogadosService{
   constructor(
-    @InjectRepository(AbogadosEntity) private readonly abogadosRespository: Repository<AbogadosEntity>,
+    @InjectRepository(AbogadosEntity) private readonly abogadosRepository: Repository<AbogadosEntity>,
     @InjectRepository(EducacionesEntity) private readonly educacionesRepository: Repository<EducacionesEntity>,
     @InjectRepository(EspecialidadesEntity) private readonly especialidadesRepository: Repository<EspecialidadesEntity>,
     @InjectRepository(ExperienciasEntity) private readonly experienciaRepository: Repository<ExperienciasEntity>,
@@ -142,7 +142,7 @@ export class AbogadosService{
         nuevoAbogado.cv_url = tempFileCv.filePath;
       }
       
-      const abogado : AbogadosEntity = await this.abogadosRespository.save(nuevoAbogado);
+      const abogado : AbogadosEntity = await this.abogadosRepository.save(nuevoAbogado);
 
       for (const educacion of educaciones) {
         educacion.abogado = abogado;
@@ -194,7 +194,7 @@ export class AbogadosService{
       }
       console.log("creacion de usuario");
       const usuario = await this.usuariosService.createUsuario(datosUsuario);
-      
+
 
       const { state } = await this.abogadoMailService.sendActivationEmail(body.correo, body.nombres, body.apellidos);
       console.log("envio de mail");
@@ -209,9 +209,30 @@ export class AbogadosService{
     }
   }
 
+  async updateAbogado(body: AbogadoUpdateDTO, id: number): Promise<{ state: boolean, message: string }> {
+    // Buscar el abogado por ID
+    const abogado = await this.abogadosRepository.createQueryBuilder('abogados').where('abogados.id = :id', { id }).getOne();;
+
+    // Si el abogado no existe, lanzamos una excepción
+    if (!abogado) {
+      throw new NotFoundException(`Abogado con ID ${id} no encontrado`);
+    }
+
+    // Actualizamos los campos del abogado con los datos del DTO
+    Object.assign(abogado, body);
+
+    // Guardamos los cambios en la base de datos
+    await this.abogadosRepository.save(abogado);
+
+    return {
+      state: true,
+      message: 'Abogado actualizado correctamente',
+    };
+  }
+
   public async findAbogados(queryParams): Promise<AbogadosEntity[]>
   {
-    const query = this.abogadosRespository.createQueryBuilder('abogados')
+    const query = this.abogadosRepository.createQueryBuilder('abogados')
       .leftJoinAndSelect('abogados.habilidadesBlandas', 'habilidadesBlandas')
       .leftJoinAndSelect('abogados.habilidadesDuras', 'habilidadesDuras')
       .leftJoinAndSelect('abogados.industrias', 'industrias')
@@ -224,7 +245,7 @@ export class AbogadosService{
       .leftJoinAndSelect('abogados.trabajos', 'trabajos');
     try {
       const clientes: AbogadosEntity[] = await query.getMany();
-      
+
       return clientes;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -234,7 +255,7 @@ export class AbogadosService{
   public async findAbogadoById(id: number): Promise<AbogadosEntity>
   {
     try {
-      const query = await this.abogadosRespository
+      const query = await this.abogadosRepository
         .createQueryBuilder('abogados')
         .leftJoinAndSelect('abogados.habilidadesBlandas', 'habilidadesBlandas')
         .leftJoinAndSelect('abogados.habilidadesDuras', 'habilidadesDuras')
@@ -263,7 +284,7 @@ export class AbogadosService{
   public async findBy({key, value} : { key: keyof AbogadoDTO; value: any })
   {
     try {
-      const usuario: AbogadosEntity = await this.abogadosRespository.createQueryBuilder(
+      const usuario: AbogadosEntity = await this.abogadosRepository.createQueryBuilder(
         'abogados'
       )
       .where({[key]: value})
@@ -272,5 +293,30 @@ export class AbogadosService{
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
+  }
+
+  async obtenerAbogadosPorOferta(ofertaId: number): Promise<AbogadosEntity[]> {
+    // Obtener la oferta por su ID
+    const oferta = await this.ofertasRepository.findOne({
+      where: { id: ofertaId },
+      relations: ['servicios', 'especialidades', 'industrias'], // Relacionamos los servicios, especialidades e industrias de la oferta
+    });
+
+    if (!oferta) {
+      throw new Error('Oferta no encontrada');
+    }
+
+    // Obtener abogados que tienen los mismos servicios, especialidades e industrias que la oferta
+    const abogados = await this.abogadosRepository
+      .createQueryBuilder('abogado')
+      .leftJoinAndSelect('abogado.servicios', 'servicio')
+      .leftJoinAndSelect('abogado.especialidades', 'especialidad')
+      .leftJoinAndSelect('abogado.industrias', 'industria')
+      .where('servicio.id IN (:...servicios)', { servicios: oferta.servicios.map(s => s.id) })
+      .andWhere('especialidad.id IN (:...especialidades)', { especialidades: oferta.especialidades.map(e => e.id) })
+      .andWhere('industria.id IN (:...industrias)', { industrias: oferta.industrias.map(i => i.id) })
+      .getMany();
+
+    return abogados;
   }
 }

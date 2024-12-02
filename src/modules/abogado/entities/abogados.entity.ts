@@ -5,11 +5,8 @@ import { UsuariosEntity } from '../../usuario/usuarios.entity';
 import { BaseEntity } from '../../../config/base.entity';
 import { HabilidadesBlandaEntity } from '../../habilidadBlanda/habilidadesBlanda.entity';
 import { HabilidadesDuraEntity } from '../../habilidadDura/habilidadesDura.entity';
-import { IndustriasEntity } from '../../industria/industrias.entity';
-import { ServiciosEntity } from '../../servicio/servicios.entity';
 import { ExperienciasEntity } from '../../experiencia/experiencias.entity';
 import { EducacionesEntity } from '../../educacion/educaciones.entity';
-import { EspecialidadesEntity } from '../../especialidad/especialidades.entity';
 import { AplicacionesEntity } from '../../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../../trabajo/trabajos.entity';
 import { ServiciosAbogadoEntity } from '../../servicio/servicioAbogado.entity';
@@ -67,8 +64,6 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   @OneToMany(() => IndustriasAbogadoEntity, (industria) => industria.abogado)
   industriasAbogado: IndustriasAbogadoEntity[];
 
-  // @OneToMany(() => ServiciosEntity, (servicio) => servicio.abogado)
-  // servicios: ServiciosEntity[];
   @OneToMany(() => ServiciosAbogadoEntity, (servicioAbogado) => servicioAbogado.abogado)
   serviciosAbogado: ServiciosAbogadoEntity[];
 

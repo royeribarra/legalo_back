@@ -6,22 +6,22 @@ import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 
 @Entity({name: 'trabajos'})
-export class TrabajosEntity extends BaseEntity implements ITrabajo{
+export class TrabajosEntity extends BaseEntity implements ITrabajo {
   @Column()
-  estado: number;
+  estado: number;  // El estado del trabajo (por ejemplo, pendiente, en progreso, completado)
 
   @Column()
-  fecha_fin: string;
+  fecha_fin: string;  // Fecha de finalización del trabajo
 
   @Column()
-  fecha_inicio: string;
+  fecha_inicio: string;  // Fecha de inicio del trabajo
 
   @ManyToOne(() => ClientesEntity, (cliente) => cliente.trabajos)
-  cliente: ClientesEntity;
+  cliente: ClientesEntity;  // Relación con el cliente que creó la oferta
 
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.trabajos)
-  abogado: AbogadosEntity;
+  abogado: AbogadosEntity;  // Relación con el abogado que fue contratado
 
   @OneToOne(() => AplicacionesEntity, (aplicacion) => aplicacion.trabajo)
-  aplicacion: AplicacionesEntity;
+  aplicacion: AplicacionesEntity;  // Relación con la aplicación que generó este trabajo
 }

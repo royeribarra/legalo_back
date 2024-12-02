@@ -127,3 +127,102 @@ export class AbogadoDTO {
   @Type(() => EspecialidadDTO)
   especialidades: EspecialidadDTO[];
 }
+
+export class AbogadoUpdateDTO {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  contrasena: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  telefono: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  direccion: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  sobre_ti: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  grado_academico: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  cip: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  colegio: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  video: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  foto: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  cv: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  cul: string;
+
+  @ApiProperty({ type: () => [HabilidadBlandaDTO] })
+  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => HabilidadBlandaDTO)
+  habilidadesBlandas: HabilidadBlandaDTO[];
+
+  @ApiProperty({ type: () => [HabilidadDuraDTO] })
+  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => HabilidadDuraDTO)
+  habilidadesDuras: HabilidadDuraDTO[];
+
+  @ApiProperty({ type: () => [IndustriaDTO] })
+  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => IndustriaDTO)
+  industrias: IndustriaDTO[];
+
+  @ApiProperty({ type: () => [ServicioDTO] })
+  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => ServicioDTO)
+  servicios: ServicioDTO[];
+
+  @ApiProperty({ type: () => [ExperienciaDTO] })
+  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => ExperienciaDTO)
+  experiencias: ExperienciaDTO[];
+
+  @ApiProperty({ type: () => [EducacionDTO] })
+  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => EducacionDTO)
+  educaciones: EducacionDTO[];
+
+  @ApiProperty({ type: () => [EspecialidadDTO] })
+  @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => EspecialidadDTO)
+  especialidades: EspecialidadDTO[];
+}

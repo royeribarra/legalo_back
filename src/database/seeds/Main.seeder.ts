@@ -12,11 +12,11 @@ export default class MainSeeder implements Seeder {
     dataSource: DataSource,
     factoryManager: SeederFactoryManager
   ): Promise<any> {
-    await runSeeder(dataSource, AbogadoSeeder);
-    await runSeeder(dataSource, ClienteSeeder);
-    await runSeeder(dataSource, UsuarioSeeder);
     await runSeeder(dataSource, ServicioSeeder);
     await runSeeder(dataSource, EspecialidadSeeder);
     await runSeeder(dataSource, IndustriaSeeder);
+    await runSeeder(dataSource, AbogadoSeeder);
+    await runSeeder(dataSource, ClienteSeeder);
+    await runSeeder(dataSource, UsuarioSeeder);
   }
 }
