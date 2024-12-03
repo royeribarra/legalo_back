@@ -1,5 +1,5 @@
 // src/trabajos/dto/crear-trabajo.dto.ts
-import { IsInt, IsDateString } from 'class-validator';
+import { IsInt, IsDateString, IsOptional, IsNumber, Min, Max } from 'class-validator';
 
 export class CrearTrabajoDTO {
   @IsInt()

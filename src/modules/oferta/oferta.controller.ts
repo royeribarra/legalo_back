@@ -41,44 +41,8 @@ export class OfertaController {
     return await this.ofertaService.findOfertaById(id);
   }
 
-  // @Post()
-  // @UseInterceptors(
-  //   FileInterceptor("profileImg", {
-  //     storage: diskStorage({
-  //       destination: "./uploads", // Carpeta donde se guardará la imagen
-  //       filename: (req, file, callback) => {
-  //         const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
-  //         callback(null, uniqueName);
-  //       },
-  //     }),
-  //     limits: { fileSize: 10 * 1024 * 1024 }, // Límite de tamaño: 10 MB
-  //   })
-  // )
-  //   uploadFile(@UploadedFile() file: Express.Multer.File) {
-  //   console.log("Archivo recibido:", file);
-  //   return { message: "Archivo subido exitosamente", filename: file.filename };
-  // }
-
-  
-
-  // @Put('edit/:id')
-  // public async updateConductor(@Body() body: ConductorUpdateDTO, @Param('id') id: number){
-  //   const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
-
-  //   const {state, message} = await this.abogadosService.updateConductor(body, id, vehiculo);
-  //   return {
-  //     state: state,
-  //     message: message,
-  //   }
-  // }
-
-  // @Delete(':id')
-  // public async deleteConductor(@Param('id') id:string){
-  //   const{ state, message} = await this.abogadosService.deleteConductor(id);
-  //   return {
-  //     state: state,
-  //     message: message
-  //   }
-  // }
-
+  @Get('cliente/:id/con-aplicaciones')
+  async getOfertasClienteConAplicaciones(@Param('id') clienteId: number) {
+    return this.ofertaService.getOfertasConAplicacionesPorCliente(clienteId);
+  }
 }

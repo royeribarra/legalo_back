@@ -1,7 +1,7 @@
 // src/trabajos/controllers/trabajos.controller.ts
 import { Controller, Param, Put, Body } from '@nestjs/common';
-import { TrabajosService } from '../services/trabajos.service';
-import { CrearTrabajoDTO } from '../dto/crear-trabajo.dto';
+import { ActualizarProgresoDTO, CrearTrabajoDTO } from './trabajo.dto';
+import { TrabajosService } from './trabajo.service';
 
 @Controller('trabajos')
 export class TrabajosController {

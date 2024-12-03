@@ -144,4 +144,17 @@ export class ClienteService{
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  async getOfertasByCliente(clienteId: number) {
+    const cliente = await this.clienteRepository.findOne({
+      where: { id: clienteId },
+      relations: ['ofertas'], // Carga las relaciones necesarias.
+    });
+
+    if (!cliente) {
+      throw new Error('Cliente no encontrado');
+    }
+
+    return cliente.ofertas;
+  }
 }

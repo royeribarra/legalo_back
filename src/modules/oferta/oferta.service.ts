@@ -118,31 +118,37 @@ export class OfertaService{
     }
   }
 
-  // async aceptarPostulacion(ofertaId: number, postulacionId: number): Promise<TrabajosEntity> {
-  //   const oferta = await this.ofertaRepository.findOne(ofertaId);
-  //   const postulacion = await this.aplicacionRepository.findOne(postulacionId);
+  async aceptarPostulacion(ofertaId: number, postulacionId: number): Promise<TrabajosEntity> {
+    const oferta = await this.ofertaRepository.findOne({where: { id: ofertaId} });
+    const postulacion = await this.aplicacionRepository.findOne({where: { id: postulacionId} });
     
-  //   if (!oferta || !postulacion) {
-  //     throw new Error('Oferta o postulación no encontrada');
-  //   }
+    if (!oferta || !postulacion) {
+      throw new Error('Oferta o postulación no encontrada');
+    }
 
-  //   // Crear el trabajo
-  //   const trabajo = this.trabajoRepository.create({
-  //     cliente: oferta.cliente,
-  //     abogado: postulacion.abogado,
-  //     oferta: oferta,
-  //     postulacion: postulacion,
-  //     fechaInicio: new Date(),
-  //     estado: 'en curso',
-  //   });
+    // Crear el trabajo
+    const trabajo = this.trabajoRepository.create({
+      cliente: oferta.cliente,
+      abogado: postulacion.abogado,
+      aplicacion: postulacion,
+      fecha_inicio: (new Date()).toDateString(),
+      estado: 1,
+    });
     
-  //   // Guardar el trabajo y actualizar la postulación
-  //   await this.trabajoRepository.save(trabajo);
+    // Guardar el trabajo y actualizar la postulación
+    await this.trabajoRepository.save(trabajo);
     
-  //   // Marcar la postulación como parte del trabajo
-  //   postulacion.trabajo = trabajo;
-  //   await this.aplicacionRepository.save(postulacion);
+    // Marcar la postulación como parte del trabajo
+    postulacion.trabajo = trabajo;
+    await this.aplicacionRepository.save(postulacion);
 
-  //   return trabajo;
-  // }
+    return trabajo;
+  }
+
+  async getOfertasConAplicacionesPorCliente(clienteId: number) {
+    return this.ofertaRepository.find({
+      where: { cliente: { id: clienteId } },
+      relations: ['aplicaciones', 'cliente'], // Incluye relaciones necesarias.
+    });
+  }
 }

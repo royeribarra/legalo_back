@@ -14,6 +14,7 @@ import { ServiciosEntity } from '../../servicio/servicios.entity';
 import { UsuariosService } from '../../usuario/usuario.service';
 import { AbogadoMailService } from '../../mail/services/abogadoMail.service';
 import { TempFilesService } from '../../tmp/tmpFile.service';
+import { OfertasEntity } from '../../oferta/oferta.entity';
 
 @Injectable()
 export class AbogadosService{
@@ -27,6 +28,7 @@ export class AbogadosService{
     @InjectRepository(HabilidadesDuraEntity) private readonly habilidadDurRepository: Repository<HabilidadesDuraEntity>,
     @InjectRepository(IndustriasEntity) private readonly industriaRepository: Repository<IndustriasEntity>,
     @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
+    @InjectRepository(OfertasEntity) private readonly ofertaRepository: Repository<OfertasEntity>,
     private readonly usuariosService: UsuariosService,
     private readonly abogadoMailService: AbogadoMailService,
     private readonly tempFilesService: TempFilesService
@@ -297,7 +299,7 @@ export class AbogadosService{
 
   async obtenerAbogadosPorOferta(ofertaId: number): Promise<AbogadosEntity[]> {
     // Obtener la oferta por su ID
-    const oferta = await this.ofertasRepository.findOne({
+    const oferta = await this.ofertaRepository.findOne({
       where: { id: ofertaId },
       relations: ['servicios', 'especialidades', 'industrias'], // Relacionamos los servicios, especialidades e industrias de la oferta
     });
@@ -312,9 +314,9 @@ export class AbogadosService{
       .leftJoinAndSelect('abogado.servicios', 'servicio')
       .leftJoinAndSelect('abogado.especialidades', 'especialidad')
       .leftJoinAndSelect('abogado.industrias', 'industria')
-      .where('servicio.id IN (:...servicios)', { servicios: oferta.servicios.map(s => s.id) })
-      .andWhere('especialidad.id IN (:...especialidades)', { especialidades: oferta.especialidades.map(e => e.id) })
-      .andWhere('industria.id IN (:...industrias)', { industrias: oferta.industrias.map(i => i.id) })
+      .where('servicio.id IN (:...servicios)', { servicios: oferta.serviciosOferta.map(s => s.id) })
+      .andWhere('especialidad.id IN (:...especialidades)', { especialidades: oferta.especialidadesOferta.map(e => e.id) })
+      .andWhere('industria.id IN (:...industrias)', { industrias: oferta.industriasOferta.map(i => i.id) })
       .getMany();
 
     return abogados;

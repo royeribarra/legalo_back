@@ -53,4 +53,8 @@ export class ClienteController {
   //   }
   // }
 
+  @Get(':id/ofertas')
+  async getOfertasByCliente(@Param('id') clienteId: number) {
+    return this.clienteService.getOfertasByCliente(clienteId);
+  }
 }

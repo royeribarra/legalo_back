@@ -2,11 +2,11 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TrabajosEntity } from '../entities/trabajos.entity';
-import { AplicacionesEntity } from '../../aplicacion/aplicaciones.entity';
-import { ClientesEntity } from '../../cliente/entities/clientes.entity';
-import { AbogadosEntity } from '../../abogado/entities/abogados.entity';
-import { CrearTrabajoDTO } from '../dto/crear-trabajo.dto';
+import { ActualizarProgresoDTO, CrearTrabajoDTO } from './trabajo.dto';
+import { TrabajosEntity } from './trabajos.entity';
+import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
+import { ClientesEntity } from '../cliente/entities/clientes.entity';
+import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 
 @Injectable()
 export class TrabajosService {
@@ -34,7 +34,7 @@ export class TrabajosService {
     }
 
     // Obtener el cliente de la oferta (el dueño de la oferta)
-    const cliente = await this.clientesRepository.findOne({ where: { id: aplicacion.oferta.clienteId } });
+    const cliente = await this.clientesRepository.findOne({ where: { id: aplicacion.oferta.cliente.id } });
     if (!cliente) {
       throw new NotFoundException(`Cliente asociado a la oferta no encontrado`);
     }

@@ -4,19 +4,19 @@ import { diskStorage } from "multer";
 import { v4 as uuidv4 } from "uuid";
 import { extname } from "path";
 import { ApiTags } from '@nestjs/swagger';
-import { AbogadosService } from '../services/abogados.service';
-import { AbogadoDTO, AbogadoUpdateDTO } from '../dto/abogado.dto';
+import { AplicacionCreateDTO } from './aplicacion.dto';
+import { AplicacionesService } from './aplicaciones.service';
 
 @ApiTags('Abogados')
 @Controller('abogados')
 export class AplicacionesController {
   constructor(
-    private readonly abogadosService: AbogadosService,
+    private readonly aplicacionService: AplicacionesService,
     ) {}
 
     @Post('crear')
     public async crearAplicacion(@Body() body: AplicacionCreateDTO) {
-      const aplicacion = await this.aplicacionesService.createAplicacion(body);
+      const aplicacion = await this.aplicacionService.createAplicacion(body);
       return {
         state: true,
         message: 'Aplicación creada con éxito',
@@ -24,16 +24,16 @@ export class AplicacionesController {
       };
     }
 
-  @Get('all')
-  public async findAllAbogados(@Query() queryParams: any)
-  {
-    return await this.abogadosService.findAbogados(queryParams);
-  }
+  // @Get('all')
+  // public async findAllAbogados(@Query() queryParams: any)
+  // {
+  //   return await this.aplicacionService.findAbogados(queryParams);
+  // }
 
-  @Get(':id')
-  public async findConductorById(@Param('id') id: number){
-    return await this.abogadosService.findAbogadoById(id);
-  }
+  // @Get(':id')
+  // public async findConductorById(@Param('id') id: number){
+  //   return await this.aplicacionService.findAbogadoById(id);
+  // }
 
   // @Post()
   // @UseInterceptors(
@@ -55,15 +55,15 @@ export class AplicacionesController {
 
 
 
-  @Put('edit/:id')
-  public async updateAbogado(@Body() body: AbogadoUpdateDTO, @Param('id') id: number)
-  {
-    const {state, message} = await this.abogadosService.updateAbogado(body, id);
-    return {
-      state: state,
-      message: message,
-    }
-  }
+  // @Put('edit/:id')
+  // public async updateAbogado(@Body() body: AbogadoUpdateDTO, @Param('id') id: number)
+  // {
+  //   const {state, message} = await this.aplicacionService.updateAbogado(body, id);
+  //   return {
+  //     state: state,
+  //     message: message,
+  //   }
+  // }
 
   // @Delete(':id')
   // public async deleteConductor(@Param('id') id:string){

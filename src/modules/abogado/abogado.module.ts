@@ -14,6 +14,7 @@ import { UsuariosModule } from '../usuario/usuario.module';
 import { MailModule } from '../mail/mail.module';
 import { TempFilesService } from '../tmp/tmpFile.service';
 import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
+import { OfertasEntity } from '../oferta/oferta.entity';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
       HabilidadesBlandaEntity,
       ServiciosEntity,
       IndustriasEntity,
-      TmpImageFileEntity
+      TmpImageFileEntity,
+      OfertasEntity
     ]),
     UsuariosModule,
     MailModule

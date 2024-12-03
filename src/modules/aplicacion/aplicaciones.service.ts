@@ -2,10 +2,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AplicacionesEntity } from '../entities/aplicaciones.entity';
-import { AplicacionCreateDTO } from '../dto/aplicacion-create.dto';
-import { OfertasEntity } from '../../oferta/oferta.entity';
-import { AbogadosEntity } from '../../abogado/entities/abogados.entity';
+import { AplicacionesEntity } from './aplicaciones.entity';
+import { OfertasEntity } from '../oferta/oferta.entity';
+import { AbogadosEntity } from '../abogado/entities/abogados.entity';
+import { AplicacionCreateDTO } from './aplicacion.dto';
 
 @Injectable()
 export class AplicacionesService {

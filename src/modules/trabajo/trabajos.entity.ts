@@ -14,7 +14,10 @@ export class TrabajosEntity extends BaseEntity implements ITrabajo {
   fecha_fin: string;  // Fecha de finalización del trabajo
 
   @Column()
-  fecha_inicio: string;  // Fecha de inicio del trabajo
+  fecha_inicio: string; 
+
+  @Column()
+  progreso: number;  // Fecha de inicio del trabajo
 
   @ManyToOne(() => ClientesEntity, (cliente) => cliente.trabajos)
   cliente: ClientesEntity;  // Relación con el cliente que creó la oferta
