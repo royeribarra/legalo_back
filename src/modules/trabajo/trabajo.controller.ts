@@ -1,5 +1,5 @@
 // src/trabajos/controllers/trabajos.controller.ts
-import { Controller, Param, Put, Body } from '@nestjs/common';
+import { Controller, Param, Put, Body, Get } from '@nestjs/common';
 import { ActualizarProgresoDTO, CrearTrabajoDTO } from './trabajo.dto';
 import { TrabajosService } from './trabajo.service';
 
@@ -38,5 +38,15 @@ export class TrabajosController {
       message: 'Progreso del trabajo actualizado con éxito',
       data: trabajo,
     };
+  }
+
+  @Get('cliente/:id/en-progreso')
+  async getTrabajosEnTrabajoPorCliente(@Param('id') clienteId: number) {
+    return this.trabajosService.getTrabajosEnProcesoPorCliente(clienteId);
+  }
+
+  @Get('cliente/:id/finalizados')
+  async getTrabajosFinalizadosPorCliente(@Param('id') clienteId: number) {
+    return this.trabajosService.getTrabajosFinalizadosPorCliente(clienteId);
   }
 }

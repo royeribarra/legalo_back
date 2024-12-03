@@ -14,8 +14,17 @@ export default class UsuarioSeeder implements Seeder {
     const userrepository =  dataSource.getRepository(UsuariosEntity);
     const abogadoRepository =  dataSource.getRepository(AbogadosEntity);
     const clienteRepository =  dataSource.getRepository(ClientesEntity);
-    const abogado = await abogadoRepository.findOneBy({
-        correo: 'royer@gmail.com',
+    const abogado1 = await abogadoRepository.findOneBy({
+      correo: 'royer@gmail.com',
+    });
+    const abogado2 = await abogadoRepository.findOneBy({
+      correo: 'mariana.perez@example.com',
+    });
+    const abogado3 = await abogadoRepository.findOneBy({
+      correo: 'carlos.martinez@example.com',
+    });
+    const abogado4 = await abogadoRepository.findOneBy({
+      correo: 'laura.gomez@example.com',
     });
     const cliente = await clienteRepository.findOneBy({
         correo: 'magaly@gmail.com',
@@ -32,20 +41,56 @@ export default class UsuarioSeeder implements Seeder {
           dni: '70019408',
           telefono: '939784580',
           perfil: 'abogado',
-          abogado: abogado,
+          abogado: abogado1,
           cliente: null
         },
         {
-            nombres: 'Magaly',
-            apellidos: 'Granados',
-            correo: 'magaly@gmail.com',
-            usuario: 'user70049277',
-            contrasena: await bcrypt.hash('cliente123', +process.env.HASH_SALT),
-            dni: '70049277',
-            telefono: '964973017',
-            perfil: 'cliente',
-            abogado: null,
-            cliente: cliente
+          nombres: 'Magaly',
+          apellidos: 'Granados',
+          correo: 'magaly@gmail.com',
+          usuario: 'user70049277',
+          contrasena: await bcrypt.hash('cliente123', +process.env.HASH_SALT),
+          dni: '70049277',
+          telefono: '964973017',
+          perfil: 'cliente',
+          abogado: null,
+          cliente: cliente
+        },
+        {
+          nombres: 'Mariana',
+          apellidos: 'Pérez López',
+          correo: 'mariana.perez@example.com',
+          usuario: 'user12345678',
+          contrasena: await bcrypt.hash('ingeniera456', +process.env.HASH_SALT),
+          dni: '12345678',
+          telefono: '987654321',
+          perfil: 'abogado',
+          abogado: abogado2,
+          cliente: null
+        },
+        {
+          nombres: 'Carlos',
+          apellidos: 'Martinez',
+          correo: 'carlos.martinez@example.com',
+          usuario: 'user98765432',
+          contrasena: await bcrypt.hash('abogado789', +process.env.HASH_SALT),
+          dni: '98765432',
+          telefono: '912345678',
+          perfil: 'abogado',
+          abogado: abogado3,
+          cliente: null
+        },
+        {
+          nombres: 'Laura',
+          apellidos: 'Gómez',
+          correo: 'laura.gomez@example.com',
+          usuario: 'user56473821',
+          contrasena: await bcrypt.hash('abogado234', +process.env.HASH_SALT),
+          dni: '56473821',
+          telefono: '965432109',
+          perfil: 'abogado',
+          abogado: abogado4,
+          cliente: null
         }
       ];
 
@@ -57,11 +102,11 @@ export default class UsuarioSeeder implements Seeder {
           dataToInsert.push(element);
         }
       }
-      
+
       await userrepository.insert(dataToInsert);
       console.log("Usuarios insertados correctamente");
     } catch (error) {
-      console.error('Error en el userSeeder:', error);
+      console.error('Error en el usuarioSeeder:', error);
     }
   }
 }

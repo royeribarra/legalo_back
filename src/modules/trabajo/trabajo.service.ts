@@ -74,4 +74,22 @@ export class TrabajosService {
     // Guardar los cambios
     return this.trabajosRepository.save(trabajo);
   }
+
+  async getTrabajosFinalizadosPorCliente(clienteId: number) {
+    return this.trabajosRepository
+      .createQueryBuilder('trabajo')
+      .where('trabajo.cliente.id = :clienteId', { clienteId }) // Usamos trabajo.cliente.id en lugar de trabajo.clienteId
+      .andWhere('trabajo.estado = :estado', { estado: 4 }) // Filtrar por estado "finalizado"
+      .getMany();
+  }
+
+  async getTrabajosEnProcesoPorCliente(clienteId: number) {
+    return this.trabajosRepository
+      .createQueryBuilder('trabajo')
+      .leftJoinAndSelect('trabajo.aplicacion', 'aplicacion')  // Realiza un LEFT JOIN para traer la relación con Aplicaciones
+      .where('trabajo.clienteId = :clienteId', { clienteId })
+      .andWhere('trabajo.estado > 0 AND trabajo.estado < 5')  // Filtrar entre estado 1 (creado), 2 (progreso) y 3 (validación)
+      .andWhere('trabajo.aplicacion IS NULL')  // Asegurarse de que no haya aplicaciones asociadas
+      .getMany();
+  }
 }

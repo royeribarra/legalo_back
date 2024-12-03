@@ -29,7 +29,7 @@ export default class OfertaSeeder implements Seeder {
         {
             uso: "Personal",
             titulo: "Oferta 1",
-            descripcion: "este es un caso de prueba 1",
+            descripcion: "este es una oferta de prueba 1",
             documento_url: "",
             duracion: "2 semanas",
             experiencia_abogado: "4 meses",
@@ -41,15 +41,90 @@ export default class OfertaSeeder implements Seeder {
             especialidades: [1, 2, 3, 4],
             preguntasOferta: [
               {
-                pregunta: "¿Donde vives?"
+                pregunta: "¿Donde vives oferta 1?"
               },
               {
-                pregunta: "¿Donde estudias?"
+                pregunta: "¿Donde estudias oferta 1?"
               },
               {
-                pregunta: "¿Donde trabajas?"
+                pregunta: "¿Donde trabajas oferta 1?"
               }
             ]
+        },
+        {
+          uso: "Empresarial",
+          titulo: "Oferta 2",
+          descripcion: "este es una oferta de prueba 2",
+          documento_url: "",
+          duracion: "2 semanas",
+          experiencia_abogado: "4 meses",
+          salario_minimo: "500",
+          salario_maximo: "1000",
+          estado: "creada",
+          industrias: [4, 5, 6],
+          servicios: [4, 5, 6],
+          especialidades: [4, 5, 6],
+          preguntasOferta: [
+            {
+              pregunta: "¿Donde vives oferta 2?"
+            },
+            {
+              pregunta: "¿Donde estudias oferta 2?"
+            },
+            {
+              pregunta: "¿Donde trabajas oferta 2?"
+            }
+          ]
+        },
+        {
+          uso: "Tecnológica",
+          titulo: "Oferta 3",
+          descripcion: "Esta es una oferta de prueba 3, dirigida a perfiles tecnológicos con experiencia en desarrollo de software.",
+          documento_url: "https://www.example.com/oferta-3.pdf",
+          duracion: "1 mes",
+          experiencia_abogado: "Ninguna",
+          salario_minimo: "1200",
+          salario_maximo: "2500",
+          estado: "abierta",
+          industrias: [1, 2, 3],
+          servicios: [1, 2, 3],
+          especialidades: [2, 4, 6],
+          preguntasOferta: [
+            {
+              pregunta: "¿Cuál es tu experiencia en desarrollo de software?"
+            },
+            {
+              pregunta: "¿Tienes conocimientos en metodologías ágiles?"
+            },
+            {
+              pregunta: "¿Qué lenguajes de programación dominas?"
+            }
+          ]
+        },
+        {
+          uso: "Salud",
+          titulo: "Oferta 4",
+          descripcion: "Oferta de trabajo en el sector salud para profesionales médicos, con énfasis en atención al paciente.",
+          documento_url: "https://www.example.com/oferta-4.pdf",
+          duracion: "6 meses",
+          experiencia_abogado: "Ninguna",
+          salario_minimo: "1500",
+          salario_maximo: "4000",
+          estado: "en progreso",
+          industrias: [7, 8],
+          servicios: [7, 8],
+          especialidades: [1, 5],
+          preguntasOferta: [
+            {
+              pregunta: "¿Tienes experiencia en atención primaria?"
+            },
+            {
+              pregunta: "¿Has trabajado en hospitales públicos o privados?"
+            },
+            {
+              pregunta: "¿Qué tratamientos o especialidades dominas?"
+            }
+          ]
         }
       ];
 
@@ -116,9 +191,9 @@ export default class OfertaSeeder implements Seeder {
       }
 
       await ofertaRepository.insert(dataToInsert);
-      console.log("Clientes insertados correctamente");
+      console.log("Ofertas insertados correctamente");
     } catch (error) {
-      console.error('Error en el ClienteSeeder:', error);
+      console.error('Error en el OfertaSeeder:', error);
     }
   }
 }

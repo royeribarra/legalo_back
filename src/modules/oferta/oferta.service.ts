@@ -151,4 +151,13 @@ export class OfertaService{
       relations: ['aplicaciones', 'cliente'], // Incluye relaciones necesarias.
     });
   }
+
+  async getOfertasSinAplicacionesPorCliente(clienteId: number) {
+    return this.ofertaRepository
+      .createQueryBuilder('oferta')
+      .leftJoinAndSelect('oferta.aplicaciones', 'aplicacion') // Asegúrate de que 'aplicaciones' esté bien relacionado
+      .where('oferta.clienteId = :clienteId', { clienteId })
+      .andWhere('aplicacion.id IS NULL') // Filtra ofertas donde no hay aplicaciones (array vacío)
+      .getMany();
+  }
 }

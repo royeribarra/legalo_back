@@ -33,7 +33,7 @@ export default class ClienteSeeder implements Seeder {
           dataToInsert.push(element);
         }
       }
-      
+
       await clienteRepository.insert(dataToInsert);
       console.log("Clientes insertados correctamente");
     } catch (error) {

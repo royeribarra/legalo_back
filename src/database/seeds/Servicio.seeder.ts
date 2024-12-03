@@ -47,7 +47,7 @@ export default class ServicioSeeder implements Seeder {
           dataToInsert.push(element);
         }
       }
-      
+
       await servicioRepository.insert(dataToInsert);
       console.log("Servicios insertados correctamente");
     } catch (error) {

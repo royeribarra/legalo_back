@@ -59,7 +59,7 @@ export default class EspecialidadSeeder implements Seeder {
           dataToInsert.push(element);
         }
       }
-      
+
       await especialidadRepository.insert(dataToInsert);
       console.log("Especialidades insertados correctamente");
     } catch (error) {

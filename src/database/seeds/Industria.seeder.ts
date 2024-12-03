@@ -80,11 +80,11 @@ export default class IndustriaSeeder implements Seeder {
           dataToInsert.push(element);
         }
       }
-      
+
       await servicioRepository.insert(dataToInsert);
-      console.log("Servicios insertados correctamente");
+      console.log("Industrias insertados correctamente");
     } catch (error) {
-      console.error('Error en el ServicioSeeder:', error);
+      console.error('Error en el IndustriaSeeder:', error);
     }
   }
 }

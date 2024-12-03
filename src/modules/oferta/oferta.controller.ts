@@ -41,6 +41,11 @@ export class OfertaController {
     return await this.ofertaService.findOfertaById(id);
   }
 
+  @Get('cliente/:id/sin-aplicaciones')
+  async getOfertasClienteSinAplicaciones(@Param('id') clienteId: number) {
+    return this.ofertaService.getOfertasSinAplicacionesPorCliente(clienteId);
+  }
+
   @Get('cliente/:id/con-aplicaciones')
   async getOfertasClienteConAplicaciones(@Param('id') clienteId: number) {
     return this.ofertaService.getOfertasConAplicacionesPorCliente(clienteId);
