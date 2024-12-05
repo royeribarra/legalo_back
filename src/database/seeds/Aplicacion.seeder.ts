@@ -20,6 +20,7 @@ export default class AplicacionSeeder implements Seeder {
             {
                 fecha_aplicacion: '2022-10-20',
                 status: 1,
+                salarioEsperado: 500,
                 abogado: await abogadoRepository.findOneBy({
                     id: 1,
                 }),
@@ -30,6 +31,7 @@ export default class AplicacionSeeder implements Seeder {
             {
                 fecha_aplicacion: '2022-10-21',
                 status: 1,
+                salarioEsperado: 600,
                 abogado: await abogadoRepository.findOneBy({
                     id: 2,
                 }),
@@ -40,6 +42,7 @@ export default class AplicacionSeeder implements Seeder {
             {
                 fecha_aplicacion: '2022-10-22',
                 status: 1,
+                salarioEsperado: 700,
                 abogado: await abogadoRepository.findOneBy({
                     id: 3,
                 }),
@@ -50,6 +53,7 @@ export default class AplicacionSeeder implements Seeder {
             {
                 fecha_aplicacion: '2022-10-23',
                 status: 1,
+                salarioEsperado: 800,
                 abogado: await abogadoRepository.findOneBy({
                     id: 4,
                 }),

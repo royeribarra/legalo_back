@@ -15,10 +15,14 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
   @Column()
   status: number;
 
-  @OneToOne(() => OfertasEntity, (oferta) => oferta.aplicaciones)
+  @Column()
+  salarioEsperado: number;
+
+  @ManyToOne(() => OfertasEntity, (oferta) => oferta.aplicaciones)
+  @JoinColumn({ name: 'oferta_id' })
   oferta: OfertasEntity;
 
-  @OneToOne(() => AbogadosEntity, (abogado) => abogado.aplicaciones)
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.aplicaciones)
   abogado: AbogadosEntity;
 
   @OneToOne(() => TrabajosEntity, (trabajo) => trabajo.aplicacion)

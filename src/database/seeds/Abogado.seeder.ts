@@ -10,8 +10,8 @@ import { ServiciosAbogadoEntity } from '../../modules/servicio/servicioAbogado.e
 import { EspecialidadesAbogadoEntity } from '../../modules/especialidad/especialidadAbogado.entity';
 import e from 'express';
 import { In } from 'typeorm';
-import { ExperienciasEntity } from 'src/modules/experiencia/experiencias.entity';
-import { EducacionesEntity } from 'src/modules/educacion/educaciones.entity';
+import { ExperienciasEntity } from '../../modules/experiencia/experiencias.entity';
+import { EducacionesEntity } from '../../modules/educacion/educaciones.entity';
 
 export default class AbogadoSeeder implements Seeder {
   public async run(

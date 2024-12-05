@@ -145,19 +145,26 @@ export class OfertaService{
     return trabajo;
   }
 
-  async getOfertasConAplicacionesPorCliente(clienteId: number) {
-    return this.ofertaRepository.find({
-      where: { cliente: { id: clienteId } },
-      relations: ['aplicaciones', 'cliente'], // Incluye relaciones necesarias.
-    });
-  }
-
   async getOfertasSinAplicacionesPorCliente(clienteId: number) {
     return this.ofertaRepository
       .createQueryBuilder('oferta')
-      .leftJoinAndSelect('oferta.aplicaciones', 'aplicacion') // Asegúrate de que 'aplicaciones' esté bien relacionado
+      .leftJoinAndSelect('oferta.aplicaciones', 'aplicacion')
       .where('oferta.clienteId = :clienteId', { clienteId })
-      .andWhere('aplicacion.id IS NULL') // Filtra ofertas donde no hay aplicaciones (array vacío)
+      .andWhere('aplicacion.id IS NULL')
       .getMany();
+  }
+
+  async getOfertasConAplicacionesPorCliente(clienteId: number) {
+    try {
+      return this.ofertaRepository
+      .createQueryBuilder('oferta')
+      .innerJoinAndSelect('oferta.aplicaciones', 'aplicaciones')
+      .innerJoinAndSelect('aplicaciones.abogado', 'abogado')
+      .innerJoinAndSelect('oferta.cliente', 'cliente', 'cliente.deleted_at IS NULL')
+      .where('cliente.id = :clienteId', { clienteId })
+      .getMany();
+    } catch (error) {
+      console.log("fallo la consulta")
+    }
   }
 }
