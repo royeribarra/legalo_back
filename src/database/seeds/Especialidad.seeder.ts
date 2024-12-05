@@ -11,43 +11,56 @@ export default class EspecialidadSeeder implements Seeder {
       const especialidadRepository =  dataSource.getRepository(EspecialidadesEntity);
       const data= [
         {
-            nombre: "Abogado Civil"
+            nombre: "Abogado Civil",
+            imagen: "icos/ico-d-civil.png"
         },
         {
-            nombre: "Abogado Penalista"
+            nombre: "Abogado Penalista",
+            imagen: "icos/ico-d-penal.png"
         },
         {
-            nombre: "Abogado Laboral"
+            nombre: "Abogado Laboral",
+            imagen: "/icos/ico-d-laboral.png"
         },
         {
-            nombre: "Abogado Familiar"
+            nombre: "Abogado Familiar",
+            imagen: "icos/ico-d-familia.png"
         },
         {
-            nombre: "Abogado Empresarial"
+            nombre: "Abogado Empresarial",
+            imagen: "icos/ico-d-empresarial.png"
         },
         {
-            nombre: "Abogado Ambiental"
+            nombre: "Abogado Ambiental",
+            imagen: "icos/ico-d-ambiental.png"
         },
         {
-            nombre: "Abogado de Competencia"
+            nombre: "Abogado de Competencia",
+            imagen: "icos/ico-d-competencia.png"
         },
         {
-            nombre: "Abogado de Competencia Desleal"
+            nombre: "Abogado de Competencia Desleal",
+            imagen: "icos/ico-d-compe-desleal.png"
         },
         {
-            nombre: "Abogado de Propiedad Intelectual"
+            nombre: "Abogado de Propiedad Intelectual",
+            imagen: "icos/ico-d-intelectual.png"
         },
         {
-            nombre: "Abogado de Protección al consumidor"
+            nombre: "Abogado de Protección al consumidor",
+            imagen: "icos/ico-d-consumidor.png"
         },
         {
-            nombre: "Abogado de Tecnología y Datos"
+            nombre: "Abogado de Tecnología y Datos",
+            imagen: "icos/ico-d-tecnologia.png"
         },
         {
-            nombre: "Abogado de Salud"
+            nombre: "Abogado de Salud",
+            imagen: "icos/ico-d-salud.png"
         },
         {
-            nombre: "Abogado de derecho Tributario"
+            nombre: "Abogado de derecho Tributario",
+            imagen: "icos/ico-d-tributario.png"
         },
       ];
 
