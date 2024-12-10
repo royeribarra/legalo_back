@@ -150,41 +150,44 @@ export default class OfertaSeeder implements Seeder {
 
           const savedOferta = await ofertaRepository.save(oferta);
 
-          const preguntasOferta = await preguntaOfertaRepository.save(
-            element.preguntasOferta.map((pregunta) => ({
-              pregunta: pregunta.pregunta,
-              oferta: savedOferta
-            }))
-          );
+          // const preguntasOferta = await preguntaOfertaRepository.save(
+          //   element.preguntasOferta.map((pregunta) => ({
+          //     pregunta: pregunta.pregunta,
+          //     oferta: savedOferta
+          //   }))
+          // );
+          // console.log(preguntasOferta)
 
-          const servicios = await serviciosOfertaRepository.findBy({ id: In(element.servicios) });
-          const serviciosOferta = await serviciosOfertaRepository.save(
-            servicios.map((servicio) => ({
-              oferta: savedOferta,
-              servicio: servicio
-            }))
-          );
+          // const servicios = await serviciosOfertaRepository.findBy({ id: In(element.servicios) });
+          // console.log(servicios)
+          // const serviciosOferta = await serviciosOfertaRepository.save(
+          //   servicios.map((servicio) => ({
+          //     oferta: savedOferta,
+          //     servicio: servicio
+          //   }))
+          // );
+          // console.log(serviciosOferta)
 
-          const especialidades = await especialidadesOfertaRepository.findBy({ id: In(element.especialidades) });
-          const especialidadesOferta = await especialidadesOfertaRepository.save(
-            especialidades.map((especialidad) => ({
-              oferta: savedOferta,
-              especialidad: especialidad
-            }))
-          );
+          // const especialidades = await especialidadesOfertaRepository.findBy({ id: In(element.especialidades) });
+          // const especialidadesOferta = await especialidadesOfertaRepository.save(
+          //   especialidades.map((especialidad) => ({
+          //     oferta: savedOferta,
+          //     especialidad: especialidad
+          //   }))
+          // );
 
-          const industrias = await industriasOfertaRepository.findBy({ id: In(element.industrias) });
-          const industriasOferta = await industriasOfertaRepository.save(
-            industrias.map((industria) => ({
-              oferta: savedOferta,
-              industria: industria
-            }))
-          );
+          // const industrias = await industriasOfertaRepository.findBy({ id: In(element.industrias) });
+          // const industriasOferta = await industriasOfertaRepository.save(
+          //   industrias.map((industria) => ({
+          //     oferta: savedOferta,
+          //     industria: industria
+          //   }))
+          // );
 
-          savedOferta.preguntas_oferta = preguntasOferta;
-          savedOferta.serviciosOferta = serviciosOferta;
-          savedOferta.especialidadesOferta = especialidadesOferta;
-          savedOferta.industriasOferta = industriasOferta;
+          // savedOferta.preguntas_oferta = preguntasOferta;
+          // savedOferta.serviciosOferta = serviciosOferta;
+          // savedOferta.especialidadesOferta = especialidadesOferta;
+          // savedOferta.industriasOferta = industriasOferta;
 
           dataToInsert.push(element);
         }

@@ -294,29 +294,29 @@ export default class AbogadoSeeder implements Seeder {
             }))
           );
 
-          const servicios = await serviciosAbogadoRepository.findBy({ id: In(element.servicios) });
-          const serviciosAbogado = await serviciosAbogadoRepository.save(
-            servicios.map((servicio) => ({
-              abogado: savedAbogado,
-              servicio: servicio
-            }))
-          );
+          // const servicios = await serviciosAbogadoRepository.findBy({ id: In(element.servicios) });
+          // const serviciosAbogado = await serviciosAbogadoRepository.save(
+          //   servicios.map((servicio) => ({
+          //     abogado: savedAbogado,
+          //     servicio: servicio
+          //   }))
+          // );
 
-          const especialidades = await especialidadesAbogadoRepository.findBy({ id: In(element.especialidades) });
-          const especialidadesAbogado = await especialidadesAbogadoRepository.save(
-            especialidades.map((especialidad) => ({
-              abogado: savedAbogado,
-              especialidad: especialidad
-            }))
-          );
+          // const especialidades = await especialidadesAbogadoRepository.findBy({ id: In(element.especialidades) });
+          // const especialidadesAbogado = await especialidadesAbogadoRepository.save(
+          //   especialidades.map((especialidad) => ({
+          //     abogado: savedAbogado,
+          //     especialidad: especialidad
+          //   }))
+          // );
 
-          const industrias = await industriasAbogadoRepository.findBy({ id: In(element.industrias) });
-          const industriasAbogado = await industriasAbogadoRepository.save(
-            industrias.map((industria) => ({
-              abogado: savedAbogado,
-              industria: industria
-            }))
-          );
+          // const industrias = await industriasAbogadoRepository.findBy({ id: In(element.industrias) });
+          // const industriasAbogado = await industriasAbogadoRepository.save(
+          //   industrias.map((industria) => ({
+          //     abogado: savedAbogado,
+          //     industria: industria
+          //   }))
+          // );
 
           const experiencias = await experienciasRepository.save(
             element.experiencias.map((experiencia) => ({
@@ -334,9 +334,9 @@ export default class AbogadoSeeder implements Seeder {
 
           savedAbogado.habilidadesBlandas = habilidadesBlandas;
           savedAbogado.habilidadesDuras = habilidadesDuras;
-          savedAbogado.industriasAbogado = industriasAbogado;
-          savedAbogado.serviciosAbogado = serviciosAbogado;
-          savedAbogado.especialidadesAbogado = especialidadesAbogado;
+          // savedAbogado.industriasAbogado = industriasAbogado;
+          // savedAbogado.serviciosAbogado = serviciosAbogado;
+          // savedAbogado.especialidadesAbogado = especialidadesAbogado;
           savedAbogado.experiencias = experiencias;
           savedAbogado.educaciones = educaciones;
           dataToInsert.push(savedAbogado);

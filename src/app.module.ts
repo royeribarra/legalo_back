@@ -13,6 +13,7 @@ import { NestjsFormDataModule } from 'nestjs-form-data';
 import { ServicioModule } from './modules/servicio/servicio.module';
 import { IndustriaModule } from './modules/industria/industria.module';
 import { EspecialidadModule } from './modules/especialidad/especialidad.module';
+import { PagoModule } from './modules/pago/pago.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { EspecialidadModule } from './modules/especialidad/especialidad.module';
     OfertaModule,
     ServicioModule,
     IndustriaModule,
-    EspecialidadModule
+    EspecialidadModule,
+    PagoModule
   ],
   controllers: [AppController],
   providers: [AppService],

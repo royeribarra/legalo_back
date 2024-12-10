@@ -167,4 +167,22 @@ export class OfertaService{
       console.log("fallo la consulta")
     }
   }
+
+  async getOfertasSinAplicacionesPorAbogado(clienteId: number, abogadoId: number) {
+    const ofertasSinAplicaciones = await this.ofertaRepository
+      .createQueryBuilder('oferta')
+      .leftJoin('oferta.aplicaciones', 'aplicacion')
+      .where('oferta.cliente_id = :clienteId', { clienteId })
+      .andWhere(
+        `NOT EXISTS (
+          SELECT 1
+          FROM aplicaciones aplicacionSub
+          WHERE aplicacionSub.oferta_id = oferta.id
+          AND aplicacionSub.abogado_id = :abogadoId
+        )`,
+        { abogadoId }
+      )
+      .getMany();
+    return ofertasSinAplicaciones;
+  }  
 }

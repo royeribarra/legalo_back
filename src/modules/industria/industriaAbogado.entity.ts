@@ -1,5 +1,4 @@
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { OfertasEntity } from "../oferta/oferta.entity";
 import { IndustriasEntity } from "./industrias.entity";
 import { AbogadosEntity } from "../abogado/entities/abogados.entity";
 
@@ -8,7 +7,7 @@ export class IndustriasAbogadoEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => AbogadosEntity, (oferta) => oferta.industriasAbogado)
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.industriasAbogado)
   abogado: AbogadosEntity;
 
   @ManyToOne(() => IndustriasEntity, (industria) => industria.industriasAbogado)

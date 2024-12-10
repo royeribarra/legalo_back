@@ -32,7 +32,7 @@ export class AbogadosController {
   }
 
   @Get(':id')
-  public async findConductorById(@Param('id') id: number){
+  public async findAbogadoById(@Param('id') id: number){
     return await this.abogadosService.findAbogadoById(id);
   }
 

@@ -8,6 +8,12 @@ import EspecialidadSeeder from './Especialidad.seeder';
 import IndustriaSeeder from './Industria.seeder';
 import OfertaSeeder from './Oferta.seeder';
 import AplicacionSeeder from './Aplicacion.seeder';
+import EspecialidadAbogadoSeeder from './EspecialidadAbogado.seeder';
+import EspecialidadOfertaSeeder from './EspecialidadOferta.seeder';
+import IndustriaAbogadoSeeder from './IndustriaAbogado.seeder';
+import IndustriaOfertaSeeder from './IndustriaOferta.seeder';
+import ServicioAbogadoSeeder from './ServicioAbogado.seeder';
+import ServicioOfertaSeeder from './ServicioOferta.seeder';
 
 export default class MainSeeder implements Seeder {
   public async run(
@@ -22,5 +28,11 @@ export default class MainSeeder implements Seeder {
     await runSeeder(dataSource, UsuarioSeeder);
     await runSeeder(dataSource, OfertaSeeder);
     await runSeeder(dataSource, AplicacionSeeder);
+    await runSeeder(dataSource, EspecialidadAbogadoSeeder);
+    await runSeeder(dataSource, EspecialidadOfertaSeeder);
+    await runSeeder(dataSource, IndustriaAbogadoSeeder);
+    await runSeeder(dataSource, IndustriaOfertaSeeder);
+    await runSeeder(dataSource, ServicioAbogadoSeeder);
+    await runSeeder(dataSource, ServicioOfertaSeeder);
   }
 }

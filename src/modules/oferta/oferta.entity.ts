@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, ManyToMany, JoinTable, OneToMany, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
 import { IOferta } from '../../interfaces/Oferta.interface';
 import { EspecialidadesEntity } from '../especialidad/especialidades.entity';
@@ -9,6 +9,7 @@ import { PreguntasOfertaEntity } from '../preguntas_oferta/preguntasOferta.entit
 import { ServiciosOfertaEntity } from '../servicio/servicioOferta.entity';
 import { IndustriasOfertaEntity } from '../industria/industriaOferta.entity';
 import { EspecialidadesOfertaEntity } from '../especialidad/especialidadOferta.entity';
+import { PagosEntity } from '../pago/pago.entity';
 
 @Entity({ name: 'ofertas' })
 export class OfertasEntity extends BaseEntity implements IOferta {
@@ -58,4 +59,7 @@ export class OfertasEntity extends BaseEntity implements IOferta {
     cascade: true,
   })
   preguntas_oferta: PreguntasOfertaEntity[];
+
+  @OneToOne(() => PagosEntity, (pago) => pago.oferta) // Relación bidireccional
+  pago: PagosEntity;
 }

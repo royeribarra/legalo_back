@@ -237,11 +237,14 @@ export class AbogadosService{
     const query = this.abogadosRepository.createQueryBuilder('abogados')
       .leftJoinAndSelect('abogados.habilidadesBlandas', 'habilidadesBlandas')
       .leftJoinAndSelect('abogados.habilidadesDuras', 'habilidadesDuras')
-      .leftJoinAndSelect('abogados.industrias', 'industrias')
-      .leftJoinAndSelect('abogados.servicios', 'servicios')
+      .leftJoinAndSelect('abogados.industriasAbogado', 'industriasAbogado')
+      .leftJoinAndSelect('industriasAbogado.industria', 'industria')
+      .leftJoinAndSelect('abogados.serviciosAbogado', 'serviciosAbogado')
+      .leftJoinAndSelect('serviciosAbogado.servicio', 'servicio')
+      .leftJoinAndSelect('abogados.especialidadesAbogado', 'especialidadesAbogado')
+      .leftJoinAndSelect('especialidadesAbogado.especialidad', 'especialidad')
       .leftJoinAndSelect('abogados.experiencias', 'experiencias')
       .leftJoinAndSelect('abogados.educaciones', 'educaciones')
-      .leftJoinAndSelect('abogados.especialidades', 'especialidades')
       .leftJoinAndSelect('abogados.usuario', 'usuario')
       .leftJoinAndSelect('abogados.aplicaciones', 'aplicaciones')
       .leftJoinAndSelect('abogados.trabajos', 'trabajos');
@@ -261,11 +264,14 @@ export class AbogadosService{
         .createQueryBuilder('abogados')
         .leftJoinAndSelect('abogados.habilidadesBlandas', 'habilidadesBlandas')
         .leftJoinAndSelect('abogados.habilidadesDuras', 'habilidadesDuras')
-        .leftJoinAndSelect('abogados.industrias', 'industrias')
-        .leftJoinAndSelect('abogados.servicios', 'servicios')
+        .leftJoinAndSelect('abogados.industriasAbogado', 'industriasAbogado')
+        .leftJoinAndSelect('industriasAbogado.industria', 'industria')
+        .leftJoinAndSelect('abogados.serviciosAbogado', 'serviciosAbogado')
+        .leftJoinAndSelect('serviciosAbogado.servicio', 'servicio')
+        .leftJoinAndSelect('abogados.especialidadesAbogado', 'especialidadesAbogado')
+        .leftJoinAndSelect('especialidadesAbogado.especialidad', 'especialidad')
         .leftJoinAndSelect('abogados.experiencias', 'experiencias')
-        .leftJoinAndSelect('abogados.educaciones', 'educaciones')
-        .leftJoinAndSelect('abogados.especialidades', 'especialidades');
+        .leftJoinAndSelect('abogados.educaciones', 'educaciones');
 
         query.where('abogados.id = :id', { id });
         console.log(query.getQuery());

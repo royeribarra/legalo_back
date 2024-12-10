@@ -12,9 +12,7 @@ export class ServicioService{
 
   public async findServicios(queryParams): Promise<ServiciosEntity[]>
   {
-    const query = this.servicioRepository.createQueryBuilder('servicios')
-      .leftJoinAndSelect('servicios.serviciosAbogado', 'serviciosAbogado')
-      .leftJoinAndSelect('servicios.serviciosOferta', 'serviciosOferta');
+    const query = this.servicioRepository.createQueryBuilder('servicios');
     try {
       const clientes: ServiciosEntity[] = await query.getMany();
       

@@ -10,6 +10,6 @@ export class IndustriasOfertaEntity {
   @ManyToOne(() => OfertasEntity, (oferta) => oferta.industriasOferta)
   oferta: OfertasEntity;
 
-  @ManyToOne(() => IndustriasEntity, (servicio) => servicio.industriasOferta)
+  @ManyToOne(() => IndustriasEntity, (industria) => industria.industriasOferta)
   industria: IndustriasEntity;
 }

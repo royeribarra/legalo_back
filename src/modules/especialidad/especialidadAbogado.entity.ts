@@ -7,9 +7,9 @@ export class EspecialidadesAbogadoEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.serviciosAbogado)
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.especialidadesAbogado)
   abogado: AbogadosEntity;
 
   @ManyToOne(() => EspecialidadesEntity, (servicio) => servicio.especialidadesAbogado)
-  servicio: EspecialidadesEntity;
+  especialidad: EspecialidadesEntity;
 }

@@ -50,4 +50,9 @@ export class OfertaController {
   async getOfertasClienteConAplicaciones(@Param('id') clienteId: number) {
     return this.ofertaService.getOfertasConAplicacionesPorCliente(clienteId);
   }
+
+  @Post('sin-aplicaciones-por-abogado')
+  async getOfertasSinAplicacionesPorAbogado(@Body() body) {
+    return this.ofertaService.getOfertasSinAplicacionesPorAbogado(body.clienteId, body.abogadoId);
+  }
 }

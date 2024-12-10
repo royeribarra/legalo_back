@@ -148,13 +148,17 @@ export class ClienteService{
   async getOfertasByCliente(clienteId: number) {
     const cliente = await this.clienteRepository.findOne({
       where: { id: clienteId },
-      relations: ['ofertas'], // Carga las relaciones necesarias.
+      relations: [
+        'ofertas',
+        'ofertas.serviciosOferta',
+        'ofertas.serviciosOferta.servicio',
+      ],
     });
-
+  
     if (!cliente) {
       throw new Error('Cliente no encontrado');
     }
-
+  
     return cliente.ofertas;
   }
 }

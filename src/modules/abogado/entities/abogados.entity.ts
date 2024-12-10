@@ -61,20 +61,20 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   @OneToMany(() => HabilidadesDuraEntity, (habilidad) => habilidad.abogado)
   habilidadesDuras: HabilidadesDuraEntity[];
 
-  @OneToMany(() => IndustriasAbogadoEntity, (industria) => industria.abogado)
+  @OneToMany(() => IndustriasAbogadoEntity, (industriaAbogado) => industriaAbogado.abogado)
   industriasAbogado: IndustriasAbogadoEntity[];
 
   @OneToMany(() => ServiciosAbogadoEntity, (servicioAbogado) => servicioAbogado.abogado)
   serviciosAbogado: ServiciosAbogadoEntity[];
+
+  @OneToMany(() => EspecialidadesAbogadoEntity, (especialidadAbogado) => especialidadAbogado.abogado)
+  especialidadesAbogado: EspecialidadesAbogadoEntity[];
 
   @OneToMany(() => ExperienciasEntity, (experiencia) => experiencia.abogado)
   experiencias: ExperienciasEntity[];
 
   @OneToMany(() => EducacionesEntity, (educacion) => educacion.abogado)
   educaciones: EducacionesEntity[];
-
-  @OneToMany(() => EspecialidadesAbogadoEntity, (especialidad) => especialidad.abogado)
-  especialidadesAbogado: EspecialidadesAbogadoEntity[];
 
   @OneToOne(() => UsuariosEntity, (usuario) => usuario.abogado)
   usuario: UsuariosEntity;
