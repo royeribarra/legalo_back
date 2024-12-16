@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail } from 'class-validator';
+import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail, isNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
@@ -157,4 +157,9 @@ export class UsuarioSeederDTO{
   @IsOptional()
   @IsString()
   cliente: ClientesEntity;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  is_active: number;
 }

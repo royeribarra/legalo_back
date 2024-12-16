@@ -42,7 +42,8 @@ export default class UsuarioSeeder implements Seeder {
           telefono: '939784580',
           perfil: 'abogado',
           abogado: abogado1,
-          cliente: null
+          cliente: null,
+          is_active: 1
         },
         {
           nombres: 'Magaly',
@@ -54,7 +55,8 @@ export default class UsuarioSeeder implements Seeder {
           telefono: '964973017',
           perfil: 'cliente',
           abogado: null,
-          cliente: cliente
+          cliente: cliente,
+          is_active: 1
         },
         {
           nombres: 'Mariana',
@@ -66,7 +68,8 @@ export default class UsuarioSeeder implements Seeder {
           telefono: '987654321',
           perfil: 'abogado',
           abogado: abogado2,
-          cliente: null
+          cliente: null,
+          is_active: 1
         },
         {
           nombres: 'Carlos',
@@ -78,7 +81,8 @@ export default class UsuarioSeeder implements Seeder {
           telefono: '912345678',
           perfil: 'abogado',
           abogado: abogado3,
-          cliente: null
+          cliente: null,
+          is_active: 1
         },
         {
           nombres: 'Laura',
@@ -90,7 +94,8 @@ export default class UsuarioSeeder implements Seeder {
           telefono: '965432109',
           perfil: 'abogado',
           abogado: abogado4,
-          cliente: null
+          cliente: null,
+          is_active: 1
         }
       ];
 
