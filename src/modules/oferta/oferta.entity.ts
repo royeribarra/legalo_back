@@ -41,10 +41,10 @@ export class OfertasEntity extends BaseEntity implements IOferta {
   @Column()
   estado: string;
 
-  @Column()
+  @Column({nullable: true})
   fecha_expiracion: string;
 
-  @Column()
+  @Column({nullable: true})
   expirado: boolean;
 
   @OneToMany(() => EspecialidadesOfertaEntity, (especialidadOferta) => especialidadOferta.oferta)
