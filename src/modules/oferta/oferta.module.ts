@@ -16,6 +16,9 @@ import { OfertaService } from './oferta.service';
 import { OfertaController } from './oferta.controller';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
+import { PreguntasOfertaEntity } from '../preguntas_oferta/preguntasOferta.entity';
+import { AbogadosEntity } from '../abogado/entities/abogados.entity';
+import { InvitacionesEntity } from './invitacion.entity';
 
 @Module({
   imports: [
@@ -30,7 +33,10 @@ import { TrabajosEntity } from '../trabajo/trabajos.entity';
       IndustriasEntity,
       TmpImageFileEntity,
       AplicacionesEntity,
-      TrabajosEntity
+      TrabajosEntity,
+      PreguntasOfertaEntity,
+      AbogadosEntity,
+      InvitacionesEntity
     ]),
     UsuariosModule,
     MailModule

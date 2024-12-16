@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail, ValidateNested } from 'class-validator';
+import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail, ValidateNested, IsArray } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type, Transform } from 'class-transformer';
 import { EspecialidadDTO } from '../especialidad/especialidad.dto';
@@ -44,17 +44,17 @@ export class OfertaDTO {
   @IsString()
   uso: string;
 
-  @ApiProperty({ type: () => [ServicioDTO] })
+  @ApiProperty({ type: [Number] })
   @IsNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => ServicioDTO)
-  servicios: ServicioDTO[];
+  @IsArray()
+  @IsNumber({}, { each: true })
+  servicios: number[];
 
-  @ApiProperty({ type: () => [EspecialidadDTO] })
+  @ApiProperty({ type: [Number] })
   @IsNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => EspecialidadDTO)
-  especialidades: EspecialidadDTO[];
+  @IsArray()
+  @IsNumber({}, { each: true })
+  especialidades: number[];
 
   @ApiProperty({ type: () => [PreguntaDTO] })
   @IsNotEmpty()

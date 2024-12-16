@@ -55,4 +55,13 @@ export class OfertaController {
   async getOfertasSinAplicacionesPorAbogado(@Body() body) {
     return this.ofertaService.getOfertasSinAplicacionesPorAbogado(body.clienteId, body.abogadoId);
   }
+
+  @Post('invitar-abogado')
+  async invitarAbogadoOferta(@Body() body) {
+    const { state, message, saveInvitacion } = await this.ofertaService.crearInvitacion(body.abogadoId, body.ofertaId);
+     return {
+      state: state,
+      message: message
+     }
+  }
 }

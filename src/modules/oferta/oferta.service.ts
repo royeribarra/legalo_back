@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, In, Repository, UpdateResult } from 'typeorm';
 import { OfertaDTO } from './oferta.dto';
 import { PreguntasOfertaEntity } from '../preguntas_oferta/preguntasOferta.entity';
 import { EspecialidadesEntity } from '../especialidad/especialidades.entity';
@@ -11,6 +11,10 @@ import { ErrorManager } from 'src/utils/error.manager';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
+import { AbogadosEntity } from '../abogado/entities/abogados.entity';
+import { InvitacionesEntity } from './invitacion.entity';
+import { ServiciosOfertaEntity } from '../servicio/servicioOferta.entity';
+import { EspecialidadesOfertaEntity } from '../especialidad/especialidadOferta.entity';
 
 @Injectable()
 export class OfertaService{
@@ -19,9 +23,11 @@ export class OfertaService{
     @InjectRepository(AplicacionesEntity) private readonly aplicacionRepository: Repository<AplicacionesEntity>,
     @InjectRepository(TrabajosEntity) private readonly trabajoRepository: Repository<TrabajosEntity>,
     @InjectRepository(ClientesEntity) private readonly clienteRepository: Repository<ClientesEntity>,
-    @InjectRepository(ClientesEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
-    @InjectRepository(ClientesEntity) private readonly preguntaRepository: Repository<PreguntasOfertaEntity>,
-    @InjectRepository(ClientesEntity) private readonly especialidadRepository: Repository<EspecialidadesEntity>,
+    @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
+    @InjectRepository(PreguntasOfertaEntity) private readonly preguntaRepository: Repository<PreguntasOfertaEntity>,
+    @InjectRepository(EspecialidadesEntity) private readonly especialidadRepository: Repository<EspecialidadesEntity>,
+    @InjectRepository(AbogadosEntity) private readonly abogadoRepository: Repository<AbogadosEntity>,
+    @InjectRepository(InvitacionesEntity) private readonly invitacionRepository: Repository<InvitacionesEntity>,
     private readonly tempFilesService: TempFilesService,
   ){}
 
@@ -55,20 +61,25 @@ export class OfertaService{
       const oferta : OfertasEntity = await this.ofertaRepository.save(nuevaOferta);
 
       
-      const especialidades = body.especialidades.map((especialidadDTO) => {
-        const especialidad = new EspecialidadesEntity();
-        especialidad.nombre = especialidadDTO.nombre;
-        return especialidad;
+      const especialidades = await this.especialidadRepository.findBy({
+        id: In(body.especialidades),
       });
-      // oferta.especialidades = await this.especialidadRepository.save(especialidades);
+      const especialidadesAbogado = especialidades.map((especialidad) => {
+        const relacion = new EspecialidadesOfertaEntity();
+        relacion.oferta = oferta;
+        relacion.especialidad = especialidad;
+        return relacion;
+      });
   
-      // Servicios
-      const servicios = body.servicios.map((servicioDTO) => {
-        const servicio = new ServiciosEntity();
-        servicio.nombre = servicioDTO.nombre;
-        return servicio;
+      const servicios = await this.servicioRepository.findBy({
+        id: In(body.servicios),
       });
-      // oferta.serviciosOferta = await this.servicioRepository.save(servicios);
+      const serviciosOferta = servicios.map((servicio) => {
+        const relacion = new ServiciosOfertaEntity();
+        relacion.oferta = oferta;
+        relacion.servicio = servicio;
+        return relacion;
+      });
   
       // Preguntas
       const preguntas = body.preguntas.map((preguntaDTO) => {
@@ -185,4 +196,54 @@ export class OfertaService{
       .getMany();
     return ofertasSinAplicaciones;
   }  
+
+  async crearInvitacion(
+    abogadoId: number,
+    ofertaId: number,
+    mensaje?: string,
+  ) {
+    const abogado = await this.abogadoRepository.findOneBy({ id: abogadoId });
+    const oferta = await this.ofertaRepository.findOneBy({ id: ofertaId });
+    console.log(oferta);
+    console.log(abogado);
+    if (!abogado || !oferta) {
+      return {
+        state: false,
+        message: "No se encontró al abogado o la oferta"
+      };
+    }
+
+    const nuevaInvitacion = this.invitacionRepository.create({
+      abogado,
+      oferta,
+      mensaje,
+    });
+    const saveInvitacion = this.invitacionRepository.save(nuevaInvitacion)
+    return {
+      state: true,
+      saveInvitacion,
+      message: "Invitación creada correctamente"
+    };
+  }
+
+  async obtenerInvitacionesPorAbogado(abogadoId: number): Promise<InvitacionesEntity[]> {
+    return this.invitacionRepository.find({
+      where: { abogado: { id: abogadoId } },
+      relations: ['oferta'],
+    });
+  }
+
+  async aceptarInvitacion(invitacionId: number): Promise<InvitacionesEntity> {
+    const invitacion = await this.invitacionRepository.findOneBy({
+      id: invitacionId,
+    });
+
+    if (!invitacion) {
+      throw new Error('Invitación no encontrada.');
+    }
+
+    invitacion.aceptada = true;
+
+    return this.invitacionRepository.save(invitacion);
+  }
 }

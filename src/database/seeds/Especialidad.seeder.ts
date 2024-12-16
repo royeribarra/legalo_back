@@ -12,11 +12,11 @@ export default class EspecialidadSeeder implements Seeder {
       const data= [
         {
             nombre: "Abogado Civil",
-            imagen: "icos/ico-d-civil.png"
+            imagen: "/icos/ico-d-civil.png"
         },
         {
             nombre: "Abogado Penalista",
-            imagen: "icos/ico-d-penal.png"
+            imagen: "/icos/ico-d-penal.png"
         },
         {
             nombre: "Abogado Laboral",
@@ -24,43 +24,43 @@ export default class EspecialidadSeeder implements Seeder {
         },
         {
             nombre: "Abogado Familiar",
-            imagen: "icos/ico-d-familia.png"
+            imagen: "/icos/ico-d-familia.png"
         },
         {
             nombre: "Abogado Empresarial",
-            imagen: "icos/ico-d-empresarial.png"
+            imagen: "/icos/ico-d-empresarial.png"
         },
         {
             nombre: "Abogado Ambiental",
-            imagen: "icos/ico-d-ambiental.png"
+            imagen: "/icos/ico-d-ambiental.png"
         },
         {
             nombre: "Abogado de Competencia",
-            imagen: "icos/ico-d-competencia.png"
+            imagen: "/icos/ico-d-competencia.png"
         },
         {
             nombre: "Abogado de Competencia Desleal",
-            imagen: "icos/ico-d-compe-desleal.png"
+            imagen: "/icos/ico-d-compe-desleal.png"
         },
         {
             nombre: "Abogado de Propiedad Intelectual",
-            imagen: "icos/ico-d-intelectual.png"
+            imagen: "/icos/ico-d-intelectual.png"
         },
         {
             nombre: "Abogado de Protección al consumidor",
-            imagen: "icos/ico-d-consumidor.png"
+            imagen: "/icos/ico-d-consumidor.png"
         },
         {
             nombre: "Abogado de Tecnología y Datos",
-            imagen: "icos/ico-d-tecnologia.png"
+            imagen: "/icos/ico-d-tecnologia.png"
         },
         {
             nombre: "Abogado de Salud",
-            imagen: "icos/ico-d-salud.png"
+            imagen: "/icos/ico-d-salud.png"
         },
         {
             nombre: "Abogado de derecho Tributario",
-            imagen: "icos/ico-d-tributario.png"
+            imagen: "/icos/ico-d-tributario.png"
         },
       ];
 

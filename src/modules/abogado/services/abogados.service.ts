@@ -15,6 +15,10 @@ import { UsuariosService } from '../../usuario/usuario.service';
 import { AbogadoMailService } from '../../mail/services/abogadoMail.service';
 import { TempFilesService } from '../../tmp/tmpFile.service';
 import { OfertasEntity } from '../../oferta/oferta.entity';
+import { IndustriasAbogadoEntity } from '../../industria/industriaAbogado.entity';
+import { EspecialidadesAbogadoEntity } from '../../especialidad/especialidadAbogado.entity';
+import { In } from 'typeorm';
+import { ServiciosAbogadoEntity } from '../../servicio/servicioAbogado.entity';
 
 @Injectable()
 export class AbogadosService{
@@ -87,12 +91,6 @@ export class AbogadosService{
       return experiencia;
     });
 
-    const especialidades = body.especialidades.map((especialidadDTO) => {
-      const especialidad = new EspecialidadesEntity();
-      especialidad.nombre = especialidadDTO.nombre;
-      return especialidad;
-    });
-
     const habilidadesBlandas = body.habilidadesBlandas.map((habilidadDTO) => {
       const habilidad = new HabilidadesBlandaEntity();
       habilidad.nombre = habilidadDTO.nombre;
@@ -105,18 +103,6 @@ export class AbogadosService{
       return habilidad;
     });
 
-    const industrias = body.industrias.map((industriaDTO) => {
-      const especialidad = new IndustriasEntity();
-      especialidad.nombre = industriaDTO.nombre;
-      return especialidad;
-    });
-
-    const servicios = body.servicios.map((servicioDTO) => {
-      const especialidad = new ServiciosEntity();
-      especialidad.nombre = servicioDTO.nombre;
-      return especialidad;
-    });
-
     try {
       const nuevoAbogado = new AbogadosEntity();
       nuevoAbogado.apellidos = body.apellidos;
@@ -127,6 +113,7 @@ export class AbogadosService{
       nuevoAbogado.sobre_ti = body.sobre_ti;
       nuevoAbogado.cip = body.cip;
       nuevoAbogado.colegio = body.colegio;
+      nuevoAbogado.dni = body.dni;
 
       nuevoAbogado.habilidadesBlandas = [];
       nuevoAbogado.habilidadesDuras = [];
@@ -153,6 +140,35 @@ export class AbogadosService{
       // for (const especialidad of especialidades) {
       //   especialidad.abogado = abogado;
       // }
+      const industrias = await this.industriaRepository.findBy({
+        id: In(body.industrias),
+      });
+      const industriasAbogado = industrias.map((industria) => {
+        const relacion = new IndustriasAbogadoEntity();
+        relacion.abogado = abogado;
+        relacion.industria = industria;
+        return relacion;
+      });
+
+      const especialidades = await this.especialidadesRepository.findBy({
+        id: In(body.especialidades),
+      });
+      const especialidadesAbogado = especialidades.map((especialidad) => {
+        const relacion = new EspecialidadesAbogadoEntity();
+        relacion.abogado = abogado;
+        relacion.especialidad = especialidad;
+        return relacion;
+      });
+
+      const servicios = await this.servicioRepository.findBy({
+        id: In(body.servicios),
+      });
+      const serviciosAbogado = servicios.map((servicio) => {
+        const relacion = new ServiciosAbogadoEntity();
+        relacion.abogado = abogado;
+        relacion.servicio = servicio;
+        return relacion;
+      });
 
       for (const experiencia of experiencias) {
         experiencia.abogado = abogado;
@@ -176,13 +192,12 @@ export class AbogadosService{
       
   
       await this.educacionesRepository.save(educaciones);
-      await this.especialidadesRepository.save(especialidades);
       await this.experienciaRepository.save(experiencias);
-
       await this.habilidadDurRepository.save(habilidadesDuras);
       await this.habilidadBlandRepository.save(habilidadesBlandas);
       await this.servicioRepository.save(servicios);
       await this.industriaRepository.save(industrias);
+      await this.especialidadesRepository.save(especialidades);
 
       const datosUsuario = {
         nombres: body.nombres,

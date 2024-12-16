@@ -10,6 +10,7 @@ import { ServiciosOfertaEntity } from '../servicio/servicioOferta.entity';
 import { IndustriasOfertaEntity } from '../industria/industriaOferta.entity';
 import { EspecialidadesOfertaEntity } from '../especialidad/especialidadOferta.entity';
 import { PagosEntity } from '../pago/pago.entity';
+import { InvitacionesEntity } from './invitacion.entity';
 
 @Entity({ name: 'ofertas' })
 export class OfertasEntity extends BaseEntity implements IOferta {
@@ -40,6 +41,12 @@ export class OfertasEntity extends BaseEntity implements IOferta {
   @Column()
   estado: string;
 
+  @Column()
+  fecha_expiracion: string;
+
+  @Column()
+  expirado: boolean;
+
   @OneToMany(() => EspecialidadesOfertaEntity, (especialidadOferta) => especialidadOferta.oferta)
   especialidadesOferta: EspecialidadesOfertaEntity[];
 
@@ -62,4 +69,7 @@ export class OfertasEntity extends BaseEntity implements IOferta {
 
   @OneToOne(() => PagosEntity, (pago) => pago.oferta) // Relación bidireccional
   pago: PagosEntity;
+
+  @OneToMany(() => InvitacionesEntity, (invitacion) => invitacion.oferta)
+  invitaciones: InvitacionesEntity[];
 }

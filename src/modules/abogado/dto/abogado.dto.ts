@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail, ValidateNested } from 'class-validator';
+import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail, ValidateNested, IsArray } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { HabilidadBlandaDTO } from '../../habilidadBlanda/habilidadBlanda.dto';
@@ -97,17 +97,23 @@ export class AbogadoDTO {
   @Type(() => HabilidadDuraDTO)
   habilidadesDuras: HabilidadDuraDTO[];
 
-  @ApiProperty({ type: () => [IndustriaDTO] })
+  @ApiProperty({ type: [Number] })
   @IsNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => IndustriaDTO)
-  industrias: IndustriaDTO[];
+  @IsArray()
+  @IsNumber({}, { each: true })
+  industrias: number[];
 
-  @ApiProperty({ type: () => [ServicioDTO] })
+  @ApiProperty({ type: [Number] })
   @IsNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => ServicioDTO)
-  servicios: ServicioDTO[];
+  @IsArray()
+  @IsNumber({}, { each: true })
+  servicios: number[];
+
+  @ApiProperty({ type: [Number] })
+  @IsNotEmpty()
+  @IsArray()
+  @IsNumber({}, { each: true })
+  especialidades: number[];
 
   @ApiProperty({ type: () => [ExperienciaDTO] })
   @IsNotEmpty()
@@ -120,12 +126,6 @@ export class AbogadoDTO {
   @ValidateNested({ each: true })
   @Type(() => EducacionDTO)
   educaciones: EducacionDTO[];
-
-  @ApiProperty({ type: () => [EspecialidadDTO] })
-  @IsNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => EspecialidadDTO)
-  especialidades: EspecialidadDTO[];
 }
 
 export class AbogadoUpdateDTO {
