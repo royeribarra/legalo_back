@@ -100,6 +100,29 @@ export class OfertaService{
     }
   }
 
+  public async findOfertas(queryParams): Promise<OfertasEntity[]>
+  {
+    const query = this.ofertaRepository.createQueryBuilder('ofertas')
+      .leftJoinAndSelect('ofertas.industriasOferta', 'industriasOferta')
+      .leftJoinAndSelect('industriasOferta.industria', 'industria')
+      .leftJoinAndSelect('ofertas.serviciosOferta', 'serviciosOferta')
+      .leftJoinAndSelect('serviciosOferta.servicio', 'servicio')
+      .leftJoinAndSelect('ofertas.especialidadesOferta', 'especialidadesOferta')
+      .leftJoinAndSelect('especialidadesOferta.especialidad', 'especialidad')
+      .leftJoinAndSelect('ofertas.cliente', 'cliente')
+      .leftJoinAndSelect('ofertas.aplicaciones', 'aplicaciones')
+      .leftJoinAndSelect('ofertas.preguntas_oferta', 'preguntas_oferta')
+      .leftJoinAndSelect('ofertas.invitaciones', 'invitaciones')
+      .leftJoinAndSelect('ofertas.pago', 'pago');
+    try {
+      const ofertas: OfertasEntity[] = await query.getMany();
+
+      return ofertas;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async findOfertaById(id: number): Promise<OfertasEntity>
   {
     try {
