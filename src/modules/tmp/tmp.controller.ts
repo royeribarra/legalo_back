@@ -68,7 +68,7 @@ import { TempFilesService } from './tmpFile.service';
     }
 
     @Post('upload-oferta-documento')
-    @UseInterceptors(FileInterceptor('file')) // Asegúrate de que el nombre coincida con el enviado desde el frontend
+    @UseInterceptors(FileInterceptor('file'))
     async uploadFileOferta(
       @UploadedFile() file: Express.Multer.File,
       @Body('nombreArchivo') nombreArchivo: string,

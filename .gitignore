@@ -5,6 +5,10 @@
 # env
 *.env
 /temp
+
+# public
+/public/uploads
+
 # Logs
 logs
 *.log

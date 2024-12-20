@@ -52,14 +52,17 @@ export class OfertaService{
       nuevaOferta.estado = "Creado";
       nuevaOferta.cliente = cliente;
 
-      const tempFile = await this.tempFilesService.getFileByClientId(body.clienteId);
-      if (!tempFile) {
-        throw new BadRequestException('Archivo temporal no encontrado');
+      const tempFile = await this.tempFilesService.getFileByClienteIdAndArchivo(cliente.id, "oferta_documento");
+      if (tempFile) {
+        nuevaOferta.documento_url = tempFile.filePath;
+          try {
+            await this.tempFilesService.clearTempFile(tempFile.id);
+        } catch (error) {
+            console.error(`Error eliminando archivo temporal: ${tempFile.filePath}`, error);
+        }
       }
-      nuevaOferta.documento_url = tempFile.filePath;
 
       const oferta : OfertasEntity = await this.ofertaRepository.save(nuevaOferta);
-
       
       const especialidades = await this.especialidadRepository.findBy({
         id: In(body.especialidades),

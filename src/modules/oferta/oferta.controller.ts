@@ -20,8 +20,7 @@ export class OfertaController {
   @UsePipes(new ValidationPipe({ transform: true }))
   // @UseInterceptors(FileInterceptor('file')) 
   // @FormDataRequest()
-  public async registerOferta(@Body() body: OfertaDTO){
-    // const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
+  public async createOferta(@Body() body: OfertaDTO){
     const { state, message, oferta } = await this.ofertaService.createOferta(body);
     return {
       state: state,

@@ -16,7 +16,6 @@ export class AbogadosController {
 
   @Post('create')
   public async registerAbogado(@Body() body: AbogadoDTO){
-    // const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);
     const { state, message, abogado } = await this.abogadosService.createAbogado(body);
     return {
       state: state,

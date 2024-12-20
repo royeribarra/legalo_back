@@ -96,6 +96,19 @@ export default class UsuarioSeeder implements Seeder {
           abogado: abogado4,
           cliente: null,
           is_active: 1
+        },
+        {
+          nombres: 'Admin',
+          apellidos: 'Admin',
+          correo: 'admin@admin.com',
+          usuario: 'userAdmin',
+          contrasena: await bcrypt.hash('secret123', +process.env.HASH_SALT),
+          dni: '99999999',
+          telefono: '999999999',
+          perfil: 'admin',
+          abogado: null,
+          cliente: null,
+          is_active: 1
         }
       ];
 

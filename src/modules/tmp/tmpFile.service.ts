@@ -89,24 +89,40 @@ export class TempFilesService {
         return tempFile;
     }
 
+    async getFileByClienteIdAndArchivo(clienteId: number, nombreArchivo: string): Promise<TmpImageFileEntity | null> {
+        const tempFile = await this.tempFileRepository.findOne({ where: { clienteId, nombreArchivo: nombreArchivo } });
+        console.log(tempFile)
+        return tempFile;
+    }
+
     async checkExistFile(dni: string, correo: string, nombreArchivo: string){
         const tempFile = await this.tempFileRepository.findOne({ where: { correo: correo, nombreArchivo: nombreArchivo, dni } });
         return tempFile;
     }
 
-    async saveTempFileOferta(file: Express.Multer.File, clienteId: string, nombreArchivo: string, fileId: string) 
-    {
-        // Rutas
+    async clearTempFile(fileId: number): Promise<void> {
+        const tempFile = await this.tempFileRepository.findOne({ where: { id: fileId } });
+    
+        if (!tempFile) {
+            throw new NotFoundException(`Archivo temporal con id ${fileId} no encontrado`);
+        }
+    
+        // Eliminar el registro de la base de datos
+        await this.tempFileRepository.delete(fileId);
+    }
+
+    async saveTempFileOferta(file: Express.Multer.File, clienteId: string, nombreArchivo: string, fileId: string) {
+        // Convertir clienteId a número
         const clienteIdNumber = Number(clienteId);
-        console.log(clienteId, "clienteId")
-        // const uploadsDir = path.join(__dirname, '..', '..', 'public', 'uploads');
+    
+        // Determinar rutas
         const uploadsDir = path.join(process.env.PROJECT_ROOT, 'public', 'uploads');
-        const filePath = path.join(uploadsDir, clienteId + '-' + fileId);
+        const fileExtension = path.extname(file.originalname); // Extraer la extensión del archivo
+        const filePath = path.join(uploadsDir, `${clienteId}-${fileId}${fileExtension}`); // Incluir la extensión en el nombre final
     
         // Crear la carpeta si no existe
-
         if (!fs.existsSync(uploadsDir)) {
-        fs.mkdirSync(uploadsDir, { recursive: true });
+            fs.mkdirSync(uploadsDir, { recursive: true });
         }
     
         console.log('Temporary file path:', file.path);
@@ -114,22 +130,25 @@ export class TempFilesService {
     
         // Validar que el archivo temporal existe
         if (!file.path || !fs.existsSync(file.path)) {
-        throw new Error(`El archivo temporal no existe en la ruta: ${file.path}`);
+            throw new Error(`El archivo temporal no existe en la ruta: ${file.path}`);
         }
     
         // Mover el archivo
         fs.renameSync(file.path, filePath);
     
         // Guardar en la base de datos
-        const tempFile = this.tempFileRepository.create({ 
-            filePath, nombreArchivo, idFront: fileId, clienteId: clienteIdNumber 
+        const tempFile = this.tempFileRepository.create({
+            filePath,
+            nombreArchivo,
+            idFront: fileId,
+            clienteId: clienteIdNumber,
         });
-        
+    
         const savedFile = await this.tempFileRepository.save(tempFile);
     
         return {
             fileId: savedFile.id,
-            path: savedFile.filePath
+            path: savedFile.filePath,
         };
     }
 }
