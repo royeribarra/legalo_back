@@ -125,10 +125,22 @@ export class AbogadosService{
       nuevoAbogado.cv_url = '';
       nuevoAbogado.video_url = '';
 
-      const tempFileCv = await this.tempFilesService.getFileByNombreArchivo(body.dni, 'cv_url');
+      const tempFileCv = await this.tempFilesService.getFileByNombreArchivo(body.dni, 'archivo_cv');
       if (tempFileCv) {
         // throw new BadRequestException('Archivo temporal no encontrado');
         nuevoAbogado.cv_url = tempFileCv.filePath;
+      }
+
+      const tempFileCul = await this.tempFilesService.getFileByNombreArchivo(body.dni, 'archivo_cul');
+      if (tempFileCul) {
+        // throw new BadRequestException('Archivo temporal no encontrado');
+        nuevoAbogado.cul_url = tempFileCul.filePath;
+      }
+
+      const tempFileImagen = await this.tempFilesService.getFileByNombreArchivo(body.dni, 'archivo_imagen');
+      if (tempFileImagen) {
+        // throw new BadRequestException('Archivo temporal no encontrado');
+        nuevoAbogado.foto_url = tempFileImagen.filePath;
       }
       
       const abogado : AbogadosEntity = await this.abogadosRepository.save(nuevoAbogado);

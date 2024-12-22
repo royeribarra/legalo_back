@@ -15,39 +15,41 @@ export class TempFilesService {
     async saveTempFile(file: Express.Multer.File, dni: string, correo: string, nombreArchivo: string) {
         // Limpiar el DNI para evitar caracteres no válidos
         const cleanDni = dni.replace(/["']/g, ""); 
-    
-        // Generar el nombre del archivo
-        const fileName = `${cleanDni}-${Date.now()}.jpg`;
-    
+        
+        // Obtener la extensión del archivo original
+        const originalExtension = path.extname(file.originalname).toLowerCase(); // Incluye el punto (e.g., ".jpg")
+
+        // Generar el nombre del archivo con la extensión original
+        const fileName = `${cleanDni}-${Date.now()}${originalExtension}`;
+        
         // Rutas
-        // const uploadsDir = path.join(__dirname, '..', '..', 'public', 'uploads');
         const uploadsDir = path.join(process.env.PROJECT_ROOT, 'public', 'uploads');
         const filePath = path.join(uploadsDir, fileName);
-    
+
         // Crear la carpeta si no existe
         if (!fs.existsSync(uploadsDir)) {
-        fs.mkdirSync(uploadsDir, { recursive: true });
+            fs.mkdirSync(uploadsDir, { recursive: true });
         }
-    
+
         console.log('Temporary file path:', file.path);
         console.log('Final file path:', filePath);
-    
+
         // Validar que el archivo temporal existe
         if (!file.path || !fs.existsSync(file.path)) {
-        throw new Error(`El archivo temporal no existe en la ruta: ${file.path}`);
+            throw new Error(`El archivo temporal no existe en la ruta: ${file.path}`);
         }
-    
+
         // Mover el archivo
         fs.renameSync(file.path, filePath);
-    
+
         // Guardar en la base de datos
         const tempFile = this.tempFileRepository.create({ dni: cleanDni, filePath, correo, nombreArchivo });
         
         const savedFile = await this.tempFileRepository.save(tempFile);
-    
+
         return {
             fileId: savedFile.id,
-            path: savedFile.filePath
+            path: savedFile.filePath,
         };
     }
 
