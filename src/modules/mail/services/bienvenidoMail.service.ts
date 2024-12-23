@@ -28,7 +28,7 @@ export class MailService {
     const mailOptions = {
       from: process.env.MAIL_USER,
       to: userEmail,
-      subject: 'Activa tu cuenta en AMPCO',
+      subject: 'Activa tu cuenta en LEGALO',
       template: './bienvenido',
     };
 

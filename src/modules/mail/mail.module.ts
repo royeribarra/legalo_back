@@ -26,7 +26,7 @@ import { ClienteMailService } from './services/clienteMail.service';
           },
         },
         defaults: {
-          from: `"AMPCO" <${process.env.MAIL_FROM}>`,
+          from: `"LEGALO" <${process.env.MAIL_FROM}>`,
         },
         template: {
           dir: join(__dirname, 'templates'),
