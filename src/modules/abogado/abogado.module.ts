@@ -15,6 +15,9 @@ import { MailModule } from '../mail/mail.module';
 import { TempFilesService } from '../tmp/tmpFile.service';
 import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
+import { EspecialidadesAbogadoEntity } from '../especialidad/especialidadAbogado.entity';
+import { ServiciosAbogadoEntity } from '../servicio/servicioAbogado.entity';
+import { IndustriasAbogadoEntity } from '../industria/industriaAbogado.entity';
 
 @Module({
   imports: [
@@ -28,7 +31,10 @@ import { OfertasEntity } from '../oferta/oferta.entity';
       ServiciosEntity,
       IndustriasEntity,
       TmpImageFileEntity,
-      OfertasEntity
+      OfertasEntity,
+      EspecialidadesAbogadoEntity,
+      ServiciosAbogadoEntity,
+      IndustriasAbogadoEntity
     ]),
     UsuariosModule,
     MailModule
