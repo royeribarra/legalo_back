@@ -28,6 +28,10 @@ export class AbogadosService{
     @InjectRepository(EspecialidadesEntity) private readonly especialidadesRepository: Repository<EspecialidadesEntity>,
     @InjectRepository(ExperienciasEntity) private readonly experienciaRepository: Repository<ExperienciasEntity>,
 
+    @InjectRepository(IndustriasAbogadoEntity) private readonly industriaAbogadoRepository: Repository<IndustriasAbogadoEntity>,
+    @InjectRepository(ServiciosAbogadoEntity) private readonly servicioAbogadoRepository: Repository<ServiciosAbogadoEntity>,
+    @InjectRepository(EspecialidadesAbogadoEntity) private readonly especialidadAbogadoRepository: Repository<EspecialidadesAbogadoEntity>,
+
     @InjectRepository(HabilidadesBlandaEntity) private readonly habilidadBlandRepository: Repository<HabilidadesBlandaEntity>,
     @InjectRepository(HabilidadesDuraEntity) private readonly habilidadDurRepository: Repository<HabilidadesDuraEntity>,
     @InjectRepository(IndustriasEntity) private readonly industriaRepository: Repository<IndustriasEntity>,
@@ -142,7 +146,7 @@ export class AbogadosService{
         // throw new BadRequestException('Archivo temporal no encontrado');
         nuevoAbogado.foto_url = tempFileImagen.filePath;
       }
-      
+
       const abogado : AbogadosEntity = await this.abogadosRepository.save(nuevoAbogado);
 
       for (const educacion of educaciones) {
@@ -194,22 +198,17 @@ export class AbogadosService{
         habilidad.abogado = abogado;
       }
 
-      // for (const servicio of servicios) {
-      //   servicio.abogado = abogado;
-      // }
+      await this.industriaAbogadoRepository.save(industriasAbogado);
+      await this.especialidadAbogadoRepository.save(especialidadesAbogado);
+      await this.servicioAbogadoRepository.save(serviciosAbogado);
 
-      // for (const industria of industrias) {
-      //   industria.abogado = abogado;
-      // }
-      
-  
       await this.educacionesRepository.save(educaciones);
       await this.experienciaRepository.save(experiencias);
       await this.habilidadDurRepository.save(habilidadesDuras);
       await this.habilidadBlandRepository.save(habilidadesBlandas);
-      await this.servicioRepository.save(servicios);
-      await this.industriaRepository.save(industrias);
-      await this.especialidadesRepository.save(especialidades);
+      // await this.servicioRepository.save(servicios);
+      // await this.industriaRepository.save(industrias);
+      // await this.especialidadesRepository.save(especialidades);
 
       const datosUsuario = {
         nombres: body.nombres,
