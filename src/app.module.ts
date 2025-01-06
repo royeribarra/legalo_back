@@ -14,6 +14,8 @@ import { ServicioModule } from './modules/servicio/servicio.module';
 import { IndustriaModule } from './modules/industria/industria.module';
 import { EspecialidadModule } from './modules/especialidad/especialidad.module';
 import { PagoModule } from './modules/pago/pago.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -31,7 +33,11 @@ import { PagoModule } from './modules/pago/pago.module';
     ServicioModule,
     IndustriaModule,
     EspecialidadModule,
-    PagoModule
+    PagoModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/public'
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
