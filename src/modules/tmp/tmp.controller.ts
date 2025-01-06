@@ -8,7 +8,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { TempFilesService } from './tmpFile.service';
 
 @Controller('temp-files')
-  export class TempFilesController {
+  export class TempFilesController
+  {
     constructor(private readonly tempFilesService: TempFilesService) {}
 
     @Post('upload-abogado-imagen')
@@ -22,14 +23,14 @@ import { TempFilesService } from './tmpFile.service';
         if (!file) {
           throw new Error('Archivo no proporcionado');
         }
-      
+
         const checkExiste = await this.tempFilesService.checkExistFile(dni, correo, nombreArchivo);
         if(checkExiste){
           return { success: false, fileId: 'Ya existe un archivo img para este abogado.' };
         }
 
         const {fileId, path} = await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
-      
+
         return { success: true, fileId };
     }
 
@@ -46,7 +47,7 @@ import { TempFilesService } from './tmpFile.service';
         return { success: false, fileId: 'Ya existe un archivo cv para este abogado.' };
       }
       const {fileId, path} = await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
-      
+
       return { success: true, fileId };
     }
 
@@ -63,7 +64,7 @@ import { TempFilesService } from './tmpFile.service';
         return { success: false, fileId: 'Ya existe un archivo cul para este abogado.' };
       }
       const {fileId, path} = await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
-      
+
       return { success: true, fileId };
     }
 

@@ -65,6 +65,16 @@ export class AbogadosController {
     }
   }
 
+  @Put('update-archivos')
+  public async updateArchivosAbogado(@Body() correo: string)
+  {
+    const {state, message} = await this.abogadosService.updateArchivosAbogado(correo);
+    return {
+      state: state,
+      message: message,
+    }
+  }
+
   // @Delete(':id')
   // public async deleteConductor(@Param('id') id:string){
   //   const{ state, message} = await this.abogadosService.deleteConductor(id);

@@ -104,11 +104,11 @@ export class TempFilesService {
 
     async clearTempFile(fileId: number): Promise<void> {
         const tempFile = await this.tempFileRepository.findOne({ where: { id: fileId } });
-    
+
         if (!tempFile) {
             throw new NotFoundException(`Archivo temporal con id ${fileId} no encontrado`);
         }
-    
+
         // Eliminar el registro de la base de datos
         await this.tempFileRepository.delete(fileId);
     }
@@ -116,28 +116,28 @@ export class TempFilesService {
     async saveTempFileOferta(file: Express.Multer.File, clienteId: string, nombreArchivo: string, fileId: string) {
         // Convertir clienteId a número
         const clienteIdNumber = Number(clienteId);
-    
+
         // Determinar rutas
         const uploadsDir = path.join(process.env.PROJECT_ROOT, 'public', 'uploads');
         const fileExtension = path.extname(file.originalname); // Extraer la extensión del archivo
         const filePath = path.join(uploadsDir, `${clienteId}-${fileId}${fileExtension}`); // Incluir la extensión en el nombre final
-    
+
         // Crear la carpeta si no existe
         if (!fs.existsSync(uploadsDir)) {
             fs.mkdirSync(uploadsDir, { recursive: true });
         }
-    
+
         console.log('Temporary file path:', file.path);
         console.log('Final file path:', filePath);
-    
+
         // Validar que el archivo temporal existe
         if (!file.path || !fs.existsSync(file.path)) {
             throw new Error(`El archivo temporal no existe en la ruta: ${file.path}`);
         }
-    
+
         // Mover el archivo
         fs.renameSync(file.path, filePath);
-    
+
         // Guardar en la base de datos
         const tempFile = this.tempFileRepository.create({
             filePath,
@@ -145,9 +145,9 @@ export class TempFilesService {
             idFront: fileId,
             clienteId: clienteIdNumber,
         });
-    
+
         const savedFile = await this.tempFileRepository.save(tempFile);
-    
+
         return {
             fileId: savedFile.id,
             path: savedFile.filePath,

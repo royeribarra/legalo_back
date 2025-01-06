@@ -19,6 +19,7 @@ import { IndustriasAbogadoEntity } from '../../industria/industriaAbogado.entity
 import { EspecialidadesAbogadoEntity } from '../../especialidad/especialidadAbogado.entity';
 import { In } from 'typeorm';
 import { ServiciosAbogadoEntity } from '../../servicio/servicioAbogado.entity';
+import { TmpImageFileEntity } from '../../tmp/tmpImgFile.entity';
 
 @Injectable()
 export class AbogadosService{
@@ -37,6 +38,7 @@ export class AbogadosService{
     @InjectRepository(IndustriasEntity) private readonly industriaRepository: Repository<IndustriasEntity>,
     @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
     @InjectRepository(OfertasEntity) private readonly ofertaRepository: Repository<OfertasEntity>,
+    @InjectRepository(TmpImageFileEntity) private readonly tmpFileRepository: Repository<TmpImageFileEntity>,
     private readonly usuariosService: UsuariosService,
     private readonly abogadoMailService: AbogadoMailService,
     private readonly tempFilesService: TempFilesService
@@ -129,19 +131,19 @@ export class AbogadosService{
       nuevoAbogado.cv_url = '';
       nuevoAbogado.video_url = '';
 
-      const tempFileCv = await this.tempFilesService.getFileByNombreArchivo(body.dni, 'archivo_cv');
+      const tempFileCv = await this.tempFilesService.getFileByNombreArchivo(body.correo, 'archivo_cv');
       if (tempFileCv) {
         // throw new BadRequestException('Archivo temporal no encontrado');
         nuevoAbogado.cv_url = tempFileCv.filePath;
       }
 
-      const tempFileCul = await this.tempFilesService.getFileByNombreArchivo(body.dni, 'archivo_cul');
+      const tempFileCul = await this.tempFilesService.getFileByNombreArchivo(body.correo, 'archivo_cul');
       if (tempFileCul) {
         // throw new BadRequestException('Archivo temporal no encontrado');
         nuevoAbogado.cul_url = tempFileCul.filePath;
       }
 
-      const tempFileImagen = await this.tempFilesService.getFileByNombreArchivo(body.dni, 'archivo_imagen');
+      const tempFileImagen = await this.tempFilesService.getFileByNombreArchivo(body.correo, 'archivo_imagen');
       if (tempFileImagen) {
         // throw new BadRequestException('Archivo temporal no encontrado');
         nuevoAbogado.foto_url = tempFileImagen.filePath;
@@ -220,12 +222,14 @@ export class AbogadosService{
         perfil: "Abogado",
         abogadoId: abogado.id
       }
-      console.log("creacion de usuario");
       const usuario = await this.usuariosService.createUsuario(datosUsuario);
 
+      try {
+        const { state } = await this.abogadoMailService.sendActivationEmail(body.correo, body.nombres, body.apellidos);
+      } catch (error) {
+        console.log("Error al enviar el mail.")
+      }
 
-      const { state } = await this.abogadoMailService.sendActivationEmail(body.correo, body.nombres, body.apellidos);
-      console.log("envio de mail");
       return {
         state: true,
         message: `Abogado creado correctamente`,
@@ -318,12 +322,12 @@ export class AbogadosService{
   public async findBy({key, value} : { key: keyof AbogadoDTO; value: any })
   {
     try {
-      const usuario: AbogadosEntity = await this.abogadosRepository.createQueryBuilder(
+      const abogado: AbogadosEntity = await this.abogadosRepository.createQueryBuilder(
         'abogados'
       )
       .where({[key]: value})
       .getOne();
-      return usuario;
+      return abogado;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
@@ -352,5 +356,35 @@ export class AbogadosService{
       .getMany();
 
     return abogados;
+  }
+
+  async updateArchivosAbogado(correo: string){
+    try {
+      const abogado = await this.findBy({ key: 'correo', value: correo });
+      if(!abogado)
+      {
+        return {
+          state: false,
+          message: "No se encontró al abogado"
+        };
+      }
+
+      const cv = await this.tmpFileRepository.createQueryBuilder('tmp').where('tmp.correo = :correo', { correo }).andWhere('tmp.nombre_archivo = :nombre_archivo', { nombre_archivo: 'archivo_cv' }).getOne();
+      const cul = await this.tmpFileRepository.createQueryBuilder('tmp').where('tmp.correo = :correo', { correo }).andWhere('tmp.nombre_archivo = :nombre_archivo', { nombre_archivo: 'archivo_cul' }).getOne();
+      const image = await this.tmpFileRepository.createQueryBuilder('tmp').where('tmp.correo = :correo', { correo }).andWhere('tmp.nombre_archivo = :nombre_archivo', { nombre_archivo: 'archivo_imagen' }).getOne();
+      abogado.cv_url = cv.filePath;
+      abogado.cul_url = cul.filePath;
+      abogado.foto_url = image.filePath;
+
+      // Guardar los cambios en la base de datos
+      await this.abogadosRepository.save(abogado);
+      return {
+        state: true,
+        message: "Archivos actualizados."
+      };
+    } catch (error) {
+      console.log(error, "error en conductorService - findConductorbyId")
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 }
