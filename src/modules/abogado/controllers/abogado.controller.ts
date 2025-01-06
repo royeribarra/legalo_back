@@ -65,8 +65,8 @@ export class AbogadosController {
     }
   }
 
-  @Put('update-archivos')
-  public async updateArchivosAbogado(@Body() correo: string)
+  @Post('update-archivos')
+  public async updateArchivosAbogado(@Body('correo') correo: string)
   {
     const {state, message} = await this.abogadosService.updateArchivosAbogado(correo);
     return {
