@@ -35,7 +35,7 @@ import { join } from 'path';
     EspecialidadModule,
     PagoModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(join(process.cwd(), 'public')),
       serveRoot: '/public'
     }),
   ],
