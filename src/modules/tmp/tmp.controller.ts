@@ -34,6 +34,35 @@ import { TempFilesService } from './tmpFile.service';
         return { success: true, fileId };
     }
 
+    @Post('upload-abogado-imagen-s3')
+    @UseInterceptors(FileInterceptor('file'))
+    async uploadAbogadoImagen(
+      @UploadedFile() file: Express.Multer.File,
+      @Body('nombreArchivo') nombreArchivo: string,
+      @Body('dni') dni: string,
+      @Body('correo') correo: string,
+    ) {
+      if (!file) {
+        throw new Error('Archivo no proporcionado');
+      }
+
+      // Verificar si ya existe el archivo
+      const checkExiste = await this.tempFilesService.checkExistFile(dni, correo, nombreArchivo);
+      if (checkExiste) {
+        return { success: false, message: 'Ya existe un archivo img para este abogado.' };
+      }
+
+      // Guardar el archivo en S3 dentro de la carpeta "abogados"
+      const s3Path = `abogados`;
+      const fileKey = await this.tempFilesService.uploadFileToS3(file, s3Path);
+
+      // Guardar en base de datos (si aplica)
+      const { fileId } = await this.tempFilesService.saveTempFile3(fileKey, dni, correo, nombreArchivo);
+
+      return { success: true, fileId };
+    }
+
+
     @Post('upload-abogado-cv')
     @UseInterceptors(FileInterceptor('file')) // Asegúrate de que el nombre coincida con el enviado desde el frontend
     async uploadFileCv(

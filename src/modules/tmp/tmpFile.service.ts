@@ -1,27 +1,46 @@
-import { Injectable, NotFoundException  } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException  } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TmpImageFileEntity } from './tmpImgFile.entity';
+import { v4 as uuidv4 } from 'uuid';
+import { Readable } from 'stream';
+import { ConfigService } from '@nestjs/config';
+import {
+    S3Client,
+    PutObjectCommand,
+    GetObjectCommand,
+    DeleteObjectCommand,
+    GetObjectCommandOutput,
+  } from '@aws-sdk/client-s3';
 
 @Injectable()
 export class TempFilesService {
-  constructor(
-    @InjectRepository(TmpImageFileEntity)
-    private readonly tempFileRepository: Repository<TmpImageFileEntity>,
-  ) {}
+    private bucketName: string;
+    private s3Client: S3Client;
+    constructor(
+        @InjectRepository(TmpImageFileEntity)
+        private readonly tempFileRepository: Repository<TmpImageFileEntity>,
+        private configService: ConfigService
+    ) {
+        this.s3Client = new S3Client({
+            region: this.configService.get<string>('AWS_REGION'),
+        });
+
+        this.bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');
+    }
 
     async saveTempFile(file: Express.Multer.File, dni: string, correo: string, nombreArchivo: string) {
         // Limpiar el DNI para evitar caracteres no válidos
-        const cleanDni = dni.replace(/["']/g, ""); 
-        
+        const cleanDni = dni.replace(/["']/g, "");
+
         // Obtener la extensión del archivo original
         const originalExtension = path.extname(file.originalname).toLowerCase(); // Incluye el punto (e.g., ".jpg")
 
         // Generar el nombre del archivo con la extensión original
         const fileName = `${cleanDni}-${Date.now()}${originalExtension}`;
-        
+
         // Rutas
         const uploadsDir = path.join(process.env.PROJECT_ROOT, 'public', 'uploads');
         const filePath = path.join(uploadsDir, fileName);
@@ -44,7 +63,18 @@ export class TempFilesService {
 
         // Guardar en la base de datos
         const tempFile = this.tempFileRepository.create({ dni: cleanDni, filePath, correo, nombreArchivo });
-        
+
+        const savedFile = await this.tempFileRepository.save(tempFile);
+
+        return {
+            fileId: savedFile.id,
+            path: savedFile.filePath,
+        };
+    }
+
+    async saveTempFile3(filePath: string, dni: string, correo: string, nombreArchivo: string) {
+        const tempFile = this.tempFileRepository.create({ dni: dni, filePath, correo, nombreArchivo });
+
         const savedFile = await this.tempFileRepository.save(tempFile);
 
         return {
@@ -153,4 +183,24 @@ export class TempFilesService {
             path: savedFile.filePath,
         };
     }
+
+    async uploadFileToS3(file: Express.Multer.File, folder: string): Promise<string> {
+        try {
+          const fileKey = `${folder}/${uuidv4()}_${file.originalname}`; // Path fijo dentro de "abogados"
+      
+          const command = new PutObjectCommand({
+            Bucket: this.bucketName,
+            Key: fileKey,
+            Body: file.buffer,
+            ContentType: file.mimetype,
+          });
+      
+          await this.s3Client.send(command);
+          return fileKey; // Retorna el path completo del archivo en S3
+        } catch (error) {
+          console.error('Error uploading file:', error);
+          throw new InternalServerErrorException('Error uploading file to S3');
+        }
+      }
+      
 }
