@@ -14,7 +14,7 @@ import { memoryStorage } from 'multer';
     constructor(private readonly tempFilesService: TempFilesService) {}
 
     @Post('upload-abogado-imagen')
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
     async uploadTempFile(
         @UploadedFile() file: Express.Multer.File,
         @Body('nombreArchivo') nombreArchivo: string,
@@ -29,10 +29,11 @@ import { memoryStorage } from 'multer';
         if(checkExiste){
           return { success: false, fileId: 'Ya existe un archivo img para este abogado.' };
         }
+        const s3Path = `abogados`;
+        const fileKey = await this.tempFilesService.uploadFileToS3(file, s3Path);
+        const { fileId } = await this.tempFilesService.saveTempFile3(fileKey, dni, correo, nombreArchivo);
 
-        const {fileId, path} = await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
-
-        return { success: true, fileId };
+        return { success: true, fileId, fileKey };
     }
 
     @Post('upload-abogado-imagen-s3')
@@ -47,17 +48,14 @@ import { memoryStorage } from 'multer';
         throw new Error('Archivo no proporcionado');
       }
 
-      // Verificar si ya existe el archivo
       const checkExiste = await this.tempFilesService.checkExistFile(dni, correo, nombreArchivo);
       if (checkExiste) {
         return { success: false, message: 'Ya existe un archivo img para este abogado.' };
       }
 
-      // Guardar el archivo en S3 dentro de la carpeta "abogados"
       const s3Path = `abogados`;
       const fileKey = await this.tempFilesService.uploadFileToS3(file, s3Path);
 
-      // Guardar en base de datos (si aplica)
       const { fileId } = await this.tempFilesService.saveTempFile3(fileKey, dni, correo, nombreArchivo);
 
       return { success: true, fileId, fileKey };
@@ -76,9 +74,11 @@ import { memoryStorage } from 'multer';
       if(checkExiste){
         return { success: false, fileId: 'Ya existe un archivo cv para este abogado.' };
       }
-      const {fileId, path} = await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
+      const s3Path = `abogados`;
+      const fileKey = await this.tempFilesService.uploadFileToS3(file, s3Path);
+      const { fileId } = await this.tempFilesService.saveTempFile3(fileKey, dni, correo, nombreArchivo);
 
-      return { success: true, fileId };
+      return { success: true, fileId, fileKey };
     }
 
     @Post('upload-abogado-cul')
@@ -93,9 +93,11 @@ import { memoryStorage } from 'multer';
       if(checkExiste){
         return { success: false, fileId: 'Ya existe un archivo cul para este abogado.' };
       }
-      const {fileId, path} = await this.tempFilesService.saveTempFile(file, dni, correo, nombreArchivo);
+      const s3Path = `abogados`;
+      const fileKey = await this.tempFilesService.uploadFileToS3(file, s3Path);
+      const { fileId } = await this.tempFilesService.saveTempFile3(fileKey, dni, correo, nombreArchivo);
 
-      return { success: true, fileId };
+      return { success: true, fileId, fileKey };
     }
 
     @Post('upload-oferta-documento')
