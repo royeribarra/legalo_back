@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { extname } from "path";
 import { ApiTags } from '@nestjs/swagger';
 import { TempFilesService } from './tmpFile.service';
+import { memoryStorage } from 'multer';
 
 @Controller('temp-files')
   export class TempFilesController
@@ -35,7 +36,7 @@ import { TempFilesService } from './tmpFile.service';
     }
 
     @Post('upload-abogado-imagen-s3')
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
     async uploadAbogadoImagen(
       @UploadedFile() file: Express.Multer.File,
       @Body('nombreArchivo') nombreArchivo: string,
@@ -59,7 +60,7 @@ import { TempFilesService } from './tmpFile.service';
       // Guardar en base de datos (si aplica)
       const { fileId } = await this.tempFilesService.saveTempFile3(fileKey, dni, correo, nombreArchivo);
 
-      return { success: true, fileId };
+      return { success: true, fileId, fileKey };
     }
 
 
