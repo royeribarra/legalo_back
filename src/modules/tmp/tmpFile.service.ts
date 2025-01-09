@@ -13,7 +13,8 @@ import {
     GetObjectCommand,
     DeleteObjectCommand,
     GetObjectCommandOutput,
-  } from '@aws-sdk/client-s3';
+} from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
 
 @Injectable()
 export class TempFilesService {
@@ -184,18 +185,26 @@ export class TempFilesService {
         };
     }
 
-    async uploadFileToS3(file: Express.Multer.File, folder: string): Promise<string>
-    {
+    async uploadFileToS3(file: Express.Multer.File, folder: string): Promise<string> {
         try {
-            const fileKey = `${uuidv4()}_${file.originalname}`; // Path fijo dentro de "abogados"
-            const command = new PutObjectCommand({
-                Bucket: this.bucketName,
-                Key: fileKey,
-                Body: file.buffer,
-                ContentType: file.mimetype,
+            const fileKey = `${folder}/${uuidv4()}_${file.originalname}`;
+
+            const upload = new Upload({
+                client: this.s3Client,
+                params: {
+                    Bucket: this.bucketName,
+                    Key: fileKey,
+                    Body: file.buffer,
+                    ContentType: file.mimetype,
+                },
             });
-            await this.s3Client.send(command);
-            return fileKey; // Retorna el path completo del archivo en S3
+
+            upload.on('httpUploadProgress', (progress) => {
+                console.log(`Upload progress: ${progress.loaded}/${progress.total}`);
+            });
+
+            await upload.done();
+            return fileKey; // Retorna la clave del archivo
         } catch (error) {
             console.error('Error uploading file:', error);
             throw new InternalServerErrorException('Error uploading file to S3');
