@@ -184,23 +184,21 @@ export class TempFilesService {
         };
     }
 
-    async uploadFileToS3(file: Express.Multer.File, folder: string): Promise<string> {
+    async uploadFileToS3(file: Express.Multer.File, folder: string): Promise<string>
+    {
         try {
-          const fileKey = `${folder}/${uuidv4()}_${file.originalname}`; // Path fijo dentro de "abogados"
-      
-          const command = new PutObjectCommand({
-            Bucket: this.bucketName,
-            Key: fileKey,
-            Body: file.buffer,
-            ContentType: file.mimetype,
-          });
-      
-          await this.s3Client.send(command);
-          return fileKey; // Retorna el path completo del archivo en S3
+            const fileKey = `${uuidv4()}_${file.originalname}`; // Path fijo dentro de "abogados"
+            const command = new PutObjectCommand({
+                Bucket: this.bucketName,
+                Key: fileKey,
+                Body: file.buffer,
+                ContentType: file.mimetype,
+            });
+            await this.s3Client.send(command);
+            return fileKey; // Retorna el path completo del archivo en S3
         } catch (error) {
-          console.error('Error uploading file:', error);
-          throw new InternalServerErrorException('Error uploading file to S3');
+            console.error('Error uploading file:', error);
+            throw new InternalServerErrorException('Error uploading file to S3');
         }
-      }
-      
+    }
 }

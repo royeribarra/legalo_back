@@ -21,7 +21,7 @@ import { MulterModule } from '@nestjs/platform-express';
     TempFilesController
   ],
   exports: [
-    TempFilesService, 
+    TempFilesService,
     TypeOrmModule
   ]
 })

@@ -12,22 +12,24 @@ import {
   import { FileInterceptor } from '@nestjs/platform-express';
   import { S3Service } from './s3.service';
   import { Response } from 'express';
-  
+
   @Controller('s3')
   export class S3Controller {
     constructor(private readonly s3Service: S3Service) {}
-  
+
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
-    async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    async uploadFile(
+      @UploadedFile() file: Express.Multer.File
+    ) {
       if (!file) {
         throw new HttpException('No file provided', HttpStatus.BAD_REQUEST);
       }
-  
+
       const fileKey = await this.s3Service.uploadFile(file);
       return { fileKey, message: 'File uploaded successfully' };
     }
-  
+
     @Post('download/:key')
     async downloadFile(@Param('key') fileKey: string, @Res() res: Response) {
       try {
