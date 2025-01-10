@@ -63,7 +63,7 @@ import { memoryStorage } from 'multer';
 
 
     @Post('upload-abogado-cv')
-    @UseInterceptors(FileInterceptor('file')) // Asegúrate de que el nombre coincida con el enviado desde el frontend
+    @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() })) // Asegúrate de que el nombre coincida con el enviado desde el frontend
     async uploadFileCv(
       @UploadedFile() file: Express.Multer.File,
       @Body('nombreArchivo') nombreArchivo: string,
@@ -82,7 +82,7 @@ import { memoryStorage } from 'multer';
     }
 
     @Post('upload-abogado-cul')
-    @UseInterceptors(FileInterceptor('file')) // Asegúrate de que el nombre coincida con el enviado desde el frontend
+    @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() })) // Asegúrate de que el nombre coincida con el enviado desde el frontend
     async uploadFileCul(
       @UploadedFile() file: Express.Multer.File,
       @Body('nombreArchivo') nombreArchivo: string,
