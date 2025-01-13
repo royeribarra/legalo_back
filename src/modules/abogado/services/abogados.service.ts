@@ -120,6 +120,7 @@ export class AbogadosService{
       nuevoAbogado.cip = body.cip;
       nuevoAbogado.colegio = body.colegio;
       nuevoAbogado.dni = body.dni;
+      nuevoAbogado.telefono = body.telefono;
 
       nuevoAbogado.habilidadesBlandas = [];
       nuevoAbogado.habilidadesDuras = [];
@@ -241,13 +242,16 @@ export class AbogadosService{
     }
   }
 
-  async updateAbogado(body: AbogadoUpdateDTO, id: number): Promise<{ state: boolean, message: string }> {
+  async updateAbogado(body: Partial<AbogadoUpdateDTO>, id: number): Promise<{ state: boolean, message: string }> {
     // Buscar el abogado por ID
-    const abogado = await this.abogadosRepository.createQueryBuilder('abogados').where('abogados.id = :id', { id }).getOne();;
+    const abogado = await this.abogadosRepository.findOne({ where: { id } });
 
     // Si el abogado no existe, lanzamos una excepción
     if (!abogado) {
-      throw new NotFoundException(`Abogado con ID ${id} no encontrado`);
+      return {
+        state: false,
+        message: `No existe el abogado con ID ${id} creado correctamente`,
+      };
     }
 
     // Actualizamos los campos del abogado con los datos del DTO
@@ -278,6 +282,12 @@ export class AbogadosService{
       .leftJoinAndSelect('abogados.usuario', 'usuario')
       .leftJoinAndSelect('abogados.aplicaciones', 'aplicaciones')
       .leftJoinAndSelect('abogados.trabajos', 'trabajos');
+
+    if (queryParams.validado_admin !== undefined) {
+      query.andWhere('abogados.validado_admin = :validado_admin', {
+        validado_admin: queryParams.validado_admin === 'true',
+      });
+    }
     try {
       const clientes: AbogadosEntity[] = await query.getMany();
 

@@ -130,27 +130,27 @@ export class AbogadoDTO {
 
 export class AbogadoUpdateDTO {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   contrasena: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   telefono: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   direccion: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   sobre_ti: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   grado_academico: string;
 
@@ -185,43 +185,43 @@ export class AbogadoUpdateDTO {
   cul: string;
 
   @ApiProperty({ type: () => [HabilidadBlandaDTO] })
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => HabilidadBlandaDTO)
   habilidadesBlandas: HabilidadBlandaDTO[];
 
   @ApiProperty({ type: () => [HabilidadDuraDTO] })
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => HabilidadDuraDTO)
   habilidadesDuras: HabilidadDuraDTO[];
 
   @ApiProperty({ type: () => [IndustriaDTO] })
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => IndustriaDTO)
   industrias: IndustriaDTO[];
 
   @ApiProperty({ type: () => [ServicioDTO] })
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => ServicioDTO)
   servicios: ServicioDTO[];
 
   @ApiProperty({ type: () => [ExperienciaDTO] })
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => ExperienciaDTO)
   experiencias: ExperienciaDTO[];
 
   @ApiProperty({ type: () => [EducacionDTO] })
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => EducacionDTO)
   educaciones: EducacionDTO[];
 
   @ApiProperty({ type: () => [EspecialidadDTO] })
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => EspecialidadDTO)
   especialidades: EspecialidadDTO[];

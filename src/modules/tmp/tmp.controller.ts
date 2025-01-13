@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { Delete } from '@nestjs/common/decorators';
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
@@ -108,6 +108,17 @@ import { memoryStorage } from 'multer';
       @Body('clienteId') clienteId: string,
       @Body('fileId') fileId: string,
     ) {
-      return await this.tempFilesService.saveTempFileOferta(file, clienteId, nombreArchivo, fileId);
+      // return await this.tempFilesService.saveTempFileOferta(file, clienteId, nombreArchivo, fileId);
+
+      const parsedClienteId = parseInt(clienteId, 10);
+
+      if (isNaN(parsedClienteId)) {
+        throw new BadRequestException('Invalid clienteId or fileId. Must be numeric.');
+      }
+      const s3Path = `ofertas`;
+      const fileKey = await this.tempFilesService.uploadFileToS3(file, s3Path);
+      const { path } = await this.tempFilesService.saveTempFileOferta3(fileKey, parsedClienteId, fileId, nombreArchivo);
+
+      return { success: true, path, fileKey };
     }
 }

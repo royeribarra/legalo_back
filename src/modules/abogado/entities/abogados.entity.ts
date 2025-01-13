@@ -33,6 +33,9 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   correo: string;
 
   @Column()
+  telefono: string;
+
+  @Column()
   sobre_ti: string;
 
   @Column({nullable: true})
@@ -55,6 +58,9 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
 
   @Column({nullable: true})
   cv_url: string;
+
+  @Column({default: false})
+  validado_admin: boolean;
 
   @OneToMany(() => HabilidadesBlandaEntity, (habilidad) => habilidad.abogado)
   habilidadesBlandas: HabilidadesBlandaEntity[];

@@ -56,7 +56,7 @@ export class AbogadosController {
 
 
   @Put('edit/:id')
-  public async updateAbogado(@Body() body: AbogadoUpdateDTO, @Param('id') id: number)
+  public async updateAbogado(@Body() body: Partial<AbogadoUpdateDTO>, @Param('id') id: number)
   {
     const {state, message} = await this.abogadosService.updateAbogado(body, id);
     return {

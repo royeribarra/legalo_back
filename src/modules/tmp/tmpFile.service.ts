@@ -75,9 +75,16 @@ export class TempFilesService {
 
     async saveTempFile3(filePath: string, dni: string, correo: string, nombreArchivo: string) {
         const tempFile = this.tempFileRepository.create({ dni: dni, filePath, correo, nombreArchivo });
-
         const savedFile = await this.tempFileRepository.save(tempFile);
+        return {
+            fileId: savedFile.id,
+            path: savedFile.filePath,
+        };
+    }
 
+    async saveTempFileOferta3(filePath: string, clienteId: number, fileId: string, nombreArchivo: string) {
+        const tempFile = this.tempFileRepository.create({ clienteId, filePath, idFront: fileId, nombreArchivo });
+        const savedFile = await this.tempFileRepository.save(tempFile);
         return {
             fileId: savedFile.id,
             path: savedFile.filePath,
