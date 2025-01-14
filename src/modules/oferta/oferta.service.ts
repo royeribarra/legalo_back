@@ -130,16 +130,20 @@ export class OfertaService{
   {
     try {
       const query = await this.ofertaRepository
-        .createQueryBuilder('abogados')
-        .leftJoinAndSelect('abogados.habilidadesBlandas', 'habilidadesBlandas')
-        .leftJoinAndSelect('abogados.habilidadesDuras', 'habilidadesDuras')
-        .leftJoinAndSelect('abogados.industrias', 'industrias')
-        .leftJoinAndSelect('abogados.servicios', 'servicios')
-        .leftJoinAndSelect('abogados.experiencias', 'experiencias')
-        .leftJoinAndSelect('abogados.educaciones', 'educaciones')
-        .leftJoinAndSelect('abogados.especialidades', 'especialidades');
+        .createQueryBuilder('ofertas')
+        .leftJoinAndSelect('ofertas.especialidadesOferta', 'especialidadesOferta')
+        .leftJoinAndSelect('especialidadesOferta.especialidad', 'especialidad')
+        .leftJoinAndSelect('ofertas.serviciosOferta', 'serviciosOferta')
+        .leftJoinAndSelect('serviciosOferta.servicio', 'servicio')
+        .leftJoinAndSelect('ofertas.industriasOferta', 'industriasOferta')
+        .leftJoinAndSelect('industriasOferta.industria', 'industria')
+        .leftJoinAndSelect('ofertas.cliente', 'cliente')
+        .leftJoinAndSelect('ofertas.aplicaciones', 'aplicaciones')
+        .leftJoinAndSelect('ofertas.preguntas_oferta', 'preguntas_oferta')
+        .leftJoinAndSelect('ofertas.pago', 'pago')
+        .leftJoinAndSelect('ofertas.invitaciones', 'invitaciones');
 
-        query.where('abogados.id = :id', { id });
+        query.where('ofertas.id = :id', { id });
         console.log(query.getQuery());
 
         const abogado = await query.getOne();

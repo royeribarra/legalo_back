@@ -18,6 +18,7 @@ import { OfertasEntity } from '../oferta/oferta.entity';
 import { EspecialidadesAbogadoEntity } from '../especialidad/especialidadAbogado.entity';
 import { ServiciosAbogadoEntity } from '../servicio/servicioAbogado.entity';
 import { IndustriasAbogadoEntity } from '../industria/industriaAbogado.entity';
+import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ import { IndustriasAbogadoEntity } from '../industria/industriaAbogado.entity';
       OfertasEntity,
       EspecialidadesAbogadoEntity,
       ServiciosAbogadoEntity,
-      IndustriasAbogadoEntity
+      IndustriasAbogadoEntity,
+      AplicacionesEntity
     ]),
     UsuariosModule,
     MailModule

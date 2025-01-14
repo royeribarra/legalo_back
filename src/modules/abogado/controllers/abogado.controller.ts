@@ -83,5 +83,16 @@ export class AbogadosController {
   //     message: message
   //   }
   // }
-
+  @Post('postular-oferta')
+  public async postularOferta(
+    @Body('abogadoId') abogadoId: number,
+    @Body('ofertaId') ofertaId: number,
+    @Body('salarioEsperado') salarioEsperado: number,
+  ) {
+    const { state, message } = await this.abogadosService.postularAbogadoOferta(abogadoId, ofertaId, salarioEsperado);
+    return {
+      state,
+      message,
+    };
+  }
 }

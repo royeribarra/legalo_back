@@ -20,6 +20,7 @@ import { EspecialidadesAbogadoEntity } from '../../especialidad/especialidadAbog
 import { In } from 'typeorm';
 import { ServiciosAbogadoEntity } from '../../servicio/servicioAbogado.entity';
 import { TmpImageFileEntity } from '../../tmp/tmpImgFile.entity';
+import { AplicacionesEntity } from '../../aplicacion/aplicaciones.entity';
 
 @Injectable()
 export class AbogadosService{
@@ -39,6 +40,7 @@ export class AbogadosService{
     @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
     @InjectRepository(OfertasEntity) private readonly ofertaRepository: Repository<OfertasEntity>,
     @InjectRepository(TmpImageFileEntity) private readonly tmpFileRepository: Repository<TmpImageFileEntity>,
+    @InjectRepository(AplicacionesEntity) private readonly aplicacionesRepository: Repository<AplicacionesEntity>,
     private readonly usuariosService: UsuariosService,
     private readonly abogadoMailService: AbogadoMailService,
     private readonly tempFilesService: TempFilesService
@@ -396,5 +398,37 @@ export class AbogadosService{
       console.log(error, "error en conductorService - findConductorbyId")
       throw ErrorManager.createSignatureError(error.message);
     }
+  }
+
+  public async postularAbogadoOferta(
+    abogadoId: number,
+    ofertaId: number,
+    salarioEsperado: number,
+  ) {
+    // Buscar el abogado por ID
+    const abogado = await this.abogadosRepository.findOne({ where: { id: abogadoId } });
+    if (!abogado) {
+      return { state: 'error', message: 'El abogado no existe' };
+    }
+
+    // Buscar la oferta por ID
+    const oferta = await this.ofertaRepository.findOne({ where: { id: ofertaId } });
+    if (!oferta) {
+      return { state: 'error', message: 'La oferta no existe' };
+    }
+
+    // Crear una nueva instancia de AplicacionesEntity
+    const nuevaAplicacion = this.aplicacionesRepository.create({
+      fecha_aplicacion: new Date().toISOString(),
+      status: 1, // Ejemplo: Status inicial como "pendiente"
+      salarioEsperado,
+      abogado,
+      oferta,
+    });
+
+    // Guardar la aplicación en la base de datos
+    await this.aplicacionesRepository.save(nuevaAplicacion);
+
+    return { state: 'success', message: 'Aplicación creada correctamente' };
   }
 }

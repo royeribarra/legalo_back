@@ -273,6 +273,7 @@ export default class AbogadoSeeder implements Seeder {
             grado_academico: element.grado_academico,
             cip: element.cip,
             colegio: element.colegio,
+            telefono: element.telefono,
             video_url: element.video,
             foto_url: element.foto,
             cv_url: element.cv,
