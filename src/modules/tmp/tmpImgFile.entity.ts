@@ -18,6 +18,12 @@ export class TmpImageFileEntity extends BaseEntity{
   @Column({ nullable: true})
   clienteId: number;
 
+  @Column({ nullable: true})
+  abogadoId: number;
+
+  @Column({ nullable: true})
+  ofertaId: number;
+
   @Column()
   filePath: string;
 }

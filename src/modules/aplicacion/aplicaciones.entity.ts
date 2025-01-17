@@ -15,8 +15,14 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
   @Column()
   status: number;
 
-  @Column()
+  @Column({ nullable: true})
   salarioEsperado: number;
+
+  @Column({ nullable: true})
+  documentoExtraUrl: string;
+
+  @Column({ nullable: true})
+  videoExtraUrl: string;
 
   @ManyToOne(() => OfertasEntity, (oferta) => oferta.aplicaciones)
   @JoinColumn({ name: 'oferta_id' })

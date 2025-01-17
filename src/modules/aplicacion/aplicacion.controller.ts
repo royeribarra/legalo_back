@@ -7,8 +7,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { AplicacionCreateDTO } from './aplicacion.dto';
 import { AplicacionesService } from './aplicaciones.service';
 
-@ApiTags('Abogados')
-@Controller('abogados')
+@ApiTags('Aplicaciones')
+@Controller('aplicaciones')
 export class AplicacionesController {
   constructor(
     private readonly aplicacionService: AplicacionesService,
@@ -29,6 +29,12 @@ export class AplicacionesController {
   // {
   //   return await this.aplicacionService.findAbogados(queryParams);
   // }
+
+  @Get('all/:abogadoId')
+  public async findAllAplicacionesByAbogadoId(@Param('abogadoId') abogadoId: number)
+  {
+    return await this.aplicacionService.findAplicacionesByAbogadoId(abogadoId);
+  }
 
   // @Get(':id')
   // public async findConductorById(@Param('id') id: number){

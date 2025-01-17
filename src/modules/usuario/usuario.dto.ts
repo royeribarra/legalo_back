@@ -161,5 +161,5 @@ export class UsuarioSeederDTO{
   @ApiProperty()
   @IsOptional()
   @IsBoolean()
-  is_active: boolean;
+  isActive: boolean;
 }

@@ -19,6 +19,8 @@ import { TrabajosEntity } from '../trabajo/trabajos.entity';
 import { PreguntasOfertaEntity } from '../preguntas_oferta/preguntasOferta.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { InvitacionesEntity } from './invitacion.entity';
+import { ServiciosOfertaEntity } from '../servicio/servicioOferta.entity';
+import { EspecialidadesOfertaEntity } from '../especialidad/especialidadOferta.entity';
 
 @Module({
   imports: [
@@ -36,7 +38,9 @@ import { InvitacionesEntity } from './invitacion.entity';
       TrabajosEntity,
       PreguntasOfertaEntity,
       AbogadosEntity,
-      InvitacionesEntity
+      InvitacionesEntity,
+      ServiciosOfertaEntity,
+      EspecialidadesOfertaEntity
     ]),
     UsuariosModule,
     MailModule

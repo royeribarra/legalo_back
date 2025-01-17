@@ -43,4 +43,15 @@ export class AplicacionesService {
     // Guardar la aplicación en la base de datos
     return this.aplicacionesRepository.save(aplicacion);
   }
+
+  async findAplicacionesByAbogadoId(abogadoId: number): Promise<AplicacionesEntity[]> {
+    return this.aplicacionesRepository.find({
+      where: {
+        abogado: {
+          id: abogadoId,
+        },
+      },
+      relations: ['oferta', 'trabajo'], // Agrega las relaciones necesarias.
+    });
+  }
 }

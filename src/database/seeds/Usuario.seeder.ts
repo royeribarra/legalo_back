@@ -43,7 +43,7 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'abogado',
           abogado: abogado1,
           cliente: null,
-          is_active: true
+          isActive: true
         },
         {
           nombres: 'Magaly',
@@ -56,7 +56,7 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'cliente',
           abogado: null,
           cliente: cliente,
-          is_active: true
+          isActive: true
         },
         {
           nombres: 'Mariana',
@@ -69,7 +69,7 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'abogado',
           abogado: abogado2,
           cliente: null,
-          is_active: true
+          isActive: true
         },
         {
           nombres: 'Carlos',
@@ -82,7 +82,7 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'abogado',
           abogado: abogado3,
           cliente: null,
-          is_active: true
+          isActive: true
         },
         {
           nombres: 'Laura',
@@ -95,7 +95,7 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'abogado',
           abogado: abogado4,
           cliente: null,
-          is_active: true
+          isActive: true
         },
         {
           nombres: 'Admin',
@@ -108,7 +108,7 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'admin',
           abogado: null,
           cliente: null,
-          is_active: true
+          isActive: true
         }
       ];
 

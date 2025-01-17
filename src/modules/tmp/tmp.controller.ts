@@ -108,17 +108,36 @@ import { memoryStorage } from 'multer';
       @Body('clienteId') clienteId: string,
       @Body('fileId') fileId: string,
     ) {
-      // return await this.tempFilesService.saveTempFileOferta(file, clienteId, nombreArchivo, fileId);
-
       const parsedClienteId = parseInt(clienteId, 10);
-
       if (isNaN(parsedClienteId)) {
         throw new BadRequestException('Invalid clienteId or fileId. Must be numeric.');
       }
       const s3Path = `ofertas`;
       const fileKey = await this.tempFilesService.uploadFileToS3(file, s3Path);
       const { path } = await this.tempFilesService.saveTempFileOferta3(fileKey, parsedClienteId, fileId, nombreArchivo);
+      return { success: true, path, fileKey };
+    }
 
+    @Post('upload-documento-aplicacion')
+    @UseInterceptors(FileInterceptor('file'))
+    async uploadDocumentoAplicacion(
+      @UploadedFile() file: Express.Multer.File,
+      @Body('nombreArchivo') nombreArchivo: string,
+      @Body('ofertaId') ofertaId: string,
+      @Body('abogadoId') abogadoId: string,
+      @Body('fileId') fileId: string,
+    ) {
+      const parsedOfertaId = parseInt(ofertaId, 10);
+      if (isNaN(parsedOfertaId)) {
+        throw new BadRequestException('Invalid clienteId or fileId. Must be numeric.');
+      }
+      const parsedAbogadoId = parseInt(abogadoId, 10);
+      if (isNaN(parsedAbogadoId)) {
+        throw new BadRequestException('Invalid clienteId or fileId. Must be numeric.');
+      }
+      const s3Path = `ofertas`;
+      const fileKey = await this.tempFilesService.uploadFileToS3(file, s3Path);
+      const { path } = await this.tempFilesService.saveTempDocumentoAplicacion3(fileKey, parsedOfertaId, parsedAbogadoId, fileId, nombreArchivo);
       return { success: true, path, fileKey };
     }
 }

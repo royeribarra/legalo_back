@@ -28,6 +28,8 @@ export class OfertaService{
     @InjectRepository(EspecialidadesEntity) private readonly especialidadRepository: Repository<EspecialidadesEntity>,
     @InjectRepository(AbogadosEntity) private readonly abogadoRepository: Repository<AbogadosEntity>,
     @InjectRepository(InvitacionesEntity) private readonly invitacionRepository: Repository<InvitacionesEntity>,
+    @InjectRepository(ServiciosOfertaEntity) private readonly servicioOfertaRepository: Repository<ServiciosOfertaEntity>,
+    @InjectRepository(EspecialidadesOfertaEntity) private readonly especialidadOfertaRepository: Repository<EspecialidadesOfertaEntity>,
     private readonly tempFilesService: TempFilesService,
   ){}
 
@@ -91,6 +93,8 @@ export class OfertaService{
         return pregunta;
       });
       oferta.preguntas_oferta = await this.preguntaRepository.save(preguntas);
+      await this.servicioOfertaRepository.save(serviciosOferta);
+      await this.especialidadOfertaRepository.save(especialidadesAbogado);
       await this.ofertaRepository.save(oferta);
 
       return {

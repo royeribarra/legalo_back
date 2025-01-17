@@ -91,6 +91,15 @@ export class TempFilesService {
         };
     }
 
+    async saveTempDocumentoAplicacion3(filePath: string, ofertaId: number, abogadoId: number, fileId: string, nombreArchivo: string) {
+        const tempFile = this.tempFileRepository.create({ ofertaId, filePath, idFront: fileId, nombreArchivo });
+        const savedFile = await this.tempFileRepository.save(tempFile);
+        return {
+            fileId: savedFile.id,
+            path: savedFile.filePath,
+        };
+    }
+
     async getFileById(fileId: number): Promise<TmpImageFileEntity | null> {
         const tempFile = await this.tempFileRepository.findOne({ where: { id: fileId } });
         if (!tempFile) {
