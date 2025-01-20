@@ -6,10 +6,16 @@ import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { AplicacionesEntity } from './aplicaciones.entity';
 import { AplicacionesController } from './aplicacion.controller';
 import { AplicacionesService } from './aplicaciones.service';
+import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AplicacionesEntity, OfertasEntity, AbogadosEntity]),
+    TypeOrmModule.forFeature([
+      AplicacionesEntity, 
+      OfertasEntity, 
+      AbogadosEntity,
+      TmpImageFileEntity
+    ]),
   ],
   controllers: [AplicacionesController],
   providers: [AplicacionesService],

@@ -6,6 +6,8 @@ import { AplicacionesEntity } from './aplicaciones.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { AplicacionCreateDTO } from './aplicacion.dto';
+import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
+import { ErrorManager } from '../../utils/error.manager';
 
 @Injectable()
 export class AplicacionesService {
@@ -16,6 +18,8 @@ export class AplicacionesService {
     private readonly ofertasRepository: Repository<OfertasEntity>,
     @InjectRepository(AbogadosEntity)
     private readonly abogadosRepository: Repository<AbogadosEntity>,
+    @InjectRepository(TmpImageFileEntity)
+    private readonly tmpRepository: Repository<TmpImageFileEntity>,
   ) {}
 
   // Crear una nueva aplicación (postulación)
@@ -53,5 +57,65 @@ export class AplicacionesService {
       },
       relations: ['oferta', 'trabajo'], // Agrega las relaciones necesarias.
     });
+  }
+
+  // Método para actualizar los campos de documentoExtraUrl y videoExtraUrl
+public async updateArchivosAplicacion(
+  abogadoId: number,
+  clienteId: number,
+  aplicacionId: number
+): Promise<any> {
+  // Paso 1: Buscar los archivos temporales (TmpImageFileEntity) para ambos tipos
+  const documentoTmpfile = await this.tmpRepository
+    .createQueryBuilder('tmpfile')
+    .where('tmpfile.clienteId = :clienteId', { clienteId })
+    .andWhere('tmpfile.abogadoId = :abogadoId', { abogadoId })
+    .andWhere('tmpfile.nombreArchivo = :nombreArchivo', { nombreArchivo: 'documento_aplicacion' }) // Buscar el archivo de documento
+    .getOne();
+
+  const videoTmpfile = await this.tmpRepository
+      .createQueryBuilder('tmpfile')
+      .where('tmpfile.clienteId = :clienteId', { clienteId })
+      .andWhere('tmpfile.abogadoId = :abogadoId', { abogadoId })
+      .andWhere('tmpfile.nombreArchivo = :nombreArchivo', { nombreArchivo: 'video_aplicacion' }) // Buscar el archivo de video
+      .getOne();
+
+    // Paso 2: Verificar si se encontraron los archivos temporales
+    if (!documentoTmpfile && !videoTmpfile) {
+      return {
+        state: false,
+        message: 'No se encontraron archivos temporales para actualizar.',
+      };
+    }
+
+    // Paso 3: Buscar la aplicación (AplicacionesEntity) usando el aplicacionId
+    const aplicacion = await this.aplicacionesRepository.findOne({
+      where: { id: aplicacionId },
+    });
+
+    if (!aplicacion) {
+      return {
+        state: false,
+        message: 'No se encontró la aplicación con el ID proporcionado',
+      };
+    }
+
+    // Paso 4: Actualizar los campos de la aplicación
+    if (documentoTmpfile) {
+      aplicacion.documentoExtraUrl = documentoTmpfile.filePath; // Asignar el archivo de documento
+    }
+
+    if (videoTmpfile) {
+      aplicacion.videoExtraUrl = videoTmpfile.filePath; // Asignar el archivo de video
+    }
+
+    // Paso 5: Guardar la aplicación con los campos actualizados
+    await this.aplicacionesRepository.save(aplicacion);
+
+    return {
+      state: true,
+      message: 'Campos actualizados exitosamente',
+      data: aplicacion,
+    };
   }
 }

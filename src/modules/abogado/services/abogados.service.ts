@@ -427,9 +427,9 @@ export class AbogadosService{
     });
 
     // Guardar la aplicación en la base de datos
-    await this.aplicacionesRepository.save(nuevaAplicacion);
+    const aplicacion = await this.aplicacionesRepository.save(nuevaAplicacion);
 
-    return { state: 'success', message: 'Aplicación creada correctamente' };
+    return { state: 'success', message: 'Aplicación creada correctamente', aplicacionId: aplicacion.id };
   }
 
   public async getOfertasConInvitacionesPorCliente(abogadoId: number): Promise<OfertasEntity[]> {
@@ -462,30 +462,33 @@ export class AbogadosService{
   }
 
   public async getAplicaciones(
-    abogadoId: number,
-    status?: number
-  ): Promise<AplicacionesEntity[]> {
+      abogadoId: number,
+      status?: number
+  ): Promise<AplicacionesEntity[]> 
+  {
     const query = this.aplicacionesRepository
-      .createQueryBuilder('aplicacion')
-      .leftJoinAndSelect('aplicacion.oferta', 'oferta')
-      .leftJoinAndSelect('oferta.industriasOferta', 'industriasOferta')
-      .leftJoinAndSelect('oferta.serviciosOferta', 'serviciosOferta')
-      .leftJoinAndSelect('oferta.especialidadesOferta', 'especialidadesOferta')
-      .leftJoinAndSelect('oferta.cliente', 'cliente')
-      .leftJoinAndSelect('oferta.aplicaciones', 'aplicaciones')
-      .leftJoinAndSelect('oferta.industriasOferta.industria', 'industria')
-      .leftJoinAndSelect('oferta.serviciosOferta.servicio', 'servicio')
-      .leftJoinAndSelect('oferta.especialidadesOferta.especialidad', 'especialidad')
-      .where('aplicacion.abogadoId = :abogadoId', { abogadoId });
-  
+        .createQueryBuilder('aplicacion')
+        .leftJoinAndSelect('aplicacion.oferta', 'oferta')
+        .leftJoinAndSelect('oferta.industriasOferta', 'industriasOferta')
+        .leftJoinAndSelect('oferta.serviciosOferta', 'serviciosOferta')
+        .leftJoinAndSelect('oferta.especialidadesOferta', 'especialidadesOferta')
+        .leftJoinAndSelect('oferta.cliente', 'cliente')
+        .leftJoinAndSelect('oferta.aplicaciones', 'aplicaciones')
+        .leftJoinAndSelect('industriasOferta.industria', 'industria')
+        .leftJoinAndSelect('serviciosOferta.servicio', 'servicio')
+        .leftJoinAndSelect('especialidadesOferta.especialidad', 'especialidad')
+        // Utilizamos la relación con 'abogado'
+        .leftJoinAndSelect('aplicacion.abogado', 'abogado')
+        .where('abogado.id = :abogadoId', { abogadoId });
+
     // Si 'status' es pasado como parámetro, agregamos el filtro
     if (status) {
-      query.andWhere('aplicacion.status = :status', { status });
+        query.andWhere('aplicacion.status = :status', { status });
     }
-  
+
     // Ejecutamos la consulta
     const aplicaciones = await query.getMany();
-  
+
     return aplicaciones;
-  }  
+  }
 }

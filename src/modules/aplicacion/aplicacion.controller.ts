@@ -14,21 +14,15 @@ export class AplicacionesController {
     private readonly aplicacionService: AplicacionesService,
     ) {}
 
-    @Post('crear')
-    public async crearAplicacion(@Body() body: AplicacionCreateDTO) {
-      const aplicacion = await this.aplicacionService.createAplicacion(body);
-      return {
-        state: true,
-        message: 'Aplicación creada con éxito',
-        data: aplicacion,
-      };
-    }
-
-  // @Get('all')
-  // public async findAllAbogados(@Query() queryParams: any)
-  // {
-  //   return await this.aplicacionService.findAbogados(queryParams);
-  // }
+  @Post('crear')
+  public async crearAplicacion(@Body() body: AplicacionCreateDTO) {
+    const aplicacion = await this.aplicacionService.createAplicacion(body);
+    return {
+      state: true,
+      message: 'Aplicación creada con éxito',
+      data: aplicacion,
+    };
+  }
 
   @Get('all/:abogadoId')
   public async findAllAplicacionesByAbogadoId(@Param('abogadoId') abogadoId: number)
@@ -36,48 +30,13 @@ export class AplicacionesController {
     return await this.aplicacionService.findAplicacionesByAbogadoId(abogadoId);
   }
 
-  // @Get(':id')
-  // public async findConductorById(@Param('id') id: number){
-  //   return await this.aplicacionService.findAbogadoById(id);
-  // }
-
-  // @Post()
-  // @UseInterceptors(
-  //   FileInterceptor("profileImg", {
-  //     storage: diskStorage({
-  //       destination: "./uploads", // Carpeta donde se guardará la imagen
-  //       filename: (req, file, callback) => {
-  //         const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
-  //         callback(null, uniqueName);
-  //       },
-  //     }),
-  //     limits: { fileSize: 10 * 1024 * 1024 }, // Límite de tamaño: 10 MB
-  //   })
-  // )
-  //   uploadFile(@UploadedFile() file: Express.Multer.File) {
-  //   console.log("Archivo recibido:", file);
-  //   return { message: "Archivo subido exitosamente", filename: file.filename };
-  // }
-
-
-
-  // @Put('edit/:id')
-  // public async updateAbogado(@Body() body: AbogadoUpdateDTO, @Param('id') id: number)
-  // {
-  //   const {state, message} = await this.aplicacionService.updateAbogado(body, id);
-  //   return {
-  //     state: state,
-  //     message: message,
-  //   }
-  // }
-
-  // @Delete(':id')
-  // public async deleteConductor(@Param('id') id:string){
-  //   const{ state, message} = await this.abogadosService.deleteConductor(id);
-  //   return {
-  //     state: state,
-  //     message: message
-  //   }
-  // }
-
+  @Post('update-archivos')
+  public async updateArchivosAbogado(@Body() body: { abogadoId: number, clienteId: number, aplicacionId: number })
+  {
+    const {state, message} = await this.aplicacionService.updateArchivosAplicacion(body.abogadoId, body.clienteId, body.aplicacionId);
+    return {
+      state: state,
+      message: message,
+    }
+  }
 }

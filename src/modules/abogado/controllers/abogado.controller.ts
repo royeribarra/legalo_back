@@ -61,8 +61,9 @@ export class AbogadosController {
     @Body('ofertaId') ofertaId: number,
     @Body('salarioEsperado') salarioEsperado: number,
   ) {
-    const { state, message } = await this.abogadosService.postularAbogadoOferta(abogadoId, ofertaId, salarioEsperado);
+    const { aplicacionId, state, message } = await this.abogadosService.postularAbogadoOferta(abogadoId, ofertaId, salarioEsperado);
     return {
+      aplicacionId,
       state,
       message,
     };
@@ -87,12 +88,10 @@ export class AbogadosController {
     }
   }
 
-  @Get('get-aplicaciones')
-  public async getOfertasConInvitaciones(
-    @Query('abogadoId') abogadoId: number,
-    @Query('status') status?: number
-  ) 
+  @Post('aplicaciones')
+  public async getOfertasConInvitaciones(@Body('abogadoId') abogadoId: number, status: number) 
   {
+
     try {
       const ofertas = await this.abogadosService.getAplicaciones(abogadoId, status);
       return {
