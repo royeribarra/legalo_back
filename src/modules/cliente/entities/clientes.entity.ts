@@ -33,6 +33,9 @@ export class ClientesEntity extends BaseEntity implements ICliente
   @Column()
   opinion: string;
 
+  @Column({default: true})
+  validado_admin: boolean;
+
   @OneToOne(() => UsuariosEntity, (usuario) => usuario.cliente)
   usuario: UsuariosEntity;
 

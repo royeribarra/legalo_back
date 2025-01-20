@@ -9,7 +9,10 @@ export class CrearTrabajoDTO {
   fecha_inicio: string;  // Fecha de inicio del trabajo
 
   @IsDateString()
-  fecha_fin: string;  // Fecha de finalización del trabajo
+  fecha_fin: string;
+
+  @IsNumber()
+  clienteId: number;
 }
 
 export class ActualizarProgresoDTO {

@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AbogadoMailService } from './services/abogadoMail.service';
 import { UsuariosModule } from '../usuario/usuario.module';
 import { ClienteMailService } from './services/clienteMail.service';
+import { MailController } from './mail.controller';
 
 @Global() // 👈 global module
 @Module({
@@ -39,6 +40,9 @@ import { ClienteMailService } from './services/clienteMail.service';
       inject: [ConfigService],
     }),
     UsuariosModule
+  ],
+  controllers: [
+    MailController
   ],
   providers: [
     MailService,

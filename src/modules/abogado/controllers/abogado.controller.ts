@@ -35,26 +35,6 @@ export class AbogadosController {
     return await this.abogadosService.findAbogadoById(id);
   }
 
-  // @Post()
-  // @UseInterceptors(
-  //   FileInterceptor("profileImg", {
-  //     storage: diskStorage({
-  //       destination: "./uploads", // Carpeta donde se guardará la imagen
-  //       filename: (req, file, callback) => {
-  //         const uniqueName = `${uuidv4()}${extname(file.originalname)}`;
-  //         callback(null, uniqueName);
-  //       },
-  //     }),
-  //     limits: { fileSize: 10 * 1024 * 1024 }, // Límite de tamaño: 10 MB
-  //   })
-  // )
-  //   uploadFile(@UploadedFile() file: Express.Multer.File) {
-  //   console.log("Archivo recibido:", file);
-  //   return { message: "Archivo subido exitosamente", filename: file.filename };
-  // }
-
-
-
   @Put('edit/:id')
   public async updateAbogado(@Body() body: Partial<AbogadoUpdateDTO>, @Param('id') id: number)
   {
@@ -75,14 +55,6 @@ export class AbogadosController {
     }
   }
 
-  // @Delete(':id')
-  // public async deleteConductor(@Param('id') id:string){
-  //   const{ state, message} = await this.abogadosService.deleteConductor(id);
-  //   return {
-  //     state: state,
-  //     message: message
-  //   }
-  // }
   @Post('postular-oferta')
   public async postularOferta(
     @Body('abogadoId') abogadoId: number,
@@ -94,5 +66,46 @@ export class AbogadosController {
       state,
       message,
     };
+  }
+
+  @Post('invitacion-a-ofertas')
+  public async getOfertasConInvitacion(@Body('abogadoId') abogadoId: string)
+  {
+    try {
+      const ofertas = await this.abogadosService.getOfertasConInvitacionesPorCliente(Number(abogadoId));
+      return {
+        state: true,
+        message: 'Ofertas obtenidas exitosamente',
+        data: ofertas,
+      };
+    } catch (error) {
+      return {
+        state: false,
+        message: 'Error al obtener las ofertas con invitaciones',
+        error: error.message,
+      };
+    }
+  }
+
+  @Get('get-aplicaciones')
+  public async getOfertasConInvitaciones(
+    @Query('abogadoId') abogadoId: number,
+    @Query('status') status?: number
+  ) 
+  {
+    try {
+      const ofertas = await this.abogadosService.getAplicaciones(abogadoId, status);
+      return {
+        state: true,
+        message: 'Ofertas obtenidas exitosamente',
+        data: ofertas,
+      };
+    } catch (error) {
+      return {
+        state: false,
+        message: 'Error al obtener las ofertas con invitaciones',
+        error: error.message,
+      };
+    }
   }
 }

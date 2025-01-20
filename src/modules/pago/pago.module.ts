@@ -4,16 +4,26 @@ import { PagosEntity } from './pago.entity';
 import { PagoService } from './pago.service';
 import { PagoController } from './pago.controller';
 import { OfertasEntity } from '../oferta/oferta.entity';
+import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
+import { TrabajosService } from '../trabajo/trabajo.service';
+import { TrabajosEntity } from '../trabajo/trabajos.entity';
+import { ClientesEntity } from '../cliente/entities/clientes.entity';
+import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       PagosEntity,
-      OfertasEntity
+      OfertasEntity,
+      AplicacionesEntity,
+      TrabajosEntity,
+      ClientesEntity,
+      AbogadosEntity
     ]),
   ],
   providers: [
-    PagoService
+    PagoService,
+    TrabajosService
   ],
   controllers: [
     PagoController

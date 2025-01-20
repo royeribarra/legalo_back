@@ -20,7 +20,7 @@ export class OfertasEntity extends BaseEntity implements IOferta {
   @Column()
   titulo: string;
 
-  @Column()
+  @Column('text')
   descripcion: string;
 
   @Column({ nullable: true })

@@ -26,6 +26,10 @@ export class PagosEntity extends BaseEntity implements IPago {
   @Column()
   ofertaId: number;
 
+  @OneToOne(() => AplicacionesEntity, { cascade: true })
+  @JoinColumn()
+  aplicacion: AplicacionesEntity;
+
   @Column({ nullable: true })
   operacion: string;
 

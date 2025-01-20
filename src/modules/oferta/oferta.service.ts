@@ -107,8 +107,7 @@ export class OfertaService{
     }
   }
 
-  public async findOfertas(queryParams): Promise<OfertasEntity[]>
-  {
+  public async findOfertas(queryParams): Promise<OfertasEntity[]> {
     const query = this.ofertaRepository.createQueryBuilder('ofertas')
       .leftJoinAndSelect('ofertas.industriasOferta', 'industriasOferta')
       .leftJoinAndSelect('industriasOferta.industria', 'industria')
@@ -121,14 +120,26 @@ export class OfertaService{
       .leftJoinAndSelect('ofertas.preguntas_oferta', 'preguntas_oferta')
       .leftJoinAndSelect('ofertas.invitaciones', 'invitaciones')
       .leftJoinAndSelect('ofertas.pago', 'pago');
+  
+    // Si `daysAgo` está presente, calcula la fecha y aplica el filtro
+    if (queryParams.daysAgo) {
+      const daysAgo = parseInt(queryParams.daysAgo, 10); // Convertir a número
+      if (isNaN(daysAgo) || daysAgo <= 0) {
+        throw new Error('El parámetro daysAgo debe ser un número positivo');
+      }
+      const dateLimit = new Date();
+      dateLimit.setDate(dateLimit.getDate() - daysAgo);
+  
+      query.andWhere('ofertas.created_at >= :dateLimit', { dateLimit });
+    }
+  
     try {
       const ofertas: OfertasEntity[] = await query.getMany();
-
       return ofertas;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
-  }
+  }  
 
   public async findOfertaById(id: number): Promise<OfertasEntity>
   {
@@ -201,15 +212,17 @@ export class OfertaService{
 
   async getOfertasConAplicacionesPorCliente(clienteId: number) {
     try {
-      return this.ofertaRepository
-      .createQueryBuilder('oferta')
-      .innerJoinAndSelect('oferta.aplicaciones', 'aplicaciones')
-      .innerJoinAndSelect('aplicaciones.abogado', 'abogado')
-      .innerJoinAndSelect('oferta.cliente', 'cliente', 'cliente.deleted_at IS NULL')
-      .where('cliente.id = :clienteId', { clienteId })
-      .getMany();
+      return await this.ofertaRepository
+        .createQueryBuilder('oferta')
+        .innerJoinAndSelect('oferta.aplicaciones', 'aplicaciones')
+        .innerJoinAndSelect('aplicaciones.abogado', 'abogado')
+        .innerJoinAndSelect('oferta.cliente', 'cliente', 'cliente.deleted_at IS NULL')
+        .where('cliente.id = :clienteId', { clienteId })
+        .andWhere('aplicaciones.trabajo IS NULL')
+        .getMany();
     } catch (error) {
-      console.log("fallo la consulta")
+      console.error('Falló la consulta', error);
+      throw new Error('Error al obtener las ofertas con aplicaciones');
     }
   }
 

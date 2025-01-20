@@ -16,7 +16,7 @@ export class TrabajosEntity extends BaseEntity implements ITrabajo {
   @Column()
   fecha_inicio: string;
 
-  @Column()
+  @Column({nullable: true})
   progreso: number;
 
   @ManyToOne(() => ClientesEntity, (cliente) => cliente.trabajos)

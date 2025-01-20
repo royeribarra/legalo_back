@@ -3,80 +3,123 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
     <title>Bienvenido a Legalo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f3f4f6;
+      }
+      .container {
+        width: 100%;
+        padding: 20px;
+      }
+      .email-wrapper {
+        width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        background-color: #000000;
+        padding: 20px;
+        text-align: center;
+        border-radius: 8px 8px 0 0;
+      }
+      .header img {
+        width: 120px;
+        height: auto;
+      }
+      .body {
+        padding: 20px;
+        color: #4b5563;
+      }
+      .body h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 16px;
+      }
+      .body p {
+        margin-bottom: 12px;
+        font-size: 16px;
+      }
+      .btn {
+        background-color: #2563eb;
+        color: #ffffff;
+        padding: 12px 24px;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+      .btn:hover {
+        background-color: #1d4ed8;
+      }
+      .footer {
+        background-color: #f3f4f6;
+        text-align: center;
+        padding: 20px;
+        border-radius: 0 0 8px 8px;
+      }
+      .footer p {
+        font-size: 14px;
+        color: #6b7280;
+      }
+      .footer .contact-info {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+      .footer .contact-info div {
+        text-align: left;
+      }
+      .footer .contact-info img {
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+      }
+    </style>
   </head>
-
-  <body class="bg-gray-100 py-20 font-sans text-gray-800">
-    <div class="flex flex-col min-h-screen items-center justify-center bg-gray-100 py-6">
-        <!-- Main Container -->
-      <div class="bg-white rounded-lg shadow-md w-full max-w-3xl">
-        <!-- Header -->
-        <header class="bg-black text-white py-4 px-6 rounded-t-lg">
-          <h1 class="text-2xl font-bold">LEGALO</h1>
-        </header>
-    
-        <!-- Body -->
-        <main class="flex flex-col md:flex-row p-6">
-          <!-- Column 1 -->
-          <div class="md:w-1/2 pr-6 flex flex-col justify-center text-center md:text-left">
-            <h2 class="text-2xl font-bold mb-4">Hola, {{ nombres }}:</h2>
-            <p class="text-gray-700 mb-6">
-              Toca el botón a continuación para confirmar tu correo electrónico.
-            </p>
-            <div class="flex justify-center md:justify-start">
-              <a href="{{ linkActivacion }}">
-                  <button class="bg-blue-600 text-white px-6 py-3 flex items-center justify-center gap-2 rounded hover:bg-blue-700 transition">
-                      Confirmar correo electrónico
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5l6 6m0 0l-6 6m6-6H3" />
-                      </svg>
-                  </button>
+  <body>
+    <div class="container">
+      <table class="email-wrapper" cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="header">
+            <img src="https://legalo.s3.us-east-1.amazonaws.com/legalo-logo.png" alt="Legalo Logo" />
+          </td>
+        </tr>
+        <tr>
+          <td class="body">
+            <h2>Hola, {{ nombres }}:</h2>
+            <p>¡Gracias por registrarte en Legalo! Haz clic en el botón a continuación para confirmar tu correo electrónico:</p>
+            <p style="text-align: center;">
+              <a href="{{ linkActivacion }}" class="btn">
+                Confirmar correo electrónico
               </a>
-            </div>
-              <p>Este enlace expirará en {{ tiempoExpiracion }} horas, así que por favor asegúrate de validarlo dentro del plazo.</p>
-          </div>
-    
-          <!-- Column 2 -->
-          <div class="md:w-1/2 pl-6 flex items-center justify-center mt-6 md:mt-0">
-            <img src="../../../../../public/images//logo-legalo-white.png" alt="Mensaje" class="rounded shadow-lg">
-          </div>
-        </main>
-    
-        <!-- Footer -->
-        <footer class="bg-gray-50 p-6 rounded-b-lg text-center">
-          <h3 class="text-lg font-bold mb-2">Estamos listos para ayudarte</h3>
-          <p class="text-gray-700 mb-4">Si tienes alguna duda o necesitas ayuda, contáctanos por:</p>
-          <div class="flex flex-col md:flex-row md:justify-center space-y-4 md:space-y-0 md:space-x-6">
-            <!-- WhatsApp -->
-            <div class="flex items-center space-x-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6 text-green-500">
-                <path d="M12.05 2a10.002 10.002 0 00-7.907 15.5l-1.1 3.73 3.86-1.02a9.985 9.985 0 004.147 1.14h.043a10.002 10.002 0 007.62-17.4A9.955 9.955 0 0012.05 2zm0 18a8.13 8.13 0 01-3.83-1l-.27-.15-2.75.72.73-2.64-.18-.28a8.1 8.1 0 01-.9-6.08A8.03 8.03 0 0112.05 4c4.37 0 8.1 3.54 8.1 7.92a8.03 8.03 0 01-8.1 8.08zm3.89-5.7l-1.67-.8c-.22-.1-.39-.14-.54.1-.14.22-.63.77-.77.92s-.28.16-.5.05a6.653 6.653 0 01-3.28-2.87c-.24-.42.24-.39.68-1.3.07-.14.04-.26-.02-.36l-.8-1.36c-.2-.35-.4-.3-.54-.3h-.46c-.14 0-.36.05-.54.26s-.71.7-.71 1.7.73 1.96.84 2.1c.1.14 1.44 2.3 3.5 3.22.49.21.87.33 1.17.43.49.15.94.13 1.3.08.4-.06 1.24-.5 1.42-1 .18-.5.18-.94.13-1.03-.05-.08-.2-.13-.42-.23z" />
-              </svg>
+            </p>
+            <p>Este enlace expirará en {{ tiempoExpiracion }} horas, por lo que te recomendamos confirmar tu correo lo antes posible.</p>
+          </td>
+        </tr>
+        <tr>
+          <td class="footer">
+            <p>Si tienes alguna pregunta o necesitas ayuda, contáctanos:</p>
+            <div class="contact-info">
               <div>
-                <p class="text-gray-800 font-medium">WhatsApp</p>
-                <p class="text-gray-600 text-sm">+123456789</p>
+                <img src="https://legalo.s3.us-east-1.amazonaws.com/phone.svg" alt="WhatsApp" />
+                <p><strong>WhatsApp:</strong> +123456789</p>
+              </div>
+              <div>
+                <img src="https://legalo.s3.us-east-1.amazonaws.com/whatsapp.svg" alt="Llamadas" />
+                <p><strong>Llámanos al:</strong> 987654321</p>
               </div>
             </div>
-            <!-- Phone -->
-            <div class="flex items-center space-x-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6 text-blue-500">
-                <path d="M20.85 17.74c-.34-.34-.8-.53-1.27-.53h-2.01c-.46 0-.9.18-1.24.51l-1.43 1.43c-1.98-.76-3.68-2.06-5.01-3.71-.84-1.04-1.5-2.18-1.95-3.39l1.42-1.42c.34-.34.53-.8.53-1.27V4.5c0-.46-.18-.9-.53-1.24l-2.02-2.02c-.34-.34-.8-.53-1.27-.53H4.42c-.47 0-.92.18-1.27.53l-1.11 1.1C1.51 4.42.5 6.13.5 7.97c0 2.92 1.43 6.14 4.28 9 .85.84 1.8 1.59 2.84 2.24 1.5.94 3.13 1.61 4.87 1.97.93.2 1.89.33 2.86.4 1.84.12 3.62-.34 5.14-1.28.92-.54 1.85-1.4 2.54-2.1l.1-.1c.34-.34.52-.79.52-1.26v-1.9c0-.46-.18-.9-.52-1.24zm-1.41.99l.7.71c-.65.65-1.42 1.32-2.31 1.81-1.21.68-2.63 1.05-4.07.93-.9-.07-1.8-.19-2.69-.37-1.43-.31-2.79-.9-4.05-1.75-1.34-.86-2.58-1.97-3.64-3.1-2.57-2.69-3.76-5.52-3.76-8.35 0-1.08.8-2.17 1.43-2.8l.71.71V6c0 .37.15.73.41.99L7 8.12c.24.25.59.39.94.39h2.02c.36 0 .7-.13.95-.38l1.42-1.42c.26-.27.62-.42.99-.42h1.97c.35 0 .7.13.94.39l1.44 1.45c.26.25.41.61.41.97v2.02c0 .37-.15.72-.42.99l-1.42 1.42c-.25.25-.38.59-.38.94v1.91c0 .35.15.7.41.94z" />
-              </svg>
-              <div>
-                <p class="text-gray-800 font-medium">Llámanos al</p>
-                <p class="text-gray-600 text-sm">987654321</p>
-              </div>
-            </div>
-          </div>
-          <p class="mt-6 text-center text-gray-500 text-sm">
-              © 2024 Legalo Web. Todos los derechos reservados.
-          </p>
-        </footer>
-      </div>
+            <p>&copy; 2024 Legalo Web. Todos los derechos reservados.</p>
+          </td>
+        </tr>
+      </table>
     </div>
   </body>
 </html>

@@ -431,4 +431,61 @@ export class AbogadosService{
 
     return { state: 'success', message: 'Aplicación creada correctamente' };
   }
+
+  public async getOfertasConInvitacionesPorCliente(abogadoId: number): Promise<OfertasEntity[]> {
+    const cliente = await this.abogadosRepository.findOne({
+      where: { id: abogadoId },
+      relations: [
+        'invitaciones',
+        'invitaciones.oferta',
+        'invitaciones.oferta.industriasOferta',
+        'invitaciones.oferta.serviciosOferta',
+        'invitaciones.oferta.especialidadesOferta',
+        'invitaciones.oferta.cliente',
+        'invitaciones.oferta.aplicaciones',
+        'invitaciones.oferta.industriasOferta.industria',
+        'invitaciones.oferta.serviciosOferta.servicio',
+        'invitaciones.oferta.especialidadesOferta.especialidad',
+      ],
+    });
+  
+    if (!cliente) {
+      throw new Error('No se encontró un cliente con el ID proporcionado');
+    }
+  
+    // Extraer ofertas desde las invitaciones
+    const ofertas = cliente.invitaciones
+      // .filter((invitacion) => invitacion.aceptada)
+      .map((invitacion) => invitacion.oferta);
+  
+    return ofertas;
+  }
+
+  public async getAplicaciones(
+    abogadoId: number,
+    status?: number
+  ): Promise<AplicacionesEntity[]> {
+    const query = this.aplicacionesRepository
+      .createQueryBuilder('aplicacion')
+      .leftJoinAndSelect('aplicacion.oferta', 'oferta')
+      .leftJoinAndSelect('oferta.industriasOferta', 'industriasOferta')
+      .leftJoinAndSelect('oferta.serviciosOferta', 'serviciosOferta')
+      .leftJoinAndSelect('oferta.especialidadesOferta', 'especialidadesOferta')
+      .leftJoinAndSelect('oferta.cliente', 'cliente')
+      .leftJoinAndSelect('oferta.aplicaciones', 'aplicaciones')
+      .leftJoinAndSelect('oferta.industriasOferta.industria', 'industria')
+      .leftJoinAndSelect('oferta.serviciosOferta.servicio', 'servicio')
+      .leftJoinAndSelect('oferta.especialidadesOferta.especialidad', 'especialidad')
+      .where('aplicacion.abogadoId = :abogadoId', { abogadoId });
+  
+    // Si 'status' es pasado como parámetro, agregamos el filtro
+    if (status) {
+      query.andWhere('aplicacion.status = :status', { status });
+    }
+  
+    // Ejecutamos la consulta
+    const aplicaciones = await query.getMany();
+  
+    return aplicaciones;
+  }  
 }

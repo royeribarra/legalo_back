@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Put, Query} from '@nestjs/common';
 import { Delete } from '@nestjs/common/decorators';
 import { ApiTags } from '@nestjs/swagger';
 import { ClienteService } from '../services/clientes.service';
-import { ClienteDTO } from '../dto/cliente.dto';
+import { ClienteDTO, ClienteUpdateDTO } from '../dto/cliente.dto';
 
 @ApiTags('Clientes')
 @Controller('clientes')
@@ -31,6 +31,16 @@ export class ClienteController {
   @Get(':id')
   public async findClienteById(@Param('id') id: number){
     return await this.clienteService.findClienteById(id);
+  }
+
+  @Put('edit/:id')
+  public async updateAbogado(@Body() body: Partial<ClienteUpdateDTO>, @Param('id') id: number)
+  {
+    const {state, message} = await this.clienteService.updateCliente(body, id);
+    return {
+      state: state,
+      message: message,
+    }
   }
 
   // @Put('edit/:id')

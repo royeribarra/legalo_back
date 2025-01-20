@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { ClienteDTO } from '../dto/cliente.dto';
+import { ClienteDTO, ClienteUpdateDTO } from '../dto/cliente.dto';
 import { ErrorManager } from '../../../utils/error.manager';
 import { EducacionesEntity } from '../../educacion/educaciones.entity';
 import { EspecialidadesEntity } from '../../especialidad/especialidades.entity';
@@ -160,5 +160,29 @@ export class ClienteService{
     }
   
     return cliente.ofertas;
+  }
+
+  async updateCliente(body: Partial<ClienteUpdateDTO>, id: number): Promise<{ state: boolean, message: string }> {
+    // Buscar el abogado por ID
+    const cliente = await this.clienteRepository.findOne({ where: { id } });
+
+    // Si el abogado no existe, lanzamos una excepción
+    if (!cliente) {
+      return {
+        state: false,
+        message: `No existe el abogado con ID ${id} creado correctamente`,
+      };
+    }
+
+    // Actualizamos los campos del abogado con los datos del DTO
+    Object.assign(cliente, body);
+
+    // Guardamos los cambios en la base de datos
+    await this.clienteRepository.save(cliente);
+
+    return {
+      state: true,
+      message: 'Cliente actualizado correctamente',
+    };
   }
 }

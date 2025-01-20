@@ -34,19 +34,20 @@ export class TrabajosService {
     }
 
     // Obtener el cliente de la oferta (el dueño de la oferta)
-    const cliente = await this.clientesRepository.findOne({ where: { id: aplicacion.oferta.cliente.id } });
+    const cliente = await this.clientesRepository.findOne({ where: { id: body.clienteId } });
     if (!cliente) {
       throw new NotFoundException(`Cliente asociado a la oferta no encontrado`);
     }
 
     // Crear el trabajo
     const trabajo = this.trabajosRepository.create({
-      estado: body.estado,  // Establecer el estado del trabajo
+      estado: body.estado,
+      progreso: 20,
       fecha_inicio: body.fecha_inicio,
       fecha_fin: body.fecha_fin,
       cliente: cliente,
-      abogado: aplicacion.abogado,  // El abogado que fue aceptado
-      aplicacion: aplicacion,  // Relacionamos con la aplicación aceptada
+      abogado: aplicacion.abogado,
+      aplicacion: aplicacion,
     });
 
     // Guardamos el trabajo

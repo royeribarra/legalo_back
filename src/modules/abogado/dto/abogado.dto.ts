@@ -184,6 +184,11 @@ export class AbogadoUpdateDTO {
   @IsString()
   cul: string;
 
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  validad_admin: boolean;
+
   @ApiProperty({ type: () => [HabilidadBlandaDTO] })
   @IsOptional()
   @ValidateNested({ each: true })

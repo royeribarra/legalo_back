@@ -101,7 +101,7 @@ import { memoryStorage } from 'multer';
     }
 
     @Post('upload-oferta-documento')
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
     async uploadFileOferta(
       @UploadedFile() file: Express.Multer.File,
       @Body('nombreArchivo') nombreArchivo: string,
@@ -119,7 +119,7 @@ import { memoryStorage } from 'multer';
     }
 
     @Post('upload-documento-aplicacion')
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
     async uploadDocumentoAplicacion(
       @UploadedFile() file: Express.Multer.File,
       @Body('nombreArchivo') nombreArchivo: string,

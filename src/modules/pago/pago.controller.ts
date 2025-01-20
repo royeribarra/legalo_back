@@ -11,8 +11,17 @@ export class PagoController {
   ) {}
 
   @Post('create')
-  async realizarPago(@Body() data: { clienteId: number; ofertaId: number; monto: number; operacion: string }) {
-    const pago = await this.pagoService.realizarPagoOferta(data.clienteId, data.ofertaId, data.monto, data.operacion);
+  async realizarPago(@Body() data: { 
+    clienteId: number; 
+    ofertaId: number; 
+    monto: number; 
+    operacion: string;
+    aplicacionId: number; 
+  }) {
+    const pago = await this.pagoService.realizarPagoOferta(
+      data.clienteId, data.ofertaId, data.monto, data.operacion, data.aplicacionId
+    );
+
     return {
       state: true,
       message: "Pago guardado con éxito."

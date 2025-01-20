@@ -94,3 +94,55 @@ export class ClienteSeederDTO {
   @IsString()
   contrasena: string;
 }
+
+export class ClienteUpdateDTO {
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  nombres: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  apellidos: string;
+
+  @ApiProperty()
+  @IsEmail({}, { message: 'El correo electrónico no es válido.' })
+  @IsOptional()
+  correo: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  documento: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  tipoPersona: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  telefono: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  empresa: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  opinion: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  contrasena: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsBoolean()
+  validad_admin: boolean;
+}

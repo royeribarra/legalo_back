@@ -32,6 +32,7 @@ export class OfertaController {
   @Get('all')
   public async findAllOfertas(@Query() queryParams: any)
   {
+    const { daysAgo = 3 } = queryParams;
     return await this.ofertaService.findOfertas(queryParams);
   }
 
