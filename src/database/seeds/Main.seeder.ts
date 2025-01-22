@@ -23,16 +23,16 @@ export default class MainSeeder implements Seeder {
     await runSeeder(dataSource, ServicioSeeder);
     await runSeeder(dataSource, EspecialidadSeeder);
     await runSeeder(dataSource, IndustriaSeeder);
-    await runSeeder(dataSource, AbogadoSeeder);
-    await runSeeder(dataSource, ClienteSeeder);
-    await runSeeder(dataSource, UsuarioSeeder);
-    await runSeeder(dataSource, OfertaSeeder);
-    await runSeeder(dataSource, AplicacionSeeder);
-    await runSeeder(dataSource, EspecialidadAbogadoSeeder);
-    await runSeeder(dataSource, EspecialidadOfertaSeeder);
-    await runSeeder(dataSource, IndustriaAbogadoSeeder);
-    await runSeeder(dataSource, IndustriaOfertaSeeder);
-    await runSeeder(dataSource, ServicioAbogadoSeeder);
-    await runSeeder(dataSource, ServicioOfertaSeeder);
+    // await runSeeder(dataSource, AbogadoSeeder);
+    // await runSeeder(dataSource, ClienteSeeder);
+    // await runSeeder(dataSource, UsuarioSeeder);
+    // await runSeeder(dataSource, OfertaSeeder);
+    // await runSeeder(dataSource, AplicacionSeeder);
+    // await runSeeder(dataSource, EspecialidadAbogadoSeeder);
+    // await runSeeder(dataSource, EspecialidadOfertaSeeder);
+    // await runSeeder(dataSource, IndustriaAbogadoSeeder);
+    // await runSeeder(dataSource, IndustriaOfertaSeeder);
+    // await runSeeder(dataSource, ServicioAbogadoSeeder);
+    // await runSeeder(dataSource, ServicioOfertaSeeder);
   }
 }
