@@ -89,20 +89,44 @@ export class AbogadosController {
   }
 
   @Post('aplicaciones')
-  public async getOfertasConInvitaciones(@Body('abogadoId') abogadoId: number, status: number) 
+  public async getAplicaciones(
+    @Body('abogadoId') abogadoId: number, 
+    @Body('estado') estado: string = 'pendiente'
+  ) 
   {
-
     try {
-      const ofertas = await this.abogadosService.getAplicaciones(abogadoId, status);
+      const aplicaciones = await this.abogadosService.getAplicaciones(abogadoId, estado);
       return {
         state: true,
-        message: 'Ofertas obtenidas exitosamente',
-        data: ofertas,
+        message: 'Aplicaciones obtenidas exitosamente',
+        data: aplicaciones,
       };
     } catch (error) {
       return {
         state: false,
-        message: 'Error al obtener las ofertas con invitaciones',
+        message: 'Error al obtener las aplicaciones',
+        error: error.message,
+      };
+    }
+  }
+
+  @Post('trabajos')
+  public async getTrabajos(
+    @Body('abogadoId') abogadoId: number, 
+    @Body('estado') estado: string
+  )
+  {
+    try {
+      const trabajos = await this.abogadosService.getTrabajos(abogadoId, estado);
+      return {
+        state: true,
+        message: 'Trabajos obtenidos exitosamente',
+        data: trabajos,
+      };
+    } catch (error) {
+      return {
+        state: false,
+        message: 'Error al obtener las trabajos',
         error: error.message,
       };
     }

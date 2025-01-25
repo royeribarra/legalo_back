@@ -21,6 +21,7 @@ import { In } from 'typeorm';
 import { ServiciosAbogadoEntity } from '../../servicio/servicioAbogado.entity';
 import { TmpImageFileEntity } from '../../tmp/tmpImgFile.entity';
 import { AplicacionesEntity } from '../../aplicacion/aplicaciones.entity';
+import { TrabajosEntity } from '../../trabajo/trabajos.entity';
 
 @Injectable()
 export class AbogadosService{
@@ -41,6 +42,7 @@ export class AbogadosService{
     @InjectRepository(OfertasEntity) private readonly ofertaRepository: Repository<OfertasEntity>,
     @InjectRepository(TmpImageFileEntity) private readonly tmpFileRepository: Repository<TmpImageFileEntity>,
     @InjectRepository(AplicacionesEntity) private readonly aplicacionesRepository: Repository<AplicacionesEntity>,
+    @InjectRepository(TrabajosEntity) private readonly trabajosRepository: Repository<TrabajosEntity>,
     private readonly usuariosService: UsuariosService,
     private readonly abogadoMailService: AbogadoMailService,
     private readonly tempFilesService: TempFilesService
@@ -284,10 +286,12 @@ export class AbogadosService{
       .leftJoinAndSelect('abogados.usuario', 'usuario')
       .leftJoinAndSelect('abogados.aplicaciones', 'aplicaciones')
       .leftJoinAndSelect('abogados.trabajos', 'trabajos');
-
-    if (queryParams.validado_admin !== undefined) {
+    console.log(queryParams)
+    if (queryParams.validadoAdmin !== undefined) {
+      // Convertir a booleano
+      const validadoAdmin = queryParams.validadoAdmin === 'true';
       query.andWhere('abogados.validado_admin = :validado_admin', {
-        validado_admin: queryParams.validado_admin === 'true',
+        validado_admin: validadoAdmin,
       });
     }
     try {
@@ -420,7 +424,7 @@ export class AbogadosService{
     // Crear una nueva instancia de AplicacionesEntity
     const nuevaAplicacion = this.aplicacionesRepository.create({
       fecha_aplicacion: new Date().toISOString(),
-      status: 1, // Ejemplo: Status inicial como "pendiente"
+      estado: "pendiente",
       salarioEsperado,
       abogado,
       oferta,
@@ -463,7 +467,7 @@ export class AbogadosService{
 
   public async getAplicaciones(
       abogadoId: number,
-      status?: number
+      estado?: string
   ): Promise<AplicacionesEntity[]> 
   {
     const query = this.aplicacionesRepository
@@ -481,14 +485,36 @@ export class AbogadosService{
         .leftJoinAndSelect('aplicacion.abogado', 'abogado')
         .where('abogado.id = :abogadoId', { abogadoId });
 
-    // Si 'status' es pasado como parámetro, agregamos el filtro
-    if (status) {
-        query.andWhere('aplicacion.status = :status', { status });
+    if (estado) {
+      console.log(estado)
+      query.andWhere('aplicacion.estado = :estado', { estado });
     }
 
     // Ejecutamos la consulta
     const aplicaciones = await query.getMany();
 
     return aplicaciones;
+  }
+
+  public async getTrabajos(
+    abogadoId: number,
+    estado?: string
+  ): Promise<TrabajosEntity[]> 
+  {
+    const query = this.trabajosRepository
+        .createQueryBuilder('trabajo')
+        .leftJoinAndSelect('trabajo.abogado', 'abogado')
+        .leftJoinAndSelect('trabajo.aplicacion', 'aplicacion')
+        .where('abogado.id = :abogadoId', { abogadoId });
+
+    if (estado) {
+      console.log(estado)
+      query.andWhere('trabajo.estado = :estado', { estado });
+    }
+
+    // Ejecutamos la consulta
+    const trabajos = await query.getMany();
+
+    return trabajos;
   }
 }

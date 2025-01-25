@@ -120,10 +120,15 @@ export class OfertaService{
       .leftJoinAndSelect('ofertas.preguntas_oferta', 'preguntas_oferta')
       .leftJoinAndSelect('ofertas.invitaciones', 'invitaciones')
       .leftJoinAndSelect('ofertas.pago', 'pago');
-  
-    // Si `daysAgo` está presente, calcula la fecha y aplica el filtro
+
+    if (queryParams.estado) {
+      query.andWhere('ofertas.estado = :estado', {
+        estado: queryParams.estado,
+      });
+    }
+
     if (queryParams.daysAgo) {
-      const daysAgo = parseInt(queryParams.daysAgo, 10); // Convertir a número
+      const daysAgo = parseInt(queryParams.daysAgo, 10);
       if (isNaN(daysAgo) || daysAgo <= 0) {
         throw new Error('El parámetro daysAgo debe ser un número positivo');
       }
@@ -188,7 +193,7 @@ export class OfertaService{
       abogado: postulacion.abogado,
       aplicacion: postulacion,
       fecha_inicio: (new Date()).toDateString(),
-      estado: 1,
+      estado: "creada",
     });
     
     // Guardar el trabajo y actualizar la postulación
@@ -289,7 +294,7 @@ export class OfertaService{
       throw new Error('Invitación no encontrada.');
     }
 
-    invitacion.aceptada = true;
+    invitacion.estado = "aceptada";
 
     return this.invitacionRepository.save(invitacion);
   }

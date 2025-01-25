@@ -67,4 +67,31 @@ export class ClienteController {
   async getOfertasByCliente(@Param('id') clienteId: number) {
     return this.clienteService.getOfertasByCliente(clienteId);
   }
+
+  @Post('trabajos')
+  public async getTrabajos(
+    @Body('clienteId') clienteId: number, 
+    @Body('estado') estado: string
+  )
+  {
+    try {
+      const trabajos = await this.clienteService.getTrabajos(clienteId, estado);
+      return {
+        state: true,
+        message: 'Trabajos obtenidos exitosamente',
+        data: trabajos,
+      };
+    } catch (error) {
+      return {
+        state: false,
+        message: 'Error al obtener las trabajos',
+        error: error.message,
+      };
+    }
+  }
+
+  @Post('ofertas/con-aplicaciones')
+  async getOfertasClienteConAplicaciones(@Body('clienteId') clienteId: number) {
+    return this.clienteService.getOfertasConAplicaciones(clienteId);
+  }
 }

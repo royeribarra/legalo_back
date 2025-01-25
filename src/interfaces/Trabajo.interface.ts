@@ -7,5 +7,5 @@ export interface ITrabajo {
     aplicacion: IAplicacion;
     fecha_inicio: string;
     fecha_fin: string;
-    estado: number;
+    estado: string;
 }

@@ -12,8 +12,8 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
   @Column()
   fecha_aplicacion: string;
 
-  @Column()
-  status: number;
+  @Column({ nullable: true })
+  estado: string;
 
   @Column({ nullable: true})
   salarioEsperado: number;

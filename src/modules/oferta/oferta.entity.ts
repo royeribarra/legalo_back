@@ -14,10 +14,10 @@ import { InvitacionesEntity } from './invitacion.entity';
 
 @Entity({ name: 'ofertas' })
 export class OfertasEntity extends BaseEntity implements IOferta {
-  @Column()
+  @Column({nullable: true})
   uso: string;
 
-  @Column()
+  @Column({nullable: true})
   titulo: string;
 
   @Column('text')
@@ -26,19 +26,19 @@ export class OfertasEntity extends BaseEntity implements IOferta {
   @Column({ nullable: true })
   documento_url: string;
 
-  @Column()
+  @Column({nullable: true})
   duracion: string;
 
-  @Column()
+  @Column({nullable: true})
   experiencia_abogado: string;
 
-  @Column()
+  @Column({nullable: true})
   salario_minimo: string;
 
-  @Column()
+  @Column({nullable: true})
   salario_maximo: string;
 
-  @Column()
+  @Column({nullable: true})
   estado: string;
 
   @Column({nullable: true})
@@ -67,7 +67,7 @@ export class OfertasEntity extends BaseEntity implements IOferta {
   })
   preguntas_oferta: PreguntasOfertaEntity[];
 
-  @OneToOne(() => PagosEntity, (pago) => pago.oferta) // Relación bidireccional
+  @OneToOne(() => PagosEntity, (pago) => pago.oferta)
   pago: PagosEntity;
 
   @OneToMany(() => InvitacionesEntity, (invitacion) => invitacion.oferta)

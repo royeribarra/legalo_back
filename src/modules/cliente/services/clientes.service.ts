@@ -14,6 +14,8 @@ import { UsuariosService } from '../../usuario/usuario.service';
 import { AbogadoMailService } from '../../mail/services/abogadoMail.service';
 import { ClientesEntity } from '../entities/clientes.entity';
 import { ClienteMailService } from '../../mail/services/clienteMail.service';
+import { TrabajosEntity } from '../../trabajo/trabajos.entity';
+import { OfertasEntity } from '../../oferta/oferta.entity';
 
 @Injectable()
 export class ClienteService{
@@ -27,6 +29,8 @@ export class ClienteService{
     @InjectRepository(HabilidadesDuraEntity) private readonly habilidadDurRepository: Repository<HabilidadesDuraEntity>,
     @InjectRepository(IndustriasEntity) private readonly industriaRepository: Repository<IndustriasEntity>,
     @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
+    @InjectRepository(TrabajosEntity) private readonly trabajoRepository: Repository<TrabajosEntity>,
+    @InjectRepository(OfertasEntity) private readonly ofertaRepository: Repository<OfertasEntity>,
     private readonly usuariosService: UsuariosService,
     private readonly clienteMailService: ClienteMailService
   ){}
@@ -184,5 +188,44 @@ export class ClienteService{
       state: true,
       message: 'Cliente actualizado correctamente',
     };
+  }
+
+  public async getTrabajos(
+    clienteId: number,
+    estado?: string
+  ): Promise<TrabajosEntity[]> 
+  {
+    const query = this.trabajoRepository
+        .createQueryBuilder('trabajo')
+        .leftJoinAndSelect('trabajo.abogado', 'abogado')
+        .leftJoinAndSelect('trabajo.aplicacion', 'aplicacion')
+        .leftJoinAndSelect('trabajo.cliente', 'cliente')
+        .where('cliente.id = :clienteId', { clienteId });
+
+    if (estado) {
+      console.log(estado)
+      query.andWhere('trabajo.estado = :estado', { estado });
+    }
+
+    // Ejecutamos la consulta
+    const trabajos = await query.getMany();
+
+    return trabajos;
+  }
+
+  async getOfertasConAplicaciones(clienteId: number) {
+    try {
+      return await this.ofertaRepository
+        .createQueryBuilder('oferta')
+        .innerJoinAndSelect('oferta.aplicaciones', 'aplicaciones')
+        .innerJoinAndSelect('aplicaciones.abogado', 'abogado')
+        .innerJoinAndSelect('oferta.cliente', 'cliente', 'cliente.deleted_at IS NULL')
+        .where('cliente.id = :clienteId', { clienteId })
+        .andWhere('aplicaciones.trabajo IS NULL')
+        .getMany();
+    } catch (error) {
+      console.error('Falló la consulta', error);
+      throw new Error('Error al obtener las ofertas con aplicaciones');
+    }
   }
 }

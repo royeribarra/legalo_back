@@ -6,5 +6,5 @@ export interface IAplicacion {
     fecha_aplicacion: string;
     oferta: IOferta;
     abogado: IAbogado;
-    status: number;
+    estado: string;
 }

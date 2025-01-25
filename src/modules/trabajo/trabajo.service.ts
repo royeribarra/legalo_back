@@ -26,7 +26,6 @@ export class TrabajosService {
     aplicacionId: number,
     body: CrearTrabajoDTO
   ): Promise<TrabajosEntity> {
-    // Buscar la aplicación
     const aplicacion = await this.aplicacionesRepository.findOne({ where: { id: aplicacionId }, relations: ['oferta', 'abogado'] });
     
     if (!aplicacion) {

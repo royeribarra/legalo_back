@@ -28,30 +28,51 @@ export class PagoService {
     if (!oferta) {
       throw new BadRequestException('La oferta no existe');
     }
-
-    const aplicacion = await this.aplicacionRepository.findOne({ where: { id: aplicacionId } });
-    if (!aplicacion) {
-      throw new BadRequestException('La aplicacion no existe');
+  
+    // Actualizar el estado de la oferta
+    oferta.estado = 'asignada';
+    await this.ofertaRepository.save(oferta);
+  
+    // Validar y actualizar la aplicación aceptada
+    const aplicacionAceptada = await this.aplicacionRepository.findOne({ where: { id: aplicacionId } });
+    if (!aplicacionAceptada) {
+      throw new BadRequestException('La aplicación no existe');
     }
-
+  
+    aplicacionAceptada.estado = 'aceptada';
+    await this.aplicacionRepository.save(aplicacionAceptada);
+  
+    // Actualizar el estado de las demás aplicaciones a 'cerrada'
+    await this.aplicacionRepository
+      .createQueryBuilder('aplicaciones')
+      .leftJoin('aplicaciones.oferta', 'oferta') // Realiza el join con la relación `oferta`
+      .update(AplicacionesEntity)
+      .set({ estado: 'cerrada' })
+      .where('oferta.id = :ofertaId', { ofertaId }) // Filtra por la relación `oferta`
+      .andWhere('aplicaciones.id != :aplicacionId', { aplicacionId }) // Excluye la aplicación aceptada
+      .execute();
+  
+    // Crear y guardar el pago
     const nuevoPago = this.pagoRepository.create({
       clienteId,
       ofertaId,
       operacion,
       fecha_operacion: new Date().toISOString(),
       oferta,
-      aplicacion
+      aplicacion: aplicacionAceptada,
     });
-
+  
     const pagoGuardado = await this.pagoRepository.save(nuevoPago);
+  
+    // Crear el trabajo asociado
     const bodyTrabajo = {
-      estado: 1,
+      estado: 'creada',
       fecha_inicio: new Date().toLocaleDateString(),
       fecha_fin: new Date().toLocaleDateString(),
-      clienteId: clienteId
+      clienteId: clienteId,
     };
     await this.trabajoService.crearTrabajoDesdeAplicacion(aplicacionId, bodyTrabajo);
-
+  
     return pagoGuardado;
-  }
+  }  
 }

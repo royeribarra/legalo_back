@@ -13,8 +13,14 @@ export class InvitacionesEntity extends BaseEntity implements IInvitacion
     @Column({ type: 'text', nullable: true })
     mensaje: string;
 
-    @Column({ type: 'boolean', default: false })
-    aceptada: boolean;
+    @Column({ nullable: true })
+    estado: string;
+
+    @Column({ nullable: true })
+    fecha_invitacion: string;
+    
+    @Column({ nullable: true })
+    fecha_respuesta: string;
 
     @ManyToOne(() => OfertasEntity, (oferta) => oferta.invitaciones)
     oferta: OfertasEntity;

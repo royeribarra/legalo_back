@@ -19,6 +19,7 @@ import { EspecialidadesAbogadoEntity } from '../especialidad/especialidadAbogado
 import { ServiciosAbogadoEntity } from '../servicio/servicioAbogado.entity';
 import { IndustriasAbogadoEntity } from '../industria/industriaAbogado.entity';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
+import { TrabajosEntity } from '../trabajo/trabajos.entity';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
       EspecialidadesAbogadoEntity,
       ServiciosAbogadoEntity,
       IndustriasAbogadoEntity,
-      AplicacionesEntity
+      AplicacionesEntity,
+      TrabajosEntity
     ]),
     UsuariosModule,
     MailModule

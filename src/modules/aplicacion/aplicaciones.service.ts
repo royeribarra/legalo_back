@@ -39,7 +39,7 @@ export class AplicacionesService {
     // Crear una nueva instancia de AplicacionesEntity
     const aplicacion = this.aplicacionesRepository.create({
       fecha_aplicacion: body.fecha_aplicacion,
-      status: body.status,
+      estado: body.estado,
       oferta,
       abogado,
     });

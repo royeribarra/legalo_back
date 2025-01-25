@@ -12,6 +12,8 @@ import { ServiciosEntity } from '../servicio/servicios.entity';
 import { IndustriasEntity } from '../industria/industrias.entity';
 import { UsuariosModule } from '../usuario/usuario.module';
 import { MailModule } from '../mail/mail.module';
+import { TrabajosEntity } from '../trabajo/trabajos.entity';
+import { OfertasEntity } from '../oferta/oferta.entity';
 
 @Module({
   imports: [
@@ -23,7 +25,9 @@ import { MailModule } from '../mail/mail.module';
       HabilidadesDuraEntity,
       HabilidadesBlandaEntity,
       ServiciosEntity,
-      IndustriasEntity
+      IndustriasEntity,
+      TrabajosEntity,
+      OfertasEntity
     ]),
     UsuariosModule,
     MailModule

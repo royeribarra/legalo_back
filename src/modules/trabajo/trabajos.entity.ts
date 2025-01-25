@@ -7,8 +7,8 @@ import { ClientesEntity } from '../cliente/entities/clientes.entity';
 
 @Entity({name: 'trabajos'})
 export class TrabajosEntity extends BaseEntity implements ITrabajo {
-  @Column()
-  estado: number;
+  @Column({ nullable: true})
+  estado: string;
 
   @Column()
   fecha_fin: string;

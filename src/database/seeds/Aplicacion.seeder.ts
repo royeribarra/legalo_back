@@ -19,7 +19,7 @@ export default class AplicacionSeeder implements Seeder {
         const data = [
             {
                 fecha_aplicacion: '2022-10-20',
-                status: 1,
+                estado: 'pendiente',
                 salarioEsperado: 500,
                 abogado: await abogadoRepository.findOneBy({
                     id: 1,
@@ -30,7 +30,18 @@ export default class AplicacionSeeder implements Seeder {
             },
             {
                 fecha_aplicacion: '2022-10-21',
-                status: 1,
+                estado: 'pendiente',
+                salarioEsperado: 600,
+                abogado: await abogadoRepository.findOneBy({
+                    id: 2,
+                }),
+                oferta: await ofertaRepository.findOneBy({
+                    id: 1,
+                }),
+            },
+            {
+                fecha_aplicacion: '2022-10-21',
+                estado: 'pendiente',
                 salarioEsperado: 600,
                 abogado: await abogadoRepository.findOneBy({
                     id: 2,
@@ -41,7 +52,7 @@ export default class AplicacionSeeder implements Seeder {
             },
             {
                 fecha_aplicacion: '2022-10-22',
-                status: 1,
+                estado: 'pendiente',
                 salarioEsperado: 700,
                 abogado: await abogadoRepository.findOneBy({
                     id: 3,
@@ -52,7 +63,7 @@ export default class AplicacionSeeder implements Seeder {
             },
             {
                 fecha_aplicacion: '2022-10-23',
-                status: 1,
+                estado: 'pendiente',
                 salarioEsperado: 800,
                 abogado: await abogadoRepository.findOneBy({
                     id: 4,
