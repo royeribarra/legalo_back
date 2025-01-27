@@ -428,6 +428,9 @@ export class AbogadosService{
       return { state: false, message: 'La oferta no existe' };
     }
 
+    oferta.estado = 'verificar_postulaciones';
+    await this.ofertaRepository.save(oferta);
+
     // Crear una nueva instancia de AplicacionesEntity
     const nuevaAplicacion = this.aplicacionesRepository.create({
       fecha_aplicacion: new Date().toISOString(),
