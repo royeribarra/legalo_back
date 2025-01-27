@@ -48,7 +48,7 @@ export default class UsuarioSeeder implements Seeder {
         {
           nombres: 'Magaly',
           apellidos: 'Granados',
-          correo: 'magaly@gmail.com',
+          correo: 'cliente@gmail.com',
           usuario: 'user70049277',
           contrasena: await bcrypt.hash('cliente123', +process.env.HASH_SALT),
           dni: '70049277',

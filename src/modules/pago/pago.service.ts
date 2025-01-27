@@ -30,7 +30,7 @@ export class PagoService {
     }
   
     // Actualizar el estado de la oferta
-    oferta.estado = 'asignada';
+    oferta.estado = 'asignado';
     await this.ofertaRepository.save(oferta);
   
     // Validar y actualizar la aplicación aceptada
@@ -39,7 +39,7 @@ export class PagoService {
       throw new BadRequestException('La aplicación no existe');
     }
   
-    aplicacionAceptada.estado = 'aceptada';
+    aplicacionAceptada.estado = 'aceptado';
     await this.aplicacionRepository.save(aplicacionAceptada);
   
     // Actualizar el estado de las demás aplicaciones a 'cerrada'
@@ -47,7 +47,7 @@ export class PagoService {
       .createQueryBuilder('aplicaciones')
       .leftJoin('aplicaciones.oferta', 'oferta') // Realiza el join con la relación `oferta`
       .update(AplicacionesEntity)
-      .set({ estado: 'cerrada' })
+      .set({ estado: 'cerrado' })
       .where('oferta.id = :ofertaId', { ofertaId }) // Filtra por la relación `oferta`
       .andWhere('aplicaciones.id != :aplicacionId', { aplicacionId }) // Excluye la aplicación aceptada
       .execute();

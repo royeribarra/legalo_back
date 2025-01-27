@@ -39,10 +39,7 @@ export default class TrabajoSeeder implements Seeder {
       const dataToInsert = [];
 
       for (const element of data) {
-        // const clienteExists = await trabajoRepository.findOneBy({ correo: element.correo, documento: element.documento });
-        // if (!clienteExists) {
           dataToInsert.push(element);
-        // }
       }
 
       await trabajoRepository.insert(dataToInsert);

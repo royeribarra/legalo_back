@@ -22,6 +22,7 @@ import { ServiciosAbogadoEntity } from '../../servicio/servicioAbogado.entity';
 import { FileEntity } from '../../tmp/file.entity';
 import { AplicacionesEntity } from '../../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../../trabajo/trabajos.entity';
+import { UsuariosEntity } from '../../usuario/usuarios.entity';
 
 @Injectable()
 export class AbogadosService{
@@ -43,6 +44,7 @@ export class AbogadosService{
     @InjectRepository(FileEntity) private readonly tmpFileRepository: Repository<FileEntity>,
     @InjectRepository(AplicacionesEntity) private readonly aplicacionesRepository: Repository<AplicacionesEntity>,
     @InjectRepository(TrabajosEntity) private readonly trabajosRepository: Repository<TrabajosEntity>,
+    @InjectRepository(UsuariosEntity) private readonly usuarioRepository: Repository<UsuariosEntity>,
     private readonly usuariosService: UsuariosService,
     private readonly abogadoMailService: AbogadoMailService,
     private readonly tempFilesService: FileService
@@ -53,9 +55,12 @@ export class AbogadosService{
     const abogadoExists = await this.findBy({
       key: 'correo',
       value: body.correo
-    })
-
-    if(abogadoExists)
+    });
+    const usuarioExistsCorreo = await this.usuarioRepository
+      .createQueryBuilder('usuarios')
+      .where('usuarios.correo = :correo', { correo: body.correo })
+      .getOne();
+    if(abogadoExists || usuarioExistsCorreo)
     {
       return {
         state: false,
@@ -67,13 +72,16 @@ export class AbogadosService{
     const abogadoExistsDni = await this.findBy({
       key: 'dni',
       value: body.dni
-    })
-
-    if(abogadoExistsDni)
+    });
+    const usuarioExistsDni = await this.usuarioRepository
+    .createQueryBuilder('usuarios')
+    .where('usuarios.dni = :dni', { dni: body.dni })
+    .getOne();
+    if(abogadoExistsDni || usuarioExistsDni)
     {
       return {
         state: false,
-        message: `Ya existe un abogado registado con dni ${body.correo}`,
+        message: `Ya existe un abogado registado con dni ${body.dni}`,
         usuario: null
       }
     }
@@ -285,10 +293,10 @@ export class AbogadosService{
       .leftJoinAndSelect('abogados.educaciones', 'educaciones')
       .leftJoinAndSelect('abogados.usuario', 'usuario')
       .leftJoinAndSelect('abogados.aplicaciones', 'aplicaciones')
-      .leftJoinAndSelect('abogados.trabajos', 'trabajos');
-    console.log(queryParams)
+      .leftJoinAndSelect('abogados.trabajos', 'trabajos')
+      .leftJoinAndSelect('abogados.files', 'files');
+
     if (queryParams.validadoAdmin !== undefined) {
-      // Convertir a booleano
       const validadoAdmin = queryParams.validadoAdmin === 'true';
       query.andWhere('abogados.validado_admin = :validado_admin', {
         validado_admin: validadoAdmin,
@@ -410,6 +418,7 @@ export class AbogadosService{
     salarioEsperado: number,
   ) {
     // Buscar el abogado por ID
+    console.log(salarioEsperado, "salarioEsperado")
     const abogado = await this.abogadosRepository.findOne({ where: { id: abogadoId } });
     if (!abogado) {
       return { state: false, message: 'El abogado no existe' };
@@ -505,6 +514,11 @@ export class AbogadosService{
         .createQueryBuilder('trabajo')
         .leftJoinAndSelect('trabajo.abogado', 'abogado')
         .leftJoinAndSelect('trabajo.aplicacion', 'aplicacion')
+        .leftJoinAndSelect('aplicacion.oferta', 'oferta')
+        .leftJoinAndSelect('oferta.especialidadesOferta', 'especialidadesOferta')
+        .leftJoinAndSelect('especialidadesOferta.especialidad', 'especialidad')
+        .leftJoinAndSelect('oferta.serviciosOferta', 'serviciosOferta')
+        .leftJoinAndSelect('serviciosOferta.servicio', 'servicio')
         .where('abogado.id = :abogadoId', { abogadoId });
 
     if (estado) {

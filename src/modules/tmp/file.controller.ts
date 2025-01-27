@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpException, HttpStatus, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { Delete } from '@nestjs/common/decorators';
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
@@ -201,7 +201,7 @@ export class FileController
   }
 
   @Post('upload-file')
-  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 }, }))
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @Body() fileDTO: FileDTO,
@@ -229,7 +229,10 @@ export class FileController
       });
       return { state: true, path, fileKey };
     } catch (error) {
-      return { state: false, message: 'Error al registrar la información del archivo.' };
+      if (error.code === 'LIMIT_FILE_SIZE') {
+        throw new HttpException('El archivo excede el límite de tamaño permitido (5MB).', HttpStatus.BAD_REQUEST);
+      }
+      return { state: false, message: 'Error al subir el archivo al servidor.' };
     }
   }
 }

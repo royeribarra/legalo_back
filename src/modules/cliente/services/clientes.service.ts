@@ -17,6 +17,7 @@ import { ClienteMailService } from '../../mail/services/clienteMail.service';
 import { TrabajosEntity } from '../../trabajo/trabajos.entity';
 import { OfertasEntity } from '../../oferta/oferta.entity';
 import { FileEntity } from '../../tmp/file.entity';
+import { UsuariosEntity } from '../../usuario/usuarios.entity';
 
 @Injectable()
 export class ClienteService{
@@ -33,6 +34,7 @@ export class ClienteService{
     @InjectRepository(TrabajosEntity) private readonly trabajoRepository: Repository<TrabajosEntity>,
     @InjectRepository(OfertasEntity) private readonly ofertaRepository: Repository<OfertasEntity>,
     @InjectRepository(FileEntity) private readonly tmpRepository: Repository<FileEntity>,
+    @InjectRepository(UsuariosEntity) private readonly usuarioRepository: Repository<UsuariosEntity>,
     private readonly usuariosService: UsuariosService,
     private readonly clienteMailService: ClienteMailService
   ){}
@@ -44,11 +46,36 @@ export class ClienteService{
       value: body.correo
     })
 
-    if(clienteExists)
+    const usuarioExistsCorreo = await this.usuarioRepository
+      .createQueryBuilder('usuarios')
+      .where('usuarios.correo = :correo', { correo: body.correo })
+      .getOne();
+
+    if(clienteExists || usuarioExistsCorreo)
     {
       return {
         state: false,
         message: `Ya existe un cliente registado con correo ${body.correo}`,
+        usuario: null,
+        cliente: null
+      }
+    }
+
+    const clienteExistsDocumento = await this.findBy({
+      key: 'documento',
+      value: body.documento
+    })
+
+    const usuarioExistsDni = await this.usuarioRepository
+    .createQueryBuilder('usuarios')
+    .where('usuarios.dni = :dni', { dni: body.documento })
+    .getOne();
+
+    if(clienteExistsDocumento || usuarioExistsDni)
+    {
+      return {
+        state: false,
+        message: `Ya existe un cliente registado con documento ${body.documento}`,
         usuario: null,
         cliente: null
       }
@@ -201,6 +228,11 @@ export class ClienteService{
         .createQueryBuilder('trabajo')
         .leftJoinAndSelect('trabajo.abogado', 'abogado')
         .leftJoinAndSelect('trabajo.aplicacion', 'aplicacion')
+        .leftJoinAndSelect('aplicacion.oferta', 'oferta')
+        .leftJoinAndSelect('oferta.especialidadesOferta', 'especialidadesOferta')
+        .leftJoinAndSelect('especialidadesOferta.especialidad', 'especialidad')
+        .leftJoinAndSelect('oferta.serviciosOferta', 'serviciosOferta')
+        .leftJoinAndSelect('serviciosOferta.servicio', 'servicio')
         .leftJoinAndSelect('trabajo.cliente', 'cliente')
         .where('cliente.id = :clienteId', { clienteId });
 
@@ -281,11 +313,17 @@ export class ClienteService{
     console.log(clienteId, estado)
   
     const cliente = await queryBuilder.getOne();
-  
+    console.log(cliente)
     if (!cliente) {
-      throw new Error('Cliente no encontrado');
+      return {
+        state: true,
+        data: []
+      };
     }
-  
-    return cliente.ofertas;
+
+    return {
+      state: true,
+      data: cliente.ofertas
+    };
   }
 }

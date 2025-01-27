@@ -43,8 +43,6 @@ export class FileService {
 
   async saveFile(fileBody: FileDTO) {
     try {
-      console.log(fileBody, "fileBody");
-  
       // Crear un objeto de archivo temporal
       const tempFile = this.tempFileRepository.create(fileBody);
   
@@ -57,8 +55,7 @@ export class FileService {
           throw new Error(`Abogado with ID ${fileBody.abogadoId} not found`);
         }
       }
-  
-      // Si viene un `clienteId`, buscamos el cliente en la base de datos
+
       if (fileBody.ofertaId) {
         const oferta = await this.ofertaRepository.findOne({ where: { id: fileBody.ofertaId } });
         if (oferta) {
@@ -67,8 +64,7 @@ export class FileService {
           throw new Error(`Cliente with ID ${fileBody.ofertaId} not found`);
         }
       }
-  
-      // Si viene un `trabajoId`, buscamos el trabajo en la base de datos
+
       if (fileBody.trabajoId) {
         const trabajo = await this.trabajoRepository.findOne({ where: { id: fileBody.trabajoId } });
         if (trabajo) {
@@ -77,8 +73,7 @@ export class FileService {
           throw new Error(`Trabajo with ID ${fileBody.trabajoId} not found`);
         }
       }
-  
-      // Si viene un `aplicacionId`, buscamos la aplicación en la base de datos
+
       if (fileBody.aplicacionId) {
         const aplicacion = await this.aplicacionRepository.findOne({ where: { id: fileBody.aplicacionId } });
         if (aplicacion) {
@@ -102,13 +97,10 @@ export class FileService {
   }  
 
     async saveTempFile(file: Express.Multer.File, dni: string, correo: string, nombreArchivo: string) {
-        // Limpiar el DNI para evitar caracteres no válidos
         const cleanDni = dni.replace(/["']/g, "");
 
-        // Obtener la extensión del archivo original
-        const originalExtension = path.extname(file.originalname).toLowerCase(); // Incluye el punto (e.g., ".jpg")
+        const originalExtension = path.extname(file.originalname).toLowerCase();
 
-        // Generar el nombre del archivo con la extensión original
         const fileName = `${cleanDni}-${Date.now()}${originalExtension}`;
 
         // Rutas
@@ -120,10 +112,6 @@ export class FileService {
             fs.mkdirSync(uploadsDir, { recursive: true });
         }
 
-        console.log('Temporary file path:', file.path);
-        console.log('Final file path:', filePath);
-
-        // Validar que el archivo temporal existe
         if (!file.path || !fs.existsSync(file.path)) {
             throw new Error(`El archivo temporal no existe en la ruta: ${file.path}`);
         }
@@ -200,28 +188,10 @@ export class FileService {
         return tempFile;
     }
 
-    // async getFileByClientId(id: number): Promise<FileEntity | null> {
-    //     console.log(id, "id")
-    //     const oferta = await this.ofertaRepository.findOneBy({
-    //         id: id,
-    //     });
-    //     const tempFile = await this.tempFileRepository.findOne({ where: { oferta: id } });
-    //     if (!tempFile) {
-    //     throw new NotFoundException(`Archivo temporal con ID ${id} no encontrado.`);
-    //     }
-    //     return tempFile;
-    // }
-
     async getFileByNombreArchivo(correo: string, nombreArchivo: string): Promise<FileEntity | null> {
         const tempFile = await this.tempFileRepository.findOne({ where: { correo: correo, nombreArchivo: nombreArchivo } });
         return tempFile;
     }
-
-    // async getFileByClienteIdAndArchivo(clienteId: number, nombreArchivo: string): Promise<FileEntity | null> {
-    //     const tempFile = await this.tempFileRepository.findOne({ where: { clienteId, nombreArchivo: nombreArchivo } });
-    //     console.log(tempFile)
-    //     return tempFile;
-    // }
 
     async checkExistFile(dni: string, correo: string, nombreArchivo: string){
         const tempFile = await this.tempFileRepository.findOne({ where: { correo: correo, nombreArchivo: nombreArchivo, dni } });
@@ -235,7 +205,6 @@ export class FileService {
             throw new NotFoundException(`Archivo temporal con id ${fileId} no encontrado`);
         }
 
-        // Eliminar el registro de la base de datos
         await this.tempFileRepository.delete(fileId);
     }
 
@@ -243,18 +212,13 @@ export class FileService {
         // Convertir clienteId a número
         const clienteIdNumber = Number(ofertaId);
 
-        // Determinar rutas
         const uploadsDir = path.join(process.env.PROJECT_ROOT, 'public', 'uploads');
-        const fileExtension = path.extname(file.originalname); // Extraer la extensión del archivo
-        const filePath = path.join(uploadsDir, `${ofertaId}-${fileId}${fileExtension}`); // Incluir la extensión en el nombre final
-
-        // Crear la carpeta si no existe
+        const fileExtension = path.extname(file.originalname);
+        const filePath = path.join(uploadsDir, `${ofertaId}-${fileId}${fileExtension}`);
+        
         if (!fs.existsSync(uploadsDir)) {
             fs.mkdirSync(uploadsDir, { recursive: true });
         }
-
-        console.log('Temporary file path:', file.path);
-        console.log('Final file path:', filePath);
 
         // Validar que el archivo temporal existe
         if (!file.path || !fs.existsSync(file.path)) {
@@ -284,27 +248,18 @@ export class FileService {
 
   async uploadFileToS3(file: Express.Multer.File, folder: string): Promise<string> {
     try {
-      // Verifica si hay extensión en el originalname, si no la hay, usa el mimetype
       let fileExtension = file.originalname.split('.').pop();
-      console.log(fileExtension, "fileExtension")
-      // Si no hay extensión en originalname, utiliza el mimetype
       if (!fileExtension) {
         const mimeTypeToExtension: { [key: string]: string } = {
           'application/pdf': 'pdf',
           'image/jpeg': 'jpg',
           'image/png': 'png',
           'text/plain': 'txt',
-          // Agrega otros tipos de archivos según tus necesidades
         };
         
-        // Obtén la extensión correspondiente al mimetype
-        fileExtension = mimeTypeToExtension[file.mimetype] || 'unknown';  // Usa 'unknown' si no se encuentra una extensión
+        fileExtension = mimeTypeToExtension[file.mimetype] || 'unknown';
       }
-      console.log(fileExtension, "fileExtension2")
-      // Genera una clave única para el archivo que incluye la extensión
       const fileKey = `${folder}/${uuidv4()}.${fileExtension}`;
-      
-      console.log(`File to upload: ${fileKey} (Mimetype: ${file.mimetype})`);
   
       const upload = new Upload({
         client: this.s3Client,

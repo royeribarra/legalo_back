@@ -110,7 +110,7 @@ export class AbogadosController {
     }
   }
 
-  @Post('trabajos')
+  @Post('get-trabajos')
   public async getTrabajos(
     @Body('abogadoId') abogadoId: number, 
     @Body('estado') estado: string

@@ -70,7 +70,7 @@ export class ClienteController {
     return this.clienteService.getOfertasByCliente(clienteId);
   }
 
-  @Post('trabajos')
+  @Post('get-trabajos')
   public async getTrabajos(
     @Body('clienteId') clienteId: number, 
     @Body('estado') estado: string
@@ -104,7 +104,11 @@ export class ClienteController {
     @Body('estado') estado: string,
   ) {
     console.log("ofertas en la linea ...")
-    return this.clienteService.getOfertas(clienteId, estado);
+    const { data, state } = await this.clienteService.getOfertas(clienteId, estado);
+     return {
+      data,
+      state
+     }
   }
 
   @Post('update-documento-oferta')
