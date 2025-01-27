@@ -29,6 +29,7 @@ export default class AbogadoSeeder implements Seeder {
       const educacionesRepository = dataSource.getRepository(EducacionesEntity);
       const data = [
         {
+          validado_admin: true,
           nombres: "Royer",
           apellidos: "Ibarra",
           correo: "royer@gmail.com",
@@ -86,6 +87,7 @@ export default class AbogadoSeeder implements Seeder {
           ],
         },
         {
+          validado_admin: true,
           nombres: "Mariana",
           apellidos: "Pérez López",
           correo: "mariana.perez@example.com",
@@ -143,6 +145,7 @@ export default class AbogadoSeeder implements Seeder {
           ],
         },
         {
+          validado_admin: true,
           nombres: "Carlos",
           apellidos: "Martínez García",
           correo: "carlos.martinez@example.com",
@@ -200,6 +203,7 @@ export default class AbogadoSeeder implements Seeder {
           ],
         },
         {
+          validado_admin: true,
           nombres: "Laura",
           apellidos: "Gómez Fernández",
           correo: "laura.gomez@example.com",
