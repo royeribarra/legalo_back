@@ -61,6 +61,7 @@ export class AbogadosController {
     @Body('ofertaId') ofertaId: number,
     @Body('salarioEsperado') salarioEsperado: number,
   ) {
+    console.log(abogadoId, ofertaId, salarioEsperado, "abogadoId, ofertaId, salarioEsperado")
     const { aplicacionId, state, message } = await this.abogadosService.postularAbogadoOferta(abogadoId, ofertaId, salarioEsperado);
     return {
       aplicacionId,

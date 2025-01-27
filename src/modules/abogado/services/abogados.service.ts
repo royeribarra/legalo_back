@@ -417,8 +417,6 @@ export class AbogadosService{
     ofertaId: number,
     salarioEsperado: number,
   ) {
-    // Buscar el abogado por ID
-    console.log(salarioEsperado, "salarioEsperado")
     const abogado = await this.abogadosRepository.findOne({ where: { id: abogadoId } });
     if (!abogado) {
       return { state: false, message: 'El abogado no existe' };
@@ -495,7 +493,6 @@ export class AbogadosService{
         .where('abogado.id = :abogadoId', { abogadoId });
 
     if (estado) {
-      console.log(estado)
       query.andWhere('aplicacion.estado = :estado', { estado });
     }
 

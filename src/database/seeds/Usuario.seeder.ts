@@ -27,7 +27,7 @@ export default class UsuarioSeeder implements Seeder {
       correo: 'laura.gomez@example.com',
     });
     const cliente = await clienteRepository.findOneBy({
-        correo: 'magaly@gmail.com',
+        correo: 'cliente@gmail.com',
     })
 
     try {
