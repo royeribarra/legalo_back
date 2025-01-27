@@ -7,10 +7,17 @@ import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { TrabajosEntity } from './trabajos.entity';
 import { TrabajosController } from './trabajo.controller';
 import { TrabajosService } from './trabajo.service';
+import { OfertasEntity } from '../oferta/oferta.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([TrabajosEntity, AplicacionesEntity, ClientesEntity, AbogadosEntity]),
+    TypeOrmModule.forFeature([
+      TrabajosEntity, 
+      AplicacionesEntity, 
+      ClientesEntity, 
+      AbogadosEntity,
+      OfertasEntity
+    ]),
   ],
   controllers: [TrabajosController],
   providers: [TrabajosService],

@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, OneToMany } from 'typeorm';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { BaseEntity } from '../../config/base.entity';
 import { ITrabajo } from '../../interfaces/Trabajo.interface';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
+import { FileEntity } from '../tmp/file.entity';
 
 @Entity({name: 'trabajos'})
 export class TrabajosEntity extends BaseEntity implements ITrabajo {
@@ -27,4 +28,7 @@ export class TrabajosEntity extends BaseEntity implements ITrabajo {
 
   @OneToOne(() => AplicacionesEntity, (aplicacion) => aplicacion.trabajo)
   aplicacion: AplicacionesEntity;
+
+  @OneToMany(() => FileEntity, (file) => file.trabajo, { cascade: true })
+  files: FileEntity[];
 }

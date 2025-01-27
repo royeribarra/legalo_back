@@ -19,6 +19,14 @@ export class S3Service {
     // El S3Client usará automáticamente las credenciales del rol IAM asociado a la instancia EC2
     this.s3Client = new S3Client({
       region: this.configService.get<string>('AWS_REGION'),
+      ...(process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY
+        ? {
+            credentials: {
+              accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
+              secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY'),
+            },
+          }
+        : {}),
     });
 
     this.bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');

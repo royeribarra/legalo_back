@@ -16,6 +16,7 @@ import { ClientesEntity } from '../entities/clientes.entity';
 import { ClienteMailService } from '../../mail/services/clienteMail.service';
 import { TrabajosEntity } from '../../trabajo/trabajos.entity';
 import { OfertasEntity } from '../../oferta/oferta.entity';
+import { FileEntity } from '../../tmp/file.entity';
 
 @Injectable()
 export class ClienteService{
@@ -31,6 +32,7 @@ export class ClienteService{
     @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
     @InjectRepository(TrabajosEntity) private readonly trabajoRepository: Repository<TrabajosEntity>,
     @InjectRepository(OfertasEntity) private readonly ofertaRepository: Repository<OfertasEntity>,
+    @InjectRepository(FileEntity) private readonly tmpRepository: Repository<FileEntity>,
     private readonly usuariosService: UsuariosService,
     private readonly clienteMailService: ClienteMailService
   ){}
@@ -227,5 +229,63 @@ export class ClienteService{
       console.error('Falló la consulta', error);
       throw new Error('Error al obtener las ofertas con aplicaciones');
     }
+  }
+
+  async updateArchivosOferta(clienteId, ofertaId){
+    const documentoTmpfile = await this.tmpRepository
+    .createQueryBuilder('tmpfile')
+    .where('tmpfile.clienteId = :clienteId', { clienteId })
+    .andWhere('tmpfile.ofertaId = :ofertaId', { ofertaId })
+    .andWhere('tmpfile.nombreArchivo = :nombreArchivo', { nombreArchivo: 'oferta_documento' }) // Buscar el archivo de documento
+    .getOne();
+
+    if (!documentoTmpfile) {
+      return {
+        state: false,
+        message: 'No se encontró archivos temporales para actualizar.',
+      };
+    }
+
+    const oferta = await this.ofertaRepository.findOne({
+      where: { id: ofertaId },
+    });
+
+    if (documentoTmpfile) {
+      oferta.documento_url = documentoTmpfile.filePath;
+    }
+
+    await this.ofertaRepository.save(oferta);
+
+    return {
+      state: true,
+      message: 'Campos actualizados exitosamente',
+      data: oferta,
+    };
+  }
+
+  async getOfertas(clienteId: number, estado?: string) {
+    const queryBuilder = this.clienteRepository
+      .createQueryBuilder('cliente')
+      .leftJoinAndSelect('cliente.ofertas', 'oferta')
+      .leftJoinAndSelect('oferta.serviciosOferta', 'servicioOferta')
+      .leftJoinAndSelect('servicioOferta.servicio', 'servicio')
+      .leftJoinAndSelect('oferta.aplicaciones', 'aplicaciones')
+      .leftJoinAndSelect('aplicaciones.abogado', 'abogado')
+      .leftJoinAndSelect('oferta.files', 'file')
+      .where('cliente.id = :clienteId', { clienteId });
+  
+    // Agregar condición opcional para estado
+    if (estado) {
+      queryBuilder.andWhere('oferta.estado = :estado', { estado });
+    }
+    console.log(clienteId, estado)
+  
+    const cliente = await queryBuilder.getOne();
+  
+    if (!cliente) {
+      throw new Error('Cliente no encontrado');
+    }
+  
+    return cliente.ofertas;
   }
 }

@@ -13,6 +13,7 @@ import { ServiciosAbogadoEntity } from '../../servicio/servicioAbogado.entity';
 import { EspecialidadesAbogadoEntity } from '../../especialidad/especialidadAbogado.entity';
 import { IndustriasAbogadoEntity } from '../../industria/industriaAbogado.entity';
 import { InvitacionesEntity } from '../../oferta/invitacion.entity';
+import { FileEntity } from '../../tmp/file.entity';
 
 @Entity({name:'abogados'})
 export class AbogadosEntity extends BaseEntity implements IAbogado
@@ -94,4 +95,7 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
 
   @OneToMany(() => InvitacionesEntity, (invitacion) => invitacion.abogado)
   invitaciones: InvitacionesEntity[];
+
+  @OneToMany(() => FileEntity, (file) => file.abogado, { cascade: true })
+  files: FileEntity[];
 }

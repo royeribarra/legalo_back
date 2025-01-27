@@ -11,6 +11,7 @@ import { IndustriasOfertaEntity } from '../industria/industriaOferta.entity';
 import { EspecialidadesOfertaEntity } from '../especialidad/especialidadOferta.entity';
 import { PagosEntity } from '../pago/pago.entity';
 import { InvitacionesEntity } from './invitacion.entity';
+import { FileEntity } from '../tmp/file.entity';
 
 @Entity({ name: 'ofertas' })
 export class OfertasEntity extends BaseEntity implements IOferta {
@@ -72,4 +73,7 @@ export class OfertasEntity extends BaseEntity implements IOferta {
 
   @OneToMany(() => InvitacionesEntity, (invitacion) => invitacion.oferta)
   invitaciones: InvitacionesEntity[];
+
+  @OneToMany(() => FileEntity, (file) => file.oferta, { cascade: true })
+  files: FileEntity[];
 }

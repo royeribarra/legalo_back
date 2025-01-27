@@ -6,7 +6,7 @@ import { AplicacionesEntity } from './aplicaciones.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { AplicacionCreateDTO } from './aplicacion.dto';
-import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
+import { FileEntity } from '../tmp/file.entity';
 import { ErrorManager } from '../../utils/error.manager';
 
 @Injectable()
@@ -18,8 +18,8 @@ export class AplicacionesService {
     private readonly ofertasRepository: Repository<OfertasEntity>,
     @InjectRepository(AbogadosEntity)
     private readonly abogadosRepository: Repository<AbogadosEntity>,
-    @InjectRepository(TmpImageFileEntity)
-    private readonly tmpRepository: Repository<TmpImageFileEntity>,
+    @InjectRepository(FileEntity)
+    private readonly tmpRepository: Repository<FileEntity>,
   ) {}
 
   // Crear una nueva aplicación (postulación)

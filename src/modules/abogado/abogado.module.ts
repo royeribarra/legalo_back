@@ -12,8 +12,8 @@ import { ServiciosEntity } from '../servicio/servicios.entity';
 import { IndustriasEntity } from '../industria/industrias.entity';
 import { UsuariosModule } from '../usuario/usuario.module';
 import { MailModule } from '../mail/mail.module';
-import { TempFilesService } from '../tmp/tmpFile.service';
-import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
+import { FileService } from '../tmp/file.service';
+import { FileEntity } from '../tmp/file.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
 import { EspecialidadesAbogadoEntity } from '../especialidad/especialidadAbogado.entity';
 import { ServiciosAbogadoEntity } from '../servicio/servicioAbogado.entity';
@@ -32,7 +32,7 @@ import { TrabajosEntity } from '../trabajo/trabajos.entity';
       HabilidadesBlandaEntity,
       ServiciosEntity,
       IndustriasEntity,
-      TmpImageFileEntity,
+      FileEntity,
       OfertasEntity,
       EspecialidadesAbogadoEntity,
       ServiciosAbogadoEntity,
@@ -45,7 +45,7 @@ import { TrabajosEntity } from '../trabajo/trabajos.entity';
   ],
   providers: [
     AbogadosService,
-    TempFilesService
+    FileService
   ],
   controllers: [
     AbogadosController

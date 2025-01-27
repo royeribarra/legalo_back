@@ -30,6 +30,7 @@ export class ClienteController {
 
   @Get(':id')
   public async findClienteById(@Param('id') id: number){
+    console.log("llegué aquí")
     return await this.clienteService.findClienteById(id);
   }
 
@@ -65,6 +66,7 @@ export class ClienteController {
 
   @Get(':id/ofertas')
   async getOfertasByCliente(@Param('id') clienteId: number) {
+    console.log("llegué aquí")
     return this.clienteService.getOfertasByCliente(clienteId);
   }
 
@@ -90,8 +92,26 @@ export class ClienteController {
     }
   }
 
-  @Post('ofertas/con-aplicaciones')
-  async getOfertasClienteConAplicaciones(@Body('clienteId') clienteId: number) {
-    return this.clienteService.getOfertasConAplicaciones(clienteId);
+  // @Post('ofertas/con-aplicaciones')
+  // async getOfertasClienteConAplicaciones(@Body('clienteId') clienteId: number) {
+  //   console.log("llegué aquí")
+  //   return this.clienteService.getOfertasConAplicaciones(clienteId);
+  // }
+
+  @Post('get-ofertas')
+  async getOfertas(
+    @Body('clienteId') clienteId: number,
+    @Body('estado') estado: string,
+  ) {
+    console.log("ofertas en la linea ...")
+    return this.clienteService.getOfertas(clienteId, estado);
+  }
+
+  @Post('update-documento-oferta')
+  async updateDocumentoOferta(
+    @Body('clienteId') clienteId: number,
+    @Body('ofertaId') ofertaId: number
+  ) {
+    return this.clienteService.updateArchivosOferta(clienteId, ofertaId);
   }
 }

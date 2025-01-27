@@ -14,6 +14,7 @@ import { UsuariosModule } from '../usuario/usuario.module';
 import { MailModule } from '../mail/mail.module';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
+import { FileEntity } from '../tmp/file.entity';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { OfertasEntity } from '../oferta/oferta.entity';
       ServiciosEntity,
       IndustriasEntity,
       TrabajosEntity,
-      OfertasEntity
+      OfertasEntity,
+      FileEntity
     ]),
     UsuariosModule,
     MailModule

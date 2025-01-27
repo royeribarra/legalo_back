@@ -1,10 +1,11 @@
 
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
 import { IAplicacion } from '../../interfaces/Aplicacion.interface';
 import { OfertasEntity } from '../oferta/oferta.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
+import { FileEntity } from '../tmp/file.entity';
 
 @Entity({name:'aplicaciones'})
 export class AplicacionesEntity extends BaseEntity implements IAplicacion
@@ -25,7 +26,7 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
   videoExtraUrl: string;
 
   @ManyToOne(() => OfertasEntity, (oferta) => oferta.aplicaciones)
-  @JoinColumn({ name: 'oferta_id' })
+  @JoinColumn()
   oferta: OfertasEntity;
 
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.aplicaciones)
@@ -34,4 +35,7 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
   @OneToOne(() => TrabajosEntity, (trabajo) => trabajo.aplicacion)
   @JoinColumn()
   trabajo: TrabajosEntity;
+
+  @OneToMany(() => FileEntity, (file) => file.aplicacion, { cascade: true })
+  files: FileEntity[];
 }

@@ -6,7 +6,7 @@ import { PreguntasOfertaEntity } from '../preguntas_oferta/preguntasOferta.entit
 import { EspecialidadesEntity } from '../especialidad/especialidades.entity';
 import { ServiciosEntity } from '../servicio/servicios.entity';
 import { OfertasEntity } from './oferta.entity';
-import { TempFilesService } from '../tmp/tmpFile.service';
+import { FileService } from '../tmp/file.service';
 import { ErrorManager } from 'src/utils/error.manager';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
@@ -30,7 +30,7 @@ export class OfertaService{
     @InjectRepository(InvitacionesEntity) private readonly invitacionRepository: Repository<InvitacionesEntity>,
     @InjectRepository(ServiciosOfertaEntity) private readonly servicioOfertaRepository: Repository<ServiciosOfertaEntity>,
     @InjectRepository(EspecialidadesOfertaEntity) private readonly especialidadOfertaRepository: Repository<EspecialidadesOfertaEntity>,
-    private readonly tempFilesService: TempFilesService,
+    private readonly tempFilesService: FileService,
   ){}
 
   public async createOferta(body: OfertaDTO)
@@ -51,18 +51,8 @@ export class OfertaService{
       nuevaOferta.salario_maximo = body.presupuesto.salario_maximo;
       nuevaOferta.titulo = body.titulo;
       nuevaOferta.uso = body.uso;
-      nuevaOferta.estado = "Creado";
+      nuevaOferta.estado = "creado";
       nuevaOferta.cliente = cliente;
-
-      const tempFile = await this.tempFilesService.getFileByClienteIdAndArchivo(cliente.id, "oferta_documento");
-      if (tempFile) {
-        nuevaOferta.documento_url = tempFile.filePath;
-          try {
-            await this.tempFilesService.clearTempFile(tempFile.id);
-        } catch (error) {
-            console.error(`Error eliminando archivo temporal: ${tempFile.filePath}`, error);
-        }
-      }
 
       const oferta : OfertasEntity = await this.ofertaRepository.save(nuevaOferta);
       

@@ -1,230 +1,123 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bienvenido a Legalo</title>
-    <link rel="stylesheet" href="styles.css" />
-</head>
-<body class="body-bg">
-  <style>
-    body.body-bg {
-      background-color: #f3f4f6;
-      font-family: Arial, sans-serif;
-      color: #2d3748;
-      margin: 0;
-      padding: 0;
-    }
-
-  .main-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-  }
-
-  .card {
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      max-width: 768px;
-      width: 100%;
-  }
-
-  .header {
-      background-color: #000000;
-      color: #ffffff;
-      padding: 16px 24px;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-  }
-
-  .header h1 {
-      margin: 0;
-      font-size: 24px;
-  }
-
-  .main-content {
-      display: flex;
-      flex-wrap: wrap;
-      padding: 24px;
-  }
-
-  .column {
-      flex: 1;
-      padding-right: 16px;
-  }
-
-  .title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 16px;
-  }
-
-  .description {
-      color: #4a5568;
-      margin-bottom: 24px;
-  }
-
-  .button-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 16px;
-  }
-
-  .confirm-button {
-      background-color: #3182ce;
-      color: #ffffff;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-  }
-
-  .confirm-button:hover {
-      background-color: #2c5282;
-  }
-
-  .icon {
-      width: 20px;
-      height: 20px;
-  }
-
-  .image-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 24px;
-  }
-
-  .image {
-      max-width: 100%;
-      border-radius: 8px;
-  }
-
-  .footer {
-      background-color: #f9fafb;
-      padding: 24px;
-      text-align: center;
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
-  }
-
-  .footer-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 8px;
-  }
-
-  .footer-description {
-      color: #4a5568;
-      margin-bottom: 16px;
-  }
-
-  .contact-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      justify-content: center;
-  }
-
-  .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-  }
-
-  .whatsapp-icon {
-      color: #48bb78;
-  }
-
-  .phone-icon {
-      color: #4299e1;
-  }
-
-  .contact-title {
-      font-weight: bold;
-  }
-
-  .contact-detail {
-      color: #718096;
-  }
-
-  .footer-note {
-      color: #a0aec0;
-      font-size: 14px;
-      margin-top: 16px;
-  }
-
-  </style>
-    <div class="main-container">
-        <!-- Main Container -->
-        <div class="card">
-            <!-- Header -->
-            <header class="header">
-                <img src="https://legalo.s3.us-east-1.amazonaws.com/legalo-logo.png" alt="Legalo Logo" />
-            </header>
-
-            <!-- Body -->
-            <main class="main-content">
-                <!-- Column 1 -->
-                <div class="column">
-                    <h2 class="title">Hola, {{ nombres }}:</h2>
-                    <p class="description">
-                        Toca el botón a continuación para confirmar tu correo electrónico.
-                    </p>
-                    <div class="button-container">
-                        <a href="{{ linkActivacion }}">
-                            <button class="confirm-button">
-                                Confirmar correo electrónico
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5l6 6m0 0l-6 6m6-6H3" />
-                                </svg>
-                            </button>
-                        </a>
-                    </div>
-                    <p class="expiration-text">
-                        Este enlace expirará en {{ tiempoExpiracion }} horas, así que por favor asegúrate de validarlo dentro del plazo.
-                    </p>
-                </div>
-            </main>
-
-            <!-- Footer -->
-            <footer class="footer">
-                <h3 class="footer-title">Estamos listos para ayudarte</h3>
-                <p class="footer-description">Si tienes alguna duda o necesitas ayuda, contáctanos por:</p>
-                <div class="contact-container">
-                    <!-- WhatsApp -->
-                    <div class="contact-item">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="icon whatsapp-icon">
-                            <path d="M12.05 2a10.002..."></path>
-                        </svg>
-                        <div>
-                            <p class="contact-title">WhatsApp</p>
-                            <p class="contact-detail">+123456789</p>
-                        </div>
-                    </div>
-                    <!-- Phone -->
-                    <div class="contact-item">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="icon phone-icon">
-                            <path d="M20.85 17.74c..."></path>
-                        </svg>
-                        <div>
-                            <p class="contact-title">Llámanos al</p>
-                            <p class="contact-detail">987654321</p>
-                        </div>
-                    </div>
-                </div>
-                <p class="footer-note">
-                    © 2024 Legalo Web. Todos los derechos reservados.
-                </p>
-            </footer>
-        </div>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f3f4f6;
+      }
+      .container {
+        width: 100%;
+        padding: 20px;
+      }
+      .email-wrapper {
+        width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        background-color: #000000;
+        padding: 20px;
+        text-align: center;
+        border-radius: 8px 8px 0 0;
+      }
+      .header img {
+        width: 120px;
+        height: auto;
+      }
+      .body {
+        padding: 20px;
+        color: #4b5563;
+      }
+      .body h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 16px;
+      }
+      .body p {
+        margin-bottom: 12px;
+        font-size: 16px;
+      }
+      .btn {
+        background-color: #2563eb;
+        color: #ffffff;
+        padding: 12px 24px;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+      .btn:hover {
+        background-color: #1d4ed8;
+      }
+      .footer {
+        background-color: #f3f4f6;
+        text-align: center;
+        padding: 20px;
+        border-radius: 0 0 8px 8px;
+      }
+      .footer p {
+        font-size: 14px;
+        color: #6b7280;
+      }
+      .footer .contact-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center !important;
+        gap: 10px;
+      }
+      .footer .contact-info img {
+        width: 24px;
+        height: 24px;
+      }
+      .footer .contact-info p {
+        margin: 0;
+        font-size: 14px;
+        color: #4b5563;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <table class="email-wrapper" cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="header">
+            <img src="https://legalo.s3.us-east-1.amazonaws.com/logo-legalo-white.png" alt="Legalo Logo" />
+          </td>
+        </tr>
+        <tr>
+          <td class="body">
+            <h2>Hola, {{ nombres }}:</h2>
+            <p>¡Gracias por registrarte en Legalo! Haz clic en el botón a continuación para confirmar tu correo electrónico:</p>
+            <p style="text-align: center;">
+              <a href="{{ linkActivacion }}" class="btn">
+                Confirmar correo electrónico
+              </a>
+            </p>
+            <p>Este enlace expirará en {{ tiempoExpiracion }} horas, por lo que te recomendamos confirmar tu correo lo antes posible.</p>
+          </td>
+        </tr>
+        <tr>
+          <td class="footer">
+            <p>Si tienes alguna pregunta o necesitas ayuda, contáctanos:</p>
+            <div class="contact-info">
+              <img src="https://legalo.s3.us-east-1.amazonaws.com/whatsapp.png" alt="WhatsApp">
+              <p><strong>WhatsApp:</strong> +123456789</p>
+            </div>
+            <p>&copy; 2024 Legalo Web. Todos los derechos reservados.</p>
+          </td>
+        </tr>
+      </table>
     </div>
-</body>
+  </body>
 </html>

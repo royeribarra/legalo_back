@@ -7,7 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { AbogadoModule } from './modules/abogado/abogado.module';
 import { ClienteModule } from './modules/cliente/cliente.module';
-import { TmpModule } from './modules/tmp/tmp.module';
+import { FileModule } from './modules/tmp/file.module';
 import { OfertaModule } from './modules/oferta/oferta.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { ServicioModule } from './modules/servicio/servicio.module';
@@ -30,7 +30,7 @@ import { AplicacionesModule } from './modules/aplicacion/aplicacion.module';
     AuthModule,
     AbogadoModule,
     ClienteModule,
-    TmpModule,
+    FileModule,
     OfertaModule,
     ServicioModule,
     IndustriaModule,

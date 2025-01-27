@@ -6,7 +6,7 @@ import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { AplicacionesEntity } from './aplicaciones.entity';
 import { AplicacionesController } from './aplicacion.controller';
 import { AplicacionesService } from './aplicaciones.service';
-import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
+import { FileEntity } from '../tmp/file.entity';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
       AplicacionesEntity, 
       OfertasEntity, 
       AbogadosEntity,
-      TmpImageFileEntity
+      FileEntity
     ]),
   ],
   controllers: [AplicacionesController],

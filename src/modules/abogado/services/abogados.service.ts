@@ -13,13 +13,13 @@ import { IndustriasEntity } from '../../industria/industrias.entity';
 import { ServiciosEntity } from '../../servicio/servicios.entity';
 import { UsuariosService } from '../../usuario/usuario.service';
 import { AbogadoMailService } from '../../mail/services/abogadoMail.service';
-import { TempFilesService } from '../../tmp/tmpFile.service';
+import { FileService } from '../../tmp/file.service';
 import { OfertasEntity } from '../../oferta/oferta.entity';
 import { IndustriasAbogadoEntity } from '../../industria/industriaAbogado.entity';
 import { EspecialidadesAbogadoEntity } from '../../especialidad/especialidadAbogado.entity';
 import { In } from 'typeorm';
 import { ServiciosAbogadoEntity } from '../../servicio/servicioAbogado.entity';
-import { TmpImageFileEntity } from '../../tmp/tmpImgFile.entity';
+import { FileEntity } from '../../tmp/file.entity';
 import { AplicacionesEntity } from '../../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../../trabajo/trabajos.entity';
 
@@ -40,12 +40,12 @@ export class AbogadosService{
     @InjectRepository(IndustriasEntity) private readonly industriaRepository: Repository<IndustriasEntity>,
     @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
     @InjectRepository(OfertasEntity) private readonly ofertaRepository: Repository<OfertasEntity>,
-    @InjectRepository(TmpImageFileEntity) private readonly tmpFileRepository: Repository<TmpImageFileEntity>,
+    @InjectRepository(FileEntity) private readonly tmpFileRepository: Repository<FileEntity>,
     @InjectRepository(AplicacionesEntity) private readonly aplicacionesRepository: Repository<AplicacionesEntity>,
     @InjectRepository(TrabajosEntity) private readonly trabajosRepository: Repository<TrabajosEntity>,
     private readonly usuariosService: UsuariosService,
     private readonly abogadoMailService: AbogadoMailService,
-    private readonly tempFilesService: TempFilesService
+    private readonly tempFilesService: FileService
   ){}
 
   public async createAbogado(body: AbogadoDTO)
@@ -317,10 +317,10 @@ export class AbogadosService{
         .leftJoinAndSelect('abogados.especialidadesAbogado', 'especialidadesAbogado')
         .leftJoinAndSelect('especialidadesAbogado.especialidad', 'especialidad')
         .leftJoinAndSelect('abogados.experiencias', 'experiencias')
-        .leftJoinAndSelect('abogados.educaciones', 'educaciones');
+        .leftJoinAndSelect('abogados.educaciones', 'educaciones')
+        .leftJoinAndSelect('abogados.files', 'files');
 
         query.where('abogados.id = :id', { id });
-        console.log(query.getQuery());
 
         const abogado = await query.getOne();
         if(!abogado)
@@ -412,13 +412,13 @@ export class AbogadosService{
     // Buscar el abogado por ID
     const abogado = await this.abogadosRepository.findOne({ where: { id: abogadoId } });
     if (!abogado) {
-      return { state: 'error', message: 'El abogado no existe' };
+      return { state: false, message: 'El abogado no existe' };
     }
 
     // Buscar la oferta por ID
     const oferta = await this.ofertaRepository.findOne({ where: { id: ofertaId } });
     if (!oferta) {
-      return { state: 'error', message: 'La oferta no existe' };
+      return { state: false, message: 'La oferta no existe' };
     }
 
     // Crear una nueva instancia de AplicacionesEntity
@@ -433,7 +433,7 @@ export class AbogadosService{
     // Guardar la aplicación en la base de datos
     const aplicacion = await this.aplicacionesRepository.save(nuevaAplicacion);
 
-    return { state: 'success', message: 'Aplicación creada correctamente', aplicacionId: aplicacion.id };
+    return { state: true, message: 'Aplicación creada correctamente', aplicacionId: aplicacion.id };
   }
 
   public async getOfertasConInvitacionesPorCliente(abogadoId: number): Promise<OfertasEntity[]> {

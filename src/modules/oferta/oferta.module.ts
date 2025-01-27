@@ -9,8 +9,8 @@ import { ServiciosEntity } from '../servicio/servicios.entity';
 import { IndustriasEntity } from '../industria/industrias.entity';
 import { UsuariosModule } from '../usuario/usuario.module';
 import { MailModule } from '../mail/mail.module';
-import { TempFilesService } from '../tmp/tmpFile.service';
-import { TmpImageFileEntity } from '../tmp/tmpImgFile.entity';
+import { FileService } from '../tmp/file.service';
+import { FileEntity } from '../tmp/file.entity';
 import { OfertasEntity } from './oferta.entity';
 import { OfertaService } from './oferta.service';
 import { OfertaController } from './oferta.controller';
@@ -33,7 +33,7 @@ import { EspecialidadesOfertaEntity } from '../especialidad/especialidadOferta.e
       HabilidadesBlandaEntity,
       ServiciosEntity,
       IndustriasEntity,
-      TmpImageFileEntity,
+      FileEntity,
       AplicacionesEntity,
       TrabajosEntity,
       PreguntasOfertaEntity,
@@ -47,7 +47,7 @@ import { EspecialidadesOfertaEntity } from '../especialidad/especialidadOferta.e
   ],
   providers: [
     OfertaService,
-    TempFilesService
+    FileService
   ],
   controllers: [
     OfertaController

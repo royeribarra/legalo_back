@@ -13,10 +13,10 @@ export default class ClienteSeeder implements Seeder {
       const clienteRepository =  dataSource.getRepository(ClientesEntity);
       const data : ClienteSeederDTO []= [
         {
-            nombres: "Magaly",
-            apellidos: "Granados",
+            nombres: "Lupe",
+            apellidos: "Guadalupe",
             contrasena: await bcrypt.hash("cliente123", +process.env.HASH_SALT),
-            correo: "magaly@gmail.com",
+            correo: "cliente@gmail.com",
             documento: "70049277",
             tipo_persona: "natural",
             telefono_contacto: "964973017",
