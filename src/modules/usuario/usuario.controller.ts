@@ -68,7 +68,7 @@ export class UsuariosController {
     }
   }
 
-  @Post('verify-activation')
+  @Post('validar-cuenta')
   async activateAccount(@Body() body: any) {
     const user = await this.usuariosService.findUserByActivationCode(body.code);
 
