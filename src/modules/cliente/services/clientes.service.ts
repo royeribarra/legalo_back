@@ -303,6 +303,7 @@ export class ClienteService{
       .leftJoinAndSelect('servicioOferta.servicio', 'servicio')
       .leftJoinAndSelect('oferta.aplicaciones', 'aplicaciones')
       .leftJoinAndSelect('aplicaciones.abogado', 'abogado')
+      .leftJoinAndSelect('abogado.files', 'files')
       .leftJoinAndSelect('oferta.files', 'file')
       .where('cliente.id = :clienteId', { clienteId });
   

@@ -215,7 +215,7 @@ export class FileController
       const s3Path = fileDTO.folder;
       fileKey = await this.fileService.uploadFileToS3(file, s3Path);
     } catch (error) {
-      return { state: false, message: 'Error al subir el archivo al servidor.' };
+      return { state: false, message: `Error al subir el archivo: ${error.message}` };
     }
 
     if (!fileKey) {
