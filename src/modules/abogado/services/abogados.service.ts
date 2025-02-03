@@ -519,6 +519,7 @@ export class AbogadosService{
         .leftJoinAndSelect('especialidadesOferta.especialidad', 'especialidad')
         .leftJoinAndSelect('oferta.serviciosOferta', 'serviciosOferta')
         .leftJoinAndSelect('serviciosOferta.servicio', 'servicio')
+        .leftJoinAndSelect('trabajo.pagos', 'pagos')
         .where('abogado.id = :abogadoId', { abogadoId });
 
     if (estado) {

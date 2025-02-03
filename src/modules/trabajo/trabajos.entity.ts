@@ -5,6 +5,7 @@ import { ITrabajo } from '../../interfaces/Trabajo.interface';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { FileEntity } from '../tmp/file.entity';
+import { PagosEntity } from '../pago/pago.entity';
 
 @Entity({name: 'trabajos'})
 export class TrabajosEntity extends BaseEntity implements ITrabajo {
@@ -31,4 +32,7 @@ export class TrabajosEntity extends BaseEntity implements ITrabajo {
 
   @OneToMany(() => FileEntity, (file) => file.trabajo, { cascade: true })
   files: FileEntity[];
+
+  @OneToMany(() => PagosEntity, (pago) => pago.trabajo)
+  pagos: PagosEntity[];
 }

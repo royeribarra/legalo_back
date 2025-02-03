@@ -22,6 +22,11 @@ export class PagoDTO {
   ofertaId: number;
 
   @ApiProperty()
+  @IsOptional()
+  @IsNumber()
+  aplicacionId: number;
+
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   operacion: string;
@@ -30,4 +35,29 @@ export class PagoDTO {
   @IsNotEmpty()
   @IsNumber()
   monto: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  direccionFactura: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  nombreFactura: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  ruc: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  tipoComprobante: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  tipoPago: string;
 }

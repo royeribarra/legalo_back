@@ -5,6 +5,7 @@ import { PagosEntity } from './pago.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
 import { TrabajosService } from '../trabajo/trabajo.service';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
+import { PagoDTO } from './pago.dto';
 
 @Injectable()
 export class PagoService {
@@ -17,13 +18,8 @@ export class PagoService {
     private trabajoService: TrabajosService
   ) {}
 
-  async realizarPagoOferta(
-    clienteId: number,
-    ofertaId: number,
-    monto: number,
-    operacion: string,
-    aplicacionId: number,
-  ): Promise<PagosEntity> {
+  async realizarPagoOferta(data: PagoDTO): Promise<PagosEntity> {
+    const { ofertaId, aplicacionId, operacion, abogadoId, clienteId, direccionFactura, monto, nombreFactura, ruc, tipoComprobante, tipoPago } = data;
     const oferta = await this.ofertaRepository.findOne({ where: { id: ofertaId } });
     if (!oferta) {
       throw new BadRequestException('La oferta no existe');
@@ -53,12 +49,18 @@ export class PagoService {
       .execute();
   
     // Crear y guardar el pago
+    // const nuevoPago = this.pagoRepository.create({
+    //   clienteId,
+    //   ofertaId,
+    //   operacion,
+    //   fecha_operacion: new Date().toISOString(),
+    //   oferta,
+    //   aplicacion: aplicacionAceptada,
+    // });
+
     const nuevoPago = this.pagoRepository.create({
-      clienteId,
-      ofertaId,
-      operacion,
+      ...data,
       fecha_operacion: new Date().toISOString(),
-      oferta,
       aplicacion: aplicacionAceptada,
     });
   
@@ -74,5 +76,7 @@ export class PagoService {
     await this.trabajoService.crearTrabajoDesdeAplicacion(aplicacionId, bodyTrabajo);
   
     return pagoGuardado;
-  }  
+  }
+
+  
 }

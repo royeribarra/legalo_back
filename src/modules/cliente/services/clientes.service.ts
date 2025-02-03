@@ -234,6 +234,7 @@ export class ClienteService{
         .leftJoinAndSelect('oferta.serviciosOferta', 'serviciosOferta')
         .leftJoinAndSelect('serviciosOferta.servicio', 'servicio')
         .leftJoinAndSelect('trabajo.cliente', 'cliente')
+        .leftJoinAndSelect('trabajo.pagos', 'pagos')
         .where('cliente.id = :clienteId', { clienteId });
 
     if (estado) {

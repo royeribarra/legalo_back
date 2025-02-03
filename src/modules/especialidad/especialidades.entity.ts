@@ -12,6 +12,9 @@ export class EspecialidadesEntity extends BaseEntity implements IEspecialidad{
   @Column()
   imagen: string;
 
+  @Column({type: 'text'})
+  descripcion: string;
+
   @OneToMany(() => EspecialidadesAbogadoEntity, (servicioAbogado) => servicioAbogado.especialidad)
   especialidadesAbogado: EspecialidadesAbogadoEntity[];
 
