@@ -24,13 +24,11 @@ export class TrabajosController {
     };
   }
 
-  @Put('actualizar-progreso/:id')
+  @Put('actualizar-progreso')
   public async actualizarProgreso(
-    @Param('id') trabajoId: number,
     @Body() body: ActualizarProgresoDTO
   ) {
     const trabajo = await this.trabajosService.actualizarProgresoTrabajo(
-      trabajoId,
       body
     );
     return {

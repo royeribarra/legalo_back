@@ -237,11 +237,11 @@ export class AbogadosService{
       }
       const usuario = await this.usuariosService.createUsuario(datosUsuario);
 
-      try {
-        const { state } = await this.abogadoMailService.sendActivationEmail(body.correo, body.nombres, body.apellidos);
-      } catch (error) {
-        console.log("Error al enviar el mail.")
-      }
+      // try {
+      //   const { state } = await this.abogadoMailService.sendActivationEmail(body.correo, body.nombres, body.apellidos);
+      // } catch (error) {
+      //   console.log("Error al enviar el mail.")
+      // }
 
       return {
         state: true,

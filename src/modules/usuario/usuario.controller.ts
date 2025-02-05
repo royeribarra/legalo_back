@@ -3,6 +3,7 @@ import { UsuarioDTO, UsuarioUpdateDTO } from './usuario.dto';
 import { Delete } from '@nestjs/common/decorators';
 import { UsuariosService } from './usuario.service';
 import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { ErrorManager } from '../../utils/error.manager';
 
 @ApiTags('Usuarios')
 @Controller('usuarios')
@@ -27,13 +28,19 @@ export class UsuariosController {
     }
   }
 
-  @ApiHeader({
-    name: 'copetrol_token'
-  })
+  // @ApiHeader({
+  //   name: 'copetrol_token'
+  // })
   @Get('all')
   public async findAllUsuarios(@Query() queryParams: any)
   {
-    return await this.usuariosService.findUsuarios(queryParams);
+    console.log("queryParams")
+    try {
+      return await this.usuariosService.findUsuarios(queryParams);
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error);
+    }
+    
   }
 
   @ApiHeader({
@@ -66,6 +73,12 @@ export class UsuariosController {
       state: state,
       message: message
     }
+  }
+
+  @Post('validar-usuario-por-admin')
+  async validarUsuarioPorAdmin(@Body('abogadoId') abogadoId: number) {
+    const {state, message} = await this.usuariosService.validarUsuarioPorAdmin(abogadoId);
+    return { message, state };
   }
 
   @Post('validar-cuenta')

@@ -18,7 +18,12 @@ export class CrearTrabajoDTO {
 export class ActualizarProgresoDTO {
   @IsOptional()
   @IsString()
-  estado?: string;  // Nuevo estado del trabajo (0: Pendiente, 1: En progreso, 2: Completado)
+  estado?: string;
+  
+  
+  @IsOptional()
+  @IsNumber()
+  trabajoId?: number;// Nuevo estado del trabajo (0: Pendiente, 1: En progreso, 2: Completado)
 
   @IsOptional()
   @IsNumber()

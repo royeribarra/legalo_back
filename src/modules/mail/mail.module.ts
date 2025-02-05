@@ -5,7 +5,6 @@ import { MailService } from './services/mail.service';
 import { join } from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AbogadoMailService } from './services/abogadoMail.service';
-import { UsuariosModule } from '../usuario/usuario.module';
 import { ClienteMailService } from './services/clienteMail.service';
 import { MailController } from './mail.controller';
 
@@ -38,8 +37,7 @@ import { MailController } from './mail.controller';
         },
       }),
       inject: [ConfigService],
-    }),
-    UsuariosModule
+    })
   ],
   controllers: [
     MailController

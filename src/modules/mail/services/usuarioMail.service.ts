@@ -6,14 +6,19 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class AbogadoMailService {
+export class UsuarioMailService {
     constructor(
         private mailerService: MailerService,
-        // private usuarioService: UsuariosService,
         private configService: ConfigService
     ) {}
 
-  async sendActivationEmail(userEmail: string, nombres: string, apellidos: string, activationCode: string, expirationTime: Date){
+  async sendActivationEmail(userEmail: string, nombres: string, apellidos: string){
+    const activationCode = randomBytes(16).toString('hex');  // Genera un código aleatorio de 32 caracteres
+    const expirationTime = new Date();
+    expirationTime.setHours(expirationTime.getHours() + 24); // Establece el tiempo de expiración a 24 horas
+
+    // Guarda el código de activación y la fecha de expiración en la base de datos
+    // await this.usuariosRepository.saveActivationCode(userEmail, activationCode, expirationTime);
     const appUrl = this.configService.get<string>('REACT_APP_URL');
     console.log(appUrl)
     const linkActivacion = `${appUrl}/registro/abogado/bienvenida?code_activation=${activationCode}`;

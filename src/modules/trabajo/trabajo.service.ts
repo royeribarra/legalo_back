@@ -54,13 +54,12 @@ export class TrabajosService {
   }
 
   async actualizarProgresoTrabajo(
-    trabajoId: number,
     body: ActualizarProgresoDTO
   ): Promise<TrabajosEntity> {
-    const trabajo = await this.trabajosRepository.findOne({ where: { id: trabajoId } });
+    const trabajo = await this.trabajosRepository.findOne({ where: { id: body.trabajoId } });
 
     if (!trabajo) {
-      throw new NotFoundException(`Trabajo con ID ${trabajoId} no encontrado`);
+      throw new NotFoundException(`Trabajo con ID ${body.trabajoId} no encontrado`);
     }
 
     // Actualizamos el estado y/o progreso según los datos enviados

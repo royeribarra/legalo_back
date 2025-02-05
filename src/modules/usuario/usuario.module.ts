@@ -5,6 +5,7 @@ import { UsuariosService } from './usuario.service';
 import { UsuariosController } from './usuario.controller';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { ClientesEntity } from '../cliente/entities/clientes.entity';
       UsuariosEntity,
       AbogadosEntity,
       ClientesEntity
-    ])
+    ]),
+    MailModule
   ],
   providers: [
     UsuariosService

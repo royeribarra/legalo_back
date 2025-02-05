@@ -8,6 +8,8 @@ import { UsuariosEntity } from './usuarios.entity';
 import { PerfilesEntity } from '../perfil/perfiles.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
+import { AbogadoMailService } from '../mail/services/abogadoMail.service';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class UsuariosService{
@@ -15,6 +17,7 @@ export class UsuariosService{
     @InjectRepository(UsuariosEntity) private readonly usuariosRepository: Repository<UsuariosEntity>,
     @InjectRepository(AbogadosEntity) private readonly abogadosRepository: Repository<AbogadosEntity>,
     @InjectRepository(ClientesEntity) private readonly clientesRepository: Repository<ClientesEntity>,
+    private readonly abogadoMailService: AbogadoMailService,
   ){}
 
   public async createUsuario(datosUsuario: UsuarioDTO)
@@ -84,14 +87,10 @@ export class UsuariosService{
 
   public async findUsuarios(queryParams): Promise<UsuariosEntity[]>
   {
-    const query = this.usuariosRepository.createQueryBuilder('usuarios')
-      .leftJoinAndSelect('usuarios.rol', 'rol');
-
-    if (queryParams.rolId) {
-      
-      query.andWhere('rol.id = :id', { id: queryParams.rolId });
-    }
     try {
+      const query = this.usuariosRepository.createQueryBuilder('usuarios')
+        .leftJoinAndSelect('usuarios.abogado', 'abogado')
+        .leftJoinAndSelect('usuarios.cliente', 'cliente');
       const usuarios: UsuariosEntity[] = await query.getMany();
       
       return usuarios;
@@ -224,5 +223,56 @@ export class UsuariosService{
     user.isActive = true;
     user.activationCode = null;
     await this.usuariosRepository.save(user);
+  }
+
+  public async validarUsuarioPorAdmin(abogadoId: number)
+  {
+    try {
+      console.log(abogadoId)
+      const abogado: AbogadosEntity = await this.abogadosRepository.findOneBy({ id: abogadoId });
+
+      if (!abogado) {
+        throw new Error("Abogado no encontrado");
+      }
+
+      const usuario: UsuariosEntity = await this.usuariosRepository
+        .createQueryBuilder('usuario')
+        .leftJoinAndSelect('usuario.abogado', 'abogado')
+        .where('abogado.id = :abogadoId', { abogadoId })
+        .getOne();
+
+      if (!usuario) {
+        throw new Error("Usuario no encontrado para el abogado dado");
+      }
+
+      const activationCode = randomBytes(16).toString('hex');  // Genera un código aleatorio de 32 caracteres
+      const expirationTime = new Date();
+      expirationTime.setHours(expirationTime.getHours() + 24); // Establece el tiempo de expiración a 24 horas
+
+      try {
+        await this.saveActivationCode(usuario.correo, activationCode, expirationTime);
+      } catch (error) {
+        throw ErrorManager.createSignatureError(error.message);
+      }
+
+      try {
+        const { state } = await this.abogadoMailService.sendActivationEmail(
+          usuario.correo, // Asegúrate de que `usuario` tiene un campo `correo`
+          usuario.nombres,
+          usuario.apellidos,
+          activationCode,
+          expirationTime
+        );
+      } catch (error) {
+        console.log("Error al enviar el mail:", error);
+      }
+
+      return {
+        state: true,
+        message: "Usuario validado correctamente."
+      };
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 }

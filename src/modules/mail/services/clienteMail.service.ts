@@ -9,7 +9,6 @@ import { ConfigService } from '@nestjs/config';
 export class ClienteMailService {
     constructor(
         private mailerService: MailerService,
-        private readonly usuarioService: UsuariosService,
         private configService: ConfigService
     ) {}
 
@@ -19,7 +18,7 @@ export class ClienteMailService {
     expirationTime.setHours(expirationTime.getHours() + 24); // Establece el tiempo de expiración a 24 horas
 
     // Guarda el código de activación y la fecha de expiración en la base de datos
-    await this.usuarioService.saveActivationCode(userEmail, activationCode, expirationTime);
+    // await this.usuarioService.saveActivationCode(userEmail, activationCode, expirationTime);
     console.log("llegue aqui")
     const appUrl = this.configService.get<string>('REACT_APP_URL');
     const linkActivacion = `${appUrl}/registro/cliente/bienvenida?code_activation=${activationCode}`;

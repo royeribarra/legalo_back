@@ -24,6 +24,11 @@ export class PagoDTO {
   @ApiProperty()
   @IsOptional()
   @IsNumber()
+  trabajoId: number;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsNumber()
   aplicacionId: number;
 
   @ApiProperty()
