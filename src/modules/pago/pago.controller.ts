@@ -12,6 +12,16 @@ export class PagoController {
 
   @Post('create')
   async realizarPago(@Body() data: PagoDTO) {
+    const pago = await this.pagoService.realizarPagoOferta(data);
+
+    return {
+      state: true,
+      message: "Pago guardado con éxito."
+    }
+  }
+
+  @Post('create-only-pago')
+  async realizarSoloPago(@Body() data: PagoDTO) {
     const pago = await this.pagoService.realizarPago(data);
 
     return {

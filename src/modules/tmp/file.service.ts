@@ -248,6 +248,7 @@ export class FileService {
 
   async uploadFileToS3(file: Express.Multer.File, folder: string): Promise<string> {
     try {
+      console.log(file)
       let fileExtension = file.originalname.split('.').pop();
       if (!fileExtension) {
         const mimeTypeToExtension: { [key: string]: string } = {
