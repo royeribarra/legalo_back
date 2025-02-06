@@ -72,7 +72,7 @@ export class ClienteController {
 
   @Post('get-trabajos')
   public async getTrabajos(
-    @Body('clienteId') clienteId: number, 
+    @Body('clienteId') clienteId: number,
     @Body('estado') estado: string
   )
   {
