@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { UsuarioSeederDTO } from '../../modules/usuario/usuario.dto';
 import { AbogadosEntity } from '../../modules/abogado/entities/abogados.entity';
 import { ClientesEntity } from '../../modules/cliente/entities/clientes.entity';
+import { RolEnum } from '../../modules/usuario/roles.enum';
 
 export default class UsuarioSeeder implements Seeder {
   public async run(
@@ -43,7 +44,8 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'abogado',
           abogado: abogado1,
           cliente: null,
-          isActive: true
+          isActive: true,
+          rol: RolEnum.ABOGADO
         },
         {
           nombres: 'Magaly',
@@ -56,7 +58,8 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'cliente',
           abogado: null,
           cliente: cliente,
-          isActive: true
+          isActive: true,
+          rol: RolEnum.CLIENTE
         },
         {
           nombres: 'Mariana',
@@ -69,7 +72,8 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'abogado',
           abogado: abogado2,
           cliente: null,
-          isActive: true
+          isActive: true,
+          rol: RolEnum.ABOGADO
         },
         {
           nombres: 'Carlos',
@@ -82,7 +86,8 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'abogado',
           abogado: abogado3,
           cliente: null,
-          isActive: true
+          isActive: true,
+          rol: RolEnum.ABOGADO
         },
         {
           nombres: 'Laura',
@@ -95,7 +100,8 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'abogado',
           abogado: abogado4,
           cliente: null,
-          isActive: true
+          isActive: true,
+          rol: RolEnum.ABOGADO
         },
         {
           nombres: 'Admin',
@@ -108,7 +114,8 @@ export default class UsuarioSeeder implements Seeder {
           perfil: 'admin',
           abogado: null,
           cliente: null,
-          isActive: true
+          isActive: true,
+          rol: RolEnum.ADMIN
         }
       ];
 

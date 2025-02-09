@@ -32,8 +32,8 @@ export class AuthService {
     secret,
     expires
   }: {
-    payload: jwt.JwtPayload; 
-    secret: string; 
+    payload: jwt.JwtPayload;
+    secret: string;
     expires: number | string;
   }){
     return jwt.sign(payload, secret, {expiresIn: expires});
@@ -50,7 +50,7 @@ export class AuthService {
       accessToken: this.signJWT({
         payload,
         secret: process.env.JWT_SECRET,
-        expires: '10h'
+        expires: '24h'
       }),
       user
     }

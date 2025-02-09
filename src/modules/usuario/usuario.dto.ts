@@ -2,6 +2,7 @@ import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail, isNumbe
 import { ApiProperty } from '@nestjs/swagger';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
+import { RolEnum } from './roles.enum';
 
 export class UsuarioDTO{
   @ApiProperty()
@@ -162,4 +163,7 @@ export class UsuarioSeederDTO{
   @IsOptional()
   @IsBoolean()
   isActive: boolean;
+
+  @ApiProperty()
+  rol: RolEnum
 }

@@ -6,6 +6,7 @@ import { BaseEntity } from '../../config/base.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { PerfilesEntity } from '../perfil/perfiles.entity';
+import { RolEnum } from './roles.enum';
 
 @Entity({name:'usuarios'})
 export class UsuariosEntity extends BaseEntity implements IUsuario{
@@ -34,6 +35,13 @@ export class UsuariosEntity extends BaseEntity implements IUsuario{
 
   @Column()
   telefono: string;
+
+  @Column({
+    type: 'enum',
+    enum: RolEnum,
+    default: RolEnum.CLIENTE,
+  })
+  rol: RolEnum;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   activationCode: string;

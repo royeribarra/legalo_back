@@ -26,7 +26,7 @@ export class AuthController {
       //return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Credenciales inválidas' });
       return response.json({
         status: 401,
-        message: 'Credenciales inválidas.' 
+        message: 'Credenciales inválidas.'
       });
     }
 

@@ -4,4 +4,5 @@ export interface IUsuario {
     usuario: string;
     contrasena: string;
     correo: string;
+    rol: 'admin' | 'cliente' | 'abogado';
 }

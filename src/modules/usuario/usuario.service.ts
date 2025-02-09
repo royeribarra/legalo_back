@@ -92,7 +92,7 @@ export class UsuariosService{
         .leftJoinAndSelect('usuarios.abogado', 'abogado')
         .leftJoinAndSelect('usuarios.cliente', 'cliente');
       const usuarios: UsuariosEntity[] = await query.getMany();
-      
+
       return usuarios;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -104,7 +104,9 @@ export class UsuariosService{
     try {
       const usuario : UsuariosEntity =  await this.usuariosRepository
         .createQueryBuilder('usuarios')
-        .where({id})
+        .leftJoinAndSelect('usuarios.abogado', 'abogado')
+        .leftJoinAndSelect('usuarios.cliente', 'cliente')
+        .where('usuarios.id = :id', { id })
         .getOne();
 
         if(!usuario)
