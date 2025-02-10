@@ -277,4 +277,53 @@ export class UsuariosService{
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  public async enviarCodigoVerificacion(abogadoId: number){
+    try {
+      const abogado: AbogadosEntity = await this.abogadosRepository.findOneBy({ id: abogadoId });
+
+      if (!abogado) {
+        throw new Error("Abogado no encontrado");
+      }
+
+      const usuario: UsuariosEntity = await this.usuariosRepository
+        .createQueryBuilder('usuario')
+        .leftJoinAndSelect('usuario.abogado', 'abogado')
+        .where('abogado.id = :abogadoId', { abogadoId })
+        .getOne();
+
+      if (!usuario) {
+        throw new Error("Usuario no encontrado para el abogado dado");
+      }
+
+      const activationCode = randomBytes(16).toString('hex');  // Genera un código aleatorio de 32 caracteres
+      const expirationTime = new Date();
+      expirationTime.setHours(expirationTime.getHours() + 24); // Establece el tiempo de expiración a 24 horas
+
+      try {
+        await this.saveActivationCode(usuario.correo, activationCode, expirationTime);
+      } catch (error) {
+        throw ErrorManager.createSignatureError(error.message);
+      }
+
+      try {
+        const { state } = await this.abogadoMailService.sendActivationEmail(
+          usuario.correo, // Asegúrate de que `usuario` tiene un campo `correo`
+          usuario.nombres,
+          usuario.apellidos,
+          activationCode,
+          expirationTime
+        );
+      } catch (error) {
+        console.log("Error al enviar el mail:", error);
+      }
+
+      return {
+        state: true,
+        message: "Usuario validado correctamente."
+      };
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
 }

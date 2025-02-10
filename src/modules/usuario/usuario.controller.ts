@@ -81,6 +81,12 @@ export class UsuariosController {
     return { message, state };
   }
 
+  @Post('enviar-mail-verificacion')
+  async enviarCodigoVerificacion(@Body('abogadoId') abogadoId: number) {
+    const {state, message} = await this.usuariosService.enviarCodigoVerificacion(abogadoId);
+    return { message, state };
+  }
+
   @Post('validar-cuenta')
   async activateAccount(@Body() body: any) {
     const user = await this.usuariosService.findUserByActivationCode(body.code);
