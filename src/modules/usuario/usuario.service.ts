@@ -296,9 +296,9 @@ export class UsuariosService{
         throw new Error("Usuario no encontrado para el abogado dado");
       }
 
-      const activationCode = randomBytes(16).toString('hex');  // Genera un código aleatorio de 32 caracteres
+      const activationCode = randomBytes(16).toString('hex');
       const expirationTime = new Date();
-      expirationTime.setHours(expirationTime.getHours() + 24); // Establece el tiempo de expiración a 24 horas
+      expirationTime.setHours(expirationTime.getHours() + 48);
 
       try {
         await this.saveActivationCode(usuario.correo, activationCode, expirationTime);
@@ -308,7 +308,7 @@ export class UsuariosService{
 
       try {
         const { state } = await this.abogadoMailService.sendActivationEmail(
-          usuario.correo, // Asegúrate de que `usuario` tiene un campo `correo`
+          usuario.correo,
           usuario.nombres,
           usuario.apellidos,
           activationCode,

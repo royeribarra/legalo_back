@@ -144,33 +144,12 @@ export class AbogadosService{
       nuevoAbogado.cv_url = '';
       nuevoAbogado.video_url = '';
 
-      const tempFileCv = await this.tempFilesService.getFileByNombreArchivo(body.correo, 'archivo_cv');
-      if (tempFileCv) {
-        // throw new BadRequestException('Archivo temporal no encontrado');
-        nuevoAbogado.cv_url = tempFileCv.filePath;
-      }
-
-      const tempFileCul = await this.tempFilesService.getFileByNombreArchivo(body.correo, 'archivo_cul');
-      if (tempFileCul) {
-        // throw new BadRequestException('Archivo temporal no encontrado');
-        nuevoAbogado.cul_url = tempFileCul.filePath;
-      }
-
-      const tempFileImagen = await this.tempFilesService.getFileByNombreArchivo(body.correo, 'archivo_imagen');
-      if (tempFileImagen) {
-        // throw new BadRequestException('Archivo temporal no encontrado');
-        nuevoAbogado.foto_url = tempFileImagen.filePath;
-      }
-
       const abogado : AbogadosEntity = await this.abogadosRepository.save(nuevoAbogado);
 
       for (const educacion of educaciones) {
         educacion.abogado = abogado;
       }
 
-      // for (const especialidad of especialidades) {
-      //   especialidad.abogado = abogado;
-      // }
       const industrias = await this.industriaRepository.findBy({
         id: In(body.industrias),
       });
@@ -221,9 +200,6 @@ export class AbogadosService{
       await this.experienciaRepository.save(experiencias);
       await this.habilidadDurRepository.save(habilidadesDuras);
       await this.habilidadBlandRepository.save(habilidadesBlandas);
-      // await this.servicioRepository.save(servicios);
-      // await this.industriaRepository.save(industrias);
-      // await this.especialidadesRepository.save(especialidades);
 
       const datosUsuario = {
         nombres: body.nombres,
@@ -232,7 +208,7 @@ export class AbogadosService{
         contrasena: body.contrasena,
         dni: body.dni,
         telefono: body.telefono,
-        perfil: "Abogado",
+        rol: "abogado",
         abogadoId: abogado.id
       }
       const usuario = await this.usuariosService.createUsuario(datosUsuario);

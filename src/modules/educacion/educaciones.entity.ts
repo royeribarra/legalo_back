@@ -3,9 +3,9 @@ import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { BaseEntity } from '../../config/base.entity';
 import { IEducacion } from '../../interfaces/Educacion.interface';
 
-@Entity()
+@Entity({name:'educaciones'})
 export class EducacionesEntity extends BaseEntity implements IEducacion{
-  @Column({name:'educaciones'})
+  @Column()
   fecha_fin: string;
 
   @Column()

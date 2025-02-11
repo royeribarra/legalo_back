@@ -12,14 +12,7 @@ export class ClienteMailService {
         private configService: ConfigService
     ) {}
 
-  async sendActivationEmail(userEmail: string, nombres: string, apellidos: string){
-    const activationCode = randomBytes(16).toString('hex');  // Genera un código aleatorio de 32 caracteres
-    const expirationTime = new Date();
-    expirationTime.setHours(expirationTime.getHours() + 24); // Establece el tiempo de expiración a 24 horas
-
-    // Guarda el código de activación y la fecha de expiración en la base de datos
-    // await this.usuarioService.saveActivationCode(userEmail, activationCode, expirationTime);
-    console.log("llegue aqui")
+  async sendActivationEmail(userEmail: string, nombres: string, apellidos: string, activationCode: string, expirationTime: Date){
     const appUrl = this.configService.get<string>('REACT_APP_URL');
     const linkActivacion = `${appUrl}/registro/cliente/bienvenida?code_activation=${activationCode}`;
     try {

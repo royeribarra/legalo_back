@@ -39,7 +39,7 @@ export class UsuarioDTO{
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  perfil: string;
+  rol: string;
 
   @ApiProperty({ required: false })
   @IsOptional()

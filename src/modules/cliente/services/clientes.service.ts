@@ -18,6 +18,7 @@ import { TrabajosEntity } from '../../trabajo/trabajos.entity';
 import { OfertasEntity } from '../../oferta/oferta.entity';
 import { FileEntity } from '../../tmp/file.entity';
 import { UsuariosEntity } from '../../usuario/usuarios.entity';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class ClienteService{
@@ -100,15 +101,34 @@ export class ClienteService{
         contrasena: body.contrasena,
         dni: body.documento,
         telefono: body.telefono,
-        perfil: "Cliente",
+        rol: "cliente",
         clienteId: cliente.id
       }
-      console.log("creacion de usuario");
+
       const usuario = await this.usuariosService.createUsuario(datosUsuario);
       
+      const activationCode = randomBytes(16).toString('hex');
+      const expirationTime = new Date();
+      expirationTime.setHours(expirationTime.getHours() + 48);
 
-      const { state } = await this.clienteMailService.sendActivationEmail(body.correo, body.nombres, body.apellidos);
-      console.log("envio de mail");
+      try {
+        await this.saveActivationCode(body.correo, activationCode, expirationTime);
+      } catch (error) {
+        throw ErrorManager.createSignatureError(error.message);
+      }
+
+      try {
+        const { state } = await this.clienteMailService.sendActivationEmail(
+          body.correo,
+          body.nombres,
+          body.apellidos,
+          activationCode,
+          expirationTime
+        );
+      } catch (error) {
+        console.log("Error al enviar el mail:", error);
+      }
+      
       return {
         state: true,
         message: `Cliente creado correctamente`,
@@ -329,5 +349,12 @@ export class ClienteService{
       state: true,
       data: cliente.ofertas
     };
+  }
+
+  public async saveActivationCode(correo: string, activationCode: string, expiresAt: Date): Promise<void> {
+    const user = await this.usuarioRepository.findOne({ where: { correo } });
+    user.activationCode = activationCode;
+    user.activationCodeExpires = expiresAt;
+    await this.usuarioRepository.save(user);
   }
 }

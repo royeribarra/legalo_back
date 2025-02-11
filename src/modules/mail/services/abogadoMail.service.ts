@@ -15,7 +15,6 @@ export class AbogadoMailService {
 
   async sendActivationEmail(userEmail: string, nombres: string, apellidos: string, activationCode: string, expirationTime: Date){
     const appUrl = this.configService.get<string>('REACT_APP_URL');
-    console.log(appUrl)
     const linkActivacion = `${appUrl}/registro/abogado/bienvenida?code_activation=${activationCode}`;
     try {
         const response = await this.mailerService.sendMail({

@@ -25,7 +25,10 @@ export class MailController {
   @Post('test-cliente')
   public async sendCliente(@Body() body: any)
   {
+    const activationCode = randomBytes(16).toString('hex');
+    const expirationTime = new Date();
+    expirationTime.setHours(expirationTime.getHours() + 24);
     const { userEmail, nombres, apellidos } = body;
-    return await this.clienteMailService.sendActivationEmail(userEmail, nombres, apellidos);
+    return await this.clienteMailService.sendActivationEmail(userEmail, nombres, apellidos, activationCode, expirationTime);
   }
 }
