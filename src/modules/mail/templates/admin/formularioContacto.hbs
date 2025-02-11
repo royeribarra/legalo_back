@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Mensaje de Contacto</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+    </style>
+</head>
+<body>
+    <h2>Nuevo Mensaje de Contacto</h2>
+    <p>Se ha recibido un nuevo mensaje a través del formulario de contacto:</p>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <td>{{name}}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{email}}</td>
+        </tr>
+        <tr>
+            <th>Servicio</th>
+            <td>{{servicio}}</td>
+        </tr>
+        <tr>
+            <th>Tipo de Servicio</th>
+            <td>{{tipoServicio}}</td>
+        </tr>
+        <tr>
+            <th>Mensaje</th>
+            <td>{{message}}</td>
+        </tr>
+    </table>
+    <p>Por favor, responde lo antes posible.</p>
+</body>
+</html>
