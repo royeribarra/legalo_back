@@ -5,6 +5,7 @@ import * as jwt from 'jsonwebtoken';
 import { PayLoadToken } from '../interfaces/auth.interface';
 import { UsuariosEntity } from '../../usuario/usuarios.entity';
 import { UsuariosService } from '../../usuario/usuario.service';
+import { ErrorManager } from '../../../utils/error.manager';
 
 @Injectable()
 export class AuthService {
@@ -15,16 +16,22 @@ export class AuthService {
 
   }
   public async validateUser(usuario: string, contrasena: string){
-    const userByEmail = await this.userService.findBy({
-      key: 'correo',
-      value: usuario
-    });
-    if(userByEmail){
-      const match = await bcrypt.compare(contrasena, userByEmail.contrasena);
-      if(!userByEmail.isActive) return null;
-      if (match) return userByEmail;
+    try {
+      const userByEmail = await this.userService.findBy({
+        key: 'correo',
+        value: usuario
+      });
+      if(userByEmail){
+        const match = await bcrypt.compare(contrasena, userByEmail.contrasena);
+        if(!userByEmail.isActive) return null;
+        if (match) return userByEmail;
+      }
+      return null;
+    } catch (error) {
+      console.log(error)
+      throw ErrorManager.createSignatureError(error.message);
     }
-    return null;
+    
   }
 
   public signJWT({
@@ -34,7 +41,7 @@ export class AuthService {
   }: {
     payload: jwt.JwtPayload;
     secret: string;
-    expires: number | string;
+    expires: jwt.SignOptions["expiresIn"];
   }){
     return jwt.sign(payload, secret, {expiresIn: expires});
   }
@@ -55,15 +62,4 @@ export class AuthService {
       user
     }
   }
-
-
-  // async login(username: string, password: string): Promise<string> {
-  //   // Lógica de verificación de credenciales
-
-  //   // Generar el token JWT
-  //   const payload = { username: username };
-  //   const token = this.jwtService.generateToken(payload);
-
-  //   return token;
-  // }
 }

@@ -63,37 +63,37 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   @Column({default: false})
   validado_admin: boolean;
 
-  @OneToMany(() => HabilidadesBlandaEntity, (habilidad) => habilidad.abogado)
+  @OneToMany(() => HabilidadesBlandaEntity, (habilidad) => habilidad.abogado, { cascade: true })
   habilidadesBlandas: HabilidadesBlandaEntity[];
 
-  @OneToMany(() => HabilidadesDuraEntity, (habilidad) => habilidad.abogado)
+  @OneToMany(() => HabilidadesDuraEntity, (habilidad) => habilidad.abogado, { cascade: true })
   habilidadesDuras: HabilidadesDuraEntity[];
 
-  @OneToMany(() => IndustriasAbogadoEntity, (industriaAbogado) => industriaAbogado.abogado)
+  @OneToMany(() => IndustriasAbogadoEntity, (industriaAbogado) => industriaAbogado.abogado, { cascade: true })
   industriasAbogado: IndustriasAbogadoEntity[];
 
-  @OneToMany(() => ServiciosAbogadoEntity, (servicioAbogado) => servicioAbogado.abogado)
+  @OneToMany(() => ServiciosAbogadoEntity, (servicioAbogado) => servicioAbogado.abogado, { cascade: true })
   serviciosAbogado: ServiciosAbogadoEntity[];
 
-  @OneToMany(() => EspecialidadesAbogadoEntity, (especialidadAbogado) => especialidadAbogado.abogado)
+  @OneToMany(() => EspecialidadesAbogadoEntity, (especialidadAbogado) => especialidadAbogado.abogado, { cascade: true })
   especialidadesAbogado: EspecialidadesAbogadoEntity[];
 
-  @OneToMany(() => ExperienciasEntity, (experiencia) => experiencia.abogado)
+  @OneToMany(() => ExperienciasEntity, (experiencia) => experiencia.abogado, { cascade: true })
   experiencias: ExperienciasEntity[];
 
-  @OneToMany(() => EducacionesEntity, (educacion) => educacion.abogado)
+  @OneToMany(() => EducacionesEntity, (educacion) => educacion.abogado, { cascade: true })
   educaciones: EducacionesEntity[];
 
   @OneToOne(() => UsuariosEntity, (usuario) => usuario.abogado)
   usuario: UsuariosEntity;
 
-  @OneToMany(() => AplicacionesEntity, (aplicacion) => aplicacion.abogado)
+  @OneToMany(() => AplicacionesEntity, (aplicacion) => aplicacion.abogado, { cascade: true })
   aplicaciones: AplicacionesEntity[];
 
-  @OneToMany(() => TrabajosEntity, (trabajo) => trabajo.abogado)
+  @OneToMany(() => TrabajosEntity, (trabajo) => trabajo.abogado, { cascade: true })
   trabajos: TrabajosEntity[];
 
-  @OneToMany(() => InvitacionesEntity, (invitacion) => invitacion.abogado)
+  @OneToMany(() => InvitacionesEntity, (invitacion) => invitacion.abogado, { cascade: true })
   invitaciones: InvitacionesEntity[];
 
   @OneToMany(() => FileEntity, (file) => file.abogado, { cascade: true })

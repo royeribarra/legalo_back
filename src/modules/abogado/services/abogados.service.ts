@@ -23,6 +23,7 @@ import { FileEntity } from '../../tmp/file.entity';
 import { AplicacionesEntity } from '../../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../../trabajo/trabajos.entity';
 import { UsuariosEntity } from '../../usuario/usuarios.entity';
+import { RolEnum } from '../../usuario/roles.enum';
 
 @Injectable()
 export class AbogadosService{
@@ -208,7 +209,7 @@ export class AbogadosService{
         contrasena: body.contrasena,
         dni: body.dni,
         telefono: body.telefono,
-        rol: "abogado",
+        rol: RolEnum.ABOGADO,
         abogadoId: abogado.id
       }
       const usuario = await this.usuariosService.createUsuario(datosUsuario);

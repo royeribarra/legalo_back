@@ -10,6 +10,17 @@ import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { AbogadoMailService } from '../mail/services/abogadoMail.service';
 import { randomBytes } from 'crypto';
+import { HabilidadesBlandaEntity } from '../habilidadBlanda/habilidadesBlanda.entity';
+import { HabilidadesDuraEntity } from '../habilidadDura/habilidadesDura.entity';
+import { IndustriasAbogadoEntity } from '../industria/industriaAbogado.entity';
+import { ServiciosAbogadoEntity } from '../servicio/servicioAbogado.entity';
+import { EspecialidadesAbogadoEntity } from '../especialidad/especialidadAbogado.entity';
+import { ExperienciasEntity } from '../experiencia/experiencias.entity';
+import { EducacionesEntity } from '../educacion/educaciones.entity';
+import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
+import { TrabajosEntity } from '../trabajo/trabajos.entity';
+import { InvitacionesEntity } from '../oferta/invitacion.entity';
+import { FileEntity } from '../tmp/file.entity';
 
 @Injectable()
 export class UsuariosService{
@@ -17,6 +28,18 @@ export class UsuariosService{
     @InjectRepository(UsuariosEntity) private readonly usuariosRepository: Repository<UsuariosEntity>,
     @InjectRepository(AbogadosEntity) private readonly abogadosRepository: Repository<AbogadosEntity>,
     @InjectRepository(ClientesEntity) private readonly clientesRepository: Repository<ClientesEntity>,
+    @InjectRepository(HabilidadesBlandaEntity) private readonly habilidadesBlandaRepository: Repository<HabilidadesBlandaEntity>,
+    @InjectRepository(HabilidadesDuraEntity) private readonly habilidadesDuraRepository: Repository<HabilidadesDuraEntity>,
+    @InjectRepository(IndustriasAbogadoEntity) private readonly industriasAbogadoRepository: Repository<IndustriasAbogadoEntity>,
+    @InjectRepository(ServiciosAbogadoEntity) private readonly serviciosAbogadoRepository: Repository<ServiciosAbogadoEntity>,
+    @InjectRepository(EspecialidadesAbogadoEntity) private readonly especialidadesAbogadoRepository: Repository<EspecialidadesAbogadoEntity>,
+    @InjectRepository(ExperienciasEntity) private readonly experienciasRepository: Repository<ExperienciasEntity>,
+    @InjectRepository(EducacionesEntity) private readonly educacionesRepository: Repository<EducacionesEntity>,
+    @InjectRepository(AplicacionesEntity) private readonly aplicacionesRepository: Repository<AplicacionesEntity>,
+    @InjectRepository(TrabajosEntity) private readonly trabajosRepository: Repository<TrabajosEntity>,
+    @InjectRepository(InvitacionesEntity) private readonly invitacionesRepository: Repository<InvitacionesEntity>,
+    @InjectRepository(FileEntity) private readonly fileRepository: Repository<FileEntity>,
+
     private readonly abogadoMailService: AbogadoMailService,
   ){}
 
@@ -57,7 +80,7 @@ export class UsuariosService{
       usuario.apellidos = datosUsuario.apellidos;
       usuario.telefono = datosUsuario.telefono;
       usuario.usuario = "user" + datosUsuario.dni;
-      
+      usuario.rol= datosUsuario.rol;
       if (datosUsuario.abogadoId) {
         usuario.abogado = await this.abogadosRepository.findOneBy({
           id: datosUsuario.abogadoId,
@@ -105,6 +128,17 @@ export class UsuariosService{
       const usuario : UsuariosEntity =  await this.usuariosRepository
         .createQueryBuilder('usuarios')
         .leftJoinAndSelect('usuarios.abogado', 'abogado')
+        // .leftJoinAndSelect('abogado.files', 'files')
+        // .leftJoinAndSelect('abogado.habilidadesBlandas', 'habilidadesBlandas')
+        // .leftJoinAndSelect('abogado.habilidadesDuras', 'habilidadesDuras')
+        // .leftJoinAndSelect('abogado.industriasAbogado', 'industriasAbogado')
+        // .leftJoinAndSelect('industriasAbogado.industria', 'industria')
+        // .leftJoinAndSelect('abogado.serviciosAbogado', 'serviciosAbogado')
+        // .leftJoinAndSelect('serviciosAbogado.servicio', 'servicio')
+        // .leftJoinAndSelect('abogado.especialidadesAbogado', 'especialidadesAbogado')
+        // .leftJoinAndSelect('especialidadesAbogado.especialidad', 'especialidad')
+        // .leftJoinAndSelect('abogado.experiencias', 'experiencias')
+        // .leftJoinAndSelect('abogado.educaciones', 'educaciones')
         .leftJoinAndSelect('usuarios.cliente', 'cliente')
         .where('usuarios.id = :id', { id })
         .getOne();
@@ -186,8 +220,14 @@ export class UsuariosService{
       .addSelect('usuario.contrasena')
       .leftJoinAndSelect('usuario.cliente', 'cliente')
       .leftJoinAndSelect('usuario.abogado', 'abogado')
-      .leftJoinAndSelect('abogado.files', 'filesAbogado')
-      .leftJoinAndSelect('cliente.files', 'filesCliente')
+      .leftJoinAndSelect('abogado.files', 'files')
+      .leftJoinAndSelect('abogado.habilidadesBlandas', 'habilidadesBlandas')
+      .leftJoinAndSelect('abogado.habilidadesDuras', 'habilidadesDuras')
+      .leftJoinAndSelect('abogado.industriasAbogado', 'industriasAbogado')
+      .leftJoinAndSelect('abogado.serviciosAbogado', 'serviciosAbogado')
+      .leftJoinAndSelect('abogado.especialidadesAbogado', 'especialidadesAbogado')
+      .leftJoinAndSelect('abogado.experiencias', 'experiencias')
+      .leftJoinAndSelect('abogado.educaciones', 'educaciones')
       .where({[key]: value})
       .getOne();
       return usuario;
@@ -239,6 +279,10 @@ export class UsuariosService{
         throw new Error("Abogado no encontrado");
       }
 
+      abogado.validado_admin = true;
+
+      await this.abogadosRepository.save(abogado);
+
       const usuario: UsuariosEntity = await this.usuariosRepository
         .createQueryBuilder('usuario')
         .leftJoinAndSelect('usuario.abogado', 'abogado')
@@ -249,9 +293,9 @@ export class UsuariosService{
         throw new Error("Usuario no encontrado para el abogado dado");
       }
 
-      const activationCode = randomBytes(16).toString('hex');  // Genera un código aleatorio de 32 caracteres
+      const activationCode = randomBytes(16).toString('hex');
       const expirationTime = new Date();
-      expirationTime.setHours(expirationTime.getHours() + 24); // Establece el tiempo de expiración a 24 horas
+      expirationTime.setHours(expirationTime.getHours() + 48);
 
       try {
         await this.saveActivationCode(usuario.correo, activationCode, expirationTime);
@@ -269,6 +313,7 @@ export class UsuariosService{
         );
       } catch (error) {
         console.log("Error al enviar el mail:", error);
+        throw ErrorManager.createSignatureError(error.message);
       }
 
       return {
@@ -323,6 +368,43 @@ export class UsuariosService{
       return {
         state: true,
         message: "Usuario validado correctamente."
+      };
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async rechazarUsuarioPorAdmin(abogadoId: number) {
+    try {
+      const abogado: AbogadosEntity = await this.abogadosRepository.findOne({
+        where: { id: abogadoId },
+        relations: ['usuario', 'habilidadesBlandas', 'habilidadesDuras', 'industriasAbogado', 'serviciosAbogado', 'especialidadesAbogado', 'experiencias', 'educaciones', 'aplicaciones', 'trabajos', 'invitaciones', 'files'] // Incluir todas las relaciones que deseas eliminar
+      });
+      if (!abogado) {
+        throw new Error("Abogado no encontrado");
+      }
+      if (abogado.usuario) {
+        await this.usuariosRepository.delete(abogado.usuario.id);
+      }
+  
+      // Eliminar todas las relaciones manualmente
+      await this.habilidadesBlandaRepository.delete({ abogado: { id: abogado.id } });
+      await this.habilidadesDuraRepository.delete({ abogado: { id: abogado.id } });
+      await this.industriasAbogadoRepository.delete({ abogado: { id: abogado.id } });
+      await this.serviciosAbogadoRepository.delete({ abogado: { id: abogado.id } });
+      await this.especialidadesAbogadoRepository.delete({ abogado: { id: abogado.id }});
+      await this.experienciasRepository.delete({ abogado: { id: abogado.id } });
+      await this.educacionesRepository.delete({ abogado: { id: abogado.id } });
+      await this.aplicacionesRepository.delete({ abogado: { id: abogado.id }});
+      await this.trabajosRepository.delete({ abogado: { id: abogado.id } });
+      await this.invitacionesRepository.delete({ abogado: { id: abogado.id } });
+      await this.fileRepository.delete({ abogado: { id: abogado.id }});
+  
+      // Ahora, eliminar al abogado
+      await this.abogadosRepository.delete(abogadoId);
+      return {
+        state: true,
+        message: "Usuario eliminado correctamente."
       };
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);

@@ -20,7 +20,7 @@ export class AuthController {
   public async login(@Body() {correo, contrasena}: AuthDTO, @Res() response: Response)
   {
     const userValidate = await this.authService.validateUser(correo, contrasena);
-
+    console.log(userValidate)
     if(!userValidate){
       //throw new UnauthorizedException('Data no validada.')
       //return response.status(HttpStatus.UNAUTHORIZED).json({ message: 'Credenciales inválidas' });

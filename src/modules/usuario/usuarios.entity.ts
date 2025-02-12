@@ -52,11 +52,11 @@ export class UsuariosEntity extends BaseEntity implements IUsuario{
   @Column({ type: 'boolean', default: false })
   isActive: boolean;
 
-  @OneToOne(() => AbogadosEntity, (abogado) => abogado.usuario)
+  @OneToOne(() => AbogadosEntity, (abogado) => abogado.usuario, { cascade: true })
   @JoinColumn()
   abogado?: AbogadosEntity;
 
-  @OneToOne(() => ClientesEntity, (cliente) => cliente.usuario)
+  @OneToOne(() => ClientesEntity, (cliente) => cliente.usuario, { cascade: true })
   @JoinColumn()
   cliente?: ClientesEntity;
 }

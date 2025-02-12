@@ -91,9 +91,9 @@ export class AbogadosController {
 
   @Post('aplicaciones')
   public async getAplicaciones(
-    @Body('abogadoId') abogadoId: number, 
+    @Body('abogadoId') abogadoId: number,
     @Body('estado') estado: string = 'pendiente'
-  ) 
+  )
   {
     try {
       const aplicaciones = await this.abogadosService.getAplicaciones(abogadoId, estado);

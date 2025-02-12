@@ -11,7 +11,6 @@ import { HabilidadesDuraEntity } from '../../habilidadDura/habilidadesDura.entit
 import { IndustriasEntity } from '../../industria/industrias.entity';
 import { ServiciosEntity } from '../../servicio/servicios.entity';
 import { UsuariosService } from '../../usuario/usuario.service';
-import { AbogadoMailService } from '../../mail/services/abogadoMail.service';
 import { ClientesEntity } from '../entities/clientes.entity';
 import { ClienteMailService } from '../../mail/services/clienteMail.service';
 import { TrabajosEntity } from '../../trabajo/trabajos.entity';
@@ -19,6 +18,7 @@ import { OfertasEntity } from '../../oferta/oferta.entity';
 import { FileEntity } from '../../tmp/file.entity';
 import { UsuariosEntity } from '../../usuario/usuarios.entity';
 import { randomBytes } from 'crypto';
+import { RolEnum } from 'src/modules/usuario/roles.enum';
 
 @Injectable()
 export class ClienteService{
@@ -101,12 +101,12 @@ export class ClienteService{
         contrasena: body.contrasena,
         dni: body.documento,
         telefono: body.telefono,
-        rol: "cliente",
+        rol: RolEnum.CLIENTE,
         clienteId: cliente.id
       }
 
       const usuario = await this.usuariosService.createUsuario(datosUsuario);
-      
+
       const activationCode = randomBytes(16).toString('hex');
       const expirationTime = new Date();
       expirationTime.setHours(expirationTime.getHours() + 48);
@@ -207,11 +207,11 @@ export class ClienteService{
         'ofertas.serviciosOferta.servicio',
       ],
     });
-  
+
     if (!cliente) {
       throw new Error('Cliente no encontrado');
     }
-  
+
     return cliente.ofertas;
   }
 
@@ -242,7 +242,7 @@ export class ClienteService{
   public async getTrabajos(
     clienteId: number,
     estado?: string
-  ): Promise<TrabajosEntity[]> 
+  ): Promise<TrabajosEntity[]>
   {
     const query = this.trabajoRepository
         .createQueryBuilder('trabajo')
@@ -329,13 +329,13 @@ export class ClienteService{
       .leftJoinAndSelect('abogado.files', 'files')
       .leftJoinAndSelect('oferta.files', 'file')
       .where('cliente.id = :clienteId', { clienteId });
-  
+
     // Agregar condición opcional para estado
     if (estado) {
       queryBuilder.andWhere('oferta.estado = :estado', { estado });
     }
     console.log(clienteId, estado)
-  
+
     const cliente = await queryBuilder.getOne();
     console.log(cliente)
     if (!cliente) {
