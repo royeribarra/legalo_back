@@ -186,6 +186,8 @@ export class UsuariosService{
       .addSelect('usuario.contrasena')
       .leftJoinAndSelect('usuario.cliente', 'cliente')
       .leftJoinAndSelect('usuario.abogado', 'abogado')
+      .leftJoinAndSelect('abogado.files', 'filesAbogado')
+      .leftJoinAndSelect('cliente.files', 'filesCliente')
       .where({[key]: value})
       .getOne();
       return usuario;
