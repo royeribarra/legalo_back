@@ -5,6 +5,7 @@ import { ICliente } from '../../../interfaces/Cliente.interface';
 import { BaseEntity } from '../../../config/base.entity';
 import { OfertasEntity } from '../../oferta/oferta.entity';
 import { TrabajosEntity } from '../../trabajo/trabajos.entity';
+import { PagosEntity } from '../../pago/pago.entity';
 
 @Entity({name:'clientes'})
 export class ClientesEntity extends BaseEntity implements ICliente
@@ -44,4 +45,7 @@ export class ClientesEntity extends BaseEntity implements ICliente
 
   @OneToMany(() => TrabajosEntity, (trabajo) => trabajo.cliente)
   trabajos: TrabajosEntity[];
+
+  @OneToMany(() => PagosEntity, (pago) => pago.cliente)
+  pagos: PagosEntity[];
 }

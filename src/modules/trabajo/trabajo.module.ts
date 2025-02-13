@@ -12,9 +12,9 @@ import { OfertasEntity } from '../oferta/oferta.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      TrabajosEntity, 
-      AplicacionesEntity, 
-      ClientesEntity, 
+      TrabajosEntity,
+      AplicacionesEntity,
+      ClientesEntity,
       AbogadosEntity,
       OfertasEntity
     ]),

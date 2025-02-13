@@ -20,19 +20,19 @@ export default class TrabajoSeeder implements Seeder {
 
       const data = [
         {
-            estado: 1,
-            fecha_fin: "2024-12-01",
-            fecha_inicio: "2024-10-05",
-            progreso: 3,
-            cliente: await clienteRepository.findOneBy({
-                id: 1,
-            }),
-            abogado: await abogadoRepository.findOneBy({
-                id: 4,
-            }),
-            aplicacion: await aplicacionRepository.findOneBy({
-                id: 4,
-            })
+          estado: 1,
+          fecha_fin: "2024-12-01",
+          fecha_inicio: "2024-10-05",
+          progreso: 3,
+          cliente: await clienteRepository.findOneBy({
+            id: 1,
+          }),
+          abogado: await abogadoRepository.findOneBy({
+            id: 4,
+          }),
+          aplicacion: await aplicacionRepository.findOneBy({
+            id: 4,
+          })
         }
       ];
 

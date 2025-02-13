@@ -68,9 +68,6 @@ export class OfertasEntity extends BaseEntity implements IOferta {
   })
   preguntas_oferta: PreguntasOfertaEntity[];
 
-  @OneToOne(() => PagosEntity, (pago) => pago.oferta)
-  pago: PagosEntity;
-
   @OneToMany(() => InvitacionesEntity, (invitacion) => invitacion.oferta)
   invitaciones: InvitacionesEntity[];
 

@@ -7,17 +7,16 @@ import { TrabajosService } from './trabajo.service';
 export class TrabajosController {
   constructor(private readonly trabajosService: TrabajosService) {}
 
-
   @Post('create')
-    async createTrabajo(@Body() data: CrearTrabajoDTO) {
-      const trabajo = await this.trabajosService.createTrabajo(data);
+  public async createTrabajo(@Body() data: CrearTrabajoDTO) {
+    const trabajo = await this.trabajosService.createTrabajo(data);
 
-      return {
-        state: true,
-        trabajo,
-        message: "Trabajo creado con éxito."
-      }
+    return {
+      state: true,
+      trabajo,
+      message: "Trabajo creado con éxito."
     }
+  }
 
   @Put('aceptar-aplicacion/:id')
   public async aceptarAplicacion(

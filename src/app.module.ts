@@ -18,6 +18,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { S3Module } from './modules/s3/s3.module';
 import { AplicacionesModule } from './modules/aplicacion/aplicacion.module';
+import { TrabajosModule } from './modules/trabajo/trabajo.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { AplicacionesModule } from './modules/aplicacion/aplicacion.module';
     PagoModule,
     AplicacionesModule,
     S3Module,
+    TrabajosModule,
     ServeStaticModule.forRoot({
       rootPath: join(join(process.cwd(), 'public')),
       serveRoot: '/public'

@@ -50,7 +50,6 @@ export class PagoService {
     const nuevoPago = this.pagoRepository.create({
       ...data,
       fecha_operacion: new Date().toISOString(),
-      aplicacion: aplicacion,
       estado: 'creado'
     });
 

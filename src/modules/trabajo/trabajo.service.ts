@@ -8,6 +8,7 @@ import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
+import { formatearFecha } from '../../utils/utils';
 
 @Injectable()
 export class TrabajosService {
@@ -135,14 +136,14 @@ export class TrabajosService {
       .leftJoin('aplicaciones.oferta', 'oferta') // Realiza el join con la relación `oferta`
       .update(AplicacionesEntity)
       .set({ estado: 'cerrado' })
-      .where('oferta.id = :ofertaId', { id: body.ofertaId }) // Filtra por la relación `oferta`
-      .andWhere('aplicaciones.id != :aplicacionId', { id: body.aplicacionId }) // Excluye la aplicación aceptada
+      .where('oferta.id = :id', { id: body.ofertaId }) // Filtra por la relación `oferta`
+      .andWhere('aplicaciones.id != :id', { id: body.aplicacionId }) // Excluye la aplicación aceptada
       .execute();
 
     const trabajo = this.trabajosRepository.create({
       estado: "creado",
       progreso: 20,
-      fecha_inicio: body.fecha_inicio,
+      fecha_inicio: formatearFecha(new Date()),
       cliente: cliente,
       abogado: aplicacion.abogado,
       aplicacion: aplicacion,

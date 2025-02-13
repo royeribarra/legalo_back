@@ -1,57 +1,50 @@
-import { Entity, Column, ManyToOne, ManyToMany, JoinTable, OneToMany, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
-import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
-import { IPago } from 'src/interfaces/Pago.interface';
-import { OfertasEntity } from '../oferta/oferta.entity';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
+import { AbogadosEntity } from '../abogado/entities/abogados.entity';
+import { ClientesEntity } from '../cliente/entities/clientes.entity';
 
 @Entity({ name: 'pagos' })
-export class PagosEntity extends BaseEntity implements IPago 
-{
-  @Column({nullable: true})
+export class PagosEntity extends BaseEntity {
+  @Column()
+  monto_total: number; // Monto total del pago realizado por el cliente
+
+  @Column({ nullable: true })
+  monto_abogado: number; // Monto que le corresponde al abogado
+
+  @Column({ nullable: true })
   direccionFactura: string;
 
-  @Column()
-  monto: number;
-
-  @Column({nullable: true})
+  @Column({ nullable: true })
   nombreFactura: string;
 
   @Column()
-  operacion: string;
-
-  @Column({nullable: true})
-  ruc: string;
-
-  @Column()
-  tipoComprobante: string;
-
-  @Column()
-  tipoPago: string;
-
-  @Column()
-  fecha_operacion: string;
-
-  @Column()
-  estado: string;
+  operacion: string; // Código de operación del pago
 
   @Column({ nullable: true })
-  clienteId: number;
+  ruc: string; // RUC para facturación
 
-  @Column({ nullable: true })
-  abogadoId: number;
+  @Column()
+  tipoComprobante: string; // Tipo de comprobante (factura, boleta, etc.)
 
-  @Column({ nullable: true })
-  ofertaId: number;
+  @Column()
+  tipoPago: string; // Método de pago (transferencia, tarjeta, etc.)
 
-  @OneToOne(() => AplicacionesEntity, { cascade: true })
-  @JoinColumn()
-  aplicacion: AplicacionesEntity;
+  @Column()
+  fecha_operacion: string; // Fecha en la que se realizó el pago
 
-  @OneToOne(() => OfertasEntity, { cascade: true })
-  @JoinColumn()
-  oferta: OfertasEntity;
+  @Column()
+  estado: string; // Estado del pago (Pendiente, Procesado, Pagado, etc.)
 
+  // Relación con el Trabajo (Cada pago está asociado a un trabajo)
   @ManyToOne(() => TrabajosEntity, (trabajo) => trabajo.pagos)
-  trabajo: TrabajosEntity;  // Relación con la entidad Trabajo (muchos pagos a un trabajo)
+  trabajo: TrabajosEntity;
+
+  // Relación con el Cliente (Cliente que realizó el pago)
+  @ManyToOne(() => ClientesEntity, (cliente) => cliente.pagos)
+  cliente: ClientesEntity;
+
+  // Relación con el Abogado (Abogado que recibe el pago)
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.pagos)
+  abogado: AbogadosEntity;
 }
