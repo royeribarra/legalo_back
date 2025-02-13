@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, OneToMany, JoinColumn } from 'typeorm';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { BaseEntity } from '../../config/base.entity';
 import { ITrabajo } from '../../interfaces/Trabajo.interface';
@@ -12,7 +12,7 @@ export class TrabajosEntity extends BaseEntity implements ITrabajo {
   @Column({ nullable: true})
   estado: string;
 
-  @Column()
+  @Column({nullable: true})
   fecha_fin: string;
 
   @Column()
@@ -28,6 +28,7 @@ export class TrabajosEntity extends BaseEntity implements ITrabajo {
   abogado: AbogadosEntity;
 
   @OneToOne(() => AplicacionesEntity, (aplicacion) => aplicacion.trabajo)
+  @JoinColumn()
   aplicacion: AplicacionesEntity;
 
   @OneToMany(() => FileEntity, (file) => file.trabajo, { cascade: true })

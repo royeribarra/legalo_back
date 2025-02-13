@@ -7,6 +7,7 @@ import { TrabajosEntity } from './trabajos.entity';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
+import { OfertasEntity } from '../oferta/oferta.entity';
 
 @Injectable()
 export class TrabajosService {
@@ -18,7 +19,9 @@ export class TrabajosService {
     @InjectRepository(ClientesEntity)
     private readonly clientesRepository: Repository<ClientesEntity>,
     @InjectRepository(AbogadosEntity)
-    private readonly abogadosRepository: Repository<AbogadosEntity>
+    private readonly abogadosRepository: Repository<AbogadosEntity>,
+    @InjectRepository(OfertasEntity)
+    private readonly ofertaRepository: Repository<OfertasEntity>
   ) {}
 
   // Lógica para crear un trabajo desde una aplicación aceptada
@@ -90,5 +93,62 @@ export class TrabajosService {
       .andWhere('trabajo.estado > 0 AND trabajo.estado < 5')  // Filtrar entre estado 1 (creado), 2 (progreso) y 3 (validación)
       .andWhere('trabajo.aplicacion IS NULL')  // Asegurarse de que no haya aplicaciones asociadas
       .getMany();
+  }
+
+  async createTrabajo(body: CrearTrabajoDTO): Promise<TrabajosEntity> {
+    const oferta = await this.ofertaRepository.findOne({ where: { id: body.ofertaId } });
+    if (!oferta) {
+      throw new BadRequestException('La oferta no existe');
+    }
+
+    const aplicacion = await this.aplicacionesRepository.findOne({ where: { id: body.aplicacionId }, relations: ['oferta', 'abogado'] });
+    if (!aplicacion) {
+      throw new NotFoundException(`Aplicación con ID ${body.aplicacionId} no encontrada`);
+    }
+
+    // Obtener el cliente de la oferta (el dueño de la oferta)
+    const cliente = await this.clientesRepository.findOne({ where: { id: body.clienteId } });
+    if (!cliente) {
+      throw new NotFoundException(`Cliente asociado a la aplicacion no encontrado`);
+    }
+
+    const abogado = await this.abogadosRepository.findOne({ where: { id: body.abogadoId } });
+    if (!abogado) {
+      throw new NotFoundException(`Abogado asociado a la aplicacion no encontrado`);
+    }
+
+    // Actualizar el estado de la oferta
+    oferta.estado = 'asignado';
+    await this.ofertaRepository.save(oferta);
+
+    // Validar y actualizar la aplicación aceptada
+    const aplicacionAceptada = await this.aplicacionesRepository.findOne({ where: { id: body.aplicacionId } });
+    if (!aplicacionAceptada) {
+      throw new BadRequestException('La aplicación no existe');
+    }
+
+    aplicacionAceptada.estado = 'aceptado';
+    await this.aplicacionesRepository.save(aplicacionAceptada);
+
+    await this.aplicacionesRepository
+      .createQueryBuilder('aplicaciones')
+      .leftJoin('aplicaciones.oferta', 'oferta') // Realiza el join con la relación `oferta`
+      .update(AplicacionesEntity)
+      .set({ estado: 'cerrado' })
+      .where('oferta.id = :ofertaId', { id: body.ofertaId }) // Filtra por la relación `oferta`
+      .andWhere('aplicaciones.id != :aplicacionId', { id: body.aplicacionId }) // Excluye la aplicación aceptada
+      .execute();
+
+    const trabajo = this.trabajosRepository.create({
+      estado: "creado",
+      progreso: 20,
+      fecha_inicio: body.fecha_inicio,
+      cliente: cliente,
+      abogado: aplicacion.abogado,
+      aplicacion: aplicacion,
+    });
+
+    // Guardamos el trabajo
+    return this.trabajosRepository.save(trabajo);
   }
 }

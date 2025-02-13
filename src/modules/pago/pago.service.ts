@@ -26,76 +26,35 @@ export class PagoService {
     if (!trabajo) {
       throw new BadRequestException('El trabajo no existe');
     }
+
+    const aplicacion = await this.aplicacionRepository.findOne({ where: { id: aplicacionId } });
+    if (!aplicacion) {
+      throw new BadRequestException('La aplicacion no existe');
+    }
     const nuevoPago = this.pagoRepository.create({
       ...data,
       fecha_operacion: new Date().toISOString(),
       trabajo: trabajo,
       estado: 'creado'
     });
-  
+
     const pagoGuardado = await this.pagoRepository.save(nuevoPago);
     return pagoGuardado;
   }
   async realizarPagoOferta(data: PagoDTO): Promise<PagosEntity> {
     const { ofertaId, aplicacionId, operacion, abogadoId, clienteId, direccionFactura, monto, nombreFactura, ruc, tipoComprobante, tipoPago } = data;
-    const oferta = await this.ofertaRepository.findOne({ where: { id: ofertaId } });
-    if (!oferta) {
-      throw new BadRequestException('La oferta no existe');
+    const aplicacion = await this.aplicacionRepository.findOne({ where: { id: aplicacionId } });
+    if (!aplicacion) {
+      throw new BadRequestException('La aplicacion no existe');
     }
-  
-    // Actualizar el estado de la oferta
-    oferta.estado = 'asignado';
-    await this.ofertaRepository.save(oferta);
-  
-    // Validar y actualizar la aplicación aceptada
-    const aplicacionAceptada = await this.aplicacionRepository.findOne({ where: { id: aplicacionId } });
-    if (!aplicacionAceptada) {
-      throw new BadRequestException('La aplicación no existe');
-    }
-  
-    aplicacionAceptada.estado = 'aceptado';
-    await this.aplicacionRepository.save(aplicacionAceptada);
-  
-    // Actualizar el estado de las demás aplicaciones a 'cerrada'
-    await this.aplicacionRepository
-      .createQueryBuilder('aplicaciones')
-      .leftJoin('aplicaciones.oferta', 'oferta') // Realiza el join con la relación `oferta`
-      .update(AplicacionesEntity)
-      .set({ estado: 'cerrado' })
-      .where('oferta.id = :ofertaId', { ofertaId }) // Filtra por la relación `oferta`
-      .andWhere('aplicaciones.id != :aplicacionId', { aplicacionId }) // Excluye la aplicación aceptada
-      .execute();
-  
-    // Crear y guardar el pago
-    // const nuevoPago = this.pagoRepository.create({
-    //   clienteId,
-    //   ofertaId,
-    //   operacion,
-    //   fecha_operacion: new Date().toISOString(),
-    //   oferta,
-    //   aplicacion: aplicacionAceptada,
-    // });
-
     const nuevoPago = this.pagoRepository.create({
       ...data,
       fecha_operacion: new Date().toISOString(),
-      aplicacion: aplicacionAceptada,
+      aplicacion: aplicacion,
       estado: 'creado'
     });
-  
+
     const pagoGuardado = await this.pagoRepository.save(nuevoPago);
-  
-    // Crear el trabajo asociado
-    const bodyTrabajo = {
-      estado: 'creada',
-      fecha_inicio: new Date().toLocaleDateString(),
-      fecha_fin: new Date().toLocaleDateString(),
-      clienteId: clienteId,
-    };
-    await this.trabajoService.crearTrabajoDesdeAplicacion(aplicacionId, bodyTrabajo);
-  
     return pagoGuardado;
   }
-
-  
 }

@@ -1,5 +1,5 @@
 // src/trabajos/controllers/trabajos.controller.ts
-import { Controller, Param, Put, Body, Get } from '@nestjs/common';
+import { Controller, Param, Put, Body, Get, Post } from '@nestjs/common';
 import { ActualizarProgresoDTO, CrearTrabajoDTO } from './trabajo.dto';
 import { TrabajosService } from './trabajo.service';
 
@@ -7,7 +7,18 @@ import { TrabajosService } from './trabajo.service';
 export class TrabajosController {
   constructor(private readonly trabajosService: TrabajosService) {}
 
-  // Ruta para aceptar una aplicación y crear un trabajo
+
+  @Post('create')
+    async createTrabajo(@Body() data: CrearTrabajoDTO) {
+      const trabajo = await this.trabajosService.createTrabajo(data);
+
+      return {
+        state: true,
+        trabajo,
+        message: "Trabajo creado con éxito."
+      }
+    }
+
   @Put('aceptar-aplicacion/:id')
   public async aceptarAplicacion(
     @Param('id') aplicacionId: number,

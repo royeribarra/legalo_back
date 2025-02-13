@@ -33,7 +33,6 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
   abogado: AbogadosEntity;
 
   @OneToOne(() => TrabajosEntity, (trabajo) => trabajo.aplicacion)
-  @JoinColumn()
   trabajo: TrabajosEntity;
 
   @OneToMany(() => FileEntity, (file) => file.aplicacion, { cascade: true })

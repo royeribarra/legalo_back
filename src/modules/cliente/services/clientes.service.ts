@@ -159,27 +159,20 @@ export class ClienteService{
   {
     try {
       const query = await this.clienteRepository
-        .createQueryBuilder('abogados')
-        .leftJoinAndSelect('abogados.habilidadesBlandas', 'habilidadesBlandas')
-        .leftJoinAndSelect('abogados.habilidadesDuras', 'habilidadesDuras')
-        .leftJoinAndSelect('abogados.industrias', 'industrias')
-        .leftJoinAndSelect('abogados.servicios', 'servicios')
-        .leftJoinAndSelect('abogados.experiencias', 'experiencias')
-        .leftJoinAndSelect('abogados.educaciones', 'educaciones')
-        .leftJoinAndSelect('abogados.especialidades', 'especialidades');
+        .createQueryBuilder('clientes');
 
-        query.where('abogados.id = :id', { id });
+        query.where('clientes.id = :id', { id });
         console.log(query.getQuery());
 
-        const abogado = await query.getOne();
-        if(!abogado)
+        const cliente = await query.getOne();
+        if(!cliente)
         {
           return null;
         }
 
-        return abogado;
+        return cliente;
     } catch (error) {
-      console.log(error, "error en conductorService - findConductorbyId")
+      console.log(error, "error en clienteService - findClientebyId")
       throw ErrorManager.createSignatureError(error.message);
     }
   }
