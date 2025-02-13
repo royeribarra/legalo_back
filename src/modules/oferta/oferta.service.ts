@@ -109,7 +109,6 @@ export class OfertaService{
       .leftJoinAndSelect('ofertas.aplicaciones', 'aplicaciones')
       .leftJoinAndSelect('ofertas.preguntas_oferta', 'preguntas_oferta')
       .leftJoinAndSelect('ofertas.invitaciones', 'invitaciones')
-      .leftJoinAndSelect('ofertas.pago', 'pago');
 
     if (queryParams.estado) {
       query.andWhere('ofertas.estado = :estado', {
@@ -150,7 +149,6 @@ export class OfertaService{
         .leftJoinAndSelect('ofertas.cliente', 'cliente')
         .leftJoinAndSelect('ofertas.aplicaciones', 'aplicaciones')
         .leftJoinAndSelect('ofertas.preguntas_oferta', 'preguntas_oferta')
-        .leftJoinAndSelect('ofertas.pago', 'pago')
         .leftJoinAndSelect('ofertas.invitaciones', 'invitaciones')
         .leftJoinAndSelect('ofertas.files', 'files');
 

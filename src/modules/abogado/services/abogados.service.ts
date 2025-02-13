@@ -485,19 +485,21 @@ export class AbogadosService{
   public async getTrabajos(
     abogadoId: number,
     estado?: string
-  ): Promise<TrabajosEntity[]> 
+  ): Promise<TrabajosEntity[]>
   {
+    console.log(abogadoId, "abogadoID")
     const query = this.trabajosRepository
         .createQueryBuilder('trabajo')
-        .leftJoinAndSelect('trabajo.abogado', 'abogado')
         .leftJoinAndSelect('trabajo.aplicacion', 'aplicacion')
         .leftJoinAndSelect('aplicacion.oferta', 'oferta')
         .leftJoinAndSelect('oferta.especialidadesOferta', 'especialidadesOferta')
         .leftJoinAndSelect('especialidadesOferta.especialidad', 'especialidad')
         .leftJoinAndSelect('oferta.serviciosOferta', 'serviciosOferta')
         .leftJoinAndSelect('serviciosOferta.servicio', 'servicio')
+        .leftJoinAndSelect('trabajo.abogado', 'abogado')
+        .leftJoinAndSelect('trabajo.cliente', 'cliente')
         .leftJoinAndSelect('trabajo.pagos', 'pagos')
-        .where('abogado.id = :abogadoId', { abogadoId });
+        .where('abogado.id = :id', { id: abogadoId });
 
     if (estado) {
       console.log(estado)

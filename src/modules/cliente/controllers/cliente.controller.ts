@@ -30,7 +30,6 @@ export class ClienteController {
 
   @Get(':id')
   public async findClienteById(@Param('id') id: number){
-    console.log("llegué aquí")
     return await this.clienteService.findClienteById(id);
   }
 
@@ -66,7 +65,6 @@ export class ClienteController {
 
   @Get(':id/ofertas')
   async getOfertasByCliente(@Param('id') clienteId: number) {
-    console.log("llegué aquí")
     return this.clienteService.getOfertasByCliente(clienteId);
   }
 

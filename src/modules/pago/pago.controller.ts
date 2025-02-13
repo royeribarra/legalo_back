@@ -12,7 +12,7 @@ export class PagoController {
 
   @Post('create')
   async realizarPago(@Body() data: PagoDTO) {
-    const pago = await this.pagoService.realizarPagoOferta(data);
+    const pago = await this.pagoService.realizarPago(data);
 
     return {
       state: true,
