@@ -10,8 +10,8 @@ export interface IOferta {
     documento_url: string;
     duracion: string;
     experiencia_abogado: string;
-    salario_minimo: string;
-    salario_maximo: string;
+    salario_minimo: number;
+    salario_maximo: number;
 
     // servicios: IServicio[];
     // especialidades: IEspecialidad[];

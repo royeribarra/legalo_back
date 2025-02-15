@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, InternalServerErrorException  } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException, BadRequestException  } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -139,31 +139,6 @@ export class FileService {
         };
     }
 
-    async saveTempFileOferta3(filePath: string, clienteId: number, fileId: string, nombreArchivo: string) 
-    {
-        const oferta = await this.ofertaRepository.findOneBy({
-            id: clienteId,
-        });
-        const tempFile = this.tempFileRepository.create({ oferta, filePath, idFront: fileId, nombreArchivo });
-        const savedFile = await this.tempFileRepository.save(tempFile);
-        return {
-            fileId: savedFile.id,
-            path: savedFile.filePath,
-        };
-    }
-
-    async saveTempDocumentoAplicacion3(filePath: string, ofertaId: number, abogadoId: number, fileId: string, nombreArchivo: string) {
-        const oferta = await this.ofertaRepository.findOneBy({
-            id: ofertaId,
-        });
-        const tempFile = this.tempFileRepository.create({ oferta, filePath, idFront: fileId, nombreArchivo });
-        const savedFile = await this.tempFileRepository.save(tempFile);
-        return {
-            fileId: savedFile.id,
-            path: savedFile.filePath,
-        };
-    }
-
     async getFileById(fileId: number): Promise<FileEntity | null> {
         const tempFile = await this.tempFileRepository.findOne({ where: { id: fileId } });
         if (!tempFile) {
@@ -208,79 +183,75 @@ export class FileService {
         await this.tempFileRepository.delete(fileId);
     }
 
-    async saveTempFileOferta(file: Express.Multer.File, ofertaId: string, nombreArchivo: string, fileId: string) {
-        // Convertir clienteId a número
-        const clienteIdNumber = Number(ofertaId);
 
-        const uploadsDir = path.join(process.env.PROJECT_ROOT, 'public', 'uploads');
-        const fileExtension = path.extname(file.originalname);
-        const filePath = path.join(uploadsDir, `${ofertaId}-${fileId}${fileExtension}`);
-        
-        if (!fs.existsSync(uploadsDir)) {
-            fs.mkdirSync(uploadsDir, { recursive: true });
+    async uploadFileToS3(file: Express.Multer.File, folder: string): Promise<string> {
+      try {
+        if (!file.buffer || file.buffer.length === 0) {
+          throw new BadRequestException('El archivo está vacío.');
         }
 
-        // Validar que el archivo temporal existe
-        if (!file.path || !fs.existsSync(file.path)) {
-            throw new Error(`El archivo temporal no existe en la ruta: ${file.path}`);
+        let fileExtension = file.originalname.split('.').pop();
+        if (!fileExtension) {
+          const mimeTypeToExtension: { [key: string]: string } = {
+            'application/pdf': 'pdf',
+            'image/jpeg': 'jpg',
+            'image/png': 'png',
+            'text/plain': 'txt',
+          };
+          fileExtension = mimeTypeToExtension[file.mimetype] || 'unknown';
         }
 
-        // Mover el archivo
-        fs.renameSync(file.path, filePath);
-        const oferta = await this.ofertaRepository.findOneBy({
-            id: Number(ofertaId),
+        if (fileExtension === 'unknown') {
+          throw new BadRequestException('Tipo de archivo no permitido.');
+        }
+
+        const fileKey = `${folder}/${uuidv4()}.${fileExtension}`;
+
+        const upload = new Upload({
+          client: this.s3Client,
+          params: {
+            Bucket: this.bucketName,
+            Key: fileKey,
+            Body: file.buffer,
+            ContentType: file.mimetype,
+          },
         });
-        // Guardar en la base de datos
-        const tempFile = this.tempFileRepository.create({
-            filePath,
-            nombreArchivo,
-            idFront: fileId,
-            oferta,
+
+        upload.on('httpUploadProgress', (progress) => {
+          console.log(`Upload progress: ${progress.loaded}/${progress.total}`);
         });
 
-        const savedFile = await this.tempFileRepository.save(tempFile);
+        try {
+          await upload.done();
+        } catch (error) {
+          await this.logS3Error(error, file.originalname);
+          console.error('Error al completar la carga en S3:', error);
+          throw new InternalServerErrorException(`No se pudo completar la carga del archivo: ${error.message}`);
+        }
 
-        return {
-            fileId: savedFile.id,
-            path: savedFile.filePath,
-        };
-    }
-
-  async uploadFileToS3(file: Express.Multer.File, folder: string): Promise<string> {
-    try {
-      console.log(file)
-      let fileExtension = file.originalname.split('.').pop();
-      if (!fileExtension) {
-        const mimeTypeToExtension: { [key: string]: string } = {
-          'application/pdf': 'pdf',
-          'image/jpeg': 'jpg',
-          'image/png': 'png',
-          'text/plain': 'txt',
-        };
-        
-        fileExtension = mimeTypeToExtension[file.mimetype] || 'unknown';
+        return fileKey;
+      } catch (error) {
+        await this.logS3Error(error, file.originalname);
+        console.error('Error uploading file:', error);
+        throw new InternalServerErrorException('Error uploading file to S3');
       }
-      const fileKey = `${folder}/${uuidv4()}.${fileExtension}`;
-  
-      const upload = new Upload({
-        client: this.s3Client,
-        params: {
-          Bucket: this.bucketName,
-          Key: fileKey,
-          Body: file.buffer,
-          ContentType: file.mimetype,
-        },
-      });
-  
-      upload.on('httpUploadProgress', (progress) => {
-        console.log(`Upload progress: ${progress.loaded}/${progress.total}`);
-      });
-  
-      await upload.done();
-      return fileKey; // Retorna la clave del archivo con la extensión
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      throw new InternalServerErrorException('Error uploading file to S3');
     }
-  }    
+
+    // 📌 Función para escribir los errores en `s3-error.log`
+  private async logS3Error(error: any, fileName: string) {
+    const logDir = path.join(__dirname, '..', 'logs');
+    const logFile = path.join(logDir, 's3-error.log');
+    const timestamp = new Date().toISOString();
+
+    const logMessage = `[${timestamp}] Error al subir ${fileName}:\n${error.stack || error.message}\n\n`;
+
+    try {
+      if (!fs.existsSync(logDir)) {
+        fs.mkdirSync(logDir, { recursive: true });
+      }
+      fs.appendFileSync(logFile, logMessage, 'utf8');
+    } catch (fsError) {
+      console.error('Error al escribir el log de S3:', fsError);
+    }
+  }
 }

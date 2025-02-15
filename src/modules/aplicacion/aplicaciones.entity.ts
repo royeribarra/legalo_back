@@ -6,12 +6,19 @@ import { OfertasEntity } from '../oferta/oferta.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
 import { FileEntity } from '../tmp/file.entity';
+import { RespuestasOfertaEntity } from '../preguntas_oferta/respuestasOferta.entity';
 
 @Entity({name:'aplicaciones'})
 export class AplicacionesEntity extends BaseEntity implements IAplicacion
 {
   @Column()
   fecha_aplicacion: string;
+
+  @Column({nullable: true})
+  numeroCuenta: string;
+
+  @Column({nullable: true})
+  selectedBanco: string;
 
   @Column({ nullable: true })
   estado: string;
@@ -37,4 +44,9 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
 
   @OneToMany(() => FileEntity, (file) => file.aplicacion, { cascade: true })
   files: FileEntity[];
+
+  @OneToMany(() => RespuestasOfertaEntity, (respuestas) => respuestas.aplicacion, {
+    cascade: true,
+  })
+  respuestas_oferta: RespuestasOfertaEntity[];
 }

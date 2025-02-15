@@ -20,6 +20,9 @@ export class ExperienciasEntity extends BaseEntity implements IExperiencia{
   @Column()
   descripcion: string;
 
+  @Column({ default: false })
+  trabajoActual: boolean;
+
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.habilidadesBlandas)
   abogado: AbogadosEntity;
 }

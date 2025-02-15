@@ -317,6 +317,8 @@ export class ClienteService{
       .leftJoinAndSelect('servicioOferta.servicio', 'servicio')
       .leftJoinAndSelect('oferta.aplicaciones', 'aplicaciones')
       .leftJoinAndSelect('oferta.preguntas_oferta', 'preguntas_oferta')
+      .leftJoinAndSelect('preguntas_oferta.respuestas', 'respuestas')
+      .leftJoinAndSelect('respuestas.aplicacion', 'aplicacion')
       .leftJoinAndSelect('aplicaciones.abogado', 'abogado')
       .leftJoinAndSelect('aplicaciones.files', 'filesAplicacion')
       .leftJoinAndSelect('abogado.files', 'files')

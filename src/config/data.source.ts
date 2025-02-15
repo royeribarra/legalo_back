@@ -8,7 +8,6 @@ import MainSeeder from "../database/seeds/Main.seeder";
 ConfigModule.forRoot({envFilePath: `.${process.env.NODE_ENV}.env`});
 
 const configService = new ConfigService();
-
 export const DataSourceConfig: DataSourceOptions & SeederOptions= {
   type: 'mysql',
   host: configService.get('DB_HOST'),

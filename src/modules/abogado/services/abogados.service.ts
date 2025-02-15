@@ -12,8 +12,6 @@ import { HabilidadesDuraEntity } from '../../habilidadDura/habilidadesDura.entit
 import { IndustriasEntity } from '../../industria/industrias.entity';
 import { ServiciosEntity } from '../../servicio/servicios.entity';
 import { UsuariosService } from '../../usuario/usuario.service';
-import { AbogadoMailService } from '../../mail/services/abogadoMail.service';
-import { FileService } from '../../tmp/file.service';
 import { OfertasEntity } from '../../oferta/oferta.entity';
 import { IndustriasAbogadoEntity } from '../../industria/industriaAbogado.entity';
 import { EspecialidadesAbogadoEntity } from '../../especialidad/especialidadAbogado.entity';
@@ -24,6 +22,8 @@ import { AplicacionesEntity } from '../../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../../trabajo/trabajos.entity';
 import { UsuariosEntity } from '../../usuario/usuarios.entity';
 import { RolEnum } from '../../usuario/roles.enum';
+import { PreguntasOfertaEntity } from '../../preguntas_oferta/preguntasOferta.entity';
+import { RespuestasOfertaEntity } from '../../preguntas_oferta/respuestasOferta.entity';
 
 @Injectable()
 export class AbogadosService{
@@ -46,9 +46,9 @@ export class AbogadosService{
     @InjectRepository(AplicacionesEntity) private readonly aplicacionesRepository: Repository<AplicacionesEntity>,
     @InjectRepository(TrabajosEntity) private readonly trabajosRepository: Repository<TrabajosEntity>,
     @InjectRepository(UsuariosEntity) private readonly usuarioRepository: Repository<UsuariosEntity>,
-    private readonly usuariosService: UsuariosService,
-    private readonly abogadoMailService: AbogadoMailService,
-    private readonly tempFilesService: FileService
+    @InjectRepository(PreguntasOfertaEntity) private readonly preguntasOfertaRepository: Repository<PreguntasOfertaEntity>,
+    @InjectRepository(RespuestasOfertaEntity) private readonly respuestasOfertaRepository: Repository<RespuestasOfertaEntity>,
+    private readonly usuariosService: UsuariosService
   ){}
 
   public async createAbogado(body: AbogadoDTO)
@@ -359,40 +359,13 @@ export class AbogadosService{
     return abogados;
   }
 
-  async updateArchivosAbogado(correo: string){
-    try {
-      const abogado = await this.findBy({ key: 'correo', value: correo });
-      if(!abogado)
-      {
-        return {
-          state: false,
-          message: "No se encontró al abogado"
-        };
-      }
-
-      const cv = await this.tmpFileRepository.createQueryBuilder('tmp').where('tmp.correo = :correo', { correo }).andWhere('tmp.nombre_archivo = :nombre_archivo', { nombre_archivo: 'archivo_cv' }).getOne();
-      const cul = await this.tmpFileRepository.createQueryBuilder('tmp').where('tmp.correo = :correo', { correo }).andWhere('tmp.nombre_archivo = :nombre_archivo', { nombre_archivo: 'archivo_cul' }).getOne();
-      const image = await this.tmpFileRepository.createQueryBuilder('tmp').where('tmp.correo = :correo', { correo }).andWhere('tmp.nombre_archivo = :nombre_archivo', { nombre_archivo: 'archivo_imagen' }).getOne();
-      abogado.cv_url = cv.filePath;
-      abogado.cul_url = cul.filePath;
-      abogado.foto_url = image.filePath;
-
-      // Guardar los cambios en la base de datos
-      await this.abogadosRepository.save(abogado);
-      return {
-        state: true,
-        message: "Archivos actualizados."
-      };
-    } catch (error) {
-      console.log(error, "error en conductorService - findConductorbyId")
-      throw ErrorManager.createSignatureError(error.message);
-    }
-  }
-
   public async postularAbogadoOferta(
     abogadoId: number,
     ofertaId: number,
     salarioEsperado: number,
+    respuestas: any,
+    numeroCuenta: string,
+    selectedBanco: string
   ) {
     const abogado = await this.abogadosRepository.findOne({ where: { id: abogadoId } });
     if (!abogado) {
@@ -401,6 +374,10 @@ export class AbogadosService{
 
     // Buscar la oferta por ID
     const oferta = await this.ofertaRepository.findOne({ where: { id: ofertaId } });
+    if (!oferta) {
+      return { state: false, message: 'La oferta no existe' };
+    }
+
     if (!oferta) {
       return { state: false, message: 'La oferta no existe' };
     }
@@ -415,12 +392,53 @@ export class AbogadosService{
       salarioEsperado,
       abogado,
       oferta,
+      numeroCuenta,
+      selectedBanco
     });
 
     // Guardar la aplicación en la base de datos
     const aplicacion = await this.aplicacionesRepository.save(nuevaAplicacion);
+    await this.actualizarRespuestas(ofertaId, aplicacion.id, respuestas);
 
     return { state: true, message: 'Aplicación creada correctamente', aplicacionId: aplicacion.id };
+  }
+
+  async actualizarRespuestas(ofertaId: number, aplicacionId: number, respuestas: any) {
+    // Obtener las preguntas relacionadas con la oferta
+    const preguntasOferta = await this.preguntasOfertaRepository.find({
+      where: { oferta: { id: ofertaId } }
+    });
+
+    // Obtener la aplicación
+    const aplicacion = await this.aplicacionesRepository.findOne({
+      where: { id: aplicacionId },
+      relations: ['respuestas_oferta'],
+    });
+
+    if (!aplicacion) {
+      throw new Error('Aplicación no encontrada');
+    }
+
+    // Mapear y guardar las respuestas
+    console.log(respuestas)
+    const respuestasActualizadas = respuestas.map(async (respuesta) => {
+      const pregunta = preguntasOferta
+        .find(pregunta => pregunta.id === respuesta.idPregunta);
+
+      if (!pregunta) {
+        throw new Error('Pregunta no encontrada');
+      }
+
+      // Crear la entidad RespuestasOferta
+      const respuestaOferta = new RespuestasOfertaEntity();
+      respuestaOferta.pregunta = pregunta;
+      respuestaOferta.respuesta = respuesta.respuesta;
+      respuestaOferta.aplicacion = aplicacion;
+
+      return respuestaOferta;
+    });
+
+    await this.respuestasOfertaRepository.save(await Promise.all(respuestasActualizadas));
   }
 
   public async getOfertasConInvitacionesPorCliente(abogadoId: number): Promise<OfertasEntity[]> {

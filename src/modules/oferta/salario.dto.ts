@@ -1,14 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class SalarioDTO {
     @ApiProperty()
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
-    salario_minimo: string;
+    salario_minimo: number;
 
     @ApiProperty()
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
-    salario_maximo: string;
+    salario_maximo: number;
 }

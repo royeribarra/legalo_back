@@ -20,6 +20,8 @@ import { ServiciosAbogadoEntity } from '../servicio/servicioAbogado.entity';
 import { IndustriasAbogadoEntity } from '../industria/industriaAbogado.entity';
 import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
+import { RespuestasOfertaEntity } from '../preguntas_oferta/respuestasOferta.entity';
+import { PreguntasOfertaEntity } from '../preguntas_oferta/preguntasOferta.entity';
 
 @Module({
   imports: [
@@ -38,7 +40,9 @@ import { TrabajosEntity } from '../trabajo/trabajos.entity';
       ServiciosAbogadoEntity,
       IndustriasAbogadoEntity,
       AplicacionesEntity,
-      TrabajosEntity
+      TrabajosEntity,
+      RespuestasOfertaEntity,
+      PreguntasOfertaEntity
     ]),
     UsuariosModule,
     MailModule

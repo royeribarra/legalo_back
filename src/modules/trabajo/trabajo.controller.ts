@@ -9,6 +9,7 @@ export class TrabajosController {
 
   @Post('create')
   public async createTrabajo(@Body() data: CrearTrabajoDTO) {
+    
     const trabajo = await this.trabajosService.createTrabajo(data);
 
     return {

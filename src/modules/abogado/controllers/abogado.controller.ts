@@ -45,24 +45,18 @@ export class AbogadosController {
     }
   }
 
-  @Post('update-archivos')
-  public async updateArchivosAbogado(@Body('correo') correo: string)
-  {
-    const {state, message} = await this.abogadosService.updateArchivosAbogado(correo);
-    return {
-      state: state,
-      message: message,
-    }
-  }
-
   @Post('postular-oferta')
   public async postularOferta(
     @Body('abogadoId') abogadoId: number,
     @Body('ofertaId') ofertaId: number,
     @Body('salarioEsperado') salarioEsperado: number,
+    @Body('respuestas') respuestas: any,
+    @Body('numeroCuenta') numeroCuenta: string,
+    @Body('selectedBanco') selectedBanco: string,
   ) {
     console.log(abogadoId, ofertaId, salarioEsperado, "abogadoId, ofertaId, salarioEsperado")
-    const { aplicacionId, state, message } = await this.abogadosService.postularAbogadoOferta(abogadoId, ofertaId, salarioEsperado);
+
+    const { aplicacionId, state, message } = await this.abogadosService.postularAbogadoOferta(abogadoId, ofertaId, salarioEsperado, respuestas, numeroCuenta, selectedBanco);
     return {
       aplicacionId,
       state,

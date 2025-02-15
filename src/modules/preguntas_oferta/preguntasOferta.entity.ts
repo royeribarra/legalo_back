@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
 import { IPreguntaOferta } from '../../interfaces/PreguntaOferta.interface';
+import { RespuestasOfertaEntity } from './respuestasOferta.entity';
 
 @Entity({name: 'preguntas_oferta'})
 export class PreguntasOfertaEntity extends BaseEntity implements IPreguntaOferta{
@@ -16,5 +17,8 @@ export class PreguntasOfertaEntity extends BaseEntity implements IPreguntaOferta
   @ManyToOne(() => OfertasEntity, (oferta) => oferta.preguntas_oferta, {
     onDelete: 'CASCADE',
   })
-  ofertas: OfertasEntity;
+  oferta: OfertasEntity;
+
+  @OneToMany(() => RespuestasOfertaEntity, (respuesta) => respuesta.pregunta)
+  respuestas: RespuestasOfertaEntity[];
 }

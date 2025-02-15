@@ -153,55 +153,8 @@ export class FileController
     }
   }
 
-
-  @Post('upload-documento-aplicacion')
-  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
-  async uploadDocumentoAplicacion(
-    @UploadedFile() file: Express.Multer.File,
-    @Body('nombreArchivo') nombreArchivo: string,
-    @Body('ofertaId') ofertaId: string,
-    @Body('abogadoId') abogadoId: string,
-    @Body('fileId') fileId: string,
-  ) {
-    const parsedOfertaId = parseInt(ofertaId, 10);
-    if (isNaN(parsedOfertaId)) {
-      throw new BadRequestException('Invalid clienteId or fileId. Must be numeric.');
-    }
-    const parsedAbogadoId = parseInt(abogadoId, 10);
-    if (isNaN(parsedAbogadoId)) {
-      throw new BadRequestException('Invalid clienteId or fileId. Must be numeric.');
-    }
-    const s3Path = `aplicaciones`;
-    const fileKey = await this.fileService.uploadFileToS3(file, s3Path);
-    const { path } = await this.fileService.saveTempDocumentoAplicacion3(fileKey, parsedOfertaId, parsedAbogadoId, fileId, nombreArchivo);
-    return { state: true, path, fileKey };
-  }
-
-  @Post('upload-video-aplicacion')
-  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage() }))
-  async uploadVideoAplicacion(
-    @UploadedFile() file: Express.Multer.File,
-    @Body('nombreArchivo') nombreArchivo: string,
-    @Body('ofertaId') ofertaId: string,
-    @Body('abogadoId') abogadoId: string,
-    @Body('fileId') fileId: string,
-  ) {
-    const parsedOfertaId = parseInt(ofertaId, 10);
-    if (isNaN(parsedOfertaId)) {
-      throw new BadRequestException('Invalid clienteId or fileId. Must be numeric.');
-    }
-    const parsedAbogadoId = parseInt(abogadoId, 10);
-    if (isNaN(parsedAbogadoId)) {
-      throw new BadRequestException('Invalid clienteId or fileId. Must be numeric.');
-    }
-    const s3Path = `aplicaciones`;
-    const fileKey = await this.fileService.uploadFileToS3(file, s3Path);
-    const { path } = await this.fileService.saveTempDocumentoAplicacion3(fileKey, parsedOfertaId, parsedAbogadoId, fileId, nombreArchivo);
-    return { state: true, path, fileKey };
-  }
-
   @Post('upload-file')
-  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 }, }))
+  @UseInterceptors(FileInterceptor('file', { storage: memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 }, }))
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @Body() fileDTO: FileDTO,
@@ -223,8 +176,8 @@ export class FileController
     }
 
     try {
-      const { path } = await this.fileService.saveFile({ 
-        ...fileDTO, 
+      const { path } = await this.fileService.saveFile({
+        ...fileDTO,
         filePath: fileKey
       });
       return { state: true, path, fileKey };

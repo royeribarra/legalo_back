@@ -1,3 +1,8 @@
 export interface IPreguntaOferta {
-    pregunta: string;
+    respuesta: string;
+}
+
+
+export interface IRespuestaOferta {
+    respuesta: string;
 }

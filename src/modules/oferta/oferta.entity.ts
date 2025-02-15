@@ -34,10 +34,10 @@ export class OfertasEntity extends BaseEntity implements IOferta {
   experiencia_abogado: string;
 
   @Column({nullable: true})
-  salario_minimo: string;
+  salario_minimo: number;
 
   @Column({nullable: true})
-  salario_maximo: string;
+  salario_maximo: number;
 
   @Column({nullable: true})
   estado: string;
@@ -63,7 +63,7 @@ export class OfertasEntity extends BaseEntity implements IOferta {
   @OneToMany(() => AplicacionesEntity, (aplicacion) => aplicacion.oferta)
   aplicaciones: AplicacionesEntity[];
 
-  @OneToMany(() => PreguntasOfertaEntity, (pregunta) => pregunta.ofertas, {
+  @OneToMany(() => PreguntasOfertaEntity, (pregunta) => pregunta.oferta, {
     cascade: true,
   })
   preguntas_oferta: PreguntasOfertaEntity[];

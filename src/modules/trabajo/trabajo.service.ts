@@ -97,23 +97,23 @@ export class TrabajosService {
   }
 
   async createTrabajo(body: CrearTrabajoDTO): Promise<TrabajosEntity> {
-    const oferta = await this.ofertaRepository.findOne({ where: { id: body.ofertaId } });
-    if (!oferta) {
-      throw new BadRequestException('La oferta no existe');
-    }
-
-    const aplicacion = await this.aplicacionesRepository.findOne({ where: { id: body.aplicacionId }, relations: ['oferta', 'abogado'] });
+    const aplicacion = await this.aplicacionesRepository.findOne({ where: { id: body.aplicacionId }, relations: ['oferta', 'oferta.cliente', 'abogado'] });
     if (!aplicacion) {
       throw new NotFoundException(`Aplicación con ID ${body.aplicacionId} no encontrada`);
     }
 
     // Obtener el cliente de la oferta (el dueño de la oferta)
-    const cliente = await this.clientesRepository.findOne({ where: { id: body.clienteId } });
+    const cliente = await this.clientesRepository.findOne({ where: { id: aplicacion.oferta.cliente.id } });
     if (!cliente) {
       throw new NotFoundException(`Cliente asociado a la aplicacion no encontrado`);
     }
 
-    const abogado = await this.abogadosRepository.findOne({ where: { id: body.abogadoId } });
+    const oferta = await this.ofertaRepository.findOne({ where: { id: aplicacion.oferta.id } });
+    if (!oferta) {
+      throw new BadRequestException('La oferta no existe');
+    }
+
+    const abogado = await this.abogadosRepository.findOne({ where: { id: aplicacion.abogado.id } });
     if (!abogado) {
       throw new NotFoundException(`Abogado asociado a la aplicacion no encontrado`);
     }
@@ -122,22 +122,16 @@ export class TrabajosService {
     oferta.estado = 'asignado';
     await this.ofertaRepository.save(oferta);
 
-    // Validar y actualizar la aplicación aceptada
-    const aplicacionAceptada = await this.aplicacionesRepository.findOne({ where: { id: body.aplicacionId } });
-    if (!aplicacionAceptada) {
-      throw new BadRequestException('La aplicación no existe');
-    }
-
-    aplicacionAceptada.estado = 'aceptado';
-    await this.aplicacionesRepository.save(aplicacionAceptada);
+    aplicacion.estado = 'aceptado';
+    await this.aplicacionesRepository.save(aplicacion);
 
     await this.aplicacionesRepository
       .createQueryBuilder('aplicaciones')
-      .leftJoin('aplicaciones.oferta', 'oferta') // Realiza el join con la relación `oferta`
+      .leftJoin('aplicaciones.oferta', 'oferta')
       .update(AplicacionesEntity)
       .set({ estado: 'cerrado' })
-      .where('oferta.id = :id', { id: body.ofertaId }) // Filtra por la relación `oferta`
-      .andWhere('aplicaciones.id != :id', { id: body.aplicacionId }) // Excluye la aplicación aceptada
+      .where('oferta.id = :id', { id: body.ofertaId })
+      .andWhere('aplicaciones.id != :id', { id: body.aplicacionId })
       .execute();
 
     const trabajo = this.trabajosRepository.create({
@@ -145,7 +139,7 @@ export class TrabajosService {
       progreso: 20,
       fecha_inicio: formatearFecha(new Date()),
       cliente: cliente,
-      abogado: aplicacion.abogado,
+      abogado: abogado,
       aplicacion: aplicacion,
     });
 
