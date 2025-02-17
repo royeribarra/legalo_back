@@ -313,6 +313,10 @@ export class ClienteService{
     const queryBuilder = this.clienteRepository
       .createQueryBuilder('cliente')
       .leftJoinAndSelect('cliente.ofertas', 'oferta')
+      .leftJoinAndSelect('oferta.especialidadesOferta', 'especialidadesOferta')
+      .leftJoinAndSelect('especialidadesOferta.especialidad', 'especialidad')
+      .leftJoinAndSelect('oferta.industriasOferta', 'industriasOferta')
+      .leftJoinAndSelect('industriasOferta.industria', 'industria')
       .leftJoinAndSelect('oferta.serviciosOferta', 'servicioOferta')
       .leftJoinAndSelect('servicioOferta.servicio', 'servicio')
       .leftJoinAndSelect('oferta.aplicaciones', 'aplicaciones')
