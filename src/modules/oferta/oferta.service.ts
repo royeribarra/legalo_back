@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, In, Repository, UpdateResult } from 'typeorm';
-import { OfertaDTO } from './oferta.dto';
+import { OfertaDTO, OfertaUpdateDTO } from './oferta.dto';
 import { PreguntasOfertaEntity } from '../preguntas_oferta/preguntasOferta.entity';
 import { EspecialidadesEntity } from '../especialidad/especialidades.entity';
 import { ServiciosEntity } from '../servicio/servicios.entity';
@@ -24,7 +24,7 @@ export class OfertaService{
     @InjectRepository(TrabajosEntity) private readonly trabajoRepository: Repository<TrabajosEntity>,
     @InjectRepository(ClientesEntity) private readonly clienteRepository: Repository<ClientesEntity>,
     @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
-    @InjectRepository(PreguntasOfertaEntity) private readonly preguntaRepository: Repository<PreguntasOfertaEntity>,
+    @InjectRepository(PreguntasOfertaEntity) private readonly preguntaOfertaRepository: Repository<PreguntasOfertaEntity>,
     @InjectRepository(EspecialidadesEntity) private readonly especialidadRepository: Repository<EspecialidadesEntity>,
     @InjectRepository(AbogadosEntity) private readonly abogadoRepository: Repository<AbogadosEntity>,
     @InjectRepository(InvitacionesEntity) private readonly invitacionRepository: Repository<InvitacionesEntity>,
@@ -82,7 +82,7 @@ export class OfertaService{
         pregunta.pregunta = preguntaDTO.nombre;
         return pregunta;
       });
-      oferta.preguntas_oferta = await this.preguntaRepository.save(preguntas);
+      oferta.preguntas_oferta = await this.preguntaOfertaRepository.save(preguntas);
       await this.servicioOfertaRepository.save(serviciosOferta);
       await this.especialidadOfertaRepository.save(especialidadesAbogado);
       await this.ofertaRepository.save(oferta);
@@ -95,6 +95,77 @@ export class OfertaService{
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
+  }
+
+  async updateOferta(body: Partial<OfertaUpdateDTO>, id: number): Promise<{ state: boolean, message: string }> {
+    // Buscar la oferta por ID, incluyendo las relaciones necesarias
+    const oferta = await this.ofertaRepository.findOne({
+      where: { id },
+      relations: ['especialidadesOferta', 'serviciosOferta', 'industriasOferta', 'preguntas_oferta'],
+    });
+
+    // Si la oferta no existe, devolvemos un error
+    if (!oferta) {
+      return {
+        state: false,
+        message: `No existe la oferta con ID ${id}`,
+      };
+    }
+
+    // Actualizar los campos simples
+    Object.assign(oferta, body);
+
+    // ACTUALIZAR RELACIONES
+
+    // 1. Actualizar especialidades
+    if (body.especialidades) {
+      // Eliminar relaciones antiguas
+      await this.especialidadOfertaRepository.delete({ oferta: { id } });
+
+      // Crear nuevas relaciones
+      const nuevasEspecialidades = body.especialidades.map((especialidadId) =>
+        this.especialidadOfertaRepository.create({ oferta, especialidad: { id: especialidadId } })
+      );
+      oferta.especialidadesOferta = await this.especialidadOfertaRepository.save(nuevasEspecialidades);
+    }
+
+    // 2. Actualizar servicios
+    if (body.servicios) {
+      await this.servicioOfertaRepository.delete({ oferta: { id } });
+
+      const nuevosServicios = body.servicios.map((servicioId) =>
+        this.servicioOfertaRepository.create({ oferta, servicio: { id: servicioId } })
+      );
+      oferta.serviciosOferta = await this.servicioOfertaRepository.save(nuevosServicios);
+    }
+
+    // 3. Actualizar industrias
+    // if (body.industria) {
+    //   await this.industriasOfertaRepository.delete({ oferta: { id } });
+
+    //   const nuevasIndustrias = body.industria.map((industriaId) =>
+    //     this.industriasOfertaRepository.create({ oferta, industria: { id: industriaId } })
+    //   );
+    //   oferta.industriasOferta = await this.industriasOfertaRepository.save(nuevasIndustrias);
+    // }
+
+    // 4. Actualizar preguntas
+    if (body.preguntas) {
+      await this.preguntaOfertaRepository.delete({ oferta: { id } });
+
+      const nuevasPreguntas = body.preguntas.map((pregunta) =>
+        this.preguntaOfertaRepository.create({ oferta, ...pregunta })
+      );
+      oferta.preguntas_oferta = await this.preguntaOfertaRepository.save(nuevasPreguntas);
+    }
+
+    // Guardar la oferta actualizada
+    await this.ofertaRepository.save(oferta);
+
+    return {
+      state: true,
+      message: 'Oferta actualizada correctamente',
+    };
   }
 
   public async findOfertas(queryParams): Promise<OfertasEntity[]> {

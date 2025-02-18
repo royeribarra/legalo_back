@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors, UsePipes, ValidationPipe  } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put,UploadedFile, UseInterceptors, UsePipes, ValidationPipe  } from '@nestjs/common';
 import { Delete, Query } from '@nestjs/common/decorators';
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { extname } from "path";
 import { ApiTags } from '@nestjs/swagger';
 import { OfertaService } from './oferta.service';
-import { OfertaDTO } from './oferta.dto';
+import { OfertaDTO, OfertaUpdateDTO } from './oferta.dto';
 import { FormDataRequest } from "nestjs-form-data";
 
 @ApiTags('Ofertas')
@@ -18,8 +18,6 @@ export class OfertaController {
 
   @Post('create')
   @UsePipes(new ValidationPipe({ transform: true }))
-  // @UseInterceptors(FileInterceptor('file')) 
-  // @FormDataRequest()
   public async createOferta(@Body() body: OfertaDTO){
     const { state, message, oferta } = await this.ofertaService.createOferta(body);
     return {
@@ -39,6 +37,16 @@ export class OfertaController {
   @Get(':id')
   public async findConductorById(@Param('id') id: number){
     return await this.ofertaService.findOfertaById(id);
+  }
+
+  @Put('edit/:id')
+  public async updateOferta(@Body() body: Partial<OfertaUpdateDTO>, @Param('id') id: number)
+  {
+    const {state, message} = await this.ofertaService.updateOferta(body, id);
+    return {
+      state: state,
+      message: message,
+    }
   }
 
   @Get('cliente/:id/sin-aplicaciones')
