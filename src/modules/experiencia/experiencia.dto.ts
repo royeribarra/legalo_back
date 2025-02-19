@@ -26,4 +26,9 @@ export class ExperienciaDTO {
     @IsString()
     @IsOptional()
     descripcion: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    ubicacion: string;
 }
