@@ -19,7 +19,7 @@ export class ClienteMailService {
         const response = await this.mailerService.sendMail({
           to: userEmail,
           subject: 'Bienvenido a Legalo.',
-          template: './cliente/bienvenido',
+          template: './cliente/confirmacion',
           context: {
             nombres: nombres,
             apellidos: apellidos,
@@ -32,7 +32,7 @@ export class ClienteMailService {
           message: "Se envió el mensaje al cliente con éxito."
         }
       } catch (error) {
-        console.log('error mailServiceCliente', error)
+        console.log('error ClienteMailService', error)
       }
   }
 }

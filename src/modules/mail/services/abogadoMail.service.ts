@@ -20,7 +20,7 @@ export class AbogadoMailService {
         const response = await this.mailerService.sendMail({
           to: userEmail,
           subject: 'Bienvenido a Legalo.',
-          template: './abogado/bienvenido',
+          template: './abogado/confirmacion',
           context: {
             nombres: nombres,
             apellidos: apellidos,
@@ -30,10 +30,10 @@ export class AbogadoMailService {
         });
         return {
           state: true,
-          message: "Se envió el mensaje al cliente con éxito."
+          message: "Se envió el mensaje al abogado con éxito."
         }
       } catch (error) {
-        console.log('error mailServiceSolicitudRecojo', error)
+        console.log('error AbogadoMailService', error)
       }
   }
 }

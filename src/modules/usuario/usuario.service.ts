@@ -267,9 +267,11 @@ export class UsuariosService{
       where: { id: userId },
       relations: ['abogado'],
     });
-    const abogado = await this.abogadosRepository.findOne({ where: { id: user.abogado.id } });
-    abogado.validado_admin = true;
-    await this.abogadosRepository.save(abogado);
+    if(user.abogado){
+      const abogado = await this.abogadosRepository.findOne({ where: { id: user.abogado.id } });
+      abogado.validado_admin = true;
+      await this.abogadosRepository.save(abogado);
+    }
 
     user.isActive = true;
     user.activationCode = null;
