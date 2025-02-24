@@ -19,6 +19,7 @@ import { join } from 'path';
 import { S3Module } from './modules/s3/s3.module';
 import { AplicacionesModule } from './modules/aplicacion/aplicacion.module';
 import { TrabajosModule } from './modules/trabajo/trabajo.module';
+import { LibroReclamacionesModule } from './modules/libro-reclamaciones/libro-reclamaciones.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { TrabajosModule } from './modules/trabajo/trabajo.module';
     AplicacionesModule,
     S3Module,
     TrabajosModule,
+    LibroReclamacionesModule,
     ServeStaticModule.forRoot({
       rootPath: join(join(process.cwd(), 'public')),
       serveRoot: '/public'

@@ -180,6 +180,7 @@ export class OfertaService{
       .leftJoinAndSelect('ofertas.aplicaciones', 'aplicaciones')
       .leftJoinAndSelect('ofertas.preguntas_oferta', 'preguntas_oferta')
       .leftJoinAndSelect('ofertas.invitaciones', 'invitaciones')
+      .leftJoinAndSelect('ofertas.files', 'files')
 
     if (queryParams.estado) {
       query.andWhere('ofertas.estado = :estado', {

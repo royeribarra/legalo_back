@@ -24,6 +24,8 @@ import { UsuariosEntity } from '../../usuario/usuarios.entity';
 import { RolEnum } from '../../usuario/roles.enum';
 import { PreguntasOfertaEntity } from '../../preguntas_oferta/preguntasOferta.entity';
 import { RespuestasOfertaEntity } from '../../preguntas_oferta/respuestasOferta.entity';
+import { UpdateExperienciaDTO } from '../../experiencia/experiencia.dto';
+import { UpdateEducacionDTO } from 'src/modules/educacion/educacion.dto';
 
 @Injectable()
 export class AbogadosService{
@@ -233,25 +235,119 @@ export class AbogadosService{
 
   async updateAbogado(body: Partial<AbogadoUpdateDTO>, id: number): Promise<{ state: boolean, message: string }> {
     // Buscar el abogado por ID
-    const abogado = await this.abogadosRepository.findOne({ where: { id } });
+    const abogado = await this.abogadosRepository.findOne({ where: { id }, relations: ['serviciosAbogado', 'especialidadesAbogado', 'habilidadesBlandas', 'habilidadesDuras', 'industriasAbogado'] });
 
     // Si el abogado no existe, lanzamos una excepción
     if (!abogado) {
       return {
         state: false,
-        message: `No existe el abogado con ID ${id} creado correctamente`,
+        message: `No existe el abogado con ID ${id}`,
       };
     }
 
-    // Actualizamos los campos del abogado con los datos del DTO
+    // Actualizamos los campos del abogado con los valores proporcionados en el body
     Object.assign(abogado, body);
 
-    // Guardamos los cambios en la base de datos
+    // Si se pasan nuevos servicios, eliminamos los anteriores y los volvemos a crear
+    if (body.serviciosAbogado) {
+      // Eliminar los servicios existentes
+      await this.servicioAbogadoRepository.delete({ abogado: {id} });
+
+      // Crear los nuevos servicios
+      const nuevosServicios = body.serviciosAbogado.map((servicioId) =>
+        this.servicioAbogadoRepository.create({ abogado, servicio: { id: servicioId } })
+      );
+      abogado.serviciosAbogado =  await this.servicioAbogadoRepository.save(nuevosServicios);
+    }
+
+    if (body.especialidadesAbogado) {
+      // Eliminar los servicios existentes
+      await this.especialidadAbogadoRepository.delete({ abogado: {id} });
+
+      // Crear los nuevos servicios
+      const nuevasEsecialidades = body.especialidadesAbogado.map((especialidadId) =>
+        this.especialidadAbogadoRepository.create({ abogado, especialidad: { id: especialidadId } })
+      );
+      abogado.especialidadesAbogado =  await this.especialidadAbogadoRepository.save(nuevasEsecialidades);
+    }
+
     await this.abogadosRepository.save(abogado);
 
     return {
       state: true,
       message: 'Abogado actualizado correctamente',
+    };
+  }
+
+  async updateExperiencia(
+    experienciaId: number,
+    body: Partial<UpdateExperienciaDTO>
+  ): Promise<{ state: boolean; message: string }> {
+    const experiencia = await this.experienciaRepository.findOne({ where: { id: experienciaId } });
+    if (!experiencia) {
+      return {
+        state: false,
+        message: `No se encontró la experiencia con ID ${experienciaId}`,
+      };
+    }
+    Object.assign(experiencia, body);
+    await this.experienciaRepository.save(experiencia);
+
+    return {
+      state: true,
+      message: 'Experiencia actualizada correctamente',
+    };
+  }
+
+  async deleteExperiencia(experienciaId: number): Promise<{ state: boolean; message: string }> {
+    const experiencia = await this.experienciaRepository.findOne({ where: { id: experienciaId } });
+    if (!experiencia) {
+      return {
+        state: false,
+        message: `No se encontró la experiencia con ID ${experienciaId}`,
+      };
+    }
+    await this.experienciaRepository.remove(experiencia);
+
+    return {
+      state: true,
+      message: 'Experiencia eliminada correctamente',
+    };
+  }
+
+  async updateEstudio(
+    educacionId: number,
+    body: Partial<UpdateEducacionDTO>
+  ): Promise<{ state: boolean; message: string }> {
+    const educacion = await this.educacionesRepository.findOne({ where: { id: educacionId } });
+    if (!educacion) {
+      return {
+        state: false,
+        message: `No se encontró la educación con ID ${educacionId}`,
+      };
+    }
+    Object.assign(educacion, body);
+    await this.educacionesRepository.save(educacion);
+
+    return {
+      state: true,
+      message: 'Educación actualizada correctamente',
+    };
+  }
+
+  async deleteEstudio(educacionId: number): Promise<{ state: boolean; message: string }> {
+    const educacion = await this.educacionesRepository.findOne({ where: { id: educacionId } });
+    if (!educacion) {
+      return {
+        state: false,
+        message: `No se encontró la educación con ID ${educacionId}`,
+      };
+    }
+    await this.educacionesRepository.remove(educacion);
+
+    return {
+      state: true,
+      message: 'Educación eliminada correctamente',
     };
   }
 

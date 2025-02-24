@@ -7,28 +7,33 @@ import { UpdateLibroReclamacionesDto } from "./dto/update-libro-reclamaciones.dt
 export class LibroReclamacionesController {
   constructor(private readonly libroService: LibroReclamacionesService) {}
 
-  @Post()
-  create(@Body() dto: CreateLibroReclamacionesDto) {
-    return this.libroService.create(dto);
+  @Post('create')
+  public async create(@Body() dto: CreateLibroReclamacionesDto) {
+    const { state, message, reclamo } = await this.libroService.create(dto);
+    return {
+      state: state,
+      message: message,
+      reclamo: reclamo
+    }
   }
 
   @Get()
-  findAll() {
+  public async findAll() {
     return this.libroService.findAll();
   }
 
   @Get(":id")
-  findOne(@Param("id") id: number) {
+  public async findOne(@Param("id") id: number) {
     return this.libroService.findOne(id);
   }
 
   @Patch(":id")
-  update(@Param("id") id: number, @Body() dto: UpdateLibroReclamacionesDto) {
+  public async update(@Param("id") id: number, @Body() dto: UpdateLibroReclamacionesDto) {
     return this.libroService.update(id, dto);
   }
 
   @Delete(":id")
-  remove(@Param("id") id: number) {
+  public async remove(@Param("id") id: number) {
     return this.libroService.remove(id);
   }
 }

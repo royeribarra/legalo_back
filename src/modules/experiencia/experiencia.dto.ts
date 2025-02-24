@@ -32,3 +32,35 @@ export class ExperienciaDTO {
     @IsNotEmpty()
     ubicacion: string;
 }
+
+export class UpdateExperienciaDTO {
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    fecha_fin: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    fecha_inicio: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    titulo: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    institucion: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    descripcion: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    ubicacion: string;
+}

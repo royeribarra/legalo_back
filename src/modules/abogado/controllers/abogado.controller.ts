@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { v4 as uuidv4 } from "uuid";
@@ -6,6 +6,7 @@ import { extname } from "path";
 import { ApiTags } from '@nestjs/swagger';
 import { AbogadosService } from '../services/abogados.service';
 import { AbogadoDTO, AbogadoUpdateDTO } from '../dto/abogado.dto';
+import { ExperienciaDTO, UpdateExperienciaDTO } from '../../experiencia/experiencia.dto';
 
 @ApiTags('Abogados')
 @Controller('abogados')
@@ -43,6 +44,50 @@ export class AbogadosController {
       state: state,
       message: message,
     }
+  }
+
+  @Put('edit-experiencia/:experienciaId')
+  public async updateExperienciaAbogado(
+    @Body() body: Partial<UpdateExperienciaDTO>,
+    @Param('experienciaId') experienciaId: number
+  ) {
+    const { state, message } = await this.abogadosService.updateExperiencia(experienciaId, body);
+
+    return {
+      state: state,
+      message: message,
+    };
+  }
+
+  @Delete('eliminar-experiencia/:experienciaId')
+  public async deleteExperienciaAbogado(@Param('experienciaId') experienciaId: number) {
+    const { state, message } = await this.abogadosService.deleteExperiencia(experienciaId);
+    return {
+      state: state,
+      message: message,
+    };
+  }
+
+  @Put('edit-estudio/:estudioId')
+  public async updateEstudioAbogado(
+    @Body() body: Partial<UpdateExperienciaDTO>,
+    @Param('estudioId') estudioId: number
+  ) {
+    const { state, message } = await this.abogadosService.updateEstudio(estudioId, body);
+
+    return {
+      state: state,
+      message: message,
+    };
+  }
+
+  @Delete('eliminar-estudio/:estudioId')
+  public async deleteEstudioAbogado(@Param('estudioId') estudioId: number) {
+    const { state, message } = await this.abogadosService.deleteEstudio(estudioId);
+    return {
+      state: state,
+      message: message,
+    };
   }
 
   @Post('postular-oferta')

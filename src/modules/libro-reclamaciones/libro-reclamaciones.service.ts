@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 import { LibroReclamaciones } from "./libro-reclamaciones.entity";
 import { CreateLibroReclamacionesDto } from "./dto/create-libro-reclamaciones.dto";
 import { UpdateLibroReclamacionesDto } from "./dto/update-libro-reclamaciones.dto";
+import { ErrorManager } from "../../utils/error.manager";
 
 @Injectable()
 export class LibroReclamacionesService {
@@ -12,9 +13,25 @@ export class LibroReclamacionesService {
     private readonly libroRepo: Repository<LibroReclamaciones>
   ) {}
 
-  async create(dto: CreateLibroReclamacionesDto): Promise<LibroReclamaciones> {
-    const reclamo = this.libroRepo.create(dto);
-    return this.libroRepo.save(reclamo);
+  public async create(dto: CreateLibroReclamacionesDto) {
+    // const reclamo = await this.libroRepo.create(dto);
+    const newReclamo = new LibroReclamaciones();
+    newReclamo.detalle = dto.detalle;
+    newReclamo.dni = dto.dni;
+    newReclamo.email = dto.email;
+    newReclamo.nombre = dto.nombre;
+    newReclamo.telefono = dto.telefono;
+    newReclamo.tipo = dto.tipo;
+    try {
+      const reclamo = await this.libroRepo.save(newReclamo);
+      return {
+        state: true,
+        message: `Reclamo creado correctamente`,
+        reclamo: reclamo,
+      }
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 
   async findAll(): Promise<LibroReclamaciones[]> {

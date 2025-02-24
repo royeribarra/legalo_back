@@ -132,6 +132,16 @@ export class AbogadoUpdateDTO {
   @ApiProperty()
   @IsOptional()
   @IsString()
+  nombres: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  apellidos: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
   contrasena: string;
 
   @ApiProperty()
@@ -166,26 +176,6 @@ export class AbogadoUpdateDTO {
 
   @ApiProperty()
   @IsOptional()
-  @IsString()
-  video: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  foto: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  cv: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  cul: string;
-
-  @ApiProperty()
-  @IsOptional()
   @IsBoolean()
   validad_admin: boolean;
 
@@ -207,12 +197,6 @@ export class AbogadoUpdateDTO {
   @Type(() => IndustriaDTO)
   industrias: IndustriaDTO[];
 
-  @ApiProperty({ type: () => [ServicioDTO] })
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => ServicioDTO)
-  servicios: ServicioDTO[];
-
   @ApiProperty({ type: () => [ExperienciaDTO] })
   @IsOptional()
   @ValidateNested({ each: true })
@@ -225,9 +209,15 @@ export class AbogadoUpdateDTO {
   @Type(() => EducacionDTO)
   educaciones: EducacionDTO[];
 
-  @ApiProperty({ type: () => [EspecialidadDTO] })
+  @ApiProperty({ type: [Number] })
   @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => EspecialidadDTO)
-  especialidades: EspecialidadDTO[];
+  @IsArray()
+  @IsNumber({}, { each: true })
+  serviciosAbogado: number[];
+
+  @ApiProperty({ type: [Number] })
+  @IsOptional()
+  @IsArray()
+  @IsNumber({}, { each: true })
+  especialidadesAbogado: number[];
 }
