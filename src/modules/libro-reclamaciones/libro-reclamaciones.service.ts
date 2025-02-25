@@ -34,8 +34,15 @@ export class LibroReclamacionesService {
     }
   }
 
-  async findAll(): Promise<LibroReclamaciones[]> {
-    return this.libroRepo.find();
+  async findAll(queryParams?): Promise<LibroReclamaciones[]> {
+    const query = this.libroRepo.createQueryBuilder('reclamos');
+    try {
+      const reclamos: LibroReclamaciones[] = await query.getMany();
+
+      return reclamos;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 
   async findOne(id: number): Promise<LibroReclamaciones> {

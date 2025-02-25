@@ -152,10 +152,14 @@ export class OfertaService{
     // 4. Actualizar preguntas
     if (body.preguntas) {
       await this.preguntaOfertaRepository.delete({ oferta: { id } });
-
       const nuevasPreguntas = body.preguntas.map((pregunta) =>
-        this.preguntaOfertaRepository.create({ oferta, ...pregunta })
+        this.preguntaOfertaRepository.create({
+          oferta,
+          pregunta: pregunta.pregunta
+        })
       );
+
+      // Ahora guardamos correctamente en la base de datos
       oferta.preguntas_oferta = await this.preguntaOfertaRepository.save(nuevasPreguntas);
     }
 
@@ -178,6 +182,7 @@ export class OfertaService{
       .leftJoinAndSelect('especialidadesOferta.especialidad', 'especialidad')
       .leftJoinAndSelect('ofertas.cliente', 'cliente')
       .leftJoinAndSelect('ofertas.aplicaciones', 'aplicaciones')
+      .leftJoinAndSelect('aplicaciones.abogado', 'abogado')
       .leftJoinAndSelect('ofertas.preguntas_oferta', 'preguntas_oferta')
       .leftJoinAndSelect('ofertas.invitaciones', 'invitaciones')
       .leftJoinAndSelect('ofertas.files', 'files')
@@ -195,17 +200,17 @@ export class OfertaService{
       }
       const dateLimit = new Date();
       dateLimit.setDate(dateLimit.getDate() - daysAgo);
-  
+
       query.andWhere('ofertas.created_at >= :dateLimit', { dateLimit });
     }
-  
+
     try {
       const ofertas: OfertasEntity[] = await query.getMany();
       return ofertas;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
-  }  
+  }
 
   public async findOfertaById(id: number): Promise<OfertasEntity>
   {

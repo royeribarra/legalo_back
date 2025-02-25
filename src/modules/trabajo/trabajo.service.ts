@@ -9,6 +9,7 @@ import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
 import { formatearFecha } from '../../utils/utils';
+import { ErrorManager } from 'src/utils/error.manager';
 
 @Injectable()
 export class TrabajosService {
@@ -145,5 +146,37 @@ export class TrabajosService {
 
     // Guardamos el trabajo
     return this.trabajosRepository.save(trabajo);
+  }
+
+  public async findTrabajos(queryParams): Promise<TrabajosEntity[]> {
+    const query = this.trabajosRepository.createQueryBuilder('trabajos')
+      .leftJoinAndSelect('trabajos.cliente', 'cliente')
+      .leftJoinAndSelect('trabajos.abogado', 'abogado')
+      .leftJoinAndSelect('trabajos.aplicacion', 'aplicacion')
+      .leftJoinAndSelect('trabajos.pagos', 'pagos')
+
+    if (queryParams.estado) {
+      query.andWhere('trabajos.estado = :estado', {
+        estado: queryParams.estado,
+      });
+    }
+
+    if (queryParams.daysAgo) {
+      const daysAgo = parseInt(queryParams.daysAgo, 10);
+      if (isNaN(daysAgo) || daysAgo <= 0) {
+        throw new Error('El parámetro daysAgo debe ser un número positivo');
+      }
+      const dateLimit = new Date();
+      dateLimit.setDate(dateLimit.getDate() - daysAgo);
+
+      query.andWhere('trabajos.created_at >= :dateLimit', { dateLimit });
+    }
+
+    try {
+      const trabajos: TrabajosEntity[] = await query.getMany();
+      return trabajos;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 }

@@ -1,5 +1,5 @@
 // src/trabajos/controllers/trabajos.controller.ts
-import { Controller, Param, Put, Body, Get, Post } from '@nestjs/common';
+import { Controller, Param, Put, Body, Get, Post, Query } from '@nestjs/common';
 import { ActualizarProgresoDTO, CrearTrabajoDTO } from './trabajo.dto';
 import { TrabajosService } from './trabajo.service';
 
@@ -9,7 +9,6 @@ export class TrabajosController {
 
   @Post('create')
   public async createTrabajo(@Body() data: CrearTrabajoDTO) {
-    
     const trabajo = await this.trabajosService.createTrabajo(data);
 
     return {
@@ -17,6 +16,13 @@ export class TrabajosController {
       trabajo,
       message: "Trabajo creado con éxito."
     }
+  }
+
+  @Get('all')
+  public async findAllTrabajos(@Query() queryParams: any)
+  {
+    const { daysAgo = 3 } = queryParams;
+    return await this.trabajosService.findTrabajos(queryParams);
   }
 
   @Put('aceptar-aplicacion/:id')

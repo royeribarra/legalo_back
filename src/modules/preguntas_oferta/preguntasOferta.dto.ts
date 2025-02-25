@@ -7,3 +7,15 @@ export class PreguntaDTO {
     @IsNotEmpty()
     nombre: string;
 }
+
+export class PreguntaUpdateDTO {
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    id: number;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    pregunta: string;
+}

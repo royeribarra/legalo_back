@@ -2,7 +2,7 @@ import { IsNumber, IsOptional, IsNotEmpty, IsString, IsBoolean, IsEmail, Validat
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type, Transform } from 'class-transformer';
 import { EspecialidadDTO } from '../especialidad/especialidad.dto';
-import { PreguntaDTO } from '../preguntas_oferta/preguntasOferta.dto';
+import { PreguntaDTO, PreguntaUpdateDTO } from '../preguntas_oferta/preguntasOferta.dto';
 import { ServicioDTO } from '../servicio/servicio.dto';
 import { SalarioDTO } from './salario.dto';
 
@@ -112,9 +112,9 @@ export class OfertaUpdateDTO {
   @IsNumber({}, { each: true })
   especialidades: number[];
 
-  @ApiProperty({ type: () => [PreguntaDTO] })
+  @ApiProperty({ type: () => [PreguntaUpdateDTO] })
   @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => PreguntaDTO)
-  preguntas: PreguntaDTO[];
+  @Type(() => PreguntaUpdateDTO)
+  preguntas: PreguntaUpdateDTO[];
 }

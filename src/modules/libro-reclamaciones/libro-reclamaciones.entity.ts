@@ -1,3 +1,4 @@
+import { BaseEntity } from "../../config/base.entity";
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
 
 export enum TipoReclamo {
@@ -6,7 +7,7 @@ export enum TipoReclamo {
 }
 
 @Entity("libro_reclamaciones")
-export class LibroReclamaciones {
+export class LibroReclamaciones extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
 import { LibroReclamacionesService } from "./libro-reclamaciones.service";
 import { CreateLibroReclamacionesDto } from "./dto/create-libro-reclamaciones.dto";
 import { UpdateLibroReclamacionesDto } from "./dto/update-libro-reclamaciones.dto";
@@ -17,9 +17,10 @@ export class LibroReclamacionesController {
     }
   }
 
-  @Get()
-  public async findAll() {
-    return this.libroService.findAll();
+  @Get('all')
+  public async findAllReclamos(@Query() queryParams: any)
+  {
+    return await this.libroService.findAll(queryParams);
   }
 
   @Get(":id")

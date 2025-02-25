@@ -61,6 +61,9 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   @Column({nullable: true})
   cv_url: string;
 
+  @Column({nullable: true})
+  objetivo: string;
+
   @Column({default: false})
   validado_admin: boolean;
 

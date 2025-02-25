@@ -6,6 +6,7 @@ import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { FileEntity } from '../tmp/file.entity';
 import { PagosEntity } from '../pago/pago.entity';
+import { ProgresoTrabajoEntity } from './progreso.entity';
 
 @Entity({name: 'trabajos'})
 export class TrabajosEntity extends BaseEntity implements ITrabajo {
@@ -20,6 +21,8 @@ export class TrabajosEntity extends BaseEntity implements ITrabajo {
 
   @Column({nullable: true})
   progreso: number;
+  @OneToMany(() => ProgresoTrabajoEntity, (progreso) => progreso.trabajo)
+  progresos: ProgresoTrabajoEntity[];
 
   @ManyToOne(() => ClientesEntity, (cliente) => cliente.trabajos)
   cliente: ClientesEntity;
