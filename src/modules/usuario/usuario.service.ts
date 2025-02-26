@@ -95,7 +95,6 @@ export class UsuariosService{
       usuario.contrasena = await bcrypt.hash(datosUsuario.contrasena, +process.env.HASH_SALT);
       
       const newUsuario : UsuariosEntity = await this.usuariosRepository.save(usuario);
-      console.log(newUsuario)
       return {
         state: true,
         message: `Usuario creado correctamente`,
@@ -258,7 +257,6 @@ export class UsuariosService{
   }
 
   public async findUserByActivationCode(code: string): Promise<UsuariosEntity | null> {
-    console.log(code)
     return this.usuariosRepository.findOne({ where: { activationCode: code } });
   }
 
@@ -281,7 +279,6 @@ export class UsuariosService{
   public async validarUsuarioPorAdmin(abogadoId: number)
   {
     try {
-      console.log(abogadoId)
       const abogado: AbogadosEntity = await this.abogadosRepository.findOneBy({ id: abogadoId });
 
       if (!abogado) {

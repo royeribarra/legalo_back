@@ -8,6 +8,7 @@ import { TrabajosEntity } from './trabajos.entity';
 import { TrabajosController } from './trabajo.controller';
 import { TrabajosService } from './trabajo.service';
 import { OfertasEntity } from '../oferta/oferta.entity';
+import { ProgresoTrabajoEntity } from './progreso.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { OfertasEntity } from '../oferta/oferta.entity';
       AplicacionesEntity,
       ClientesEntity,
       AbogadosEntity,
-      OfertasEntity
+      OfertasEntity,
+      ProgresoTrabajoEntity
     ]),
   ],
   controllers: [TrabajosController],

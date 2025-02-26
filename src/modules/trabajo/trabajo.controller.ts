@@ -55,13 +55,45 @@ export class TrabajosController {
     };
   }
 
+  @Post('registrar-progreso')
+  public async registrarProgreso(
+    @Body() body: any
+  ) {
+    const trabajo = await this.trabajosService.registrarProgreso(body);
+    return {
+      state: true,
+      message: 'Progreso del trabajo actualizado con éxito',
+      data: trabajo,
+    };
+  }
+
+  @Post('finalizar-trabajo')
+  public async finalizarTrabajo(
+    @Body() body: any
+  ) {
+    const trabajo = await this.trabajosService.finalizarTrabajo(body);
+    return {
+      state: true,
+      message: 'Se ha registrado la culminación del trabajo con éxito'
+    };
+  }
+
   @Get('cliente/:id/en-progreso')
   async getTrabajosEnTrabajoPorCliente(@Param('id') clienteId: number) {
-    return this.trabajosService.getTrabajosEnProcesoPorCliente(clienteId);
+    return await this.trabajosService.getTrabajosEnProcesoPorCliente(clienteId);
   }
 
   @Get('cliente/:id/finalizados')
   async getTrabajosFinalizadosPorCliente(@Param('id') clienteId: number) {
-    return this.trabajosService.getTrabajosFinalizadosPorCliente(clienteId);
+    return await this.trabajosService.getTrabajosFinalizadosPorCliente(clienteId);
+  }
+
+  @Post('obtener-total-trabajos-por-cliente')
+  async obtenerTotalTrabajosPorCliente(@Body() body: any) {
+    const response = await this.trabajosService.obtenerTotalTrabajosPorCliente(body);
+    return{
+      total: response,
+      state: true
+    }
   }
 }

@@ -41,10 +41,6 @@ export default class AbogadoSeeder implements Seeder {
           grado_academico: "Universitario",
           cip: "70027",
           colegio: "ingenieros",
-          video: "",
-          foto: "",
-          cv: "",
-          cul: "",
           active: 1,
           habilidadesBlandas: ["Comunicación", "Trabajo en equipo"],
           habilidadesDuras: ["JavaScript", "TypeScript"],
@@ -100,10 +96,6 @@ export default class AbogadoSeeder implements Seeder {
           cip: "12345",
           active: 1,
           colegio: "Escuela de Ingeniería",
-          video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-          foto: "https://www.example.com/foto-perfil.jpg",
-          cv: "https://www.example.com/cv-mariana-perez.pdf",
-          cul: "Cultura Organizacional",
           habilidadesBlandas: ["Liderazgo", "Adaptabilidad", "Pensamiento crítico"],
           habilidadesDuras: ["Python", "Django", "Java", "AWS"],
           industrias: [2, 4, 5],
@@ -158,10 +150,6 @@ export default class AbogadoSeeder implements Seeder {
           cip: "50012",
           active: 1,
           colegio: "Colegio de Abogados de Lima",
-          video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Ejemplo de video
-          foto: "https://www.example.com/foto-carlos.jpg", // Foto de perfil
-          cv: "https://www.example.com/cv-carlos-martinez.pdf",
-          cul: "Ética Profesional",
           habilidadesBlandas: ["Comunicación", "Resolución de conflictos", "Trabajo en equipo"],
           habilidadesDuras: ["Derecho Corporativo", "Contratos", "Litigios comerciales"],
           industrias: [4, 6, 9], // Empresas, Comercial, Finanzas
@@ -216,10 +204,6 @@ export default class AbogadoSeeder implements Seeder {
           cip: "40045",
           active: 1,
           colegio: "Colegio de Abogados de Madrid",
-          video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Ejemplo de video
-          foto: "https://www.example.com/foto-laura.jpg", // Foto de perfil
-          cv: "https://www.example.com/cv-laura-gomez.pdf",
-          cul: "Derechos Humanos",
           habilidadesBlandas: ["Empatía", "Negociación", "Pensamiento estratégico"],
           habilidadesDuras: ["Derecho Penal", "Litigios Criminales", "Defensa Penal"],
           industrias: [8, 9], // Justicia, Gobierno
@@ -277,11 +261,7 @@ export default class AbogadoSeeder implements Seeder {
             grado_academico: element.grado_academico,
             cip: element.cip,
             colegio: element.colegio,
-            telefono: element.telefono,
-            video_url: element.video,
-            foto_url: element.foto,
-            cv_url: element.cv,
-            cul_url: element.cul
+            telefono: element.telefono
           });
           const savedAbogado = await abogadoRepository.save(abogado);
 

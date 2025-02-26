@@ -9,7 +9,8 @@ import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
 import { formatearFecha } from '../../utils/utils';
-import { ErrorManager } from 'src/utils/error.manager';
+import { ErrorManager } from '../../utils/error.manager';
+import { ProgresoTrabajoEntity } from './progreso.entity';
 
 @Injectable()
 export class TrabajosService {
@@ -23,7 +24,9 @@ export class TrabajosService {
     @InjectRepository(AbogadosEntity)
     private readonly abogadosRepository: Repository<AbogadosEntity>,
     @InjectRepository(OfertasEntity)
-    private readonly ofertaRepository: Repository<OfertasEntity>
+    private readonly ofertaRepository: Repository<OfertasEntity>,
+    @InjectRepository(ProgresoTrabajoEntity)
+    private readonly progresoTrabajoRepository: Repository<ProgresoTrabajoEntity>
   ) {}
 
   // Lógica para crear un trabajo desde una aplicación aceptada
@@ -177,6 +180,66 @@ export class TrabajosService {
       return trabajos;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  async registrarProgreso(
+    body: any
+  ){
+    const trabajo = await this.trabajosRepository.findOne({ where: { id: body.trabajoId } });
+
+    if (!trabajo) {
+      throw new NotFoundException(`Trabajo con ID ${body.trabajoId} no encontrado`);
+    }
+
+    if (body.progreso !== undefined) {
+      trabajo.progreso = body.progreso;
+      trabajo.estado = "en proceso";
+    }
+    const newProgreso = this.progresoTrabajoRepository.create({
+      descripcion: body.descripcion,
+      progreso: body.progreso,
+      trabajo
+    });
+    try {
+      const progreso = await this.progresoTrabajoRepository.save(newProgreso);
+
+      // Guardar los cambios
+      return this.trabajosRepository.save(trabajo);
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+  async finalizarTrabajo (body: any){
+    const trabajo = await this.trabajosRepository.findOne({ where: { id: body.trabajoId } });
+    if (!trabajo) {
+      throw new NotFoundException(`Trabajo con ID ${body.trabajoId} no encontrado`);
+    }
+    if(trabajo.progreso != 100){
+      throw new NotFoundException(`El trabao debe tener un progreso de 100 %`);
+    }
+    trabajo.estado = "finalizado";
+    trabajo.fecha_fin = new Date().toISOString().split("T")[0];
+    try {
+      return this.trabajosRepository.save(trabajo);
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  async obtenerTotalTrabajosPorCliente(params: any) {
+    try {
+      const totalTrabajos = await this.trabajosRepository
+        .createQueryBuilder('trabajos')
+        .leftJoin('trabajos.cliente', 'cliente')
+        .where('cliente.id = :clienteId', { clienteId: params.clienteId })
+        .select('COUNT(trabajos.id)', 'total')
+        .getCount();
+
+      return totalTrabajos || 0;
+    } catch (error) {
+      console.error('Error al obtener el total de trabajos por cliente:', error);
+      throw new Error('No se pudo obtener el total de trabajos por cliente');
     }
   }
 }

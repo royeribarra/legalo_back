@@ -33,7 +33,6 @@ export class IndustriaService{
         .leftJoinAndSelect('industrias.industriasOferta', 'industriasOferta');
 
         query.where('industrias.id = :id', { id });
-        console.log(query.getQuery());
 
         const abogado = await query.getOne();
         if(!abogado)

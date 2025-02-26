@@ -99,7 +99,6 @@ export class AbogadosController {
     @Body('numeroCuenta') numeroCuenta: string,
     @Body('selectedBanco') selectedBanco: string,
   ) {
-    console.log(abogadoId, ofertaId, salarioEsperado, "abogadoId, ofertaId, salarioEsperado")
 
     const { aplicacionId, state, message } = await this.abogadosService.postularAbogadoOferta(abogadoId, ofertaId, salarioEsperado, respuestas, numeroCuenta, selectedBanco);
     return {

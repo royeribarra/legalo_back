@@ -101,7 +101,6 @@ export class ClienteController {
     @Body('clienteId') clienteId: number,
     @Body('estado') estado: string,
   ) {
-    console.log("ofertas en la linea ...")
     const { data, state } = await this.clienteService.getOfertas(clienteId, estado);
      return {
       data,

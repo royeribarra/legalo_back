@@ -9,6 +9,7 @@ import { TrabajosService } from '../trabajo/trabajo.service';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
 import { ClientesEntity } from '../cliente/entities/clientes.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
+import { ProgresoTrabajoEntity } from '../trabajo/progreso.entity';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { AbogadosEntity } from '../abogado/entities/abogados.entity';
       AplicacionesEntity,
       TrabajosEntity,
       ClientesEntity,
-      AbogadosEntity
+      AbogadosEntity,
+      ProgresoTrabajoEntity
     ]),
   ],
   providers: [

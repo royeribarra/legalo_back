@@ -13,7 +13,7 @@ export class ProgresoTrabajoEntity extends BaseEntity {
   @Column({ nullable: true })
   documento: string;
 
-  @Column()
+  @Column({ nullable: true })
   estado: string;
 
   @ManyToOne(() => TrabajosEntity, (trabajo) => trabajo.progreso)

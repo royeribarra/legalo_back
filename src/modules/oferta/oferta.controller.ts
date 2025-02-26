@@ -72,4 +72,13 @@ export class OfertaController {
       message: message
      }
   }
+
+  @Post('obtener-total-ofertas-por-cliente')
+  async obtenerTotalOfertasPorCliente(@Body() body: any) {
+    const response = await this.ofertaService.obtenerTotalOfertasPorCliente(body);
+    return{
+      total: response,
+      state: true
+    }
+  }
 }

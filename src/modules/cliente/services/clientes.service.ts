@@ -162,7 +162,6 @@ export class ClienteService{
         .createQueryBuilder('clientes');
 
         query.where('clientes.id = :id', { id });
-        console.log(query.getQuery());
 
         const cliente = await query.getOne();
         if(!cliente)
@@ -248,10 +247,10 @@ export class ClienteService{
         .leftJoinAndSelect('serviciosOferta.servicio', 'servicio')
         .leftJoinAndSelect('trabajo.cliente', 'cliente')
         .leftJoinAndSelect('trabajo.pagos', 'pagos')
+        .leftJoinAndSelect('trabajo.progresos', 'progresos')
         .where('cliente.id = :id', { id: clienteId });
 
     if (estado) {
-      console.log(estado)
       query.andWhere('trabajo.estado = :estado', { estado });
     }
 
@@ -333,10 +332,8 @@ export class ClienteService{
     if (estado) {
       queryBuilder.andWhere('oferta.estado = :estado', { estado });
     }
-    console.log(clienteId, estado)
 
     const cliente = await queryBuilder.getOne();
-    console.log(cliente)
     if (!cliente) {
       return {
         state: true,

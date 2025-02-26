@@ -230,7 +230,6 @@ export class OfertaService{
         .leftJoinAndSelect('ofertas.files', 'files');
 
         query.where('ofertas.id = :id', { id });
-        console.log(query.getQuery());
 
         const abogado = await query.getOne();
         if(!abogado)
@@ -322,8 +321,7 @@ export class OfertaService{
   ) {
     const abogado = await this.abogadoRepository.findOneBy({ id: abogadoId });
     const oferta = await this.ofertaRepository.findOneBy({ id: ofertaId });
-    console.log(oferta);
-    console.log(abogado);
+
     if (!abogado || !oferta) {
       return {
         state: false,
@@ -363,5 +361,21 @@ export class OfertaService{
     invitacion.estado = "aceptada";
 
     return this.invitacionRepository.save(invitacion);
+  }
+
+  async obtenerTotalOfertasPorCliente(params: any) {
+    try {
+      const totalOfertas = await this.ofertaRepository
+        .createQueryBuilder('ofertas')
+        .leftJoin('ofertas.cliente', 'cliente')
+        .where('cliente.id = :clienteId', { clienteId: params.clienteId })
+        .andWhere('ofertas.estado != :estado', { estado: 'asignado' }) // Condición para filtrar el estado
+        .getCount(); // Contar las ofertas que cumplen la condición
+
+      return totalOfertas || 0; // Retorna el conteo, o 0 si no hay resultados
+    } catch (error) {
+      console.error('Error al obtener el total de ofertas por cliente:', error);
+      throw new Error('No se pudo obtener el total de ofertas por cliente');
+    }
   }
 }

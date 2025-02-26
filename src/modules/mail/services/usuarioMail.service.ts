@@ -20,7 +20,7 @@ export class UsuarioMailService {
     // Guarda el código de activación y la fecha de expiración en la base de datos
     // await this.usuariosRepository.saveActivationCode(userEmail, activationCode, expirationTime);
     const appUrl = this.configService.get<string>('REACT_APP_URL');
-    console.log(appUrl)
+
     const linkActivacion = `${appUrl}/registro/abogado/bienvenida?code_activation=${activationCode}`;
     try {
         const response = await this.mailerService.sendMail({

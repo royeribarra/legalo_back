@@ -142,10 +142,6 @@ export class AbogadosService{
       nuevoAbogado.industriasAbogado = [];
       nuevoAbogado.serviciosAbogado = [];
       nuevoAbogado.especialidadesAbogado = [];
-      nuevoAbogado.foto_url = '';
-      nuevoAbogado.cul_url = '';
-      nuevoAbogado.cv_url = '';
-      nuevoAbogado.video_url = '';
 
       const abogado : AbogadosEntity = await this.abogadosRepository.save(nuevoAbogado);
 
@@ -516,7 +512,6 @@ export class AbogadosService{
     }
 
     // Mapear y guardar las respuestas
-    console.log(respuestas)
     const respuestasActualizadas = respuestas.map(async (respuesta) => {
       const pregunta = preguntasOferta
         .find(pregunta => pregunta.id === respuesta.idPregunta);
@@ -601,7 +596,6 @@ export class AbogadosService{
     estado?: string
   ): Promise<TrabajosEntity[]>
   {
-    console.log(abogadoId, "abogadoID")
     const query = this.trabajosRepository
         .createQueryBuilder('trabajo')
         .leftJoinAndSelect('trabajo.aplicacion', 'aplicacion')
@@ -613,10 +607,10 @@ export class AbogadosService{
         .leftJoinAndSelect('trabajo.abogado', 'abogado')
         .leftJoinAndSelect('trabajo.cliente', 'cliente')
         .leftJoinAndSelect('trabajo.pagos', 'pagos')
+        .leftJoinAndSelect('trabajo.progresos', 'progresos')
         .where('abogado.id = :id', { id: abogadoId });
 
     if (estado) {
-      console.log(estado)
       query.andWhere('trabajo.estado = :estado', { estado });
     }
 

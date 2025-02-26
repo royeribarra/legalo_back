@@ -21,11 +21,6 @@ export interface IAbogado {
     cip: string;
     colegio: string;
 
-    video_url: string;
-    foto_url: string;
-    cv_url: string;
-    cul_url: string;
-
     habilidadesBlandas: IHabilidaBlanda[];
     habilidadesDuras: IHabilidadDura[];
     // industrias: IIndutria[];

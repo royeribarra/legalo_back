@@ -50,18 +50,6 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   grado_academico: string;
 
   @Column({nullable: true})
-  video_url: string;
-
-  @Column({nullable: true})
-  cul_url: string;
-
-  @Column({nullable: true})
-  foto_url: string;
-
-  @Column({nullable: true})
-  cv_url: string;
-
-  @Column({nullable: true})
   objetivo: string;
 
   @Column({default: false})

@@ -34,7 +34,6 @@ export class UsuariosController {
   @Get('all')
   public async findAllUsuarios(@Query() queryParams: any)
   {
-    console.log("queryParams")
     try {
       return await this.usuariosService.findUsuarios(queryParams);
     } catch (error) {
@@ -77,14 +76,12 @@ export class UsuariosController {
 
   @Post('validar-usuario-por-admin')
   async validarUsuarioPorAdmin(@Body('abogadoId') abogadoId: number) {
-    console.log(abogadoId)
     const {state, message} = await this.usuariosService.validarUsuarioPorAdmin(abogadoId);
     return { message, state };
   }
 
   @Post('rechazar-usuario-por-admin')
   async rechazarUsuarioPorAdmin(@Body('abogadoId') abogadoId: number) {
-    console.log(abogadoId)
     const {state, message} = await this.usuariosService.rechazarUsuarioPorAdmin(abogadoId);
     return { message, state };
   }
