@@ -68,22 +68,7 @@ export class AbogadoDTO {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  video: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  foto: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  cv: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  cul: string;
+  objetivo: string;
 
   @ApiProperty({ type: () => [HabilidadBlandaDTO] })
   @IsNotEmpty()
@@ -178,6 +163,11 @@ export class AbogadoUpdateDTO {
   @IsOptional()
   @IsBoolean()
   validad_admin: boolean;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  objetivo: string;
 
   @ApiProperty({ type: () => [HabilidadBlandaDTO] })
   @IsOptional()

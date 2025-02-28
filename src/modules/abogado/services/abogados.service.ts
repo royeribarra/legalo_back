@@ -136,6 +136,7 @@ export class AbogadosService{
       nuevoAbogado.colegio = body.colegio;
       nuevoAbogado.dni = body.dni;
       nuevoAbogado.telefono = body.telefono;
+      nuevoAbogado.objetivo = body.objetivo;
 
       nuevoAbogado.habilidadesBlandas = [];
       nuevoAbogado.habilidadesDuras = [];
