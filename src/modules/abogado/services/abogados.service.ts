@@ -608,6 +608,7 @@ export class AbogadosService{
         .leftJoinAndSelect('trabajo.abogado', 'abogado')
         .leftJoinAndSelect('trabajo.cliente', 'cliente')
         .leftJoinAndSelect('trabajo.pagos', 'pagos')
+        .leftJoinAndSelect('trabajo.pagosAbogado', 'pagosAbogado')
         .leftJoinAndSelect('trabajo.progresos', 'progresos')
         .where('abogado.id = :id', { id: abogadoId });
 

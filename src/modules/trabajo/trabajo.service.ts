@@ -157,6 +157,7 @@ export class TrabajosService {
       .leftJoinAndSelect('trabajos.abogado', 'abogado')
       .leftJoinAndSelect('trabajos.aplicacion', 'aplicacion')
       .leftJoinAndSelect('trabajos.pagos', 'pagos')
+      .leftJoinAndSelect('trabajos.pagosAbogado', 'pagosAbogado')
       .leftJoinAndSelect('trabajos.progresos', 'progresos')
 
     if (queryParams.estado) {
