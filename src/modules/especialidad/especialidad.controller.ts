@@ -19,4 +19,15 @@ export class EspecialidadController {
   public async findEspecialidadById(@Param('id') id: number){
     return await this.especialidadService.findEspecialidadById(id);
   }
+
+  @Post('estadistica')
+  public async getEstadistica(){
+    const {especialidadesEstadisticas} = await this.especialidadService.getEstadisticas();
+    return{
+      state: true,
+      data: {
+        especialidadesEstadisticas
+      }
+    }
+  }
 }

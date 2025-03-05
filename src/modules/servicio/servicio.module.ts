@@ -5,13 +5,17 @@ import { ServicioService } from './servicio.service';
 import { ServiciosEntity } from './servicios.entity';
 import { ServiciosAbogadoEntity } from './servicioAbogado.entity';
 import { ServiciosOfertaEntity } from './servicioOferta.entity';
+import { OfertasEntity } from '../oferta/oferta.entity';
+import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       ServiciosEntity,
       ServiciosAbogadoEntity,
-      ServiciosOfertaEntity
+      ServiciosOfertaEntity,
+      OfertasEntity,
+      AbogadosEntity
     ]),
   ],
   providers: [

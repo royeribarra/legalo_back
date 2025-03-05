@@ -20,6 +20,19 @@ export class ServicioController {
     return await this.servicioService.findServicioById(id);
   }
 
+  @Post('estadistica')
+  public async getEstadistica(){
+    const {serviciosAbogados, serviciosOfertas, serviciosEstadisticas} = await this.servicioService.getEstadisticas();
+    return{
+      state: true,
+      data: {
+        serviciosAbogados,
+        serviciosOfertas,
+        serviciosEstadisticas
+      }
+    }
+  }
+
   // @Put('edit/:id')
   // public async updateConductor(@Body() body: ConductorUpdateDTO, @Param('id') id: number){
   //   const vehiculo = await this.vehiculoService.findVehiculoById(body.vehiculoId);

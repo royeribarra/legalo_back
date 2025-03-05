@@ -47,4 +47,32 @@ export class EspecialidadService{
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  public async getEstadisticas() {
+    try {
+      // Contar cuántas ofertas están asociadas a cada servicio
+      const especialidadesEstadisticas = await this.especialidadRepository
+        .createQueryBuilder("especialidad")
+        .leftJoin("especialidad.especialidadesOferta", "especialidadesOferta")
+        .leftJoin("especialidadesOferta.oferta", "oferta")
+        .leftJoin("especialidad.especialidadesAbogado", "especialidadesAbogado")
+        .leftJoin("especialidadesAbogado.abogado", "abogado")
+        .select([
+          "especialidad.nombre AS nombre",
+          "COALESCE(COUNT(DISTINCT oferta.id), 0) AS total_ofertas",
+          "COALESCE(COUNT(DISTINCT abogado.id), 0) AS total_abogados"
+        ])
+        .groupBy("especialidad.nombre")
+        .orderBy("total_ofertas", "DESC")
+        .addOrderBy("total_abogados", "DESC")
+        .getRawMany();
+
+      return {
+        especialidadesEstadisticas
+      };
+    } catch (error) {
+      console.error("Error en getEstadisticas:", error);
+      throw new Error("Error obteniendo estadísticas"); // Lanza el error para que Nest.js lo capture
+    }
+  }
 }
