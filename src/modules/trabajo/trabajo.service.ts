@@ -185,6 +185,32 @@ export class TrabajosService {
     }
   }
 
+  public async findTrabajoById(id: number): Promise<TrabajosEntity>
+  {
+    try {
+      const query = this.trabajosRepository.createQueryBuilder('trabajos')
+        .leftJoinAndSelect('trabajos.cliente', 'cliente')
+        .leftJoinAndSelect('trabajos.abogado', 'abogado')
+        .leftJoinAndSelect('trabajos.aplicacion', 'aplicacion')
+        .leftJoinAndSelect('trabajos.pagos', 'pagos')
+        .leftJoinAndSelect('trabajos.pagosAbogado', 'pagosAbogado')
+        .leftJoinAndSelect('trabajos.progresos', 'progresos')
+
+        query.where('trabajos.id = :id', { id });
+
+        const trabajo = await query.getOne();
+        if(!trabajo)
+        {
+          return null;
+        }
+
+        return trabajo;
+    } catch (error) {
+      console.log(error, "error en conductorService - findConductorbyId")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   async registrarProgreso(
     body: any
   ){

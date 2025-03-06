@@ -25,6 +25,15 @@ export class TrabajosController {
     return await this.trabajosService.findTrabajos(queryParams);
   }
 
+  @Get(':id')
+  public async findTrabajoById(@Param('id') id: number){
+    const trabajo = await this.trabajosService.findTrabajoById(id);
+    return {
+      state: true,
+      data: trabajo
+    }
+  }
+
   @Put('aceptar-aplicacion/:id')
   public async aceptarAplicacion(
     @Param('id') aplicacionId: number,
