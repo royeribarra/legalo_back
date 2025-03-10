@@ -44,6 +44,9 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   cip: string;
 
   @Column({nullable: true})
+  ruc: string;
+
+  @Column({nullable: true})
   colegio: string;
 
   @Column()

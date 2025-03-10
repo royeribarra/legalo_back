@@ -36,4 +36,23 @@ export class AbogadoMailService {
         console.log('error AbogadoMailService', error)
       }
   }
+
+  async rechazarAbogado(nombres: string, apellidos: string, userEmail: string){
+    try {
+      const response = await this.mailerService.sendMail({
+        to: userEmail,
+        subject: 'Lamentamos',
+        template: './abogado/rechazo',
+        context: {
+          nombres: nombres + ' ' + apellidos,
+        },
+      });
+      return {
+        state: true,
+        message: "Se envió el mensaje al abogado con éxito."
+      }
+    } catch (error) {
+      console.log('error rechazarAbogado', error)
+    }
+  }
 }

@@ -192,6 +192,7 @@ export class TrabajosService {
         .leftJoinAndSelect('trabajos.cliente', 'cliente')
         .leftJoinAndSelect('trabajos.abogado', 'abogado')
         .leftJoinAndSelect('trabajos.aplicacion', 'aplicacion')
+        .leftJoinAndSelect('aplicacion.oferta', 'oferta')
         .leftJoinAndSelect('trabajos.pagos', 'pagos')
         .leftJoinAndSelect('trabajos.pagosAbogado', 'pagosAbogado')
         .leftJoinAndSelect('trabajos.progresos', 'progresos')

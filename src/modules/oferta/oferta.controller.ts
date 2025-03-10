@@ -36,7 +36,11 @@ export class OfertaController {
 
   @Get(':id')
   public async findConductorById(@Param('id') id: number){
-    return await this.ofertaService.findOfertaById(id);
+    const oferta = await this.ofertaService.findOfertaById(id);
+    return {
+      state: true,
+      data: oferta
+    }
   }
 
   @Put('edit/:id')

@@ -408,6 +408,7 @@ export class UsuariosService{
   
       // Ahora, eliminar al abogado
       await this.abogadosRepository.delete(abogadoId);
+      await this.abogadoMailService.rechazarAbogado(abogado.nombres, abogado.apellidos, abogado.correo);
       return {
         state: true,
         message: "Usuario eliminado correctamente."

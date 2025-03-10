@@ -18,6 +18,9 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
   numeroCuenta: string;
 
   @Column({nullable: true})
+  numeroCuentaCci: string;
+
+  @Column({nullable: true})
   selectedBanco: string;
 
   @Column({ nullable: true })

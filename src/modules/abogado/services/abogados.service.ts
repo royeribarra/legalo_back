@@ -135,6 +135,7 @@ export class AbogadosService{
       nuevoAbogado.cip = body.cip;
       nuevoAbogado.colegio = body.colegio;
       nuevoAbogado.dni = body.dni;
+      nuevoAbogado.ruc = body.ruc;
       nuevoAbogado.telefono = body.telefono;
       nuevoAbogado.objetivo = body.objetivo;
 
@@ -458,7 +459,8 @@ export class AbogadosService{
     salarioEsperado: number,
     respuestas: any,
     numeroCuenta: string,
-    selectedBanco: string
+    selectedBanco: string,
+    numeroCuentaCci: string
   ) {
     const abogado = await this.abogadosRepository.findOne({ where: { id: abogadoId } });
     if (!abogado) {
@@ -486,7 +488,8 @@ export class AbogadosService{
       abogado,
       oferta,
       numeroCuenta,
-      selectedBanco
+      selectedBanco,
+      numeroCuentaCci
     });
 
     // Guardar la aplicación en la base de datos

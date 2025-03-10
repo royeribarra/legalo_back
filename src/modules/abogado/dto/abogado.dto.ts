@@ -38,6 +38,11 @@ export class AbogadoDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
+  ruc: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
   telefono: string;
 
   @ApiProperty()

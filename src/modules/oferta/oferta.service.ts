@@ -225,6 +225,7 @@ export class OfertaService{
         .leftJoinAndSelect('industriasOferta.industria', 'industria')
         .leftJoinAndSelect('ofertas.cliente', 'cliente')
         .leftJoinAndSelect('ofertas.aplicaciones', 'aplicaciones')
+        .leftJoinAndSelect('aplicaciones.abogado', 'abogado')
         .leftJoinAndSelect('ofertas.preguntas_oferta', 'preguntas_oferta')
         .leftJoinAndSelect('ofertas.invitaciones', 'invitaciones')
         .leftJoinAndSelect('ofertas.files', 'files');
