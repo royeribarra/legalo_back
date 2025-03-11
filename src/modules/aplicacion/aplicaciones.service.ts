@@ -118,4 +118,20 @@ public async updateArchivosAplicacion(
       data: aplicacion,
     };
   }
+
+  async obtenerTotalAplicacionesPorAbogado(params: any) {
+    try {
+      const totalTrabajos = await this.aplicacionesRepository
+        .createQueryBuilder('aplicaciones')
+        .leftJoin('aplicaciones.abogado', 'abogado')
+        .where('abogado.id = :abogadoId', { abogadoId: params.abogadoId })
+        .select('COUNT(aplicaciones.id)', 'total')
+        .getCount();
+
+      return totalTrabajos || 0;
+    } catch (error) {
+      console.error('Error al obtener el total de aplicaciones por abogado:', error);
+      throw new Error('No se pudo obtener el total de aplicaciones por abogado');
+    }
+  }
 }

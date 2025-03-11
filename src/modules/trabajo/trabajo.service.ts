@@ -271,4 +271,20 @@ export class TrabajosService {
       throw new Error('No se pudo obtener el total de trabajos por cliente');
     }
   }
+
+  async obtenerTotalTrabajosPorAbogado(params: any) {
+    try {
+      const totalTrabajos = await this.trabajosRepository
+        .createQueryBuilder('trabajos')
+        .leftJoin('trabajos.abogado', 'abogado')
+        .where('abogado.id = :abogadoId', { abogadoId: params.abogadoId })
+        .select('COUNT(trabajos.id)', 'total')
+        .getCount();
+
+      return totalTrabajos || 0;
+    } catch (error) {
+      console.error('Error al obtener el total de trabajos por abogado:', error);
+      throw new Error('No se pudo obtener el total de trabajos por abogado');
+    }
+  }
 }

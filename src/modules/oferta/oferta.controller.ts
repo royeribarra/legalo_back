@@ -85,4 +85,13 @@ export class OfertaController {
       state: true
     }
   }
+
+  @Post('obtener-total-invitaciones-por-abogado')
+  async obtenerTotalTrabajosPorAbogado(@Body() body: any) {
+    const response = await this.ofertaService.obtenerTotalInvitacionesPorAbogado(body);
+    return{
+      total: response,
+      state: true
+    }
+  }
 }

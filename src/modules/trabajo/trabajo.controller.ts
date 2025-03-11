@@ -105,4 +105,13 @@ export class TrabajosController {
       state: true
     }
   }
+
+  @Post('obtener-total-trabajos-por-abogado')
+  async obtenerTotalTrabajosPorAbogado(@Body() body: any) {
+    const response = await this.trabajosService.obtenerTotalTrabajosPorAbogado(body);
+    return{
+      total: response,
+      state: true
+    }
+  }
 }

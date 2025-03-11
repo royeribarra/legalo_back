@@ -379,4 +379,21 @@ export class OfertaService{
       throw new Error('No se pudo obtener el total de ofertas por cliente');
     }
   }
+
+  async obtenerTotalInvitacionesPorAbogado(params: any) {
+    try {
+      const totalInvitaciones = await this.invitacionRepository
+        .createQueryBuilder('invitaciones')
+        .leftJoin('invitaciones.abogado', 'abogado')
+        .leftJoin('invitaciones.oferta', 'oferta')
+        .where('abogado.id = :abogadoId', { abogadoId: params.abogadoId })
+        .andWhere('invitaciones.estado != :estado', { estado: 'rechazado' })
+        .getCount();
+
+      return totalInvitaciones || 0;
+    } catch (error) {
+      console.error('Error al obtener las invitaciones del abogado:', error);
+      throw new Error('No se pudo obtener el total de invitaciones del abogado');
+    }
+  }
 }

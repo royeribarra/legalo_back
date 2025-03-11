@@ -39,4 +39,13 @@ export class AplicacionesController {
       message: message,
     }
   }
+
+  @Post('obtener-total-aplicaciones-por-abogado')
+  async obtenerTotalTrabajosPorAbogado(@Body() body: any) {
+    const response = await this.aplicacionService.obtenerTotalAplicacionesPorAbogado(body);
+    return{
+      total: response,
+      state: true
+    }
+  }
 }
