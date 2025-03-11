@@ -36,7 +36,7 @@ export class AbogadoDTO {
   dni: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   ruc: string;
 
