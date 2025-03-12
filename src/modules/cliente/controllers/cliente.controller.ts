@@ -116,6 +116,12 @@ export class ClienteController {
     return this.clienteService.updateArchivosOferta(clienteId, ofertaId);
   }
 
+  @Get('all-abogados')
+  public async findAllAbogados(@Query() queryParams: any)
+  {
+    return await this.clienteService.findAbogados(queryParams);
+  }
+
   @Post('obtener-abogados-aptos-por-cliente')
   async obtenerAbogadosAptosPorCliente(
     @Body('clienteId') clienteId: number

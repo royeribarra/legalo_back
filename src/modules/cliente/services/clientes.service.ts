@@ -345,6 +345,32 @@ export class ClienteService{
     await this.usuarioRepository.save(user);
   }
 
+  public async findAbogados(queryParams): Promise<AbogadosEntity[]>
+  {
+    const query = this.abogadoRepository.createQueryBuilder('abogados')
+      .leftJoinAndSelect('abogados.industriasAbogado', 'industriasAbogado')
+      .leftJoinAndSelect('industriasAbogado.industria', 'industria')
+      .leftJoinAndSelect('abogados.serviciosAbogado', 'serviciosAbogado')
+      .leftJoinAndSelect('serviciosAbogado.servicio', 'servicio')
+      .leftJoinAndSelect('abogados.especialidadesAbogado', 'especialidadesAbogado')
+      .leftJoinAndSelect('especialidadesAbogado.especialidad', 'especialidad')
+      .leftJoinAndSelect('abogados.files', 'files');
+
+    if (queryParams.validadoAdmin !== undefined) {
+      const validadoAdmin = queryParams.validadoAdmin === 'true';
+      query.andWhere('abogados.validado_admin = :validado_admin', {
+        validado_admin: validadoAdmin,
+      });
+    }
+    try {
+      const clientes: AbogadosEntity[] = await query.getMany();
+
+      return clientes;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async obtenerAbogadosAptosPorcliente(clienteId: number): Promise<AbogadosEntity[]> {
     // Subconsulta para industrias
     const subqueryIndustrias = this.abogadoRepository
