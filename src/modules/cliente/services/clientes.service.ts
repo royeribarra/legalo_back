@@ -345,7 +345,7 @@ export class ClienteService{
     await this.usuarioRepository.save(user);
   }
 
-  public async findAbogados(queryParams): Promise<AbogadosEntity[]>
+  public async findAbogados(clienteId: number, validadoAdmin: boolean): Promise<AbogadosEntity[]>
   {
     const query = this.abogadoRepository.createQueryBuilder('abogados')
       .leftJoinAndSelect('abogados.industriasAbogado', 'industriasAbogado')
@@ -354,14 +354,10 @@ export class ClienteService{
       .leftJoinAndSelect('serviciosAbogado.servicio', 'servicio')
       .leftJoinAndSelect('abogados.especialidadesAbogado', 'especialidadesAbogado')
       .leftJoinAndSelect('especialidadesAbogado.especialidad', 'especialidad')
-      .leftJoinAndSelect('abogados.files', 'files');
-
-    if (queryParams.validadoAdmin !== undefined) {
-      const validadoAdmin = queryParams.validadoAdmin === 'true';
-      query.andWhere('abogados.validado_admin = :validado_admin', {
+      .leftJoinAndSelect('abogados.files', 'files')
+      .andWhere('abogados.validado_admin = :validado_admin', {
         validado_admin: validadoAdmin,
-      });
-    }
+    });
     try {
       const clientes: AbogadosEntity[] = await query.getMany();
 
