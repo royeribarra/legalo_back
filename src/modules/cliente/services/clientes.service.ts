@@ -3,13 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ClienteDTO, ClienteUpdateDTO } from '../dto/cliente.dto';
 import { ErrorManager } from '../../../utils/error.manager';
-import { EducacionesEntity } from '../../educacion/educaciones.entity';
-import { EspecialidadesEntity } from '../../especialidad/especialidades.entity';
-import { ExperienciasEntity } from '../../experiencia/experiencias.entity';
-import { HabilidadesBlandaEntity } from '../../habilidadBlanda/habilidadesBlanda.entity';
-import { HabilidadesDuraEntity } from '../../habilidadDura/habilidadesDura.entity';
-import { IndustriasEntity } from '../../industria/industrias.entity';
-import { ServiciosEntity } from '../../servicio/servicios.entity';
 import { UsuariosService } from '../../usuario/usuario.service';
 import { ClientesEntity } from '../entities/clientes.entity';
 import { ClienteMailService } from '../../mail/services/clienteMail.service';
@@ -18,24 +11,22 @@ import { OfertasEntity } from '../../oferta/oferta.entity';
 import { FileEntity } from '../../tmp/file.entity';
 import { UsuariosEntity } from '../../usuario/usuarios.entity';
 import { randomBytes } from 'crypto';
-import { RolEnum } from 'src/modules/usuario/roles.enum';
+import { RolEnum } from '../../usuario/roles.enum';
+import { AbogadosEntity } from '../../abogado/entities/abogados.entity';
+import { Brackets } from "typeorm";
+import { IndustriasOfertaEntity } from 'src/modules/industria/industriaOferta.entity';
+import { ServiciosOfertaEntity } from 'src/modules/servicio/servicioOferta.entity';
+import { EspecialidadesOfertaEntity } from 'src/modules/especialidad/especialidadOferta.entity';
 
 @Injectable()
 export class ClienteService{
   constructor(
     @InjectRepository(ClientesEntity) private readonly clienteRepository: Repository<ClientesEntity>,
-    @InjectRepository(EducacionesEntity) private readonly educacionesRepository: Repository<EducacionesEntity>,
-    @InjectRepository(EspecialidadesEntity) private readonly especialidadesRepository: Repository<EspecialidadesEntity>,
-    @InjectRepository(ExperienciasEntity) private readonly experienciaRepository: Repository<ExperienciasEntity>,
-
-    @InjectRepository(HabilidadesBlandaEntity) private readonly habilidadBlandRepository: Repository<HabilidadesBlandaEntity>,
-    @InjectRepository(HabilidadesDuraEntity) private readonly habilidadDurRepository: Repository<HabilidadesDuraEntity>,
-    @InjectRepository(IndustriasEntity) private readonly industriaRepository: Repository<IndustriasEntity>,
-    @InjectRepository(ServiciosEntity) private readonly servicioRepository: Repository<ServiciosEntity>,
     @InjectRepository(TrabajosEntity) private readonly trabajoRepository: Repository<TrabajosEntity>,
     @InjectRepository(OfertasEntity) private readonly ofertaRepository: Repository<OfertasEntity>,
     @InjectRepository(FileEntity) private readonly tmpRepository: Repository<FileEntity>,
     @InjectRepository(UsuariosEntity) private readonly usuarioRepository: Repository<UsuariosEntity>,
+    @InjectRepository(AbogadosEntity) private readonly abogadoRepository: Repository<AbogadosEntity>,
     private readonly usuariosService: UsuariosService,
     private readonly clienteMailService: ClienteMailService
   ){}
@@ -352,5 +343,58 @@ export class ClienteService{
     user.activationCode = activationCode;
     user.activationCodeExpires = expiresAt;
     await this.usuarioRepository.save(user);
+  }
+
+  public async obtenerAbogadosAptosPorcliente(clienteId: number): Promise<AbogadosEntity[]> {
+    // Subconsulta para industrias
+    const subqueryIndustrias = this.abogadoRepository
+      .createQueryBuilder()
+      .select('industriasOferta.industriaId')
+      .from(IndustriasOfertaEntity, 'industriasOferta')
+      .innerJoin(OfertasEntity, 'ofertas', 'industriasOferta.ofertaId = ofertas.id')
+      .where('ofertas.clienteId = :clienteId', { clienteId })
+      .getQuery();
+
+    // Subconsulta para servicios
+    const subqueryServicios = this.abogadoRepository
+      .createQueryBuilder()
+      .select('serviciosOferta.servicioId')
+      .from(ServiciosOfertaEntity, 'serviciosOferta')
+      .innerJoin(OfertasEntity, 'ofertas', 'serviciosOferta.ofertaId = ofertas.id')
+      .where('ofertas.clienteId = :clienteId', { clienteId })
+      .getQuery();
+
+    // Subconsulta para especialidades
+    const subqueryEspecialidades = this.abogadoRepository
+      .createQueryBuilder()
+      .select('especialidadesOferta.especialidadId')
+      .from(EspecialidadesOfertaEntity, 'especialidadesOferta')
+      .innerJoin(OfertasEntity, 'ofertas', 'especialidadesOferta.ofertaId = ofertas.id')
+      .where('ofertas.clienteId = :clienteId', { clienteId })
+      .getQuery();
+
+    // Query principal para obtener los abogados
+    const query = this.abogadoRepository.createQueryBuilder('abogados')
+      .leftJoinAndSelect('abogados.industriasAbogado', 'industriasAbogado')
+      .leftJoinAndSelect('industriasAbogado.industria', 'industria')
+      .leftJoinAndSelect('abogados.serviciosAbogado', 'serviciosAbogado')
+      .leftJoinAndSelect('serviciosAbogado.servicio', 'servicio')
+      .leftJoinAndSelect('abogados.especialidadesAbogado', 'especialidadesAbogado')
+      .leftJoinAndSelect('especialidadesAbogado.especialidad', 'especialidad')
+      .leftJoinAndSelect('abogados.experiencias', 'experiencias')
+      .leftJoinAndSelect('abogados.educaciones', 'educaciones')
+      .leftJoinAndSelect('abogados.files', 'files')
+      .where('abogados.validado_admin = :validado_admin', { validado_admin: true })
+      .andWhere(new Brackets(qb => {
+        qb.where(`industriasAbogado.industriaId IN (${subqueryIndustrias})`)
+          .orWhere(`serviciosAbogado.servicioId IN (${subqueryServicios})`)
+          .orWhere(`especialidadesAbogado.especialidadId IN (${subqueryEspecialidades})`);
+      }))
+      .setParameter('clienteId', clienteId); // Pasar el parámetro correctamente
+    try {
+      return await query.getMany();
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
   }
 }

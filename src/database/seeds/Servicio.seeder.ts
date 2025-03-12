@@ -11,31 +11,31 @@ export default class ServicioSeeder implements Seeder {
       const servicioRepository =  dataSource.getRepository(ServiciosEntity);
       const data= [
         {
-            nombre: "No estoy seguro del servicio a escoger"
+          nombre: "No estoy seguro del servicio a escoger"
         },
         {
-            nombre: "Asesoría legal"
+          nombre: "Asesoría legal"
         },
         {
-            nombre: "Consultoría "
+          nombre: "Consultoría "
         },
         {
-            nombre: "Patrocinio en poder judicial"
+          nombre: "Patrocinio en poder judicial"
         },
         {
-            nombre: "Patrocinio en procedimiento administrativo"
+          nombre: "Patrocinio en procedimiento administrativo"
         },
         {
-            nombre: "Redacción de Documentos Legales"
+          nombre: "Redacción de Documentos Legales"
         },
         {
-            nombre: "Cumplimiento Regulatorio"
+          nombre: "Cumplimiento Regulatorio"
         },
         {
-            nombre: "Mediación"
+          nombre: "Mediación"
         },
         {
-            nombre: "Prácticas pre-profesionales"
+          nombre: "Prácticas pre-profesionales"
         },
       ];
 

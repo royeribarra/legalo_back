@@ -115,4 +115,11 @@ export class ClienteController {
   ) {
     return this.clienteService.updateArchivosOferta(clienteId, ofertaId);
   }
+
+  @Post('obtener-abogados-aptos-por-cliente')
+  async obtenerAbogadosAptosPorCliente(
+    @Body('clienteId') clienteId: number
+  ) {
+    return this.clienteService.obtenerAbogadosAptosPorcliente(clienteId);
+  }
 }
