@@ -41,7 +41,7 @@ export class AbogadoMailService {
     try {
       const response = await this.mailerService.sendMail({
         to: userEmail,
-        subject: 'Lamentamos',
+        subject: 'No registro',
         template: './abogado/rechazo',
         context: {
           nombres: nombres + ' ' + apellidos,
