@@ -18,8 +18,8 @@ import { AdminMailService } from './services/adminMail.service';
         // or
         transport: {
           host: process.env.MAIL_HOST,
-          port: 465,
-          secure: true,
+          port: config.get<number>('MAIL_PORT'),
+          secure: config.get<boolean>('MAIL_SECURE'),
           auth: {
             user: process.env.MAIL_USER,
             pass: process.env.MAIL_PASSWORD,
