@@ -352,19 +352,12 @@ export class AbogadosService{
   public async findAbogados(queryParams): Promise<AbogadosEntity[]>
   {
     const query = this.abogadosRepository.createQueryBuilder('abogados')
-      .leftJoinAndSelect('abogados.habilidadesBlandas', 'habilidadesBlandas')
-      .leftJoinAndSelect('abogados.habilidadesDuras', 'habilidadesDuras')
       .leftJoinAndSelect('abogados.industriasAbogado', 'industriasAbogado')
       .leftJoinAndSelect('industriasAbogado.industria', 'industria')
       .leftJoinAndSelect('abogados.serviciosAbogado', 'serviciosAbogado')
       .leftJoinAndSelect('serviciosAbogado.servicio', 'servicio')
       .leftJoinAndSelect('abogados.especialidadesAbogado', 'especialidadesAbogado')
       .leftJoinAndSelect('especialidadesAbogado.especialidad', 'especialidad')
-      .leftJoinAndSelect('abogados.experiencias', 'experiencias')
-      .leftJoinAndSelect('abogados.educaciones', 'educaciones')
-      .leftJoinAndSelect('abogados.usuario', 'usuario')
-      .leftJoinAndSelect('abogados.aplicaciones', 'aplicaciones')
-      .leftJoinAndSelect('abogados.trabajos', 'trabajos')
       .leftJoinAndSelect('abogados.files', 'files');
 
     if (queryParams.validadoAdmin !== undefined) {
