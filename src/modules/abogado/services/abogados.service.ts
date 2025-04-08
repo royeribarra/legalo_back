@@ -358,6 +358,7 @@ export class AbogadosService{
       .leftJoinAndSelect('serviciosAbogado.servicio', 'servicio')
       .leftJoinAndSelect('abogados.especialidadesAbogado', 'especialidadesAbogado')
       .leftJoinAndSelect('especialidadesAbogado.especialidad', 'especialidad')
+      .leftJoinAndSelect('abogados.usuario', 'usuario')
       .leftJoinAndSelect('abogados.files', 'files');
 
     if (queryParams.validadoAdmin !== undefined) {
