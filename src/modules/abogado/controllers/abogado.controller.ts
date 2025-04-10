@@ -36,6 +36,11 @@ export class AbogadosController {
     return await this.abogadosService.findAbogadoById(id);
   }
 
+  @Get('obtener-abogado-nuevo')
+  public async obtenerAbogadoconSelect(@Param('id') id: number){
+    return await this.abogadosService.newFindAbogadoById(id);
+  }
+
   @Put('edit/:id')
   public async updateAbogado(@Body() body: Partial<AbogadoUpdateDTO>, @Param('id') id: number)
   {

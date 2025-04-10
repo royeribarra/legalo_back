@@ -21,6 +21,7 @@ import { AplicacionesModule } from './modules/aplicacion/aplicacion.module';
 import { TrabajosModule } from './modules/trabajo/trabajo.module';
 import { LibroReclamacionesModule } from './modules/libro-reclamaciones/libro-reclamaciones.module';
 import { PagoAbogadoModule } from './modules/pagoAbogado/pagoAbogado.module';
+import { LogModule } from './modules/log/log.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { PagoAbogadoModule } from './modules/pagoAbogado/pagoAbogado.module';
     TrabajosModule,
     LibroReclamacionesModule,
     PagoAbogadoModule,
+    LogModule,
     ServeStaticModule.forRoot({
       rootPath: join(join(process.cwd(), 'public')),
       serveRoot: '/public'

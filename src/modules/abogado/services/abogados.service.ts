@@ -408,6 +408,44 @@ export class AbogadosService{
     }
   }
 
+  public async newFindAbogadoById(id: number): Promise<AbogadosEntity>
+  {
+    try {
+      const query = await this.abogadosRepository
+        .createQueryBuilder('abogados')
+        .leftJoinAndSelect('abogados.habilidadesBlandas', 'habilidadesBlandas')
+        .addSelect(['habilidadesBlandas.id', 'habilidadesBlandas.nombre']) // solo selecciona el campo `nombre` de habilidades blandas
+        .leftJoinAndSelect('abogados.habilidadesDuras', 'habilidadesDuras')
+        .addSelect(['habilidadesBlandas.id', 'habilidadesDuras.nombre']) // solo selecciona el campo `nombre` de habilidades duras
+        .leftJoinAndSelect('abogados.industriasAbogado', 'industriasAbogado')
+        .leftJoinAndSelect('industriasAbogado.industria', 'industria')
+        .addSelect(['industria.id', 'industria.nombre']) // solo selecciona el campo `nombre` de la industria
+        .leftJoinAndSelect('abogados.serviciosAbogado', 'serviciosAbogado')
+        .leftJoinAndSelect('serviciosAbogado.servicio', 'servicio')
+        .addSelect(['servicio.id', 'servicio.nombre']) // solo selecciona el campo `nombre` del servicio
+        .leftJoinAndSelect('abogados.especialidadesAbogado', 'especialidadesAbogado')
+        .leftJoinAndSelect('especialidadesAbogado.especialidad', 'especialidad')
+        .addSelect(['especialidad.id', 'especialidad.nombre']) // solo selecciona el campo `nombre` de la especialidad
+        .leftJoinAndSelect('abogados.experiencias', 'experiencias')
+        .leftJoinAndSelect('abogados.educaciones', 'educaciones')
+        .leftJoinAndSelect('abogados.files', 'files')
+        .where('abogados.id = :id', { id });
+
+        query.where('abogados.id = :id', { id });
+
+        const abogado = await query.getOne();
+        if(!abogado)
+        {
+          return null;
+        }
+
+        return abogado;
+    } catch (error) {
+      console.log(error, "error en conductorService - findConductorbyId")
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async findBy({key, value} : { key: keyof AbogadoDTO; value: any })
   {
     try {
