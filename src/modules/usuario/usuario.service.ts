@@ -210,6 +210,23 @@ export class UsuariosService{
     }
   }
 
+  public async findUserLogin({key, value} : { key: keyof UsuarioDTO; value: any })
+  {
+    try {
+      const usuario: UsuariosEntity = await this.usuariosRepository.createQueryBuilder(
+        'usuario'
+      )
+      .addSelect('usuario.contrasena')
+      .leftJoinAndSelect('usuario.cliente', 'cliente')
+      .leftJoinAndSelect('usuario.abogado', 'abogado')
+      .where({[key]: value})
+      .getOne();
+      return usuario;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
   public async findBy({key, value} : { key: keyof UsuarioDTO; value: any })
   {
     try {

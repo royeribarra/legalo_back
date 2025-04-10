@@ -17,7 +17,7 @@ export class AuthService {
   }
   public async validateUser(usuario: string, contrasena: string){
     try {
-      const userByEmail = await this.userService.findBy({
+      const userByEmail = await this.userService.findUserLogin({
         key: 'correo',
         value: usuario
       });
