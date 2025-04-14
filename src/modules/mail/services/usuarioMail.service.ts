@@ -42,4 +42,33 @@ export class UsuarioMailService {
         console.log('error mailServiceSolicitudRecojo', error)
       }
   }
+
+  async solicitudCambioContrasena(email: string, code: string, expirationDate: string) {
+    const appUrl = this.configService.get<string>('REACT_APP_URL');
+    const resetLink = `${appUrl}/recuperar/cambiar-contrasena?code=${code}&email=${email}`;
+
+    try {
+      const response = await this.mailerService.sendMail({
+        to: email,
+        subject: 'Recuperación de contraseña - Legalo',
+        template: './usuario/recuperar-contrasena',
+        context: {
+          resetLink: resetLink,
+          expirationDate: expirationDate,
+          email: email
+        },
+      });
+
+      return {
+        state: true,
+        message: 'Se envió el correo de recuperación con éxito.',
+      };
+    } catch (error) {
+      console.error('Error UsuarioMailService (recuperación):', error);
+      return {
+        state: false,
+        message: 'Error al enviar el correo de recuperación.',
+      };
+    }
+  }
 }

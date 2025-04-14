@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, HttpException, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
@@ -21,6 +21,10 @@ import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
 import { InvitacionesEntity } from '../oferta/invitacion.entity';
 import { FileEntity } from '../tmp/file.entity';
+import { v4 as uuidv4 } from 'uuid';
+import { addHours, isAfter, format } from 'date-fns';
+import { PasswordResetRequestEntity } from './password-reset-request.entity';
+import { UsuarioMailService } from '../mail/services/usuarioMail.service';
 
 @Injectable()
 export class UsuariosService{
@@ -39,7 +43,8 @@ export class UsuariosService{
     @InjectRepository(TrabajosEntity) private readonly trabajosRepository: Repository<TrabajosEntity>,
     @InjectRepository(InvitacionesEntity) private readonly invitacionesRepository: Repository<InvitacionesEntity>,
     @InjectRepository(FileEntity) private readonly fileRepository: Repository<FileEntity>,
-
+    @InjectRepository(PasswordResetRequestEntity) private readonly resetRepo: Repository<PasswordResetRequestEntity>,
+    private readonly usuarioMailService: UsuarioMailService,
     private readonly abogadoMailService: AbogadoMailService,
   ){}
 
@@ -434,4 +439,117 @@ export class UsuariosService{
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  async solicitarCambioContrasena(email: string): Promise<{ status: number; message: string }> {
+    const token = uuidv4();
+    const expiresAt = addHours(new Date(), 48); // 48 horas
+  
+    // Primero, verificamos si el correo existe en la base de datos de usuarios
+    const usuarioExistente: UsuariosEntity = await this.usuariosRepository
+      .createQueryBuilder('usuario')
+      .where('usuario.correo = :correo', { correo: email })  // Usamos el campo 'correo' en la entidad
+      .getOne();
+
+    if (!usuarioExistente) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        message: 'El correo electrónico no está registrado en el sistema.',
+      }, HttpStatus.NOT_FOUND);
+    }
+  
+    // Verificamos si ya hay una solicitud activa
+    const solicitudExistente = await this.resetRepo.findOne({
+      where: { email },
+      order: { createdAt: 'DESC' },
+    });
+  
+    if (solicitudExistente && isAfter(solicitudExistente.expiresAt, new Date())) {
+      // Ya existe una solicitud activa
+      throw new HttpException({
+        status: HttpStatus.CONFLICT,
+        message: 'Ya existe una solicitud activa de recuperación de contraseña.',
+      }, HttpStatus.CONFLICT);
+    }
+  
+    try {
+      // Guardamos la nueva solicitud de cambio de contraseña
+      const solicitud = this.resetRepo.create({ email, token, expiresAt });
+      await this.resetRepo.save(solicitud);
+  
+      // Formateamos la fecha de expiración para el correo
+      const formattedDate = format(expiresAt, 'dd-MM-yyyy HH:mm');
+  
+      // Enviamos el correo con el enlace para cambiar la contraseña
+      await this.usuarioMailService.solicitudCambioContrasena(email, token, formattedDate);
+  
+      return {
+        status: 200,
+        message: 'Correo de recuperación enviado correctamente.',
+      };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error al generar la solicitud de cambio de contraseña.',
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async confirmarCambioContrasena(data: {
+    correo: string;
+    codigo: string;
+    nuevaContrasena: string;
+  }) {
+    const { correo, codigo, nuevaContrasena } = data;
+  
+    // Buscar la solicitud de cambio de contraseña
+    const passwordResetRequest = await this.resetRepo.findOne({
+      where: {
+        email: correo,
+        token: codigo,
+      },
+    });
+  
+    // Validar que exista la solicitud
+    if (!passwordResetRequest) {
+      throw new NotFoundException('Código de recuperación inválido o correo no coincide');
+    }
+  
+    // Verificar si la solicitud ha expirado
+    if (new Date() > passwordResetRequest.expiresAt) {
+      throw new BadRequestException('El código de recuperación ha expirado');
+    }
+  
+    // Buscar al usuario
+    const usuario = await this.usuariosRepository.findOne({
+      where: { correo },
+    });
+  
+    // Validar que el usuario exista
+    if (!usuario) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+  
+    // Comparar el correo del usuario con el de la solicitud
+    if (passwordResetRequest.email !== usuario.correo) {
+      throw new BadRequestException('El correo de la solicitud no coincide con el correo del usuario');
+    }
+  
+    // Hashear la nueva contraseña igual que en el registro
+    const saltRounds = parseInt(process.env.HASH_SALT || '10', 10);
+    usuario.contrasena = await bcrypt.hash(nuevaContrasena, saltRounds);
+  
+    // Eliminar la solicitud de cambio de contraseña (ya no es necesario)
+    await this.resetRepo.delete(passwordResetRequest.id);
+  
+    // Actualizar la contraseña del usuario
+    const updatedUsuario = await this.usuariosRepository.save(usuario);
+
+    return {
+      state: true,
+      message: 'Contraseña actualizada correctamente',
+      usuario: updatedUsuario,
+    };
+  }
+
 }

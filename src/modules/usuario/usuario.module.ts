@@ -17,6 +17,7 @@ import { AplicacionesEntity } from '../aplicacion/aplicaciones.entity';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
 import { InvitacionesEntity } from '../oferta/invitacion.entity';
 import { FileEntity } from '../tmp/file.entity';
+import { PasswordResetRequestEntity } from './password-reset-request.entity';
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ import { FileEntity } from '../tmp/file.entity';
       AplicacionesEntity,
       TrabajosEntity,
       InvitacionesEntity,
-      FileEntity
+      FileEntity,
+      PasswordResetRequestEntity
     ]),
     MailModule
   ],

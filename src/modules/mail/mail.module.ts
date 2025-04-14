@@ -8,6 +8,7 @@ import { AbogadoMailService } from './services/abogadoMail.service';
 import { ClienteMailService } from './services/clienteMail.service';
 import { MailController } from './mail.controller';
 import { AdminMailService } from './services/adminMail.service';
+import { UsuarioMailService } from './services/usuarioMail.service';
 
 @Global()
 @Module({
@@ -45,9 +46,10 @@ import { AdminMailService } from './services/adminMail.service';
   providers: [
     MailService,
     AbogadoMailService,
+    UsuarioMailService,
     ClienteMailService,
     AdminMailService
   ],
-  exports: [MailService, AbogadoMailService, ClienteMailService, AdminMailService],
+  exports: [MailService, AbogadoMailService, ClienteMailService, AdminMailService, UsuarioMailService],
 })
 export class MailModule {}

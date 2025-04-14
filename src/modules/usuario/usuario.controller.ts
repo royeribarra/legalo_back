@@ -110,4 +110,23 @@ export class UsuariosController {
     await this.usuariosService.activateUser(user.id);
     return { message: 'Cuenta activada correctamente', user, success: true };
   }
+
+  @Post('solicitud-cambio-contrasena')
+  async solicitudCambioContrasena(@Body('correo') correo: string) {
+    const {status, message} = await this.usuariosService.solicitarCambioContrasena(correo);
+    return { message, status };
+  }
+
+  @Post('confirmar-cambio-contrasena')
+  async confirmarCambioContrasena(
+    @Body() { correo, codigo, nuevaContrasena }: { correo: string; codigo: string; nuevaContrasena: string },
+  ) {
+    // Llamar al servicio con los tres parámetros
+    const { state, message } = await this.usuariosService.confirmarCambioContrasena({
+      correo,
+      codigo,
+      nuevaContrasena,
+    });
+    return { state, message };
+  }
 }
