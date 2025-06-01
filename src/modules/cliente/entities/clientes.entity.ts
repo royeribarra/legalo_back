@@ -40,12 +40,18 @@ export class ClientesEntity extends BaseEntity implements ICliente
   @OneToOne(() => UsuariosEntity, (usuario) => usuario.cliente)
   usuario: UsuariosEntity;
 
-  @OneToMany(() => OfertasEntity, (oferta) => oferta.cliente)
+  @OneToMany(() => OfertasEntity, (oferta) => oferta.cliente, {
+    cascade: ['remove']
+  })
   ofertas: OfertasEntity[];
 
-  @OneToMany(() => TrabajosEntity, (trabajo) => trabajo.cliente)
+  @OneToMany(() => TrabajosEntity, (trabajo) => trabajo.cliente, {
+    cascade: ['remove']
+  })
   trabajos: TrabajosEntity[];
 
-  @OneToMany(() => PagosEntity, (pago) => pago.cliente)
+  @OneToMany(() => PagosEntity, (pago) => pago.cliente, {
+    cascade: ['remove']
+  })
   pagos: PagosEntity[];
 }

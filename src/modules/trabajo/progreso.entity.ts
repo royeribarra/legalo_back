@@ -16,6 +16,8 @@ export class ProgresoTrabajoEntity extends BaseEntity {
   @Column({ nullable: true })
   estado: string;
 
-  @ManyToOne(() => TrabajosEntity, (trabajo) => trabajo.progreso)
+  @ManyToOne(() => TrabajosEntity, (trabajo) => trabajo.progresos, {
+    onDelete: 'CASCADE',
+  })
   trabajo: TrabajosEntity;
 }

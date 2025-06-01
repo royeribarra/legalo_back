@@ -427,7 +427,7 @@ export class UsuariosService{
       await this.trabajosRepository.delete({ abogado: { id: abogado.id } });
       await this.invitacionesRepository.delete({ abogado: { id: abogado.id } });
       await this.fileRepository.delete({ abogado: { id: abogado.id }});
-  
+
       // Ahora, eliminar al abogado
       await this.abogadosRepository.delete(abogadoId);
       await this.abogadoMailService.rechazarAbogado(abogado.nombres, abogado.apellidos, abogado.correo);
@@ -443,7 +443,7 @@ export class UsuariosService{
   async solicitarCambioContrasena(email: string): Promise<{ status: number; message: string }> {
     const token = uuidv4();
     const expiresAt = addHours(new Date(), 48); // 48 horas
-  
+
     // Primero, verificamos si el correo existe en la base de datos de usuarios
     const usuarioExistente: UsuariosEntity = await this.usuariosRepository
       .createQueryBuilder('usuario')
@@ -456,13 +456,13 @@ export class UsuariosService{
         message: 'El correo electrónico no está registrado en el sistema.',
       }, HttpStatus.NOT_FOUND);
     }
-  
+
     // Verificamos si ya hay una solicitud activa
     const solicitudExistente = await this.resetRepo.findOne({
       where: { email },
       order: { createdAt: 'DESC' },
     });
-  
+
     if (solicitudExistente && isAfter(solicitudExistente.expiresAt, new Date())) {
       // Ya existe una solicitud activa
       throw new HttpException({
@@ -470,18 +470,18 @@ export class UsuariosService{
         message: 'Ya existe una solicitud activa de recuperación de contraseña.',
       }, HttpStatus.CONFLICT);
     }
-  
+
     try {
       // Guardamos la nueva solicitud de cambio de contraseña
       const solicitud = this.resetRepo.create({ email, token, expiresAt });
       await this.resetRepo.save(solicitud);
-  
+
       // Formateamos la fecha de expiración para el correo
       const formattedDate = format(expiresAt, 'dd-MM-yyyy HH:mm');
-  
+
       // Enviamos el correo con el enlace para cambiar la contraseña
       await this.usuarioMailService.solicitudCambioContrasena(email, token, formattedDate);
-  
+
       return {
         status: 200,
         message: 'Correo de recuperación enviado correctamente.',
@@ -500,48 +500,49 @@ export class UsuariosService{
     codigo: string;
     nuevaContrasena: string;
   }) {
-    const { correo, codigo, nuevaContrasena } = data;
-  
+    const correoNormalizado = data.correo.trim().toLowerCase();
+    const { codigo, nuevaContrasena } = data;
+
     // Buscar la solicitud de cambio de contraseña
     const passwordResetRequest = await this.resetRepo.findOne({
       where: {
-        email: correo,
+        email: correoNormalizado,
         token: codigo,
       },
     });
-  
+
     // Validar que exista la solicitud
     if (!passwordResetRequest) {
       throw new NotFoundException('Código de recuperación inválido o correo no coincide');
     }
-  
+
     // Verificar si la solicitud ha expirado
     if (new Date() > passwordResetRequest.expiresAt) {
       throw new BadRequestException('El código de recuperación ha expirado');
     }
-  
+
     // Buscar al usuario
     const usuario = await this.usuariosRepository.findOne({
-      where: { correo },
+      where: { correo: correoNormalizado },
     });
-  
+
     // Validar que el usuario exista
     if (!usuario) {
       throw new NotFoundException('Usuario no encontrado');
     }
-  
+
     // Comparar el correo del usuario con el de la solicitud
     if (passwordResetRequest.email !== usuario.correo) {
       throw new BadRequestException('El correo de la solicitud no coincide con el correo del usuario');
     }
-  
+
     // Hashear la nueva contraseña igual que en el registro
     const saltRounds = parseInt(process.env.HASH_SALT || '10', 10);
     usuario.contrasena = await bcrypt.hash(nuevaContrasena, saltRounds);
-  
+
     // Eliminar la solicitud de cambio de contraseña (ya no es necesario)
     await this.resetRepo.delete(passwordResetRequest.id);
-  
+
     // Actualizar la contraseña del usuario
     const updatedUsuario = await this.usuariosRepository.save(usuario);
 

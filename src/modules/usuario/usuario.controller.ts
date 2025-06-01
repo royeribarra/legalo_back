@@ -113,7 +113,8 @@ export class UsuariosController {
 
   @Post('solicitud-cambio-contrasena')
   async solicitudCambioContrasena(@Body('correo') correo: string) {
-    const {status, message} = await this.usuariosService.solicitarCambioContrasena(correo);
+    const correoLower = correo.toLowerCase();
+    const {status, message} = await this.usuariosService.solicitarCambioContrasena(correoLower);
     return { message, status };
   }
 
@@ -122,8 +123,9 @@ export class UsuariosController {
     @Body() { correo, codigo, nuevaContrasena }: { correo: string; codigo: string; nuevaContrasena: string },
   ) {
     // Llamar al servicio con los tres parámetros
+    const correoLower = correo.toLowerCase();
     const { state, message } = await this.usuariosService.confirmarCambioContrasena({
-      correo,
+      correo: correoLower,
       codigo,
       nuevaContrasena,
     });

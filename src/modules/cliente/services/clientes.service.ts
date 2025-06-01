@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ClienteDTO, ClienteUpdateDTO } from '../dto/cliente.dto';
@@ -14,9 +14,10 @@ import { randomBytes } from 'crypto';
 import { RolEnum } from '../../usuario/roles.enum';
 import { AbogadosEntity } from '../../abogado/entities/abogados.entity';
 import { Brackets } from "typeorm";
-import { IndustriasOfertaEntity } from 'src/modules/industria/industriaOferta.entity';
-import { ServiciosOfertaEntity } from 'src/modules/servicio/servicioOferta.entity';
-import { EspecialidadesOfertaEntity } from 'src/modules/especialidad/especialidadOferta.entity';
+import { IndustriasOfertaEntity } from '../../industria/industriaOferta.entity';
+import { ServiciosOfertaEntity } from '../../servicio/servicioOferta.entity';
+import { EspecialidadesOfertaEntity } from '../../especialidad/especialidadOferta.entity';
+import { PagosEntity } from '../../pago/pago.entity';
 
 @Injectable()
 export class ClienteService{
@@ -27,8 +28,9 @@ export class ClienteService{
     @InjectRepository(FileEntity) private readonly tmpRepository: Repository<FileEntity>,
     @InjectRepository(UsuariosEntity) private readonly usuarioRepository: Repository<UsuariosEntity>,
     @InjectRepository(AbogadosEntity) private readonly abogadoRepository: Repository<AbogadosEntity>,
+    @InjectRepository(AbogadosEntity) private readonly pagoRepository: Repository<PagosEntity>,
     private readonly usuariosService: UsuariosService,
-    private readonly clienteMailService: ClienteMailService
+    private readonly clienteMailService: ClienteMailService,
   ){}
 
   public async createCliente(body: ClienteDTO)
@@ -419,4 +421,36 @@ export class ClienteService{
       throw ErrorManager.createSignatureError(error.message);
     }
   }
+
+  async eliminarClienteYRelaciones(clienteId: number): Promise<void> {
+    const cliente = await this.clienteRepository.findOne({
+      where: { id: clienteId },
+      relations: ['pagos', 'trabajos', 'ofertas', 'usuario'],
+    });
+
+    if (!cliente) {
+      throw new NotFoundException('Cliente no encontrado');
+    }
+
+    // Primero eliminar relaciones dependientes
+    if (cliente.pagos?.length) {
+      await this.pagoRepository.remove(cliente.pagos);
+    }
+
+    if (cliente.trabajos?.length) {
+      await this.trabajoRepository.remove(cliente.trabajos);
+    }
+
+    if (cliente.ofertas?.length) {
+      await this.ofertaRepository.remove(cliente.ofertas);
+    }
+
+    if (cliente.usuario) {
+      await this.usuarioRepository.remove(cliente.usuario);
+    }
+
+    // Finalmente, eliminar el cliente
+    await this.clienteRepository.remove(cliente);
+  }
+
 }

@@ -22,10 +22,14 @@ export class TrabajosEntity extends BaseEntity implements ITrabajo {
 
   @Column({nullable: true})
   progreso: number;
-  @OneToMany(() => ProgresoTrabajoEntity, (progreso) => progreso.trabajo)
+  @OneToMany(() => ProgresoTrabajoEntity, (progreso) => progreso.trabajo, {
+    cascade: ['remove']
+  })
   progresos: ProgresoTrabajoEntity[];
 
-  @ManyToOne(() => ClientesEntity, (cliente) => cliente.trabajos)
+  @ManyToOne(() => ClientesEntity, (cliente) => cliente.trabajos, {
+    onDelete: 'CASCADE',
+  })
   cliente: ClientesEntity;
 
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.trabajos)
@@ -35,12 +39,16 @@ export class TrabajosEntity extends BaseEntity implements ITrabajo {
   @JoinColumn()
   aplicacion: AplicacionesEntity;
 
-  @OneToMany(() => FileEntity, (file) => file.trabajo, { cascade: true })
+  @OneToMany(() => FileEntity, (file) => file.trabajo, { cascade: ['remove'] })
   files: FileEntity[];
 
-  @OneToMany(() => PagosEntity, (pago) => pago.trabajo)
+  @OneToMany(() => PagosEntity, (pago) => pago.trabajo, {
+    cascade: ['remove']
+  })
   pagos: PagosEntity[];
 
-  @OneToMany(() => PagosAbogadoEntity, (pago) => pago.trabajo)
+  @OneToMany(() => PagosAbogadoEntity, (pago) => pago.trabajo, {
+    cascade: ['remove']
+  })
   pagosAbogado: PagosAbogadoEntity[];
 }

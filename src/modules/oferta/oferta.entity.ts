@@ -48,16 +48,24 @@ export class OfertasEntity extends BaseEntity implements IOferta {
   @Column({nullable: true, default: false })
   expirado: boolean;
 
-  @OneToMany(() => EspecialidadesOfertaEntity, (especialidadOferta) => especialidadOferta.oferta)
+  @OneToMany(() => EspecialidadesOfertaEntity, (especialidadOferta) => especialidadOferta.oferta, {
+    cascade: ['remove'],
+  })
   especialidadesOferta: EspecialidadesOfertaEntity[];
 
-  @OneToMany(() => ServiciosOfertaEntity, (servicioOferta) => servicioOferta.oferta)
+  @OneToMany(() => ServiciosOfertaEntity, (servicioOferta) => servicioOferta.oferta, {
+    cascade: ['remove'],
+  })
   serviciosOferta: ServiciosOfertaEntity[];
 
-  @OneToMany(() => IndustriasOfertaEntity, (industriaOferta) => industriaOferta.oferta)
+  @OneToMany(() => IndustriasOfertaEntity, (industriaOferta) => industriaOferta.oferta, {
+    cascade: ['remove'],
+  })
   industriasOferta: IndustriasOfertaEntity[];
 
-  @ManyToOne(() => ClientesEntity, (cliente) => cliente.ofertas)
+  @ManyToOne(() => ClientesEntity, (cliente) => cliente.ofertas, {
+    onDelete: 'CASCADE',
+  })
   cliente: ClientesEntity;
 
   @OneToMany(() => AplicacionesEntity, (aplicacion) => aplicacion.oferta)

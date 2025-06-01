@@ -21,7 +21,9 @@ export class PagosAbogadoEntity extends BaseEntity {
   @Column()
   estado: string;
 
-  @ManyToOne(() => TrabajosEntity, (trabajo) => trabajo.pagosAbogado)
+  @ManyToOne(() => TrabajosEntity, (trabajo) => trabajo.pagosAbogado, {
+    onDelete: 'CASCADE',
+  })
   trabajo: TrabajosEntity;
 
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.pagos)

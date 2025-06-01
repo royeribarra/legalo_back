@@ -37,14 +37,20 @@ export class PagosEntity extends BaseEntity {
   estado: string; // Estado del pago (Pendiente, Procesado, Pagado, etc.)
 
   // Relación con el Trabajo (Cada pago está asociado a un trabajo)
-  @ManyToOne(() => TrabajosEntity, (trabajo) => trabajo.pagos)
+  @ManyToOne(() => TrabajosEntity, (trabajo) => trabajo.pagos, {
+    onDelete: 'CASCADE',
+  })
   trabajo: TrabajosEntity;
 
   // Relación con el Cliente (Cliente que realizó el pago)
-  @ManyToOne(() => ClientesEntity, (cliente) => cliente.pagos)
+  @ManyToOne(() => ClientesEntity, (cliente) => cliente.pagos, {
+    onDelete: 'CASCADE',
+  })
   cliente: ClientesEntity;
 
   // Relación con el Abogado (Abogado que recibe el pago)
-  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.pagos)
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.pagos, {
+    onDelete: 'CASCADE',
+  })
   abogado: AbogadosEntity;
 }

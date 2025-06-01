@@ -35,6 +35,6 @@ export class FileEntity extends BaseEntity{
   aplicacion?: AplicacionesEntity;
 
   // Relación opcional con Trabajo
-  @ManyToOne(() => TrabajosEntity, (trabajo) => trabajo.files, { nullable: true })
+  @ManyToOne(() => TrabajosEntity, (trabajo) => trabajo.files, { nullable: true, onDelete: 'CASCADE' })
   trabajo?: TrabajosEntity;
 }
