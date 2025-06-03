@@ -427,30 +427,36 @@ export class ClienteService{
       where: { id: clienteId },
       relations: ['pagos', 'trabajos', 'ofertas', 'usuario'],
     });
+    console.log(cliente)
+    try {
+      if (!cliente) {
+        throw new NotFoundException('Cliente no encontrado');
+      }
 
-    if (!cliente) {
-      throw new NotFoundException('Cliente no encontrado');
+      // Primero eliminar relaciones dependientes
+      if (cliente.pagos?.length) {
+        await this.pagoRepository.remove(cliente.pagos);
+      }
+
+      if (cliente.trabajos?.length) {
+        await this.trabajoRepository.remove(cliente.trabajos);
+      }
+
+      if (cliente.ofertas?.length) {
+        await this.ofertaRepository.remove(cliente.ofertas);
+      }
+
+      if (cliente.usuario) {
+        await this.usuarioRepository.remove(cliente.usuario);
+      }
+
+      // Finalmente, eliminar el cliente
+      await this.clienteRepository.remove(cliente);
+    } catch (error) {
+      console.log(error)
     }
 
-    // Primero eliminar relaciones dependientes
-    if (cliente.pagos?.length) {
-      await this.pagoRepository.remove(cliente.pagos);
-    }
-
-    if (cliente.trabajos?.length) {
-      await this.trabajoRepository.remove(cliente.trabajos);
-    }
-
-    if (cliente.ofertas?.length) {
-      await this.ofertaRepository.remove(cliente.ofertas);
-    }
-
-    if (cliente.usuario) {
-      await this.usuarioRepository.remove(cliente.usuario);
-    }
-
-    // Finalmente, eliminar el cliente
-    await this.clienteRepository.remove(cliente);
+    
   }
 
 }

@@ -35,7 +35,9 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
   @Column({ nullable: true})
   videoExtraUrl: string;
 
-  @ManyToOne(() => OfertasEntity, (oferta) => oferta.aplicaciones)
+  @ManyToOne(() => OfertasEntity, (oferta) => oferta.aplicaciones, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   oferta: OfertasEntity;
 

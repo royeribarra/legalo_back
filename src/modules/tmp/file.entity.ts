@@ -27,11 +27,17 @@ export class FileEntity extends BaseEntity{
   abogado?: AbogadosEntity;
 
   // Relación opcional con Oferta
-  @ManyToOne(() => OfertasEntity, (oferta) => oferta.files, { nullable: true })
+  @ManyToOne(() => OfertasEntity, (oferta) => oferta.files, {
+    nullable: true,
+    onDelete: 'CASCADE'
+  })
   oferta?: OfertasEntity;
 
   // Relación opcional con Aplicacion
-  @ManyToOne(() => AplicacionesEntity, (aplicacion) => aplicacion.files, { nullable: true })
+  @ManyToOne(() => AplicacionesEntity, (aplicacion) => aplicacion.files, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   aplicacion?: AplicacionesEntity;
 
   // Relación opcional con Trabajo

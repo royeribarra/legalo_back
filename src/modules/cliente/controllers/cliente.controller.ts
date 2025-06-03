@@ -131,4 +131,11 @@ export class ClienteController {
   ) {
     return this.clienteService.obtenerAbogadosAptosPorcliente(clienteId);
   }
+
+  @Post('eliminar')
+  async eliminarAbogdo(
+    @Body('clienteId') clienteId: number
+  ) {
+    return this.clienteService.eliminarClienteYRelaciones(clienteId);
+  }
 }

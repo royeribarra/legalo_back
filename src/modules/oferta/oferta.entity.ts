@@ -82,3 +82,5 @@ export class OfertasEntity extends BaseEntity implements IOferta {
   @OneToMany(() => FileEntity, (file) => file.oferta, { cascade: true })
   files: FileEntity[];
 }
+
+
