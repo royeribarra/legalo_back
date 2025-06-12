@@ -25,6 +25,8 @@ export class InvitacionesEntity extends BaseEntity implements IInvitacion
     @ManyToOne(() => OfertasEntity, (oferta) => oferta.invitaciones)
     oferta: OfertasEntity;
 
-    @ManyToOne(() => AbogadosEntity, (abogado) => abogado.invitaciones)
+    @ManyToOne(() => AbogadosEntity, (abogado) => abogado.invitaciones, {
+      onDelete: 'CASCADE',
+    })
     abogado: AbogadosEntity;
 }

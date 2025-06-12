@@ -8,6 +8,8 @@ export class HabilidadesDuraEntity extends BaseEntity implements IHabilidadDura{
   @Column()
   nombre: string;
 
-  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.habilidadesBlandas)
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.habilidadesDuras, {
+    onDelete: 'CASCADE',
+  })
   abogado: AbogadosEntity;
 }

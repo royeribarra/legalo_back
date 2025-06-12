@@ -32,7 +32,9 @@ export class TrabajosEntity extends BaseEntity implements ITrabajo {
   })
   cliente: ClientesEntity;
 
-  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.trabajos)
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.trabajos, {
+    onDelete: 'CASCADE',
+  })
   abogado: AbogadosEntity;
 
   @OneToOne(() => AplicacionesEntity, (aplicacion) => aplicacion.trabajo)

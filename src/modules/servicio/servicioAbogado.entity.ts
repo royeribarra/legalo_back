@@ -7,7 +7,9 @@ export class ServiciosAbogadoEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.serviciosAbogado)
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.serviciosAbogado, {
+    onDelete: 'CASCADE',
+  })
   abogado: AbogadosEntity;
 
   @ManyToOne(() => ServiciosEntity, (servicio) => servicio.serviciosAbogado)

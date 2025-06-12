@@ -41,7 +41,9 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
   @JoinColumn()
   oferta: OfertasEntity;
 
-  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.aplicaciones)
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.aplicaciones, {
+    onDelete: 'CASCADE',
+  })
   abogado: AbogadosEntity;
 
   @OneToOne(() => TrabajosEntity, (trabajo) => trabajo.aplicacion)

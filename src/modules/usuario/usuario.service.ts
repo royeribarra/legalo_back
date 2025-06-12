@@ -285,13 +285,13 @@ export class UsuariosService{
   public async activateUser(userId: number): Promise<void> {
     const user = await this.usuariosRepository.findOne({
       where: { id: userId },
-      relations: ['abogado'],
+      // relations: ['abogado'],
     });
-    if(user.abogado){
-      const abogado = await this.abogadosRepository.findOne({ where: { id: user.abogado.id } });
-      abogado.validado_admin = true;
-      await this.abogadosRepository.save(abogado);
-    }
+    // if(user.abogado){
+    //   const abogado = await this.abogadosRepository.findOne({ where: { id: user.abogado.id } });
+    //   abogado.validado_admin = true;
+    //   await this.abogadosRepository.save(abogado);
+    // }
 
     user.isActive = true;
     user.activationCode = null;
@@ -307,9 +307,9 @@ export class UsuariosService{
         throw new Error("Abogado no encontrado");
       }
 
-      // abogado.validado_admin = true;
+      abogado.validado_admin = true;
 
-      // await this.abogadosRepository.save(abogado);
+      await this.abogadosRepository.save(abogado);
 
       const usuario: UsuariosEntity = await this.usuariosRepository
         .createQueryBuilder('usuario')

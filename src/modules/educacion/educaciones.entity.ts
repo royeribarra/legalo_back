@@ -23,6 +23,8 @@ export class EducacionesEntity extends BaseEntity implements IEducacion{
   @Column({nullable: true})
   descripcion: string;
 
-  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.habilidadesBlandas)
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.educaciones, {
+    onDelete: 'CASCADE',
+  })
   abogado: AbogadosEntity;
 }

@@ -23,7 +23,9 @@ export class FileEntity extends BaseEntity{
   idFront: string;
 
   // Relación opcional con Abogado
-  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.files, { nullable: true })
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.files, {
+    onDelete: 'CASCADE',
+  })
   abogado?: AbogadosEntity;
 
   // Relación opcional con Oferta

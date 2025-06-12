@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { ClienteDTO, ClienteUpdateDTO } from '../dto/cliente.dto';
@@ -422,7 +422,7 @@ export class ClienteService{
     }
   }
 
-  async eliminarClienteYRelaciones(clienteId: number): Promise<void> {
+  async eliminarClienteYRelaciones(clienteId: number) {
     const cliente = await this.clienteRepository.findOne({
       where: { id: clienteId },
       relations: ['pagos', 'trabajos', 'ofertas', 'usuario'],
@@ -452,8 +452,15 @@ export class ClienteService{
 
       // Finalmente, eliminar el cliente
       await this.clienteRepository.remove(cliente);
+      return {
+        state: true,
+        message: 'Cliente eliminado correctamente',
+      };
+
     } catch (error) {
       console.log(error)
+      console.error(error);
+    throw new InternalServerErrorException('Error al eliminar el cliente y sus relaciones');
     }
 
     

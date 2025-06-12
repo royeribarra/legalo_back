@@ -26,6 +26,8 @@ export class ExperienciasEntity extends BaseEntity implements IExperiencia{
   @Column({ default: false })
   trabajoActual: boolean;
 
-  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.habilidadesBlandas)
+  @ManyToOne(() => AbogadosEntity, (abogado) => abogado.experiencias, {
+    onDelete: 'CASCADE',
+  })
   abogado: AbogadosEntity;
 }
