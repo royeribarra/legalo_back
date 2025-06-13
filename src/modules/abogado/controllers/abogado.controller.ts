@@ -176,4 +176,9 @@ export class AbogadosController {
       };
     }
   }
+
+  @Delete(':id')
+  async eliminarAbogado(@Param('id') id: string) {
+    return this.abogadosService.eliminarAbogadoPorId(Number(id));
+  }
 }

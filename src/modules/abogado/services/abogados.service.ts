@@ -656,4 +656,32 @@ export class AbogadosService{
 
     return trabajos;
   }
+
+  async eliminarAbogadoPorId(id: number): Promise<{ mensaje: string }> {
+    const abogado = await this.abogadosRepository.findOne({
+      where: { id },
+      relations: [
+        'habilidadesBlandas',
+        'habilidadesDuras',
+        'industriasAbogado',
+        'serviciosAbogado',
+        'especialidadesAbogado',
+        'experiencias',
+        'educaciones',
+        'aplicaciones',
+        'trabajos',
+        'invitaciones',
+        'files',
+        'pagos',
+        'usuario',
+      ],
+    });
+
+    if (!abogado) {
+      throw new NotFoundException('Abogado no encontrado');
+    }
+
+    await this.abogadosRepository.remove(abogado);
+    return { mensaje: 'Abogado eliminado correctamente junto con sus relaciones' };
+  }
 }
