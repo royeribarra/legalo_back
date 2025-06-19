@@ -30,10 +30,13 @@ export class AplicacionesEntity extends BaseEntity implements IAplicacion
   salarioEsperado: number;
 
   @Column({ nullable: true})
-  documentoExtraUrl: string;
+  comision: number;
 
   @Column({ nullable: true})
-  videoExtraUrl: string;
+  impuesto: number;
+
+  @Column({ nullable: true})
+  salarioReal: number;
 
   @ManyToOne(() => OfertasEntity, (oferta) => oferta.aplicaciones, {
     onDelete: 'CASCADE',

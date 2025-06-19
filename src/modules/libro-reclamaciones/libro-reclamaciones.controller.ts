@@ -37,4 +37,9 @@ export class LibroReclamacionesController {
   public async remove(@Param("id") id: number) {
     return this.libroService.remove(id);
   }
+
+  @Post(":id/responder")
+  public async responderLibro(@Param("id") id: number, @Body("respuesta") respuesta: string) {
+    return this.libroService.responderLibro(id, respuesta);
+  }
 }

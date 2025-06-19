@@ -100,15 +100,6 @@ public async updateArchivosAplicacion(
       };
     }
 
-    // Paso 4: Actualizar los campos de la aplicación
-    if (documentoTmpfile) {
-      aplicacion.documentoExtraUrl = documentoTmpfile.filePath; // Asignar el archivo de documento
-    }
-
-    if (videoTmpfile) {
-      aplicacion.videoExtraUrl = videoTmpfile.filePath; // Asignar el archivo de video
-    }
-
     // Paso 5: Guardar la aplicación con los campos actualizados
     await this.aplicacionesRepository.save(aplicacion);
 

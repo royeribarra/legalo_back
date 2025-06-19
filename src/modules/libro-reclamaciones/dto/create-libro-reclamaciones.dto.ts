@@ -22,5 +22,5 @@ export class CreateLibroReclamacionesDto {
 
   @IsString()
   @MinLength(10, { message: "Debe contener al menos 10 caracteres" })
-  detalle: string;
+  descripcion: string;
 }

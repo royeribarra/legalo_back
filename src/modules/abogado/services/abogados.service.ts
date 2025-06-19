@@ -512,11 +512,18 @@ export class AbogadosService{
     oferta.estado = 'verificar_postulaciones';
     await this.ofertaRepository.save(oferta);
 
+    const comision = salarioEsperado * 0.20;
+    const impuesto = salarioEsperado * 0.18;
+    const salarioReal = salarioEsperado - comision - impuesto;
+
     // Crear una nueva instancia de AplicacionesEntity
     const nuevaAplicacion = this.aplicacionesRepository.create({
       fecha_aplicacion: new Date().toISOString(),
       estado: "pendiente",
       salarioEsperado,
+      comision,
+      impuesto,
+      salarioReal,
       abogado,
       oferta,
       numeroCuenta,

@@ -11,23 +11,35 @@ export class LibroReclamaciones extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100 })
+  @Column()
   nombre: string;
 
-  @Column({ length: 8 })
+  @Column()
+  doomicilio: string;
+
+  @Column()
   dni: string;
+
+  @Column()
+  telefono: string;
 
   @Column({ length: 100 })
   email: string;
-
-  @Column({ length: 9 })
-  telefono: string;
 
   @Column({ type: "enum", enum: TipoReclamo })
   tipo: TipoReclamo;
 
   @Column({ type: "text" })
-  detalle: string;
+  descripcion: string;
+
+  @Column({ type: "text" })
+  pedido: string;
+
+  @Column({ type: "text" })
+  respuesta: string;
+
+  @Column()
+  fueRespondido: boolean;
 
   @CreateDateColumn()
   fechaRegistro: Date;

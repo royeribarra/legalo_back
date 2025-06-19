@@ -12,7 +12,7 @@ export class PdfController {
     const pdfBuffer = await this.pdfService.generateReclamacionPDF();
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename="hoja_reclamacion.pdf"',
+      'Content-Disposition': 'inline; filename="hoja_reclamacion.pdf"',
       'Content-Length': pdfBuffer.length,
     });
     res.send(pdfBuffer);

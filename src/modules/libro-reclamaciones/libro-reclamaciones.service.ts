@@ -16,7 +16,7 @@ export class LibroReclamacionesService {
   public async create(dto: CreateLibroReclamacionesDto) {
     // const reclamo = await this.libroRepo.create(dto);
     const newReclamo = new LibroReclamaciones();
-    newReclamo.detalle = dto.detalle;
+    newReclamo.descripcion = dto.descripcion;
     newReclamo.dni = dto.dni;
     newReclamo.email = dto.email;
     newReclamo.nombre = dto.nombre;
@@ -54,6 +54,13 @@ export class LibroReclamacionesService {
   async update(id: number, dto: UpdateLibroReclamacionesDto): Promise<LibroReclamaciones> {
     await this.findOne(id); // Lanza error si no existe
     await this.libroRepo.update(id, dto);
+    return this.findOne(id);
+  }
+
+  async responderLibro(id: number, respuesta: string): Promise<LibroReclamaciones> {
+    const libro = await this.findOne(id);
+    libro.respuesta =  respuesta;
+    await this.libroRepo.save(libro);
     return this.findOne(id);
   }
 
