@@ -9,6 +9,7 @@ import { ClienteMailService } from './services/clienteMail.service';
 import { MailController } from './mail.controller';
 import { AdminMailService } from './services/adminMail.service';
 import { UsuarioMailService } from './services/usuarioMail.service';
+import { LibroReclamacionMailService } from './services/libroReclamacionMail.service';
 
 @Global()
 @Module({
@@ -48,8 +49,9 @@ import { UsuarioMailService } from './services/usuarioMail.service';
     AbogadoMailService,
     UsuarioMailService,
     ClienteMailService,
-    AdminMailService
+    AdminMailService,
+    LibroReclamacionMailService
   ],
-  exports: [MailService, AbogadoMailService, ClienteMailService, AdminMailService, UsuarioMailService],
+  exports: [MailService, AbogadoMailService, ClienteMailService, AdminMailService, UsuarioMailService, LibroReclamacionMailService],
 })
 export class MailModule {}

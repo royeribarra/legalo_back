@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bienvenido a Legalo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f3f4f6;
+      }
+      .container {
+        width: 100%;
+        padding: 20px;
+      }
+      .email-wrapper {
+        width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        background-color: #000000;
+        padding: 20px;
+        text-align: center;
+        border-radius: 8px 8px 0 0;
+      }
+      .header img {
+        width: 120px;
+        height: auto;
+      }
+      .body {
+        padding: 20px;
+        color: #4b5563;
+      }
+      .body h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 16px;
+      }
+      .body p {
+        margin-bottom: 12px;
+        font-size: 16px;
+      }
+      .btn {
+        background-color: #2563eb;
+        color: #ffffff;
+        padding: 12px 24px;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+      .btn:hover {
+        background-color: #1d4ed8;
+      }
+      .footer {
+        background-color: #f3f4f6;
+        text-align: center;
+        padding: 20px;
+        border-radius: 0 0 8px 8px;
+      }
+      .footer p {
+        font-size: 14px;
+        color: #6b7280;
+      }
+      .footer .contact-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center !important;
+        gap: 10px;
+      }
+      .footer .contact-info img {
+        width: 24px;
+        height: 24px;
+      }
+      .footer .contact-info p {
+        margin: 0;
+        font-size: 14px;
+        color: #4b5563;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <table class="email-wrapper" cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="header">
+            <img src="https://legalo.s3.us-east-1.amazonaws.com/logo-legalo-white.png" alt="Legalo Logo" />
+          </td>
+        </tr>
+        <tr>
+          <td class="body">
+            <h2>Hola, {{ nombres }}:</h2>
+            <p>¡Gracias por reclamar en Legalo! Haz clic en el botón a continuación para confirmar tu correo electrónico:</p>
+            <p style="text-align: center;">
+              <a href="" class="btn">
+                Confirmar correo electrónico
+              </a>
+            </p>
+            <p>Este enlace expirará en  horas, por lo que te recomendamos confirmar tu correo lo antes posible.</p>
+          </td>
+        </tr>
+        <tr>
+          <td class="footer">
+            <p>Si tienes alguna pregunta o necesitas ayuda, contáctanos:</p>
+            <div class="contact-info">
+              <img src="https://legalo.s3.us-east-1.amazonaws.com/whatsapp.png" alt="WhatsApp">
+              <p><strong>WhatsApp:</strong> +123456789</p>
+            </div>
+            <p>&copy; 2024 Legalo Web. Todos los derechos reservados.</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>

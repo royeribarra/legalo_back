@@ -15,7 +15,7 @@ export class LibroReclamaciones extends BaseEntity {
   nombre: string;
 
   @Column()
-  doomicilio: string;
+  domicilio: string;
 
   @Column()
   dni: string;

@@ -5,12 +5,16 @@ import { LibroReclamaciones } from "./libro-reclamaciones.entity";
 import { CreateLibroReclamacionesDto } from "./dto/create-libro-reclamaciones.dto";
 import { UpdateLibroReclamacionesDto } from "./dto/update-libro-reclamaciones.dto";
 import { ErrorManager } from "../../utils/error.manager";
+import { PdfService } from "../pdf/pdf.service";
+import { LibroReclamacionMailService } from "../mail/services/libroReclamacionMail.service";
 
 @Injectable()
 export class LibroReclamacionesService {
   constructor(
     @InjectRepository(LibroReclamaciones)
-    private readonly libroRepo: Repository<LibroReclamaciones>
+    private readonly libroRepo: Repository<LibroReclamaciones>,
+    private readonly pdfService: PdfService,
+    private readonly libroReclamacionService: LibroReclamacionMailService,
   ) {}
 
   public async create(dto: CreateLibroReclamacionesDto) {
@@ -61,6 +65,8 @@ export class LibroReclamacionesService {
     const libro = await this.findOne(id);
     libro.respuesta =  respuesta;
     await this.libroRepo.save(libro);
+    const libroReclamacionPdf = await this.pdfService.generateReclamacionPDF();
+    await this.libroReclamacionService.sendReclamoEmail(libro.email, libro.nombre, libroReclamacionPdf);
     return this.findOne(id);
   }
 
