@@ -30,6 +30,7 @@ async function bootstrap() {
     prefix: '/public/', // Esto añade un prefijo a las URLs de los archivos
   });
 
+  app.set('trust proxy', 1);
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new ValidationExceptionFilter());
   // app.useGlobalFilters(new GlobalExceptionFilter());
