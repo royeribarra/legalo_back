@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { BaseEntity } from '../../config/base.entity';
 import { IHabilidaBlanda } from '../../interfaces/HabilidadBlanda.interface';
@@ -11,5 +11,7 @@ export class HabilidadesBlandaEntity extends BaseEntity implements IHabilidaBlan
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.habilidadesBlandas, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'abogado_id' })
+  @Index('idx_habilidades_blanda_abogado')
   abogado: AbogadosEntity;
 }

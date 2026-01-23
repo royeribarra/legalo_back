@@ -1,5 +1,5 @@
 
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { IAbogado } from '../../../interfaces/Abogado.interface';
 import { UsuariosEntity } from '../../usuario/usuarios.entity';
 import { BaseEntity } from '../../../config/base.entity';
@@ -16,6 +16,7 @@ import { InvitacionesEntity } from '../../oferta/invitacion.entity';
 import { FileEntity } from '../../tmp/file.entity';
 import { PagosEntity } from '../../pago/pago.entity';
 
+@Index(['validado_admin', 'created_at'])
 @Entity({name:'abogados'})
 export class AbogadosEntity extends BaseEntity implements IAbogado
 {

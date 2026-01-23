@@ -1,5 +1,5 @@
 
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { Exclude } from '@nestjs/class-transformer';
 import { IUsuario } from '../../interfaces/Usuario.interface';
 import { BaseEntity } from '../../config/base.entity';
@@ -53,7 +53,8 @@ export class UsuariosEntity extends BaseEntity implements IUsuario{
   isActive: boolean;
 
   @OneToOne(() => AbogadosEntity, (abogado) => abogado.usuario, { cascade: true })
-  @JoinColumn()
+  @JoinColumn({ name: 'abogado_id' })
+  @Index('idx_usuario_abogado')
   abogado?: AbogadosEntity;
 
   @OneToOne(() => ClientesEntity, (cliente) => cliente.usuario, { cascade: true })

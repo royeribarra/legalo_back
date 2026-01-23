@@ -92,8 +92,13 @@ export class AbogadosService{
     const educaciones = body.educaciones.map((educacionDTO) => {
       const educacion = new EducacionesEntity();
       educacion.descripcion = educacionDTO.descripcion;
-      educacion.fecha_fin = educacionDTO.fecha_fin;
-      educacion.fecha_inicio = educacionDTO.fecha_inicio;
+      educacion.fecha_inicio = educacionDTO.fecha_inicio
+        ? new Date(educacionDTO.fecha_inicio)
+        : null;
+
+      educacion.fecha_fin = educacionDTO.fecha_fin
+        ? new Date(educacionDTO.fecha_fin)
+        : null;
       educacion.institucion = educacionDTO.institucion;
       educacion.titulo = educacionDTO.titulo;
       educacion.ubicacion = educacionDTO.ubicacion;
@@ -104,8 +109,13 @@ export class AbogadosService{
     const experiencias = body.experiencias.map((expienciaDTO) => {
       const experiencia = new ExperienciasEntity();
       experiencia.descripcion = expienciaDTO.descripcion;
-      experiencia.fecha_fin = expienciaDTO.fecha_fin;
-      experiencia.fecha_inicio = expienciaDTO.fecha_inicio;
+      experiencia.fecha_inicio = expienciaDTO.fecha_inicio
+        ? new Date(expienciaDTO.fecha_inicio)
+        : null;
+
+        experiencia.fecha_fin = expienciaDTO.fecha_fin
+        ? new Date(expienciaDTO.fecha_fin)
+        : null;
       experiencia.institucion = expienciaDTO.institucion;
       experiencia.titulo = expienciaDTO.titulo;
       experiencia.abogado = null;

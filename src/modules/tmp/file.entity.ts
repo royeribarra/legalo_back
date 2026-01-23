@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToOne, OneToMany, Index, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { OfertasEntity } from '../oferta/oferta.entity';
@@ -26,6 +26,8 @@ export class FileEntity extends BaseEntity{
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.files, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'abogado_id' })
+  @Index('idx_files_abogado')
   abogado?: AbogadosEntity;
 
   // Relación opcional con Oferta

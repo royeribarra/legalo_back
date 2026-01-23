@@ -1,27 +1,26 @@
-import { ConfigModule } from "@nestjs/config";
-import { DataSource, DataSourceOptions  } from "typeorm";
-import { ConfigService } from '@nestjs/config/dist';
+import 'dotenv/config';
+import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { SeederOptions } from 'typeorm-extension';
-import MainSeeder from "../database/seeds/Main.seeder";
+import MainSeeder from '../database/seeds/Main.seeder.js';
 
-ConfigModule.forRoot({envFilePath: `.${process.env.NODE_ENV}.env`});
-
-const configService = new ConfigService();
-export const DataSourceConfig: DataSourceOptions & SeederOptions= {
+const dataSourceOptions = {
   type: 'mysql',
-  host: configService.get('DB_HOST'),
-  port: configService.get('DB_PORT'),
-  username: configService.get('DB_USER'),
-  password: configService.get('DB_PASSWORD'),
-  database: configService.get('DB_NAME'),
-  entities: [__dirname + '/../**/**/*.entity{.ts,.js}'],
-  migrations: [__dirname + '/../../migrations/*{.ts,.js}'],
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  entities: ['dist/**/**.entity.js', 'src/**/**.entity.ts'],
+  migrations: ['dist/migrations/*.js', 'migrations/*.ts'],
   synchronize: false,
-  migrationsRun: true,
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),
   seeds: [MainSeeder],
-}
+} as const;
 
-export const AppDS= new DataSource(DataSourceConfig);
+const AppDataSource = new DataSource(
+  dataSourceOptions as any // 👈 TypeORM + SeederOptions bug conocido
+);
+
+export default AppDataSource;

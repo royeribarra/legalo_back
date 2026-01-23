@@ -1,28 +1,28 @@
 import { Module, Logger } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSourceConfig } from './config/data.source';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from './modules/auth/auth.module';
-import { AbogadoModule } from './modules/abogado/abogado.module';
-import { ClienteModule } from './modules/cliente/cliente.module';
-import { FileModule } from './modules/tmp/file.module';
-import { OfertaModule } from './modules/oferta/oferta.module';
+import { AuthModule } from './modules/auth/auth.module.js';
+import { AbogadoModule } from './modules/abogado/abogado.module.js';
+import { ClienteModule } from './modules/cliente/cliente.module.js';
+import { FileModule } from './modules/tmp/file.module.js';
+import { OfertaModule } from './modules/oferta/oferta.module.js';
 import { NestjsFormDataModule } from 'nestjs-form-data';
-import { ServicioModule } from './modules/servicio/servicio.module';
-import { IndustriaModule } from './modules/industria/industria.module';
-import { EspecialidadModule } from './modules/especialidad/especialidad.module';
-import { PagoModule } from './modules/pago/pago.module';
+import { ServicioModule } from './modules/servicio/servicio.module.js';
+import { IndustriaModule } from './modules/industria/industria.module.js';
+import { EspecialidadModule } from './modules/especialidad/especialidad.module.js';
+import { PagoModule } from './modules/pago/pago.module.js';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { S3Module } from './modules/s3/s3.module';
-import { AplicacionesModule } from './modules/aplicacion/aplicacion.module';
-import { TrabajosModule } from './modules/trabajo/trabajo.module';
-import { LibroReclamacionesModule } from './modules/libro-reclamaciones/libro-reclamaciones.module';
-import { PagoAbogadoModule } from './modules/pagoAbogado/pagoAbogado.module';
-import { LogModule } from './modules/log/log.module';
-import { PdfModule } from './modules/pdf/pdf.module';
+import { S3Module } from './modules/s3/s3.module.js';
+import { AplicacionesModule } from './modules/aplicacion/aplicacion.module.js';
+import { TrabajosModule } from './modules/trabajo/trabajo.module.js';
+import { LibroReclamacionesModule } from './modules/libro-reclamaciones/libro-reclamaciones.module.js';
+import { PagoAbogadoModule } from './modules/pagoAbogado/pagoAbogado.module.js';
+import { LogModule } from './modules/log/log.module.js';
+import { PdfModule } from './modules/pdf/pdf.module.js';
+import dataSource from './config/data.source.js';
 
 @Module({
   imports: [
@@ -30,7 +30,7 @@ import { PdfModule } from './modules/pdf/pdf.module';
       envFilePath: `.${process.env.NODE_ENV}.env`,
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({...DataSourceConfig}),
+    TypeOrmModule.forRoot(dataSource.options),
     NestjsFormDataModule,
     AuthModule,
     AbogadoModule,

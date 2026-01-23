@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, OneToMany, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, OneToMany, JoinColumn, Index } from 'typeorm';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { BaseEntity } from '../../config/base.entity';
 import { ITrabajo } from '../../interfaces/Trabajo.interface';
@@ -35,6 +35,8 @@ export class TrabajosEntity extends BaseEntity implements ITrabajo {
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.trabajos, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'abogado_id' })
+  @Index('idx_trabajos_abogado')
   abogado: AbogadosEntity;
 
   @OneToOne(() => AplicacionesEntity, (aplicacion) => aplicacion.trabajo)
