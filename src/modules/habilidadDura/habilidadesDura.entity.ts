@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { BaseEntity } from '../../config/base.entity';
 import { IHabilidadDura } from '../../interfaces/HabilidadDura.interface';
@@ -11,5 +11,7 @@ export class HabilidadesDuraEntity extends BaseEntity implements IHabilidadDura{
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.habilidadesDuras, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'abogado_id' })
+  @Index('idx_habilidades_dura_abogado')
   abogado: AbogadosEntity;
 }

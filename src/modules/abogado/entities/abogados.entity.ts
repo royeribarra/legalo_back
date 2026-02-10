@@ -1,5 +1,4 @@
-
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { IAbogado } from '../../../interfaces/Abogado.interface';
 import { UsuariosEntity } from '../../usuario/usuarios.entity';
 import { BaseEntity } from '../../../config/base.entity';
@@ -15,7 +14,9 @@ import { IndustriasAbogadoEntity } from '../../industria/industriaAbogado.entity
 import { InvitacionesEntity } from '../../oferta/invitacion.entity';
 import { FileEntity } from '../../tmp/file.entity';
 import { PagosEntity } from '../../pago/pago.entity';
+import { IsEmail, Matches } from 'class-validator';
 
+@Index(['validado_admin', 'createdAt'])
 @Entity({name:'abogados'})
 export class AbogadosEntity extends BaseEntity implements IAbogado
 {
@@ -26,12 +27,14 @@ export class AbogadosEntity extends BaseEntity implements IAbogado
   apellidos: string;
 
   @Column()
+  @Matches(/^\d{8}$/, { message: 'DNI must be an 8-digit number' })
   dni: string;
 
   @Column()
   direccion: string;
 
   @Column()
+  @IsEmail()
   correo: string;
 
   @Column()

@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSourceConfig } from './config/data.source';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { AbogadoModule } from './modules/abogado/abogado.module';
 import { ClienteModule } from './modules/cliente/cliente.module';
@@ -23,6 +23,7 @@ import { LibroReclamacionesModule } from './modules/libro-reclamaciones/libro-re
 import { PagoAbogadoModule } from './modules/pagoAbogado/pagoAbogado.module';
 import { LogModule } from './modules/log/log.module';
 import { PdfModule } from './modules/pdf/pdf.module';
+import { createDataSourceConfig } from './config/typeorm.datasource';
 
 @Module({
   imports: [
@@ -30,7 +31,10 @@ import { PdfModule } from './modules/pdf/pdf.module';
       envFilePath: `.${process.env.NODE_ENV}.env`,
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({...DataSourceConfig}),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: createDataSourceConfig,
+    }),
     NestjsFormDataModule,
     AuthModule,
     AbogadoModule,

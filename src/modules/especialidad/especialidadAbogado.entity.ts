@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { AbogadosEntity } from "../abogado/entities/abogados.entity";
 import { EspecialidadesEntity } from "./especialidades.entity";
 
@@ -10,6 +10,8 @@ export class EspecialidadesAbogadoEntity {
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.especialidadesAbogado, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'abogado_id' })
+  @Index('idx_especialidades_abogado')
   abogado: AbogadosEntity;
 
   @ManyToOne(() => EspecialidadesEntity, (servicio) => servicio.especialidadesAbogado)

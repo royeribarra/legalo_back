@@ -1,5 +1,5 @@
 
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
 import { IAplicacion } from '../../interfaces/Aplicacion.interface';
 import { OfertasEntity } from '../oferta/oferta.entity';
@@ -16,11 +16,11 @@ export class InvitacionesEntity extends BaseEntity implements IInvitacion
     @Column({ nullable: true })
     estado: string;
 
-    @Column({ nullable: true })
-    fecha_invitacion: string;
-    
-    @Column({ nullable: true })
-    fecha_respuesta: string;
+    @Column({ type: 'date', nullable: true })
+    fecha_invitacion: Date;
+
+    @Column({ type: 'date', nullable: true })
+    fecha_respuesta: Date;
 
     @ManyToOne(() => OfertasEntity, (oferta) => oferta.invitaciones)
     oferta: OfertasEntity;
@@ -28,5 +28,7 @@ export class InvitacionesEntity extends BaseEntity implements IInvitacion
     @ManyToOne(() => AbogadosEntity, (abogado) => abogado.invitaciones, {
       onDelete: 'CASCADE',
     })
+    @JoinColumn({ name: 'abogado_id' })
+    @Index('idx_invitaciones_abogado')
     abogado: AbogadosEntity;
 }

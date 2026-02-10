@@ -1,15 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Index, JoinColumn } from 'typeorm';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { BaseEntity } from '../../config/base.entity';
 import { IExperiencia } from '../../interfaces/Experiencia.interface';
 
 @Entity({name:'experiencias'})
 export class ExperienciasEntity extends BaseEntity implements IExperiencia{
-  @Column()
-  fecha_fin: string;
+  @Column({ type: 'date', nullable: true })
+  fecha_fin: Date;
 
-  @Column()
-  fecha_inicio: string;
+  @Column({ type: 'date', nullable: true })
+  fecha_inicio: Date;
 
   @Column()
   titulo: string;
@@ -29,5 +29,7 @@ export class ExperienciasEntity extends BaseEntity implements IExperiencia{
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.experiencias, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'abogado_id' })
+  @Index('idx_experiencias_abogado')
   abogado: AbogadosEntity;
 }
