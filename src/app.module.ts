@@ -33,7 +33,9 @@ import { createDataSourceConfig } from './config/typeorm.datasource';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: createDataSourceConfig,
+      // useFactory: createDataSourceConfig,
+      useFactory: (config: ConfigService) =>
+        createDataSourceConfig(config, process.env.NODE_ENV === 'production'),
     }),
     NestjsFormDataModule,
     AuthModule,

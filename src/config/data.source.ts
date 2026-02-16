@@ -20,13 +20,13 @@ export const DataSourceConfig: DataSourceOptions & SeederOptions= {
   entities: [
     isProd
       ? 'dist/**/*.entity.js'
-      : 'src1/**/*.entity.ts',
+      : 'src/**/*.entity.ts',
   ],
   // migrations: [__dirname + '/../../migrations/*{.ts,.js}'],
   migrations: [
     isProd
       ? 'dist/migrations/*.js'
-      : 'src1/migrations/*.ts',
+      : 'src/migrations/*.ts',
   ],
   synchronize: false,
   migrationsRun: false,
