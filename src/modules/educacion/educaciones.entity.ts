@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Index, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
 import { BaseEntity } from '../../config/base.entity';
 import { IEducacion } from '../../interfaces/Educacion.interface';
@@ -26,7 +26,5 @@ export class EducacionesEntity extends BaseEntity implements IEducacion{
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.educaciones, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'abogado_id' })
-  @Index('idx_educaciones_abogado')
   abogado: AbogadosEntity;
 }

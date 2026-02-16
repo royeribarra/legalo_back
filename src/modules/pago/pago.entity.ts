@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, Index, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
 import { TrabajosEntity } from '../trabajo/trabajos.entity';
 import { AbogadosEntity } from '../abogado/entities/abogados.entity';
@@ -52,7 +52,5 @@ export class PagosEntity extends BaseEntity {
   @ManyToOne(() => AbogadosEntity, (abogado) => abogado.pagos, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'abogado_id' })
-  @Index('idx_pagos_abogado')
   abogado: AbogadosEntity;
 }

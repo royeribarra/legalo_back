@@ -22,7 +22,8 @@
     "orm:init": "typeorm-ts-node-commonjs -d ./src/config/typeorm-cli.datasource.ts",
     "m:gen": "cross-env NODE_ENV=develop npm run orm:init migration:generate",
     "m:run": "cross-env NODE_ENV=develop npm run orm:init migration:run",
-    "seed": "cross-env NODE_ENV=develop ts-node ./node_modules/typeorm-extension/dist/cli/index.js seed -d ./src/config/typeorm-cli.datasource.ts"
+    "seed": "cross-env NODE_ENV=develop ts-node ./node_modules/typeorm-extension/dist/cli/index.js seed -d ./src/config/typeorm-cli.datasource.ts",
+    "m:run:prod": "node ./node_modules/typeorm/cli.js -d dist/config/typeorm-cli.datasource.js migration:run"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.723.0",
