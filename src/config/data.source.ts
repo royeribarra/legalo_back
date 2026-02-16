@@ -6,8 +6,9 @@ import { SeederOptions } from 'typeorm-extension';
 import MainSeeder from "../database/seeds/Main.seeder";
 
 ConfigModule.forRoot({envFilePath: `.${process.env.NODE_ENV}.env`});
-
 const configService = new ConfigService();
+const isProd = process.env.NODE_ENV === 'production';
+
 export const DataSourceConfig: DataSourceOptions & SeederOptions= {
   type: 'mysql',
   host: configService.get('DB_HOST'),
@@ -15,8 +16,18 @@ export const DataSourceConfig: DataSourceOptions & SeederOptions= {
   username: configService.get('DB_USER'),
   password: configService.get('DB_PASSWORD'),
   database: configService.get('DB_NAME'),
-  entities: [__dirname + '/../**/**/*.entity{.ts,.js}'],
-  migrations: [__dirname + '/../../migrations/*{.ts,.js}'],
+  // entities: [__dirname + '/../**/**/*.entity{.ts,.js}'],
+  entities: [
+    isProd
+      ? 'dist/**/*.entity.js'
+      : 'src/**/*.entity.ts',
+  ],
+  // migrations: [__dirname + '/../../migrations/*{.ts,.js}'],
+  migrations: [
+    isProd
+      ? 'dist/migrations/*.js'
+      : 'src/migrations/*.ts',
+  ],
   synchronize: false,
   migrationsRun: false,
   logging: false,
