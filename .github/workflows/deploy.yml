@@ -24,6 +24,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Debug migrations path
+        run: |
+          echo "====== FILE CONTENT ======"
+          cat src/config/typeorm-cli.datasource.ts
+
       - name: Build image
         run: docker build -t ghcr.io/${{ github.repository }}:latest .
 
