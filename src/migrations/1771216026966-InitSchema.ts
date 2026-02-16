@@ -4,10 +4,10 @@ export class InitSchema1771216026966 implements MigrationInterface {
     name = 'InitSchema1771216026966'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`DROP INDEX \`idx_experiencias_abogado\` ON \`experiencias\``);
-        await queryRunner.query(`DROP INDEX \`idx_educaciones_abogado\` ON \`educaciones\``);
-        await queryRunner.query(`DROP INDEX \`idx_pagos_abogado\` ON \`pagos\``);
-        await queryRunner.query(`DROP INDEX \`idx_invitaciones_abogado\` ON \`invitaciones\``);
+        await queryRunner.query(`DROP INDEX IF EXISTS \`idx_experiencias_abogado\` ON \`experiencias\``);
+        await queryRunner.query(`DROP INDEX IF EXISTS \`idx_educaciones_abogado\` ON \`educaciones\``);
+        await queryRunner.query(`DROP INDEX IF EXISTS \`idx_pagos_abogado\` ON \`pagos\``);
+        await queryRunner.query(`DROP INDEX IF EXISTS \`idx_invitaciones_abogado\` ON \`invitaciones\``);
         await queryRunner.query(`ALTER TABLE \`habilidades_blandas\` DROP FOREIGN KEY \`FK_f6847ca550afe2c575adf0cc813\``);
         await queryRunner.query(`ALTER TABLE \`habilidades_blandas\` CHANGE \`deleted_at\` \`deleted_at\` timestamp(6) NULL`);
         await queryRunner.query(`ALTER TABLE \`habilidades_blandas\` CHANGE \`abogado_id\` \`abogado_id\` int NULL`);
