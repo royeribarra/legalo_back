@@ -1,20 +1,15 @@
+// typeorm-cli.datasource.ts
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
-import MainSeeder from '../database/seeds/Main.seeder';
+import { createDataSourceConfig } from './typeorm.datasource';
 
 dotenv.config({ path: `.${process.env.NODE_ENV}.env` });
 
-export const AppDS = new DataSource({
-  type: 'mysql',
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  entities: ['src/**/*.entity.ts'],
-  migrations: ['src/migrations/*.ts'],
-  namingStrategy: new SnakeNamingStrategy(),
-  synchronize: false,
-});
+export default new DataSource(
+  createDataSourceConfig(
+    new ConfigService(),
+    process.env.NODE_ENV === 'production',
+  ),
+);
