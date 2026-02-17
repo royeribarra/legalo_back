@@ -1,5 +1,26 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
+async function dropForeignKeyIfExists(
+    queryRunner: QueryRunner,
+    table: string,
+    fkName: string,
+) {
+    const result = await queryRunner.query(`
+      SELECT CONSTRAINT_NAME
+      FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS
+      WHERE CONSTRAINT_SCHEMA = DATABASE()
+        AND TABLE_NAME = '${table}'
+        AND CONSTRAINT_NAME = '${fkName}'
+    `);
+  
+    if (result.length > 0) {
+      await queryRunner.query(`
+        ALTER TABLE \`${table}\`
+        DROP FOREIGN KEY \`${fkName}\`
+      `);
+    }
+}  
+
 export class InitSchema1771216026966 implements MigrationInterface {
     name = 'InitSchema1771216026966'
 
@@ -46,23 +67,27 @@ export class InitSchema1771216026966 implements MigrationInterface {
         // await queryRunner.query(`DROP INDEX IF EXISTS \`idx_educaciones_abogado\` ON \`educaciones\``);
         // await queryRunner.query(`DROP INDEX IF EXISTS \`idx_pagos_abogado\` ON \`pagos\``);
         // await queryRunner.query(`DROP INDEX IF EXISTS \`idx_invitaciones_abogado\` ON \`invitaciones\``);
-        await queryRunner.query(`ALTER TABLE \`habilidades_blandas\` DROP FOREIGN KEY \`FK_f6847ca550afe2c575adf0cc813\``);
+        await dropForeignKeyIfExists(queryRunner, 'habilidades_blandas', 'FK_f6847ca550afe2c575adf0cc813');
         await queryRunner.query(`ALTER TABLE \`habilidades_blandas\` CHANGE \`deleted_at\` \`deleted_at\` timestamp(6) NULL`);
         await queryRunner.query(`ALTER TABLE \`habilidades_blandas\` CHANGE \`abogado_id\` \`abogado_id\` int NULL`);
-        await queryRunner.query(`ALTER TABLE \`habilidades_duras\` DROP FOREIGN KEY \`FK_fd2feb177ffd5609bf1030cc457\``);
+
+        await dropForeignKeyIfExists(queryRunner, 'habilidades_duras', 'FK_fd2feb177ffd5609bf1030cc457');
         await queryRunner.query(`ALTER TABLE \`habilidades_duras\` CHANGE \`deleted_at\` \`deleted_at\` timestamp(6) NULL`);
         await queryRunner.query(`ALTER TABLE \`habilidades_duras\` CHANGE \`abogado_id\` \`abogado_id\` int NULL`);
-        await queryRunner.query(`ALTER TABLE \`experiencias\` DROP FOREIGN KEY \`FK_36c4a935245dc22dceb21568586\``);
+
+        await dropForeignKeyIfExists(queryRunner, 'experiencias', 'FK_36c4a935245dc22dceb21568586');
         await queryRunner.query(`ALTER TABLE \`experiencias\` CHANGE \`deleted_at\` \`deleted_at\` timestamp(6) NULL`);
         await queryRunner.query(`ALTER TABLE \`experiencias\` CHANGE \`fecha_fin\` \`fecha_fin\` date NULL`);
         await queryRunner.query(`ALTER TABLE \`experiencias\` CHANGE \`fecha_inicio\` \`fecha_inicio\` date NULL`);
         await queryRunner.query(`ALTER TABLE \`experiencias\` CHANGE \`abogado_id\` \`abogado_id\` int NULL`);
-        await queryRunner.query(`ALTER TABLE \`educaciones\` DROP FOREIGN KEY \`FK_aa99d5b415317d1ae3fb4d844f5\``);
+
+        await dropForeignKeyIfExists(queryRunner, 'educaciones', 'FK_aa99d5b415317d1ae3fb4d844f5');
         await queryRunner.query(`ALTER TABLE \`educaciones\` CHANGE \`deleted_at\` \`deleted_at\` timestamp(6) NULL`);
         await queryRunner.query(`ALTER TABLE \`educaciones\` CHANGE \`fecha_fin\` \`fecha_fin\` date NULL`);
         await queryRunner.query(`ALTER TABLE \`educaciones\` CHANGE \`fecha_inicio\` \`fecha_inicio\` date NULL`);
         await queryRunner.query(`ALTER TABLE \`educaciones\` CHANGE \`descripcion\` \`descripcion\` varchar(255) NULL`);
         await queryRunner.query(`ALTER TABLE \`educaciones\` CHANGE \`abogado_id\` \`abogado_id\` int NULL`);
+        
         await queryRunner.query(`ALTER TABLE \`files\` DROP FOREIGN KEY \`FK_889080ced09b49ebb4c8fb005db\``);
         await queryRunner.query(`ALTER TABLE \`files\` DROP FOREIGN KEY \`FK_3847bce5b766d69c2d0e320b1ef\``);
         await queryRunner.query(`ALTER TABLE \`files\` DROP FOREIGN KEY \`FK_6ea47570ecb59c0fd0ce6b784be\``);
