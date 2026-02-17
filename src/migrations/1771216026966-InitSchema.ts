@@ -110,10 +110,10 @@ export class InitSchema1771216026966 implements MigrationInterface {
         await dropIndexIfExists(queryRunner, 'files', 'FK_3847bce5b766d69c2d0e320b1ef');
         await dropIndexIfExists(queryRunner, 'files', 'FK_6ea47570ecb59c0fd0ce6b784be');
         await dropIndexIfExists(queryRunner, 'files', 'FK_45969913e1276f23c44c04ab30b');
-        await queryRunner.query(`ALTER TABLE \`files\` DROP FOREIGN KEY \`FK_889080ced09b49ebb4c8fb005db\``);
-        await queryRunner.query(`ALTER TABLE \`files\` DROP FOREIGN KEY \`FK_3847bce5b766d69c2d0e320b1ef\``);
-        await queryRunner.query(`ALTER TABLE \`files\` DROP FOREIGN KEY \`FK_6ea47570ecb59c0fd0ce6b784be\``);
-        await queryRunner.query(`ALTER TABLE \`files\` DROP FOREIGN KEY \`FK_45969913e1276f23c44c04ab30b\``);
+        await queryRunner.query(`DROP INDEX \`FK_889080ced09b49ebb4c8fb005db\` ON \`files\``);
+        await queryRunner.query(`DROP INDEX \`FK_3847bce5b766d69c2d0e320b1ef\` ON \`files\``);
+        await queryRunner.query(`DROP INDEX \`FK_6ea47570ecb59c0fd0ce6b784be\` ON \`files\``);
+        await queryRunner.query(`DROP INDEX \`FK_45969913e1276f23c44c04ab30b\` ON \`files\``);
         await queryRunner.query(`ALTER TABLE \`files\` CHANGE \`deleted_at\` \`deleted_at\` timestamp(6) NULL`);
         await queryRunner.query(`ALTER TABLE \`files\` CHANGE \`dni\` \`dni\` varchar(255) NULL`);
         await queryRunner.query(`ALTER TABLE \`files\` CHANGE \`correo\` \`correo\` varchar(255) NULL`);
