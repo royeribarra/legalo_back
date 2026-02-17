@@ -19,7 +19,25 @@ async function dropForeignKeyIfExists(
         DROP FOREIGN KEY \`${fkName}\`
       `);
     }
-}  
+}
+
+async function dropIndexIfExists(
+    queryRunner: QueryRunner,
+    table: string,
+    indexName: string,
+  ) {
+    const result = await queryRunner.query(`
+      SHOW INDEX FROM \`${table}\`
+      WHERE Key_name = '${indexName}'
+    `);
+  
+    if (result.length > 0) {
+      await queryRunner.query(`
+        DROP INDEX \`${indexName}\` ON \`${table}\`
+      `);
+    }
+  }
+  
 
 export class InitSchema1771216026966 implements MigrationInterface {
     name = 'InitSchema1771216026966'
@@ -88,10 +106,10 @@ export class InitSchema1771216026966 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`educaciones\` CHANGE \`descripcion\` \`descripcion\` varchar(255) NULL`);
         await queryRunner.query(`ALTER TABLE \`educaciones\` CHANGE \`abogado_id\` \`abogado_id\` int NULL`);
         
-        await dropForeignKeyIfExists(queryRunner, 'files', 'FK_889080ced09b49ebb4c8fb005db');
-        await dropForeignKeyIfExists(queryRunner, 'files', 'FK_3847bce5b766d69c2d0e320b1ef');
-        await dropForeignKeyIfExists(queryRunner, 'files', 'FK_6ea47570ecb59c0fd0ce6b784be');
-        await dropForeignKeyIfExists(queryRunner, 'files', 'FK_45969913e1276f23c44c04ab30b');
+        await dropIndexIfExists(queryRunner, 'files', 'FK_889080ced09b49ebb4c8fb005db');
+        await dropIndexIfExists(queryRunner, 'files', 'FK_3847bce5b766d69c2d0e320b1ef');
+        await dropIndexIfExists(queryRunner, 'files', 'FK_6ea47570ecb59c0fd0ce6b784be');
+        await dropIndexIfExists(queryRunner, 'files', 'FK_45969913e1276f23c44c04ab30b');
         await queryRunner.query(`ALTER TABLE \`files\` DROP FOREIGN KEY \`FK_889080ced09b49ebb4c8fb005db\``);
         await queryRunner.query(`ALTER TABLE \`files\` DROP FOREIGN KEY \`FK_3847bce5b766d69c2d0e320b1ef\``);
         await queryRunner.query(`ALTER TABLE \`files\` DROP FOREIGN KEY \`FK_6ea47570ecb59c0fd0ce6b784be\``);
